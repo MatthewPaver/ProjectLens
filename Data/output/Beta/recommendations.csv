@@ -1,0 +1,19 @@
+project_name,task_id,recommendation_type,description,confidence_score,recommended_action
+Beta,Multiple,forecasting,Forecasting skipped for tasks (tsk-018) due to insufficient historical data (< 3 points).,1.0,ACTION: Provide more historical data points (at least 3) for affected tasks to enable forecasting.
+Beta,tsk-016,severity_clusters,High severity task: Task 016 (Score: 3.00),1.0,"ACTION: Prioritise investigation of high-severity task 'Task 016' (ID: tsk-016). Check root causes (e.g., slippage, milestone delays)."
+Beta,tsk-008,severity_clusters,High severity task: Task 008 (Score: 3.00),1.0,"ACTION: Prioritise investigation of high-severity task 'Task 008' (ID: tsk-008). Check root causes (e.g., slippage, milestone delays)."
+Beta,tsk-041,severity_clusters,High severity task: Task 041 (Score: 3.00),1.0,"ACTION: Prioritise investigation of high-severity task 'Task 041' (ID: tsk-041). Check root causes (e.g., slippage, milestone delays)."
+Beta,tsk-001,severity_clusters,High severity task: Task 001 (Score: 3.00),1.0,"ACTION: Prioritise investigation of high-severity task 'Task 001' (ID: tsk-001). Check root causes (e.g., slippage, milestone delays)."
+Beta,tsk-035,severity_clusters,High severity task: Task 035 (Score: 3.00),1.0,"ACTION: Prioritise investigation of high-severity task 'Task 035' (ID: tsk-035). Check root causes (e.g., slippage, milestone delays)."
+Beta,tsk-019,performance_alerts,Critical task 'Task 019' (ID: tsk-019) has slipped by 9 days.,1.0,ACTION: Immediately investigate critical task 'Task 019' (ID: tsk-019). Assess impact and mitigation plan.
+Beta,tsk-005,performance_alerts,Critical task 'Task 005' (ID: tsk-005) has slipped by 20 days.,1.0,ACTION: Immediately investigate critical task 'Task 005' (ID: tsk-005). Assess impact and mitigation plan.
+Beta,tsk-044,performance_alerts,Critical task 'Task 044' (ID: tsk-044) has slipped by 13 days.,1.0,ACTION: Immediately investigate critical task 'Task 044' (ID: tsk-044). Assess impact and mitigation plan.
+Beta,tsk-043,performance_alerts,Critical task 'Task 043' (ID: tsk-043) has slipped by 11 days.,1.0,ACTION: Immediately investigate critical task 'Task 043' (ID: tsk-043). Assess impact and mitigation plan.
+Beta,tsk-042,performance_alerts,Critical task 'Task 042' (ID: tsk-042) has slipped by 8 days.,1.0,ACTION: Immediately investigate critical task 'Task 042' (ID: tsk-042). Assess impact and mitigation plan.
+Beta,Multiple,performance_alerts,...and 3 more critical tasks with significant slippage.,0.9,ACTION: Review the full slippage report for all critical tasks.
+Beta,tsk-001,performance_alerts,Forecast for 'Task 001' (ID: tsk-001) deviates significantly (73 days later) from baseline.,1.0,ACTION: Review task 'Task 001' (ID: tsk-001). Understand the deviation. Update baseline if necessary.
+Beta,tsk-003,performance_alerts,Forecast for 'Task 003' (ID: tsk-003) deviates significantly (33 days later) from baseline.,1.0,ACTION: Review task 'Task 003' (ID: tsk-003). Understand the deviation. Update baseline if necessary.
+Beta,tsk-005,performance_alerts,Forecast for 'Task 005' (ID: tsk-005) deviates significantly (20 days later) from baseline.,1.0,ACTION: Review task 'Task 005' (ID: tsk-005). Understand the deviation. Update baseline if necessary.
+Beta,tsk-007,performance_alerts,Forecast for 'Task 007' (ID: tsk-007) deviates significantly (20 days later) from baseline.,1.0,ACTION: Review task 'Task 007' (ID: tsk-007). Understand the deviation. Update baseline if necessary.
+Beta,tsk-008,performance_alerts,Forecast for 'Task 008' (ID: tsk-008) deviates significantly (36 days later) from baseline.,1.0,ACTION: Review task 'Task 008' (ID: tsk-008). Understand the deviation. Update baseline if necessary.
+Beta,Multiple,performance_alerts,...and 13 more tasks with significant forecast vs baseline deviation.,0.9,ACTION: Review the full forecast report for deviations from baseline.

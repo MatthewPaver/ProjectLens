@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "P6 Schedule Schema",
+  "type": "object",
+  "properties": {
+    "task_code": {
+      "type": "string",
+      "description": "Unique identifier for the task"
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Project number or identifier"
+    },
+    "product_line": {
+      "type": "string",
+      "description": "Product line number"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["Not Started", "In Progress", "Completed", "On Hold"],
+      "description": "Current status of the task"
+    },
+    "department": {
+      "type": "string",
+      "description": "Department number"
+    },
+    "activity_type": {
+      "type": "string",
+      "description": "Activity type number"
+    },
+    "class_number": {
+      "type": "string",
+      "description": "Class number"
+    },
+    "baseline_start": {
+      "type": "string",
+      "format": "date",
+      "description": "Original planned start date"
+    },
+    "baseline_finish": {
+      "type": "string",
+      "format": "date",
+      "description": "Original planned finish date"
+    },
+    "duration_orig": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Original planned duration in days"
+    },
+    "forecast_start": {
+      "type": "string",
+      "format": "date",
+      "description": "Updated estimated start date"
+    },
+    "forecast_finish": {
+      "type": "string",
+      "format": "date",
+      "description": "Updated estimated finish date"
+    },
+    "duration_upd": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Updated duration in days"
+    },
+    "dependency_tasks": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "task_code",
+    "baseline_start",
+    "baseline_finish",
+    "duration_orig"
+  ],
+  "additionalProperties": true
+}

@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Project Slippage Data Schema",
+  "description": "Schema for project slippage and delay analysis data",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "description": "Unique identifier for the project"
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Unique identifier for the task"
+    },
+    "baseline_start": {
+      "type": "string",
+      "format": "date",
+      "description": "Baseline start date of the task"
+    },
+    "baseline_finish": {
+      "type": "string",
+      "format": "date",
+      "description": "Baseline finish date of the task"
+    },
+    "actual_start": {
+      "type": "string",
+      "format": "date",
+      "description": "Actual start date of the task"
+    },
+    "actual_finish": {
+      "type": "string",
+      "format": "date",
+      "description": "Actual finish date of the task"
+    },
+    "forecast_start": {
+      "type": "string",
+      "format": "date",
+      "description": "Forecasted start date of the task"
+    },
+    "forecast_finish": {
+      "type": "string",
+      "format": "date",
+      "description": "Forecasted finish date of the task"
+    },
+    "start_slippage_days": {
+      "type": "number",
+      "description": "Number of days the task start date slipped from baseline"
+    },
+    "finish_slippage_days": {
+      "type": "number",
+      "description": "Number of days the task finish date slipped from baseline"
+    },
+    "duration_change": {
+      "type": "number",
+      "description": "Change in duration from baseline in days"
+    },
+    "delay_reason": {
+      "type": "string",
+      "description": "Reason for the delay, if known"
+    },
+    "delay_category": {
+      "type": "string",
+      "description": "Category of the delay (e.g., Weather, Resource, Technical)"
+    },
+    "impact_level": {
+      "type": "string",
+      "enum": ["Low", "Medium", "High", "Critical"],
+      "description": "Impact level of the delay on the project"
+    },
+    "mitigation_plan": {
+      "type": "string",
+      "description": "Plan to mitigate the delay, if any"
+    },
+    "responsible_party": {
+      "type": "string",
+      "description": "Party responsible for the delay"
+    },
+    "approval_status": {
+      "type": "string",
+      "enum": ["Pending", "Approved", "Rejected"],
+      "description": "Status of delay approval, if applicable"
+    },
+    "comments": {
+      "type": "string",
+      "description": "Additional comments about the delay"
+    }
+  },
+  "required": [
+    "project_id",
+    "task_id",
+    "baseline_finish"
+  ]
+} 

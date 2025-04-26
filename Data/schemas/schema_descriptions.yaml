@@ -1,0 +1,243 @@
+# Schema Descriptions for Project Lens Data
+# Author: Matt Paver
+# University of Liverpool
+# Last Updated: April 2024
+
+tasks:
+  description: "Base task information for project planning and tracking"
+  columns:
+    id:
+      type: string
+      description: "Unique task identifier (format: T1000+)"
+    name:
+      type: string
+      description: "Task name/description"
+    start_date:
+      type: string
+      format: "DD/MM/YYYY"
+      description: "Planned start date"
+    end_date:
+      type: string
+      format: "DD/MM/YYYY"
+      description: "Planned end date"
+    duration:
+      type: integer
+      description: "Planned duration in days"
+    progress:
+      type: integer
+      description: "Task completion percentage (0-100)"
+    dependencies:
+      type: string
+      description: "Comma-separated list of task IDs this task depends on"
+    resource_id:
+      type: string
+      description: "Assigned resource identifier"
+
+milestones:
+  description: "Project milestone information"
+  columns:
+    id:
+      type: string
+      description: "Unique milestone identifier (format: M100+)"
+    name:
+      type: string
+      description: "Milestone name"
+    date:
+      type: string
+      format: "DD/MM/YYYY"
+      description: "Target milestone date"
+    type:
+      type: string
+      enum: ["start", "end", "intermediate"]
+      description: "Milestone type"
+    tasks:
+      type: string
+      description: "Comma-separated list of task IDs associated with this milestone"
+
+delay_risks:
+  description: "Task delay risk analysis"
+  columns:
+    Project Name:
+      type: string
+      description: "Name of the project"
+    Task ID:
+      type: string
+      description: "Unique task identifier"
+    Planned Duration:
+      type: integer
+      description: "Original planned duration in days"
+    Forecasted Duration:
+      type: integer
+      description: "Forecasted duration including delays"
+    Delay Risk (%):
+      type: float
+      description: "Probability of delay (0-100)"
+    Delay (Days):
+      type: integer
+      description: "Expected delay in days"
+    Delay (%):
+      type: float
+      description: "Delay as percentage of planned duration"
+    Status:
+      type: string
+      description: "Current task status"
+    Task Code:
+      type: string
+      description: "Task identifier for reference"
+
+change_points:
+  description: "Significant changes in project timeline"
+  columns:
+    Project Name:
+      type: string
+      description: "Name of the project"
+    Task or Milestone ID:
+      type: string
+      description: "Identifier of changed item"
+    Change Date:
+      type: string
+      format: "DD/MM/YYYY"
+      description: "Date when change occurred"
+    Change Type:
+      type: string
+      description: "Type of change"
+    Delta (Days):
+      type: integer
+      description: "Change in duration (days)"
+    Rebaseline Flag:
+      type: string
+      enum: ["Yes", "No"]
+      description: "Whether this change triggered a rebaseline"
+
+milestone_bias_report:
+  description: "Analysis of milestone timing accuracy"
+  columns:
+    Project Name:
+      type: string
+      description: "Name of the project"
+    Milestone ID:
+      type: string
+      description: "Unique milestone identifier"
+    Planned Date:
+      type: string
+      format: "DD/MM/YYYY"
+      description: "Original planned date"
+    Actual Date:
+      type: string
+      format: "DD/MM/YYYY"
+      description: "Actual completion date"
+    Bias (Days):
+      type: integer
+      description: "Difference between planned and actual (days)"
+    Bias Direction:
+      type: string
+      enum: ["Early", "Late"]
+      description: "Whether milestone was early or late"
+
+project_health:
+  description: "Overall project health metrics"
+  columns:
+    Project Name:
+      type: string
+      description: "Name of the project"
+    Task ID:
+      type: string
+      description: "Unique task identifier"
+    Active Task:
+      type: integer
+      enum: [0, 1]
+      description: "Whether task is currently active"
+    Delayed Task:
+      type: integer
+      enum: [0, 1]
+      description: "Whether task is delayed"
+    Overall Risk (%):
+      type: integer
+      description: "Overall risk score (0-100)"
+    Start Date:
+      type: string
+      format: "DD/MM/YYYY"
+      description: "Task start date"
+    End Date:
+      type: string
+      format: "DD/MM/YYYY"
+      description: "Task end date"
+
+gantt_tasks:
+  description: "Task data formatted for Gantt chart visualisation"
+  columns:
+    Project Name:
+      type: string
+      description: "Name of the project"
+    Task ID:
+      type: string
+      description: "Unique task identifier"
+    Planned Start Date:
+      type: string
+      format: "DD/MM/YYYY"
+      description: "Original planned start date"
+    Planned Finish Date:
+      type: string
+      format: "DD/MM/YYYY"
+      description: "Original planned finish date"
+    Actual Start Date:
+      type: string
+      format: "DD/MM/YYYY"
+      description: "Actual start date"
+    Actual Finish Date:
+      type: string
+      format: "DD/MM/YYYY"
+      description: "Actual finish date"
+    Task Status:
+      type: string
+      description: "Current task status"
+    Task Code:
+      type: string
+      description: "Task identifier for reference"
+
+at_risk_tasks:
+  description: "Tasks identified as high risk"
+  columns:
+    Project Name:
+      type: string
+      description: "Name of the project"
+    Task ID:
+      type: string
+      description: "Unique task identifier"
+    Delay (Days):
+      type: integer
+      description: "Expected delay in days"
+    Overall Risk (%):
+      type: float
+      description: "Overall risk score (0-100)"
+    Primary Risk Reason:
+      type: string
+      description: "Main reason for risk"
+    Risk Score Rank:
+      type: integer
+      description: "Ranking of risk severity"
+
+recommendations:
+  description: "Generated recommendations for at-risk tasks"
+  columns:
+    Project Name:
+      type: string
+      description: "Name of the project"
+    Task ID:
+      type: string
+      description: "Unique task identifier"
+    Priority:
+      type: string
+      enum: ["High", "Medium", "Low"]
+      description: "Recommendation priority"
+    Category:
+      type: string
+      enum: ["Schedule", "Resource", "Risk"]
+      description: "Type of recommendation"
+    Recommendation:
+      type: string
+      description: "Specific recommendation text"
+    Date Generated:
+      type: string
+      format: "DD/MM/YYYY"
+      description: "Date recommendation was generated" 

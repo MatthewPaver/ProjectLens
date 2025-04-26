@@ -1,0 +1,394 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Project Data Schema",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "description": "Unique identifier for the project"
+    },
+    "project_name": {
+      "type": "string",
+      "description": "Name of the project"
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Unique identifier for the task"
+    },
+    "task_name": {
+      "type": "string",
+      "description": "Name of the task"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["Not Started", "In Progress", "Completed", "On Hold", "Cancelled"],
+      "description": "Current status of the task"
+    },
+    "department": {
+      "type": "string",
+      "description": "Department responsible for the task"
+    },
+    "priority": {
+      "type": "string",
+      "description": "Task priority level"
+    },
+    "baseline_start": {
+      "oneOf": [
+        {"type": "string", "format": "date"},
+        {"type": "string", "format": "date-time"}
+      ],
+      "description": "Original planned start date"
+    },
+    "baseline_finish": {
+      "oneOf": [
+        {"type": "string", "format": "date"},
+        {"type": "string", "format": "date-time"}
+      ],
+      "description": "Original planned finish date"
+    },
+    "start_date": {
+      "oneOf": [
+        {"type": "string", "format": "date"},
+        {"type": "string", "format": "date-time"}
+      ],
+      "description": "Actual start date"
+    },
+    "forecast_finish": {
+      "oneOf": [
+        {"type": "string", "format": "date"},
+        {"type": "string", "format": "date-time"}
+      ],
+      "description": "Updated estimated finish date"
+    },
+    "actual_start": {
+      "oneOf": [
+        {"type": "string", "format": "date"},
+        {"type": "string", "format": "date-time"}
+      ],
+      "description": "Actual start date"
+    },
+    "actual_finish": {
+      "oneOf": [
+        {"type": "string", "format": "date"},
+        {"type": "string", "format": "date-time"},
+        {"type": "null"}
+      ],
+      "description": "Actual finish date"
+    },
+    "duration_orig": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Original planned duration in days"
+    },
+    "duration_upd": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Updated duration in days"
+    },
+    "percent_complete": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Percentage of task completion"
+    },
+    "schedule_risk": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Schedule risk score"
+    },
+    "resource_risk": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Resource risk score"
+    },
+    "technical_risk": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Technical risk score"
+    },
+    "risk_level": {
+      "type": "string",
+      "description": "Overall risk level"
+    },
+    "assigned_resources": {
+      "type": "string",
+      "description": "Assigned resources"
+    },
+    "resource_allocation": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Resource allocation percentage"
+    },
+    "planned_cost": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Planned cost"
+    },
+    "actual_cost": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Actual cost"
+    },
+    "phase": {
+      "type": "string",
+      "description": "Project phase"
+    },
+    "predecessors": {
+      "type": "string",
+      "description": "Comma-separated list of predecessor task IDs"
+    },
+    "forecast_start": {
+      "oneOf": [
+        {"type": "string", "format": "date"},
+        {"type": "string", "format": "date-time"}
+      ],
+      "description": "Updated estimated start date"
+    },
+    "is_critical": {
+      "type": "boolean",
+      "description": "Indicates if the task is on the critical path"
+    },
+    "dependencies_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of task dependencies"
+    },
+    "end_date": {
+      "oneOf": [
+        {"type": "string", "format": "date"},
+        {"type": "string", "format": "date-time"},
+        {"type": "null"}
+      ],
+      "description": "Actual end date of the task"
+    },
+    "total_tasks": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total number of tasks in the project"
+    },
+    "planned_completion": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Planned completion percentage"
+    },
+    "actual_completion": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Actual completion percentage"
+    },
+    "delayed_tasks": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of delayed tasks"
+    },
+    "is_active": {
+      "type": "boolean",
+      "description": "Indicates if the project is active"
+    },
+    "forecast_completion_date": {
+      "oneOf": [
+        {"type": "string", "format": "date"},
+        {"type": "string", "format": "date-time"}
+      ],
+      "description": "Forecast completion date"
+    },
+    "task_status": {
+      "type": "string",
+      "description": "Current status of the task"
+    },
+    "delay_days": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of days a task is delayed"
+    },
+    "slippage_percentage": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Percentage of schedule slippage"
+    },
+    "is_critical_at_risk": {
+      "type": "boolean",
+      "description": "Indicates if a critical task is at risk"
+    },
+    "overall_risk": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Overall risk score"
+    },
+    "dependency_risk": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Risk score related to dependencies"
+    },
+    "schedule_factors": {
+      "type": "string",
+      "description": "Factors contributing to schedule risk"
+    },
+    "resource_factors": {
+      "type": "string",
+      "description": "Factors contributing to resource risk"
+    },
+    "dependency_factors": {
+      "type": "string",
+      "description": "Factors contributing to dependency risk"
+    },
+    "predicted_duration": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Predicted duration in days"
+    },
+    "delay_probability": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Probability of delay"
+    },
+    "predicted_completion_date": {
+      "oneOf": [
+        {"type": "string", "format": "date"},
+        {"type": "string", "format": "date-time"}
+      ],
+      "description": "Predicted completion date"
+    },
+    "recommended_action": {
+      "type": "string",
+      "description": "Recommended action to address issues"
+    },
+    "priority_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Priority score for the recommended action"
+    },
+    "category": {
+      "type": "string",
+      "description": "Category of the recommendation"
+    },
+    "depends_on": {
+      "type": "string",
+      "description": "ID of the task this task depends on"
+    },
+    "dependency_type": {
+      "type": "string",
+      "description": "Type of dependency relationship"
+    },
+    "dependency_strength": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Strength of the dependency"
+    },
+    "criticality_index": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Index of task criticality in the network"
+    },
+    "date": {
+      "oneOf": [
+        {"type": "string", "format": "date"},
+        {"type": "string", "format": "date-time"}
+      ],
+      "description": "Date for trend analysis"
+    },
+    "completion_rate": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Rate of completion over time"
+    },
+    "slippage_rate": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Rate of schedule slippage over time"
+    },
+    "active_tasks": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of active tasks"
+    },
+    "predicted_completion_rate": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Predicted rate of completion"
+    },
+    "predicted_slippage_rate": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Predicted rate of slippage"
+    },
+    "confidence_low": {
+      "type": "number",
+      "description": "Lower bound of confidence interval"
+    },
+    "confidence_high": {
+      "type": "number",
+      "description": "Upper bound of confidence interval"
+    },
+    "change_point_flag": {
+      "type": "boolean",
+      "description": "Indicates if a significant change was detected"
+    },
+    "trigger_event": {
+      "type": "string",
+      "description": "Event that triggered a change point"
+    },
+    "affected_task_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of tasks affected by a change point"
+    },
+    "change_magnitude": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Magnitude of the change"
+    },
+    "confidence_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Confidence score for the change point detection"
+    },
+    "successors": {
+      "type": "string",
+      "description": "Comma-separated list of successor task IDs"
+    },
+    "wbs": {
+      "type": "string",
+      "description": "Work Breakdown Structure identifier"
+    },
+    "delay_reason": {
+      "type": "string", 
+      "description": "Reason for task delay"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or comments about the task"
+    },
+    "created_by": {
+      "type": "string",
+      "description": "Person who created the task"
+    },
+    "modified_date": {
+      "oneOf": [
+        {"type": "string", "format": "date"},
+        {"type": "string", "format": "date-time"}
+      ],
+      "description": "Date when the task was last modified"
+    }
+  },
+  "required": [
+    "project_id",
+    "project_name",
+    "task_id",
+    "start_date",
+    "baseline_finish"
+  ]
+} 

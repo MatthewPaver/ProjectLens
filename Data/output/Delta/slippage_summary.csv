@@ -1,0 +1,343 @@
+project_name,task_id,update_phase,task_name,baseline_end,end_date,slip_days,severity_score,change_type
+Delta,tsk-033,update_1,Task 033,2025-11-10,2025-11-13,3,1,Delay
+Delta,tsk-046,update_1,Task 046,2025-10-23,2025-10-22,-1,0,Early Finish
+Delta,tsk-001,update_2,Task 001,2025-10-04,2025-10-29,25,2,Delay
+Delta,tsk-005,update_2,Task 005,2025-04-12,2025-04-25,13,2,Delay
+Delta,tsk-013,update_2,Task 013,2025-10-08,2025-10-18,10,2,Delay
+Delta,tsk-017,update_2,Task 017,2025-08-24,2025-09-20,27,2,Delay
+Delta,tsk-021,update_2,Task 021,2025-10-23,2025-10-23,0,0,On Time
+Delta,tsk-023,update_2,Task 023,2025-10-27,2025-11-09,13,2,Delay
+Delta,tsk-032,update_2,Task 032,2025-10-22,2025-11-02,11,2,Delay
+Delta,tsk-033,update_2,Task 033,2025-11-10,2025-11-13,3,1,Delay
+Delta,tsk-039,update_2,Task 039,2025-03-23,2025-04-03,11,2,Delay
+Delta,tsk-046,update_2,Task 046,2025-10-23,2025-10-22,-1,0,Early Finish
+Delta,tsk-001,update_3,Task 001,2025-10-04,2025-10-29,25,2,Delay
+Delta,tsk-004,update_3,Task 004,2025-03-06,2025-04-09,34,3,Delay
+Delta,tsk-005,update_3,Task 005,2025-04-12,2025-04-26,14,2,Delay
+Delta,tsk-007,update_3,Task 007,2025-05-18,2025-06-01,14,2,Delay
+Delta,tsk-010,update_3,Task 010,2025-07-01,2025-07-11,10,2,Delay
+Delta,tsk-011,update_3,Task 011,2025-07-19,2025-07-22,3,1,Delay
+Delta,tsk-013,update_3,Task 013,2025-10-08,2025-10-18,10,2,Delay
+Delta,tsk-015,update_3,Task 015,2025-07-11,2025-07-27,16,2,Delay
+Delta,tsk-016,update_3,Task 016,2025-08-28,2025-09-11,14,2,Delay
+Delta,tsk-017,update_3,Task 017,2025-08-24,2025-09-20,27,2,Delay
+Delta,tsk-019,update_3,Task 019,2025-03-13,2025-03-09,-4,0,Early Finish
+Delta,tsk-021,update_3,Task 021,2025-10-23,2025-10-26,3,1,Delay
+Delta,tsk-022,update_3,Task 022,2025-05-19,2025-05-25,6,1,Delay
+Delta,tsk-023,update_3,Task 023,2025-10-27,2025-11-09,13,2,Delay
+Delta,tsk-024,update_3,Task 024,2025-06-18,2025-06-26,8,2,Delay
+Delta,tsk-025,update_3,Task 025,2025-11-29,2025-11-30,1,1,Delay
+Delta,tsk-031,update_3,Task 031,2025-06-15,2025-07-02,17,2,Delay
+Delta,tsk-032,update_3,Task 032,2025-10-22,2025-11-07,16,2,Delay
+Delta,tsk-033,update_3,Task 033,2025-11-10,2025-11-13,3,1,Delay
+Delta,tsk-037,update_3,Task 037,2024-12-01,2024-12-14,13,2,Delay
+Delta,tsk-039,update_3,Task 039,2025-03-23,2025-04-10,18,2,Delay
+Delta,tsk-041,update_3,Task 041,2025-01-02,2024-12-28,-5,0,Early Finish
+Delta,tsk-043,update_3,Task 043,2025-08-10,2025-08-22,12,2,Delay
+Delta,tsk-045,update_3,Task 045,2025-08-13,2025-08-19,6,1,Delay
+Delta,tsk-046,update_3,Task 046,2025-10-23,2025-10-27,4,1,Delay
+Delta,tsk-001,update_4,Task 001,2025-10-04,2025-10-29,25,2,Delay
+Delta,tsk-004,update_4,Task 004,2025-03-06,2025-04-09,34,3,Delay
+Delta,tsk-005,update_4,Task 005,2025-04-12,2025-04-26,14,2,Delay
+Delta,tsk-007,update_4,Task 007,2025-05-18,2025-06-01,14,2,Delay
+Delta,tsk-008,update_4,Task 008,2025-02-17,2025-02-15,-2,0,Early Finish
+Delta,tsk-010,update_4,Task 010,2025-07-01,2025-07-11,10,2,Delay
+Delta,tsk-011,update_4,Task 011,2025-07-19,2025-07-22,3,1,Delay
+Delta,tsk-013,update_4,Task 013,2025-10-08,2025-10-18,10,2,Delay
+Delta,tsk-015,update_4,Task 015,2025-07-11,2025-07-27,16,2,Delay
+Delta,tsk-016,update_4,Task 016,2025-08-28,2025-09-11,14,2,Delay
+Delta,tsk-017,update_4,Task 017,2025-08-24,2025-09-20,27,2,Delay
+Delta,tsk-019,update_4,Task 019,2025-03-13,2025-03-09,-4,0,Early Finish
+Delta,tsk-021,update_4,Task 021,2025-10-23,2025-10-26,3,1,Delay
+Delta,tsk-022,update_4,Task 022,2025-05-19,2025-05-28,9,2,Delay
+Delta,tsk-023,update_4,Task 023,2025-10-27,2025-11-09,13,2,Delay
+Delta,tsk-024,update_4,Task 024,2025-06-18,2025-06-26,8,2,Delay
+Delta,tsk-025,update_4,Task 025,2025-11-29,2025-11-30,1,1,Delay
+Delta,tsk-026,update_4,Task 026,2025-09-23,2025-10-05,12,2,Delay
+Delta,tsk-027,update_4,Task 027,2025-03-13,2025-03-10,-3,0,Early Finish
+Delta,tsk-029,update_4,Task 029,2025-05-05,2025-05-20,15,2,Delay
+Delta,tsk-031,update_4,Task 031,2025-06-15,2025-07-02,17,2,Delay
+Delta,tsk-032,update_4,Task 032,2025-10-22,2025-11-08,17,2,Delay
+Delta,tsk-033,update_4,Task 033,2025-11-10,2025-11-13,3,1,Delay
+Delta,tsk-034,update_4,Task 034,2024-12-05,2024-12-07,2,1,Delay
+Delta,tsk-035,update_4,Task 035,2024-12-12,2024-12-08,-4,0,Early Finish
+Delta,tsk-037,update_4,Task 037,2024-12-01,2024-12-14,13,2,Delay
+Delta,tsk-038,update_4,Task 038,2025-07-18,2025-07-31,13,2,Delay
+Delta,tsk-039,update_4,Task 039,2025-03-23,2025-04-15,23,2,Delay
+Delta,tsk-041,update_4,Task 041,2025-01-02,2024-12-28,-5,0,Early Finish
+Delta,tsk-043,update_4,Task 043,2025-08-10,2025-08-22,12,2,Delay
+Delta,tsk-045,update_4,Task 045,2025-08-13,2025-08-25,12,2,Delay
+Delta,tsk-046,update_4,Task 046,2025-10-23,2025-10-27,4,1,Delay
+Delta,tsk-050,update_4,Task 050,2025-01-26,2025-02-09,14,2,Delay
+Delta,tsk-001,update_5,Task 001,2025-10-04,2025-10-29,25,2,Delay
+Delta,tsk-004,update_5,Task 004,2025-03-06,2025-04-16,41,3,Delay
+Delta,tsk-005,update_5,Task 005,2025-04-12,2025-04-26,14,2,Delay
+Delta,tsk-006,update_5,Task 006,2025-05-14,2025-05-17,3,1,Delay
+Delta,tsk-007,update_5,Task 007,2025-05-18,2025-06-01,14,2,Delay
+Delta,tsk-008,update_5,Task 008,2025-02-17,2025-02-15,-2,0,Early Finish
+Delta,tsk-010,update_5,Task 010,2025-07-01,2025-07-11,10,2,Delay
+Delta,tsk-011,update_5,Task 011,2025-07-19,2025-07-22,3,1,Delay
+Delta,tsk-013,update_5,Task 013,2025-10-08,2025-10-18,10,2,Delay
+Delta,tsk-015,update_5,Task 015,2025-07-11,2025-07-27,16,2,Delay
+Delta,tsk-016,update_5,Task 016,2025-08-28,2025-09-11,14,2,Delay
+Delta,tsk-017,update_5,Task 017,2025-08-24,2025-09-23,30,2,Delay
+Delta,tsk-018,update_5,Task 018,2025-04-17,2025-04-22,5,1,Delay
+Delta,tsk-019,update_5,Task 019,2025-03-13,2025-03-09,-4,0,Early Finish
+Delta,tsk-020,update_5,Task 020,2025-04-22,2025-05-06,14,2,Delay
+Delta,tsk-021,update_5,Task 021,2025-10-23,2025-10-26,3,1,Delay
+Delta,tsk-022,update_5,Task 022,2025-05-19,2025-05-28,9,2,Delay
+Delta,tsk-023,update_5,Task 023,2025-10-27,2025-11-30,34,3,Delay
+Delta,tsk-024,update_5,Task 024,2025-06-18,2025-06-26,8,2,Delay
+Delta,tsk-025,update_5,Task 025,2025-11-29,2025-11-30,1,1,Delay
+Delta,tsk-026,update_5,Task 026,2025-09-23,2025-10-05,12,2,Delay
+Delta,tsk-027,update_5,Task 027,2025-03-13,2025-03-17,4,1,Delay
+Delta,tsk-029,update_5,Task 029,2025-05-05,2025-05-20,15,2,Delay
+Delta,tsk-031,update_5,Task 031,2025-06-15,2025-07-02,17,2,Delay
+Delta,tsk-032,update_5,Task 032,2025-10-22,2025-11-08,17,2,Delay
+Delta,tsk-033,update_5,Task 033,2025-11-10,2025-11-13,3,1,Delay
+Delta,tsk-034,update_5,Task 034,2024-12-05,2024-12-07,2,1,Delay
+Delta,tsk-035,update_5,Task 035,2024-12-12,2024-12-13,1,1,Delay
+Delta,tsk-037,update_5,Task 037,2024-12-01,2024-12-14,13,2,Delay
+Delta,tsk-038,update_5,Task 038,2025-07-18,2025-07-31,13,2,Delay
+Delta,tsk-039,update_5,Task 039,2025-03-23,2025-04-19,27,2,Delay
+Delta,tsk-040,update_5,Task 040,2025-02-03,2025-01-29,-5,0,Early Finish
+Delta,tsk-041,update_5,Task 041,2025-01-02,2024-12-28,-5,0,Early Finish
+Delta,tsk-042,update_5,Task 042,2025-02-04,2025-02-12,8,2,Delay
+Delta,tsk-043,update_5,Task 043,2025-08-10,2025-08-22,12,2,Delay
+Delta,tsk-045,update_5,Task 045,2025-08-13,2025-08-25,12,2,Delay
+Delta,tsk-046,update_5,Task 046,2025-10-23,2025-11-02,10,2,Delay
+Delta,tsk-047,update_5,Task 047,2025-11-15,2025-11-25,10,2,Delay
+Delta,tsk-050,update_5,Task 050,2025-01-26,2025-02-09,14,2,Delay
+Delta,tsk-001,update_6,Task 001,2025-10-04,2025-10-29,25,2,Delay
+Delta,tsk-004,update_6,Task 004,2025-03-06,2025-04-16,41,3,Delay
+Delta,tsk-005,update_6,Task 005,2025-04-12,2025-04-26,14,2,Delay
+Delta,tsk-006,update_6,Task 006,2025-05-14,2025-05-17,3,1,Delay
+Delta,tsk-007,update_6,Task 007,2025-05-18,2025-06-01,14,2,Delay
+Delta,tsk-008,update_6,Task 008,2025-02-17,2025-02-10,-7,0,Early Finish
+Delta,tsk-010,update_6,Task 010,2025-07-01,2025-07-15,14,2,Delay
+Delta,tsk-011,update_6,Task 011,2025-07-19,2025-07-22,3,1,Delay
+Delta,tsk-012,update_6,Task 012,2025-08-10,2025-08-22,12,2,Delay
+Delta,tsk-013,update_6,Task 013,2025-10-08,2025-10-18,10,2,Delay
+Delta,tsk-015,update_6,Task 015,2025-07-11,2025-07-27,16,2,Delay
+Delta,tsk-016,update_6,Task 016,2025-08-28,2025-09-11,14,2,Delay
+Delta,tsk-017,update_6,Task 017,2025-08-24,2025-09-23,30,2,Delay
+Delta,tsk-018,update_6,Task 018,2025-04-17,2025-04-22,5,1,Delay
+Delta,tsk-019,update_6,Task 019,2025-03-13,2025-03-15,2,1,Delay
+Delta,tsk-020,update_6,Task 020,2025-04-22,2025-05-13,21,2,Delay
+Delta,tsk-021,update_6,Task 021,2025-10-23,2025-10-26,3,1,Delay
+Delta,tsk-022,update_6,Task 022,2025-05-19,2025-05-28,9,2,Delay
+Delta,tsk-023,update_6,Task 023,2025-10-27,2025-12-03,37,3,Delay
+Delta,tsk-024,update_6,Task 024,2025-06-18,2025-06-26,8,2,Delay
+Delta,tsk-025,update_6,Task 025,2025-11-29,2025-11-30,1,1,Delay
+Delta,tsk-026,update_6,Task 026,2025-09-23,2025-10-05,12,2,Delay
+Delta,tsk-027,update_6,Task 027,2025-03-13,2025-03-24,11,2,Delay
+Delta,tsk-028,update_6,Task 028,2025-10-16,2025-10-30,14,2,Delay
+Delta,tsk-029,update_6,Task 029,2025-05-05,2025-05-20,15,2,Delay
+Delta,tsk-031,update_6,Task 031,2025-06-15,2025-07-02,17,2,Delay
+Delta,tsk-032,update_6,Task 032,2025-10-22,2025-11-08,17,2,Delay
+Delta,tsk-033,update_6,Task 033,2025-11-10,2025-11-13,3,1,Delay
+Delta,tsk-034,update_6,Task 034,2024-12-05,2024-12-07,2,1,Delay
+Delta,tsk-035,update_6,Task 035,2024-12-12,2024-12-19,7,1,Delay
+Delta,tsk-037,update_6,Task 037,2024-12-01,2024-12-14,13,2,Delay
+Delta,tsk-038,update_6,Task 038,2025-07-18,2025-07-31,13,2,Delay
+Delta,tsk-039,update_6,Task 039,2025-03-23,2025-04-19,27,2,Delay
+Delta,tsk-040,update_6,Task 040,2025-02-03,2025-01-29,-5,0,Early Finish
+Delta,tsk-041,update_6,Task 041,2025-01-02,2024-12-28,-5,0,Early Finish
+Delta,tsk-042,update_6,Task 042,2025-02-04,2025-02-12,8,2,Delay
+Delta,tsk-043,update_6,Task 043,2025-08-10,2025-08-22,12,2,Delay
+Delta,tsk-044,update_6,Task 044,2024-12-15,2024-12-10,-5,0,Early Finish
+Delta,tsk-045,update_6,Task 045,2025-08-13,2025-08-27,14,2,Delay
+Delta,tsk-046,update_6,Task 046,2025-10-23,2025-11-02,10,2,Delay
+Delta,tsk-047,update_6,Task 047,2025-11-15,2025-11-25,10,2,Delay
+Delta,tsk-048,update_6,Task 048,2025-10-14,2025-10-09,-5,0,Early Finish
+Delta,tsk-050,update_6,Task 050,2025-01-26,2025-02-25,30,2,Delay
+Delta,tsk-001,update_7,Task 001,2025-10-04,2025-10-29,25,2,Delay
+Delta,tsk-003,update_7,Task 003,2025-09-05,2025-09-09,4,1,Delay
+Delta,tsk-004,update_7,Task 004,2025-03-06,2025-04-16,41,3,Delay
+Delta,tsk-005,update_7,Task 005,2025-04-12,2025-04-29,17,2,Delay
+Delta,tsk-006,update_7,Task 006,2025-05-14,2025-05-17,3,1,Delay
+Delta,tsk-007,update_7,Task 007,2025-05-18,2025-06-01,14,2,Delay
+Delta,tsk-008,update_7,Task 008,2025-02-17,2025-02-10,-7,0,Early Finish
+Delta,tsk-009,update_7,Task 009,2025-10-24,2025-10-21,-3,0,Early Finish
+Delta,tsk-010,update_7,Task 010,2025-07-01,2025-07-15,14,2,Delay
+Delta,tsk-011,update_7,Task 011,2025-07-19,2025-07-24,5,1,Delay
+Delta,tsk-012,update_7,Task 012,2025-08-10,2025-08-22,12,2,Delay
+Delta,tsk-013,update_7,Task 013,2025-10-08,2025-10-18,10,2,Delay
+Delta,tsk-015,update_7,Task 015,2025-07-11,2025-07-27,16,2,Delay
+Delta,tsk-016,update_7,Task 016,2025-08-28,2025-09-11,14,2,Delay
+Delta,tsk-017,update_7,Task 017,2025-08-24,2025-09-23,30,2,Delay
+Delta,tsk-018,update_7,Task 018,2025-04-17,2025-04-22,5,1,Delay
+Delta,tsk-019,update_7,Task 019,2025-03-13,2025-03-15,2,1,Delay
+Delta,tsk-020,update_7,Task 020,2025-04-22,2025-05-13,21,2,Delay
+Delta,tsk-021,update_7,Task 021,2025-10-23,2025-11-02,10,2,Delay
+Delta,tsk-022,update_7,Task 022,2025-05-19,2025-05-29,10,2,Delay
+Delta,tsk-023,update_7,Task 023,2025-10-27,2025-12-03,37,3,Delay
+Delta,tsk-024,update_7,Task 024,2025-06-18,2025-06-26,8,2,Delay
+Delta,tsk-025,update_7,Task 025,2025-11-29,2025-11-30,1,1,Delay
+Delta,tsk-026,update_7,Task 026,2025-09-23,2025-10-05,12,2,Delay
+Delta,tsk-027,update_7,Task 027,2025-03-13,2025-03-24,11,2,Delay
+Delta,tsk-028,update_7,Task 028,2025-10-16,2025-10-30,14,2,Delay
+Delta,tsk-029,update_7,Task 029,2025-05-05,2025-05-20,15,2,Delay
+Delta,tsk-031,update_7,Task 031,2025-06-15,2025-07-02,17,2,Delay
+Delta,tsk-032,update_7,Task 032,2025-10-22,2025-11-09,18,2,Delay
+Delta,tsk-033,update_7,Task 033,2025-11-10,2025-11-19,9,2,Delay
+Delta,tsk-034,update_7,Task 034,2024-12-05,2024-12-07,2,1,Delay
+Delta,tsk-035,update_7,Task 035,2024-12-12,2024-12-19,7,1,Delay
+Delta,tsk-037,update_7,Task 037,2024-12-01,2024-12-14,13,2,Delay
+Delta,tsk-038,update_7,Task 038,2025-07-18,2025-07-31,13,2,Delay
+Delta,tsk-039,update_7,Task 039,2025-03-23,2025-04-19,27,2,Delay
+Delta,tsk-040,update_7,Task 040,2025-02-03,2025-01-29,-5,0,Early Finish
+Delta,tsk-041,update_7,Task 041,2025-01-02,2024-12-28,-5,0,Early Finish
+Delta,tsk-042,update_7,Task 042,2025-02-04,2025-02-12,8,2,Delay
+Delta,tsk-043,update_7,Task 043,2025-08-10,2025-08-29,19,2,Delay
+Delta,tsk-044,update_7,Task 044,2024-12-15,2024-12-10,-5,0,Early Finish
+Delta,tsk-045,update_7,Task 045,2025-08-13,2025-08-27,14,2,Delay
+Delta,tsk-046,update_7,Task 046,2025-10-23,2025-11-02,10,2,Delay
+Delta,tsk-047,update_7,Task 047,2025-11-15,2025-11-27,12,2,Delay
+Delta,tsk-048,update_7,Task 048,2025-10-14,2025-10-09,-5,0,Early Finish
+Delta,tsk-050,update_7,Task 050,2025-01-26,2025-02-25,30,2,Delay
+Delta,tsk-001,update_8,Task 001,2025-10-04,2025-10-29,25,2,Delay
+Delta,tsk-003,update_8,Task 003,2025-09-05,2025-09-09,4,1,Delay
+Delta,tsk-004,update_8,Task 004,2025-03-06,2025-04-16,41,3,Delay
+Delta,tsk-005,update_8,Task 005,2025-04-12,2025-04-29,17,2,Delay
+Delta,tsk-006,update_8,Task 006,2025-05-14,2025-05-17,3,1,Delay
+Delta,tsk-007,update_8,Task 007,2025-05-18,2025-06-01,14,2,Delay
+Delta,tsk-008,update_8,Task 008,2025-02-17,2025-02-12,-5,0,Early Finish
+Delta,tsk-009,update_8,Task 009,2025-10-24,2025-10-21,-3,0,Early Finish
+Delta,tsk-010,update_8,Task 010,2025-07-01,2025-08-30,60,3,Delay
+Delta,tsk-011,update_8,Task 011,2025-07-19,2025-07-24,5,1,Delay
+Delta,tsk-012,update_8,Task 012,2025-08-10,2025-08-22,12,2,Delay
+Delta,tsk-013,update_8,Task 013,2025-10-08,2025-10-18,10,2,Delay
+Delta,tsk-014,update_8,Task 014,2025-07-12,2025-07-22,10,2,Delay
+Delta,tsk-015,update_8,Task 015,2025-07-11,2025-07-29,18,2,Delay
+Delta,tsk-016,update_8,Task 016,2025-08-28,2025-09-13,16,2,Delay
+Delta,tsk-017,update_8,Task 017,2025-08-24,2025-09-23,30,2,Delay
+Delta,tsk-018,update_8,Task 018,2025-04-17,2025-04-22,5,1,Delay
+Delta,tsk-019,update_8,Task 019,2025-03-13,2025-03-20,7,1,Delay
+Delta,tsk-020,update_8,Task 020,2025-04-22,2025-05-13,21,2,Delay
+Delta,tsk-021,update_8,Task 021,2025-10-23,2025-11-02,10,2,Delay
+Delta,tsk-022,update_8,Task 022,2025-05-19,2025-06-02,14,2,Delay
+Delta,tsk-023,update_8,Task 023,2025-10-27,2025-12-03,37,3,Delay
+Delta,tsk-024,update_8,Task 024,2025-06-18,2025-07-01,13,2,Delay
+Delta,tsk-025,update_8,Task 025,2025-11-29,2025-12-05,6,1,Delay
+Delta,tsk-026,update_8,Task 026,2025-09-23,2025-10-05,12,2,Delay
+Delta,tsk-027,update_8,Task 027,2025-03-13,2025-03-29,16,2,Delay
+Delta,tsk-028,update_8,Task 028,2025-10-16,2025-10-30,14,2,Delay
+Delta,tsk-029,update_8,Task 029,2025-05-05,2025-05-24,19,2,Delay
+Delta,tsk-030,update_8,Task 030,2025-01-03,2025-01-18,15,2,Delay
+Delta,tsk-031,update_8,Task 031,2025-06-15,2025-07-02,17,2,Delay
+Delta,tsk-032,update_8,Task 032,2025-10-22,2025-11-09,18,2,Delay
+Delta,tsk-033,update_8,Task 033,2025-11-10,2025-11-19,9,2,Delay
+Delta,tsk-034,update_8,Task 034,2024-12-05,2024-12-07,2,1,Delay
+Delta,tsk-035,update_8,Task 035,2024-12-12,2024-12-19,7,1,Delay
+Delta,tsk-037,update_8,Task 037,2024-12-01,2024-12-16,15,2,Delay
+Delta,tsk-038,update_8,Task 038,2025-07-18,2025-08-03,16,2,Delay
+Delta,tsk-039,update_8,Task 039,2025-03-23,2025-04-19,27,2,Delay
+Delta,tsk-040,update_8,Task 040,2025-02-03,2025-01-29,-5,0,Early Finish
+Delta,tsk-041,update_8,Task 041,2025-01-02,2024-12-28,-5,0,Early Finish
+Delta,tsk-042,update_8,Task 042,2025-02-04,2025-02-12,8,2,Delay
+Delta,tsk-043,update_8,Task 043,2025-08-10,2025-08-29,19,2,Delay
+Delta,tsk-044,update_8,Task 044,2024-12-15,2024-12-10,-5,0,Early Finish
+Delta,tsk-045,update_8,Task 045,2025-08-13,2025-08-27,14,2,Delay
+Delta,tsk-046,update_8,Task 046,2025-10-23,2025-11-02,10,2,Delay
+Delta,tsk-047,update_8,Task 047,2025-11-15,2025-11-27,12,2,Delay
+Delta,tsk-048,update_8,Task 048,2025-10-14,2025-10-09,-5,0,Early Finish
+Delta,tsk-050,update_8,Task 050,2025-01-26,2025-02-25,30,2,Delay
+Delta,tsk-001,update_9,Task 001,2025-10-04,2025-10-29,25,2,Delay
+Delta,tsk-003,update_9,Task 003,2025-09-05,2025-09-13,8,2,Delay
+Delta,tsk-004,update_9,Task 004,2025-03-06,2025-04-16,41,3,Delay
+Delta,tsk-005,update_9,Task 005,2025-04-12,2025-04-29,17,2,Delay
+Delta,tsk-006,update_9,Task 006,2025-05-14,2025-05-17,3,1,Delay
+Delta,tsk-007,update_9,Task 007,2025-05-18,2025-06-01,14,2,Delay
+Delta,tsk-008,update_9,Task 008,2025-02-17,2025-02-12,-5,0,Early Finish
+Delta,tsk-009,update_9,Task 009,2025-10-24,2025-10-26,2,1,Delay
+Delta,tsk-010,update_9,Task 010,2025-07-01,2025-08-30,60,3,Delay
+Delta,tsk-011,update_9,Task 011,2025-07-19,2025-07-31,12,2,Delay
+Delta,tsk-012,update_9,Task 012,2025-08-10,2025-08-22,12,2,Delay
+Delta,tsk-013,update_9,Task 013,2025-10-08,2025-10-19,11,2,Delay
+Delta,tsk-014,update_9,Task 014,2025-07-12,2025-07-28,16,2,Delay
+Delta,tsk-015,update_9,Task 015,2025-07-11,2025-07-30,19,2,Delay
+Delta,tsk-016,update_9,Task 016,2025-08-28,2025-09-17,20,2,Delay
+Delta,tsk-017,update_9,Task 017,2025-08-24,2025-09-23,30,2,Delay
+Delta,tsk-018,update_9,Task 018,2025-04-17,2025-04-22,5,1,Delay
+Delta,tsk-019,update_9,Task 019,2025-03-13,2025-03-20,7,1,Delay
+Delta,tsk-020,update_9,Task 020,2025-04-22,2025-05-13,21,2,Delay
+Delta,tsk-021,update_9,Task 021,2025-10-23,2025-11-07,15,2,Delay
+Delta,tsk-022,update_9,Task 022,2025-05-19,2025-06-02,14,2,Delay
+Delta,tsk-023,update_9,Task 023,2025-10-27,2025-12-03,37,3,Delay
+Delta,tsk-024,update_9,Task 024,2025-06-18,2025-07-01,13,2,Delay
+Delta,tsk-025,update_9,Task 025,2025-11-29,2025-12-05,6,1,Delay
+Delta,tsk-026,update_9,Task 026,2025-09-23,2025-10-05,12,2,Delay
+Delta,tsk-027,update_9,Task 027,2025-03-13,2025-03-29,16,2,Delay
+Delta,tsk-028,update_9,Task 028,2025-10-16,2025-11-01,16,2,Delay
+Delta,tsk-029,update_9,Task 029,2025-05-05,2025-05-24,19,2,Delay
+Delta,tsk-030,update_9,Task 030,2025-01-03,2025-01-18,15,2,Delay
+Delta,tsk-031,update_9,Task 031,2025-06-15,2025-07-02,17,2,Delay
+Delta,tsk-032,update_9,Task 032,2025-10-22,2025-11-09,18,2,Delay
+Delta,tsk-033,update_9,Task 033,2025-11-10,2025-11-21,11,2,Delay
+Delta,tsk-034,update_9,Task 034,2024-12-05,2024-12-07,2,1,Delay
+Delta,tsk-035,update_9,Task 035,2024-12-12,2024-12-19,7,1,Delay
+Delta,tsk-036,update_9,Task 036,2025-08-31,2025-09-15,15,2,Delay
+Delta,tsk-037,update_9,Task 037,2024-12-01,2024-12-16,15,2,Delay
+Delta,tsk-038,update_9,Task 038,2025-07-18,2025-08-03,16,2,Delay
+Delta,tsk-039,update_9,Task 039,2025-03-23,2025-04-19,27,2,Delay
+Delta,tsk-040,update_9,Task 040,2025-02-03,2025-01-29,-5,0,Early Finish
+Delta,tsk-041,update_9,Task 041,2025-01-02,2024-12-28,-5,0,Early Finish
+Delta,tsk-042,update_9,Task 042,2025-02-04,2025-02-12,8,2,Delay
+Delta,tsk-043,update_9,Task 043,2025-08-10,2025-08-29,19,2,Delay
+Delta,tsk-044,update_9,Task 044,2024-12-15,2024-12-10,-5,0,Early Finish
+Delta,tsk-045,update_9,Task 045,2025-08-13,2025-08-27,14,2,Delay
+Delta,tsk-046,update_9,Task 046,2025-10-23,2025-11-02,10,2,Delay
+Delta,tsk-047,update_9,Task 047,2025-11-15,2025-11-27,12,2,Delay
+Delta,tsk-048,update_9,Task 048,2025-10-14,2025-10-09,-5,0,Early Finish
+Delta,tsk-050,update_9,Task 050,2025-01-26,2025-02-25,30,2,Delay
+Delta,tsk-001,update_10,Task 001,2025-10-04,2025-11-03,30,2,Delay
+Delta,tsk-002,update_10,Task 002,2025-07-29,2025-07-25,-4,0,Early Finish
+Delta,tsk-003,update_10,Task 003,2025-09-05,2025-09-19,14,2,Delay
+Delta,tsk-004,update_10,Task 004,2025-03-06,2025-04-16,41,3,Delay
+Delta,tsk-005,update_10,Task 005,2025-04-12,2025-04-29,17,2,Delay
+Delta,tsk-006,update_10,Task 006,2025-05-14,2025-05-17,3,1,Delay
+Delta,tsk-007,update_10,Task 007,2025-05-18,2025-06-01,14,2,Delay
+Delta,tsk-008,update_10,Task 008,2025-02-17,2025-02-12,-5,0,Early Finish
+Delta,tsk-009,update_10,Task 009,2025-10-24,2025-10-31,7,1,Delay
+Delta,tsk-010,update_10,Task 010,2025-07-01,2025-08-30,60,3,Delay
+Delta,tsk-011,update_10,Task 011,2025-07-19,2025-07-31,12,2,Delay
+Delta,tsk-012,update_10,Task 012,2025-08-10,2025-08-22,12,2,Delay
+Delta,tsk-013,update_10,Task 013,2025-10-08,2025-10-19,11,2,Delay
+Delta,tsk-014,update_10,Task 014,2025-07-12,2025-07-28,16,2,Delay
+Delta,tsk-015,update_10,Task 015,2025-07-11,2025-07-30,19,2,Delay
+Delta,tsk-016,update_10,Task 016,2025-08-28,2025-09-18,21,2,Delay
+Delta,tsk-017,update_10,Task 017,2025-08-24,2025-09-23,30,2,Delay
+Delta,tsk-018,update_10,Task 018,2025-04-17,2025-04-22,5,1,Delay
+Delta,tsk-019,update_10,Task 019,2025-03-13,2025-03-20,7,1,Delay
+Delta,tsk-020,update_10,Task 020,2025-04-22,2025-05-13,21,2,Delay
+Delta,tsk-021,update_10,Task 021,2025-10-23,2025-11-07,15,2,Delay
+Delta,tsk-022,update_10,Task 022,2025-05-19,2025-06-07,19,2,Delay
+Delta,tsk-023,update_10,Task 023,2025-10-27,2025-12-03,37,3,Delay
+Delta,tsk-024,update_10,Task 024,2025-06-18,2025-07-01,13,2,Delay
+Delta,tsk-025,update_10,Task 025,2025-11-29,2025-12-05,6,1,Delay
+Delta,tsk-026,update_10,Task 026,2025-09-23,2025-10-05,12,2,Delay
+Delta,tsk-027,update_10,Task 027,2025-03-13,2025-04-03,21,2,Delay
+Delta,tsk-028,update_10,Task 028,2025-10-16,2025-11-01,16,2,Delay
+Delta,tsk-029,update_10,Task 029,2025-05-05,2025-05-24,19,2,Delay
+Delta,tsk-030,update_10,Task 030,2025-01-03,2025-01-18,15,2,Delay
+Delta,tsk-031,update_10,Task 031,2025-06-15,2025-07-09,24,2,Delay
+Delta,tsk-032,update_10,Task 032,2025-10-22,2025-11-09,18,2,Delay
+Delta,tsk-033,update_10,Task 033,2025-11-10,2025-11-28,18,2,Delay
+Delta,tsk-034,update_10,Task 034,2024-12-05,2024-12-07,2,1,Delay
+Delta,tsk-035,update_10,Task 035,2024-12-12,2024-12-19,7,1,Delay
+Delta,tsk-036,update_10,Task 036,2025-08-31,2025-09-15,15,2,Delay
+Delta,tsk-037,update_10,Task 037,2024-12-01,2024-12-16,15,2,Delay
+Delta,tsk-038,update_10,Task 038,2025-07-18,2025-08-03,16,2,Delay
+Delta,tsk-039,update_10,Task 039,2025-03-23,2025-04-19,27,2,Delay
+Delta,tsk-040,update_10,Task 040,2025-02-03,2025-01-29,-5,0,Early Finish
+Delta,tsk-041,update_10,Task 041,2025-01-02,2024-12-28,-5,0,Early Finish
+Delta,tsk-042,update_10,Task 042,2025-02-04,2025-02-12,8,2,Delay
+Delta,tsk-043,update_10,Task 043,2025-08-10,2025-08-29,19,2,Delay
+Delta,tsk-044,update_10,Task 044,2024-12-15,2024-12-10,-5,0,Early Finish
+Delta,tsk-045,update_10,Task 045,2025-08-13,2025-08-27,14,2,Delay
+Delta,tsk-046,update_10,Task 046,2025-10-23,2025-11-02,10,2,Delay
+Delta,tsk-047,update_10,Task 047,2025-11-15,2025-11-27,12,2,Delay
+Delta,tsk-048,update_10,Task 048,2025-10-14,2025-10-16,2,1,Delay
+Delta,tsk-049,update_10,Task 049,2025-01-12,2025-01-09,-3,0,Early Finish
+Delta,tsk-050,update_10,Task 050,2025-01-26,2025-02-25,30,2,Delay

@@ -1,0 +1,1043 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Task Data Schema",
+  "description": "Schema for validating task data",
+  "type": "object",
+  "synonyms": {
+    "task_id": [
+      "task_code",
+      "activity_id",
+      "wbs_id"
+    ],
+    "task_name": [
+        "task_name"
+    ],
+    "start_date": [
+        "start_date",
+        "start_date_upd"
+    ],
+    "end_date": [
+        "end_date",
+        "end_date_upd"
+    ],
+    "actual_start": [
+        "act_start_date",
+        "actual_start_date",
+        "startdate",
+        "startdateupd"
+    ],
+    "actual_finish": [
+        "finish_date",
+        "act_finish_date",
+        "actual_end_date",
+        "enddate",
+        "enddateupd"
+    ],
+    "duration": [
+        "duration",
+        "duration_orig",
+        "target_drtn_hr_cnt",
+        "target_work_qty",
+        "duration_upd"
+    ],
+    "percent_complete": [
+        "percent_complete",
+        "activity_complete",
+        "calc_phys_complete_pct",
+        "complete_pct",
+        "remain_drtn_hr_cnt",
+        "remain_work_qty"
+    ],
+    "status": [
+        "status",
+        "status_code"
+    ],
+    "remaining_duration": [
+        "remain_drtn_hr_cnt"
+    ],
+    "actual_duration": [
+        "actual_drtn_hr_cnt",
+        "act_work_qty"
+    ],
+    "total_float": [
+        "total_float_hr_cnt"
+    ],
+    "wbs_description": [
+        "wbs_descr"
+    ],
+    "baselinestart": [
+        "baselinestart"
+    ],
+    "ismilestone": [
+        "ismilestone"
+    ],
+    "iscritical": [
+        "iscritical"
+    ],
+    "riskflag": [
+        "riskflag"
+    ],
+    "severityscore": [
+        "severityscore"
+    ],
+    "update_phase": [
+        "updatephase",
+        "reporting_period",
+        "period_id",
+        "update_no"
+    ]
+  },
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "description": "Unique identifier for the task (e.g., Activity ID)"
+    },
+    "task_name": {
+      "type": "string",
+      "description": "Name of the task"
+    },
+    "actual_start": {
+      "type": "string",
+      "description": "Actual start date of the task (YYYY-MM-DD or DD/MM/YYYY)",
+      "pattern": "^(\\d{4}-\\d{2}-\\d{2}|\\d{2}/\\d{2}/\\d{4})$"
+    },
+    "actual_finish": {
+      "type": "string",
+      "description": "Actual finish date of the task (YYYY-MM-DD or DD/MM/YYYY)",
+      "pattern": "^(\\d{4}-\\d{2}-\\d{2}|\\d{2}/\\d{2}/\\d{4})$"
+    },
+    "duration_orig": {
+      "type": "number",
+      "description": "Original duration of the task in days"
+    },
+    "percent_complete": {
+      "type": "number",
+      "description": "Percentage completion of the task",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "Project Name": {
+      "type": "string",
+      "enum": [
+        "Project001"
+      ]
+    },
+    "id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Delayed",
+        "Cancelled",
+        "Completed",
+        "On Track",
+        "On Hold"
+      ]
+    },
+    "duration": {
+      "type": "number",
+      "description": "Planned duration of the task (e.g., target_drtn_hr_cnt)"
+    },
+    "baseline_start_date": {
+      "type": "string",
+      "description": "Baseline start date (YYYY-MM-DD or DD/MM/YYYY)",
+      "pattern": "^(\\d{4}-\\d{2}-\\d{2}|\\d{2}/\\d{2}/\\d{4})$",
+      "synonyms": [
+          "base_start_date",
+          "bl_start",
+          "start_date_orig",
+          "baselinestart"
+      ]
+    },
+    "baseline_end_date": {
+      "type": "string",
+      "description": "Baseline end date (YYYY-MM-DD or DD/MM/YYYY)",
+      "pattern": "^(\\d{4}-\\d{2}-\\d{2}|\\d{2}/\\d{2}/\\d{4})$",
+      "synonyms": [
+          "base_end_date",
+          "baseline_end",
+          "bl_finish",
+          "end_date_orig"
+      ]
+    },
+    "remaining_duration": {
+        "type": "number",
+        "description": "Remaining duration (e.g., remain_drtn_hr_cnt)"
+    },
+    "actual_duration": {
+        "type": "number",
+        "description": "Actual duration (e.g., actual_drtn_hr_cnt)"
+    },
+    "total_float": {
+        "type": "number",
+        "description": "Total float (e.g., total_float_hr_cnt)"
+    },
+    "wbs_description": {
+        "type": "string",
+        "description": "WBS Description (e.g., wbs_descr)"
+    },
+    "is_milestone": {
+        "type": ["boolean", "null"],
+        "description": "Flag indicating if the task is a milestone",
+        "synonyms": ["ismilestone"]
+    },
+    "is_critical": {
+        "type": ["boolean", "null"],
+        "description": "Flag indicating if the task is on the critical path",
+        "synonyms": ["iscritical"]
+    },
+    "risk_flag": {
+        "type": ["string", "null"],
+        "description": "Categorical risk level associated with the task",
+        "enum": ["Low", "Medium", "High", null],
+        "synonyms": ["riskflag"]
+    },
+    "severity_score": {
+        "type": ["number", "null"],
+        "description": "Numerical score indicating task risk/importance",
+        "minimum": 0.0,
+        "maximum": 1.0,
+        "synonyms": ["severityscore"]
+    },
+    "update_phase": {
+        "type": ["integer", "string"],
+        "description": "Identifier for the update cycle or reporting period (e.g., 1, 2, 'Jan24')"
+    }
+  },
+  "required": [
+    "task_id",
+    "task_name",
+    "actual_start",
+    "actual_finish"
+  ],
+  "additionalProperties": true,
+  "patterns": {},
+  "statistics": {
+    "Project Name": {
+      "count": 6,
+      "type_counts": {
+        "string": 6
+      },
+      "value_patterns": [
+        "Project001"
+      ]
+    },
+    "Task or Milestone ID": {
+      "count": 1,
+      "type_counts": {
+        "string": 1
+      },
+      "value_patterns": [
+        "T1075",
+        "T1102",
+        "T1077",
+        "T1117",
+        "T1097",
+        "T1058",
+        "T1029",
+        "T1063",
+        "T1037",
+        "T1018",
+        "T1061",
+        "T1050",
+        "T1009",
+        "T1016",
+        "T1057"
+      ]
+    },
+    "Change Date": {
+      "count": 1,
+      "type_counts": {
+        "string": 1
+      },
+      "value_patterns": [
+        "2025-01-24 00:00:00",
+        "2025-01-16 00:00:00",
+        "2025-02-02 00:00:00",
+        "2025-01-13 00:00:00",
+        "2025-01-14 00:00:00",
+        "2025-01-30 00:00:00",
+        "2025-02-03 00:00:00",
+        "2025-01-25 00:00:00",
+        "2025-02-01 00:00:00",
+        "2025-01-23 00:00:00",
+        "2025-01-10 00:00:00",
+        "2025-01-15 00:00:00"
+      ]
+    },
+    "Change Type": {
+      "count": 1,
+      "type_counts": {
+        "string": 1
+      },
+      "value_patterns": [
+        "Delay Shift",
+        "Scope Change",
+        "Priority Change",
+        "Rebaseline",
+        "Resource Reallocation"
+      ]
+    },
+    "Delta (Days)": {
+      "count": 1,
+      "type_counts": {
+        "integer": 1
+      },
+      "value_patterns": []
+    },
+    "Rebaseline Flag": {
+      "count": 1,
+      "type_counts": {
+        "string": 1
+      },
+      "value_patterns": [
+        "No",
+        "Yes"
+      ]
+    },
+    "id": {
+      "count": 6,
+      "type_counts": {
+        "string": 6
+      },
+      "value_patterns": [
+        "T1002",
+        "T1082",
+        "T1023",
+        "T1048",
+        "T1117",
+        "T1102",
+        "T1017",
+        "T1003",
+        "T1086",
+        "T1036",
+        "T1019",
+        "T1014",
+        "T1004",
+        "T1093",
+        "T1090",
+        "T1008",
+        "T1029",
+        "T1066",
+        "T1055",
+        "T1080",
+        "T1056",
+        "T1106",
+        "T1040",
+        "T1024",
+        "T1000",
+        "T1001",
+        "T1005",
+        "T1006",
+        "T1007",
+        "T1009",
+        "T1010",
+        "T1011",
+        "T1012",
+        "T1013",
+        "T1015",
+        "T1016",
+        "T1018",
+        "T1020",
+        "T1021",
+        "T1022",
+        "T1025",
+        "T1026",
+        "T1027",
+        "T1028",
+        "T1030",
+        "T1031",
+        "T1032",
+        "T1033",
+        "T1034",
+        "T1035",
+        "T1037",
+        "T1038",
+        "T1039",
+        "T1041",
+        "T1042",
+        "T1043",
+        "T1044",
+        "T1045",
+        "T1046",
+        "T1047",
+        "T1049",
+        "T1050",
+        "T1051",
+        "T1052",
+        "T1053",
+        "T1054",
+        "T1057",
+        "T1058",
+        "T1059",
+        "T1060",
+        "T1061",
+        "T1062",
+        "T1063",
+        "T1064",
+        "T1065",
+        "T1067",
+        "T1068",
+        "T1069",
+        "T1070",
+        "T1071",
+        "T1072",
+        "T1073",
+        "T1074",
+        "T1075",
+        "T1076",
+        "T1077",
+        "T1078",
+        "T1079",
+        "T1081",
+        "T1083",
+        "T1084",
+        "T1085",
+        "T1087",
+        "T1088",
+        "T1089",
+        "T1091",
+        "T1092",
+        "T1094",
+        "T1095",
+        "T1096",
+        "T1097",
+        "T1098",
+        "T1099",
+        "T1100",
+        "T1101",
+        "T1103",
+        "T1104",
+        "T1105",
+        "T1107",
+        "T1108",
+        "T1109",
+        "T1110",
+        "T1111",
+        "T1112",
+        "T1113",
+        "T1114",
+        "T1115",
+        "T1116",
+        "T1118",
+        "T1119"
+      ]
+    },
+    "Priority": {
+      "count": 1,
+      "type_counts": {
+        "string": 1
+      },
+      "value_patterns": [
+        "Medium",
+        "Low",
+        "High"
+      ]
+    },
+    "type": {
+      "count": 1,
+      "type_counts": {
+        "string": 1
+      },
+      "value_patterns": [
+        "Resource",
+        "Schedule",
+        "Risk"
+      ]
+    },
+    "Recommendation": {
+      "count": 1,
+      "type_counts": {
+        "string": 1
+      },
+      "value_patterns": []
+    },
+    "Date Generated": {
+      "count": 1,
+      "type_counts": {
+        "string": 1
+      },
+      "value_patterns": [
+        "2025-07-04 00:00:00"
+      ]
+    },
+    "Forecasted Duration": {
+      "count": 1,
+      "type_counts": {
+        "integer": 1
+      },
+      "value_patterns": []
+    },
+    "Delay Risk (%)": {
+      "count": 1,
+      "type_counts": {
+        "number": 1
+      },
+      "value_patterns": []
+    },
+    "slippage_days": {
+      "count": 2,
+      "type_counts": {
+        "integer": 2
+      },
+      "value_patterns": []
+    },
+    "Delay (%)": {
+      "count": 1,
+      "type_counts": {
+        "number": 1
+      },
+      "value_patterns": []
+    },
+    "status": {
+      "count": 3,
+      "type_counts": {
+        "string": 2,
+        "integer": 1
+      },
+      "value_patterns": [
+        "Delayed",
+        "Cancelled",
+        "Completed",
+        "On Track",
+        "On Hold"
+      ]
+    },
+    "Task Code": {
+      "count": 2,
+      "type_counts": {
+        "string": 2
+      },
+      "value_patterns": [
+        "T1000",
+        "T1001",
+        "T1002",
+        "T1003",
+        "T1004",
+        "T1005",
+        "T1006",
+        "T1007",
+        "T1008",
+        "T1009",
+        "T1010",
+        "T1011",
+        "T1012",
+        "T1013",
+        "T1014",
+        "T1015",
+        "T1016",
+        "T1017",
+        "T1018",
+        "T1019",
+        "T1020",
+        "T1021",
+        "T1022",
+        "T1023",
+        "T1024",
+        "T1025",
+        "T1026",
+        "T1027",
+        "T1028",
+        "T1029",
+        "T1030",
+        "T1031",
+        "T1032",
+        "T1033",
+        "T1034",
+        "T1035",
+        "T1036",
+        "T1037",
+        "T1038",
+        "T1039",
+        "T1040",
+        "T1041",
+        "T1042",
+        "T1043",
+        "T1044",
+        "T1045",
+        "T1046",
+        "T1047",
+        "T1048",
+        "T1049",
+        "T1050",
+        "T1051",
+        "T1052",
+        "T1053",
+        "T1054",
+        "T1055",
+        "T1056",
+        "T1057",
+        "T1058",
+        "T1059",
+        "T1060",
+        "T1061",
+        "T1062",
+        "T1063",
+        "T1064",
+        "T1065",
+        "T1066",
+        "T1067",
+        "T1068",
+        "T1069",
+        "T1070",
+        "T1071",
+        "T1072",
+        "T1073",
+        "T1074",
+        "T1075",
+        "T1076",
+        "T1077",
+        "T1078",
+        "T1079",
+        "T1080",
+        "T1081",
+        "T1082",
+        "T1083",
+        "T1084",
+        "T1085",
+        "T1086",
+        "T1087",
+        "T1088",
+        "T1089",
+        "T1090",
+        "T1091",
+        "T1092",
+        "T1093",
+        "T1094",
+        "T1095",
+        "T1096",
+        "T1097",
+        "T1098",
+        "T1099",
+        "T1100",
+        "T1101",
+        "T1102",
+        "T1103",
+        "T1104",
+        "T1105",
+        "T1106",
+        "T1107",
+        "T1108",
+        "T1109",
+        "T1110",
+        "T1111",
+        "T1112",
+        "T1113",
+        "T1114",
+        "T1115",
+        "T1116",
+        "T1117",
+        "T1118",
+        "T1119"
+      ]
+    },
+    "Planned Start Date": {
+      "count": 1,
+      "type_counts": {
+        "string": 1
+      },
+      "value_patterns": [
+        "2025-01-23 00:00:00",
+        "2025-01-16 00:00:00",
+        "2025-01-25 00:00:00",
+        "2025-01-12 00:00:00",
+        "2025-01-19 00:00:00",
+        "2025-01-21 00:00:00",
+        "2025-01-11 00:00:00",
+        "2025-01-29 00:00:00",
+        "2025-01-10 00:00:00",
+        "2025-01-04 00:00:00",
+        "2025-01-05 00:00:00",
+        "2025-01-27 00:00:00",
+        "2025-01-08 00:00:00",
+        "2025-01-26 00:00:00",
+        "2025-01-01 00:00:00",
+        "2025-01-22 00:00:00",
+        "2025-01-13 00:00:00",
+        "2025-01-30 00:00:00",
+        "2025-01-09 00:00:00",
+        "2025-01-20 00:00:00",
+        "2025-01-28 00:00:00",
+        "2025-01-17 00:00:00",
+        "2025-01-07 00:00:00",
+        "2025-01-24 00:00:00",
+        "2025-01-06 00:00:00",
+        "2025-01-14 00:00:00",
+        "2025-01-03 00:00:00",
+        "2025-01-18 00:00:00",
+        "2025-01-15 00:00:00",
+        "2025-01-02 00:00:00"
+      ]
+    },
+    "Planned Finish Date": {
+      "count": 1,
+      "type_counts": {
+        "string": 1
+      },
+      "value_patterns": [
+        "2025-01-02 00:00:00",
+        "2025-06-02 00:00:00",
+        "2025-07-02 00:00:00",
+        "2025-11-01 00:00:00",
+        "2025-10-02 00:00:00",
+        "2025-09-01 00:00:00",
+        "2025-12-01 00:00:00",
+        "2025-12-02 00:00:00",
+        "2025-05-02 00:00:00",
+        "2025-04-02 00:00:00",
+        "2025-11-02 00:00:00",
+        "2025-08-02 00:00:00",
+        "2025-03-02 00:00:00",
+        "2025-09-02 00:00:00",
+        "2025-02-02 00:00:00",
+        "2025-08-01 00:00:00"
+      ]
+    },
+    "Actual Start Date": {
+      "count": 1,
+      "type_counts": {
+        "string": 1
+      },
+      "value_patterns": [
+        "2025-01-23 00:00:00",
+        "2025-01-16 00:00:00",
+        "2025-01-25 00:00:00",
+        "2025-01-12 00:00:00",
+        "2025-01-19 00:00:00",
+        "2025-01-21 00:00:00",
+        "2025-01-11 00:00:00",
+        "2025-01-29 00:00:00",
+        "2025-01-10 00:00:00",
+        "2025-01-04 00:00:00",
+        "2025-01-05 00:00:00",
+        "2025-01-27 00:00:00",
+        "2025-01-08 00:00:00",
+        "2025-01-26 00:00:00",
+        "2025-01-01 00:00:00",
+        "2025-01-22 00:00:00",
+        "2025-01-13 00:00:00",
+        "2025-01-30 00:00:00",
+        "2025-01-09 00:00:00",
+        "2025-01-20 00:00:00",
+        "2025-01-28 00:00:00",
+        "2025-01-17 00:00:00",
+        "2025-01-07 00:00:00",
+        "2025-01-24 00:00:00",
+        "2025-01-06 00:00:00",
+        "2025-01-14 00:00:00",
+        "2025-01-03 00:00:00",
+        "2025-01-18 00:00:00",
+        "2025-01-15 00:00:00",
+        "2025-01-02 00:00:00"
+      ]
+    },
+    "Actual Finish Date": {
+      "count": 1,
+      "type_counts": {
+        "string": 1
+      },
+      "value_patterns": [
+        "2025-01-02 00:00:00",
+        "2025-06-02 00:00:00",
+        "2025-07-02 00:00:00",
+        "2025-11-01 00:00:00",
+        "2025-10-02 00:00:00",
+        "2025-09-01 00:00:00",
+        "2025-12-01 00:00:00",
+        "2025-12-02 00:00:00",
+        "2025-05-02 00:00:00",
+        "2025-04-02 00:00:00",
+        "2025-11-02 00:00:00",
+        "2025-08-02 00:00:00",
+        "2025-03-02 00:00:00",
+        "2025-09-02 00:00:00",
+        "2025-02-02 00:00:00",
+        "2025-08-01 00:00:00"
+      ]
+    },
+    "name": {
+      "count": 1,
+      "type_counts": {
+        "string": 1
+      },
+      "value_patterns": [
+        "Virtual intermediate extranet",
+        "Open-source explicit attitude",
+        "Ergonomic intangible definition",
+        "Phased mobile service-desk",
+        "Persevering fresh-thinking matrix",
+        "Advanced bandwidth-monitored installation",
+        "Multi-tiered incremental info-mediaries",
+        "Triple-buffered 24hour collaboration",
+        "Up-sized maximized concept",
+        "Grass-roots mission-critical adapter",
+        "Function-based client-server core",
+        "Cross-platform intermediate installation",
+        "Customer-focused global website",
+        "Team-oriented homogeneous policy",
+        "Intuitive bandwidth-monitored frame",
+        "Polarized real-time initiative",
+        "Synergized upward-trending complexity",
+        "Optimized logistical approach",
+        "Customer-focused fresh-thinking encoding",
+        "Customizable dynamic knowledgebase",
+        "Compatible directional implementation",
+        "Networked leadingedge open system",
+        "Automated 24/7 forecast",
+        "Face-to-face client-driven time-frame",
+        "Reactive 4thgeneration methodology",
+        "Ameliorated real-time model",
+        "Digitized foreground moderator",
+        "Managed human-resource hub",
+        "Multi-channeled multimedia knowledgebase",
+        "Profound multi-state initiative",
+        "Inverse 5thgeneration success",
+        "Compatible methodical Graphic Interface",
+        "Reverse-engineered heuristic service-desk",
+        "Operative executive neural-net",
+        "Sharable reciprocal moratorium",
+        "Balanced systemic hardware",
+        "Extended client-driven concept",
+        "Stand-alone optimizing knowledgebase",
+        "User-centric bandwidth-monitored access",
+        "Up-sized multimedia project",
+        "Centralized disintermediate algorithm",
+        "Fully-configurable uniform concept",
+        "Expanded intermediate knowledgebase",
+        "Operative bifurcated hardware",
+        "Reactive foreground info-mediaries",
+        "Total analyzing policy",
+        "Configurable zero tolerance moratorium",
+        "Open-architected coherent pricing structure",
+        "Diverse incremental customer loyalty",
+        "Assimilated context-sensitive superstructure",
+        "Programmable exuding superstructure",
+        "User-friendly disintermediate algorithm",
+        "Secured 24/7 challenge",
+        "Upgradable incremental open architecture",
+        "Progressive 24hour support",
+        "Enhanced encompassing protocol",
+        "Visionary neutral function",
+        "Proactive foreground middleware",
+        "Face-to-face fresh-thinking time-frame",
+        "Networked 24hour pricing structure",
+        "Implemented grid-enabled array",
+        "Ameliorated asymmetric standardization",
+        "Vision-oriented explicit secured line",
+        "Organized maximized methodology",
+        "Synergized bottom-line alliance",
+        "Business-focused client-server policy",
+        "Stand-alone content-based capacity",
+        "Balanced actuating moratorium",
+        "Synchronized heuristic encryption",
+        "Profound 6thgeneration system engine",
+        "Customer-focused zero-defect product",
+        "Persevering even-keeled flexibility",
+        "Grass-roots coherent algorithm",
+        "Quality-focused user-facing productivity",
+        "Team-oriented optimizing complexity",
+        "Synchronized systematic circuit",
+        "Ergonomic zero administration adapter",
+        "Down-sized bandwidth-monitored emulation",
+        "Enterprise-wide methodical alliance",
+        "Programmable bifurcated core",
+        "Grass-roots methodical solution",
+        "Fully-configurable composite secured line",
+        "Enhanced mission-critical functionalities",
+        "Advanced user-facing workforce",
+        "Multi-channeled contextually-based hierarchy",
+        "Optional modular archive",
+        "Function-based value-added protocol",
+        "Switchable zero-defect adapter",
+        "Right-sized real-time Internet solution",
+        "Public-key system-worthy protocol",
+        "Optional intangible standardization",
+        "Customizable high-level Graphic Interface",
+        "Triple-buffered 3rdgeneration circuit",
+        "Integrated client-server forecast",
+        "Synergistic intangible moderator",
+        "Organized intangible help-desk",
+        "Proactive holistic product",
+        "De-engineered heuristic matrices",
+        "Multi-layered 4thgeneration product",
+        "Proactive demand-driven software",
+        "Profound transitional hub",
+        "Networked 3rdgeneration utilization",
+        "Customer-focused human-resource ability",
+        "Robust value-added complexity",
+        "Focused demand-driven matrices",
+        "Integrated secondary concept",
+        "Distributed context-sensitive algorithm",
+        "Extended human-resource benchmark",
+        "Optimized secondary budgetary management",
+        "Up-sized 24hour definition",
+        "Upgradable mobile knowledgebase",
+        "Advanced 4thgeneration middleware",
+        "Decentralized asynchronous monitoring",
+        "Polarized full-range challenge",
+        "Expanded systematic paradigm",
+        "Adaptive regional secured line",
+        "Proactive eco-centric installation",
+        "Customer-focused grid-enabled collaboration",
+        "Reverse-engineered high-level utilization",
+        "Implemented background hub"
+      ]
+    },
+    "start": {
+      "count": 2,
+      "type_counts": {
+        "string": 2
+      },
+      "value_patterns": [
+        "2025-01-23 00:00:00",
+        "2025-01-16 00:00:00",
+        "2025-01-25 00:00:00",
+        "2025-01-12 00:00:00",
+        "2025-01-19 00:00:00",
+        "2025-01-21 00:00:00",
+        "2025-01-11 00:00:00",
+        "2025-01-29 00:00:00",
+        "2025-01-10 00:00:00",
+        "2025-01-04 00:00:00",
+        "2025-01-05 00:00:00",
+        "2025-01-27 00:00:00",
+        "2025-01-08 00:00:00",
+        "2025-01-26 00:00:00",
+        "2025-01-01 00:00:00",
+        "2025-01-22 00:00:00",
+        "2025-01-13 00:00:00",
+        "2025-01-30 00:00:00",
+        "2025-01-09 00:00:00",
+        "2025-01-20 00:00:00",
+        "2025-01-28 00:00:00",
+        "2025-01-17 00:00:00",
+        "2025-01-07 00:00:00",
+        "2025-01-24 00:00:00",
+        "2025-01-06 00:00:00",
+        "2025-01-14 00:00:00",
+        "2025-01-03 00:00:00",
+        "2025-01-18 00:00:00",
+        "2025-01-15 00:00:00",
+        "2025-01-02 00:00:00"
+      ]
+    },
+    "end_date": {
+      "count": 1,
+      "type_counts": {
+        "string": 1
+      },
+      "value_patterns": [
+        "2025-01-02 00:00:00",
+        "2025-06-02 00:00:00",
+        "2025-07-02 00:00:00",
+        "2025-11-01 00:00:00",
+        "2025-10-02 00:00:00",
+        "2025-09-01 00:00:00",
+        "2025-12-01 00:00:00",
+        "2025-12-02 00:00:00",
+        "2025-05-02 00:00:00",
+        "2025-04-02 00:00:00",
+        "2025-11-02 00:00:00",
+        "2025-08-02 00:00:00",
+        "2025-03-02 00:00:00",
+        "2025-09-02 00:00:00",
+        "2025-02-02 00:00:00",
+        "2025-08-01 00:00:00"
+      ]
+    },
+    "dependencies": {
+      "count": 1,
+      "type_counts": {
+        "string": 1
+      },
+      "value_patterns": []
+    },
+    "resource_id": {
+      "count": 1,
+      "type_counts": {
+        "string": 1
+      },
+      "value_patterns": [
+        "R3",
+        "R5",
+        "R7",
+        "R8",
+        "R9",
+        "R4",
+        "R6",
+        "R1",
+        "R2"
+      ]
+    },
+    "Overall Risk (%)": {
+      "count": 2,
+      "type_counts": {
+        "number": 1,
+        "integer": 1
+      },
+      "value_patterns": []
+    },
+    "Primary Risk Reason": {
+      "count": 1,
+      "type_counts": {
+        "string": 1
+      },
+      "value_patterns": [
+        "Scope Changes",
+        "Unclear Requirements",
+        "Technical Complexity",
+        "Resource Availability",
+        "External Dependencies",
+        "Overallocated Resources",
+        "Dependency Delays",
+        "Quality Issues"
+      ]
+    },
+    "Risk Score Rank": {
+      "count": 1,
+      "type_counts": {
+        "integer": 1
+      },
+      "value_patterns": []
+    },
+    "Active Task": {
+      "count": 1,
+      "type_counts": {
+        "integer": 1
+      },
+      "value_patterns": []
+    },
+    "Delayed Task": {
+      "count": 1,
+      "type_counts": {
+        "integer": 1
+      },
+      "value_patterns": []
+    },
+    "End Date": {
+      "count": 1,
+      "type_counts": {
+        "string": 1
+      },
+      "value_patterns": [
+        "2025-01-02 00:00:00",
+        "2025-06-02 00:00:00",
+        "2025-07-02 00:00:00",
+        "2025-11-01 00:00:00",
+        "2025-10-02 00:00:00",
+        "2025-09-01 00:00:00",
+        "2025-12-01 00:00:00",
+        "2025-12-02 00:00:00",
+        "2025-05-02 00:00:00",
+        "2025-04-02 00:00:00",
+        "2025-11-02 00:00:00",
+        "2025-08-02 00:00:00",
+        "2025-03-02 00:00:00",
+        "2025-09-02 00:00:00",
+        "2025-02-02 00:00:00",
+        "2025-08-01 00:00:00"
+      ]
+    }
+  }
+}
