@@ -121,7 +121,7 @@ ProjectLens/
 │   │   │   └── task_updates.csv
 │   │   └── Delta/
 │   │       └── task_updates.csv
-│   ├── output/            # Generated analysis results
+│   ├── output/            # Generated analysis results (used by Power BI)
 │   ├── archive/           # Input folders moved here after processing (success/failed)
 │   └── schemas/           # JSON schemas for data validation (e.g., tasks.json)
 ├── Processing/            # Backend data processing modules
@@ -138,7 +138,10 @@ ProjectLens/
 │   ├── run_website.py     # Main script to set up venv and run the web server
 │   ├── static/            # CSS, JavaScript, images for the website
 │   └── templates/         # HTML templates for the website
-└── README.md              # This file
+├── Output/
+│   └── ProjectLens.pbix   # Microsoft Power BI dashboard (linked to Data/output/)
+└── README.md              # Project setup and documentation
+
 ```
 
 ## Setup and Execution
