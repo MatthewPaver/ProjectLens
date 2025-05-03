@@ -4,6 +4,10 @@ ProjectLens provides a web interface and backend pipeline for analysing project 
 
 ---
 
+<p align="center">
+  <img src="https://github.com/MatthewPaver/ProjectLens/blob/main/Portfolio%20Overview%20Thumbnail.png?raw=true" alt="Portfolio Overview" width="1000"/>
+</p>
+
 ## 🚀 Quick Start: How to Run the Website
 
 1. **Open your terminal and navigate to the ProjectLens root directory:**
