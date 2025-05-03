@@ -1,51 +1,76 @@
-task_id,task_name,actual_start,actual_finish,baseline_start,baseline_end,percent_complete,duration,status,is_milestone,is_critical,risk_flag,severity_score,update_phase
-TSK-001,Task 001,2024-11-22,2025-01-10,2024-11-21,2025-01-02,1.0,5 wks,Complete,FALSE,True,Medium,0.12,Update_006
-TSK-002,Task 002,2025-02-23,2025-04-18,2025-02-21,2025-04-04,1.0,5 wks,Complete,FALSE,TRUE,Low,,Update_006
-TSK-003,Task 003,2025-09-24,2025-11-19,2025-09-26,2025-11-17,Complete,8,Complete,,0,High,0.83,Update_006
-TSK-004,Task 004,2025-08-06,2025-10-06,2025-08-09,2025-10-07,100%,5 wks,Complete,,True,H,0.34,Update_006
-TSK-005,Task 005,2025-07-19,2025-08-24,2025-07-16,2025-08-28,1.0,4 wks,Complete,TRUE,True,,,Update_006
-TSK-006,Task 006,2024-10-26,2024-12-09,2024-10-29,2024-12-02,100%,,Complete,No,0,High,0.46,Update_006
-TSK-007,Task 007,2025-07-12,2025-09-07,2025-07-14,2025-09-06,Complete,5 wks,Complete,TRUE,,Low,,Update_006
-TSK-008,Task 008,2025-03-25,2025-04-21,2025-03-24,2025-04-03,100%,4 days,Complete,TRUE,FALSE,L,0.86,Update_006
-TSK-009,Task 009,2024-12-14,2025-02-09,2024-12-12,2025-01-30,100%,33,Complete,False,FALSE,L,0.42,Update_006
-TSK-010,Task 010,2025-08-11,2025-08-31,2025-08-12,2025-09-02,Complete,2 wks,Complete,TRUE,No,Medium,,Update_006
-TSK-011,Task 011,2025-05-12,2025-07-14,2025-05-13,2025-06-21,1.0,,Complete,True,TRUE,Medium,0.75,Update_006
-TSK-012,Task 012,2025-03-16,,2025-03-14,2025-04-19,,3 days,IP,1,No,Low,,Update_006
-TSK-013,Task 013,2025-01-14,2025-03-05,2025-01-11,2025-02-17,100%,1 days,Complete,0,No,Medium,,Update_006
-TSK-014,Task 014,2025-04-23,2025-05-19,2025-04-25,2025-05-20,100%,5,Complete,No,No,Low,0.13,Update_006
-TSK-015,Task 015,2025-01-18,2025-02-02,2025-01-20,2025-02-02,100%,4 wks,Complete,FALSE,0,H,,Update_006
-TSK-016,Task 016,2025-10-08,,2025-10-09,2025-10-30,,3 wks,IP,No,FALSE,Low,,Update_006
-TSK-017,Task 017,2024-11-21,,2024-11-20,2025-01-03,57,4 wks,In Progress,No,1,Medium,,Update_006
-TSK-018,Task 018,2025-03-23,2025-05-19,2025-03-26,2025-05-14,1.0,2 wks,Complete,False,False,Low,,Update_006
-TSK-019,Task 019,2025-07-07,2025-09-02,2025-07-07,2025-08-22,1.0,25,Complete,,False,Low,,Update_006
-TSK-020,Task 020,2024-12-09,2025-02-13,2024-12-08,2025-02-01,1.0,,Complete,FALSE,,H,,Update_006
-TSK-021,Task 021,2025-01-14,2025-02-25,2025-01-17,2025-02-17,1.0,2 wks,Complete,No,1,Medium,0.34,Update_006
-TSK-022,Task 022,2025-10-08,2025-12-02,2025-10-06,2025-10-26,100%,2 wks,Complete,,0,L,,Update_006
-TSK-023,Task 023,2024-11-26,2025-01-19,2024-11-28,2025-01-15,1.0,8 days,Complete,,TRUE,L,0.4,Update_006
-TSK-024,Task 024,2024-10-26,,2024-10-28,2024-11-07,57%,30,IP,1,False,,0.38,Update_006
-TSK-025,Task 025,2025-02-17,2025-03-28,2025-02-18,2025-03-13,100%,9 days,Complete,Yes,0,,0.76,Update_006
-TSK-026,Task 026,2025-07-25,,2025-07-25,2025-08-05,,6 days,In Progress,1,Yes,Medium,0.47,Update_006
-TSK-027,Task 027,2025-05-09,2025-05-28,2025-05-10,2025-05-31,100%,,Complete,Yes,,Medium,,Update_006
-TSK-028,Task 028,2025-02-20,2025-04-12,2025-02-20,2025-04-02,1.0,5 wks,Complete,Yes,Yes,H,,Update_006
-TSK-029,Task 029,2025-07-19,2025-08-15,2025-07-16,2025-08-03,100%,,Complete,Yes,No,,0.37,Update_006
-TSK-030,Task 030,2025-10-21,2025-12-27,2025-10-23,2025-12-07,1.0,,Complete,,True,Medium,,Update_006
-TSK-031,Task 031,2025-05-11,2025-06-18,2025-05-14,2025-06-02,Complete,4 wks,Complete,1,No,Medium,0.8,Update_006
-TSK-032,Task 032,2025-09-01,2025-11-21,2025-08-31,2025-10-06,1.0,46,Complete,FALSE,,High,,Update_006
-TSK-033,Task 033,2025-10-19,2025-12-18,2025-10-19,2025-11-15,100%,3 days,Complete,1,0,H,0.11,Update_006
-TSK-034,Task 034,2025-04-12,2025-05-20,2025-04-12,2025-05-17,Complete,3 days,Complete,FALSE,0,Low,0.91,Update_006
-TSK-035,Task 035,2024-10-30,2024-11-22,2024-11-01,2024-11-27,Complete,5 wks,Complete,True,TRUE,L,,Update_006
-TSK-036,Task 036,2025-08-05,2025-10-03,2025-08-04,2025-09-19,Complete,4 wks,Complete,TRUE,True,High,,Update_006
-TSK-037,Task 037,2025-03-31,2025-05-15,2025-04-02,2025-05-09,Complete,2 wks,Complete,No,,Low,0.91,Update_006
-TSK-038,Task 038,2024-11-14,2025-01-21,2024-11-12,2025-01-11,Complete,5 wks,Complete,,TRUE,,0.66,Update_006
-TSK-039,Task 039,2025-07-23,2025-08-18,2025-07-24,2025-08-08,Complete,5 wks,Complete,0,,Medium,,Update_006
-TSK-040,Task 040,2024-11-28,2025-01-08,2024-11-30,2025-01-08,Complete,,Complete,FALSE,False,,,Update_006
-TSK-041,Task 041,2025-01-29,2025-04-04,2025-01-31,2025-03-24,Complete,,Complete,No,0,Medium,0.94,Update_006
-TSK-042,Task 042,2025-06-13,2025-07-09,2025-06-12,2025-06-24,1.0,,Complete,,False,L,0.41,Update_006
-TSK-043,Task 043,2025-03-25,2025-05-12,2025-03-25,2025-05-01,Complete,1 days,Complete,FALSE,1,Low,0.17,Update_006
-TSK-044,Task 044,2024-11-26,2025-01-13,2024-11-24,2025-01-03,100%,3 days,Complete,,,,,Update_006
-TSK-045,Task 045,2025-02-15,2025-04-13,2025-02-13,2025-03-13,Complete,4 wks,Complete,,False,Low,0.24,Update_006
-TSK-046,Task 046,2025-10-07,2025-11-15,2025-10-07,2025-11-09,100%,5 days,Complete,False,False,L,,Update_006
-TSK-047,Task 047,2025-08-09,2025-09-27,2025-08-12,2025-09-25,1.0,,Complete,False,False,H,,Update_006
-TSK-048,Task 048,2025-04-10,2025-06-07,2025-04-12,2025-06-09,1.0,2 days,Complete,No,False,Medium,,Update_006
-TSK-049,Task 049,2025-02-07,2025-04-12,2025-02-06,2025-03-25,100%,41,Complete,True,False,High,0.39,Update_006
-TSK-050,Task 050,2025-01-18,2025-01-31,2025-01-18,2025-02-03,Complete,10 days,Complete,No,,H,0.61,Update_006
+project_name,task_id,task_name,actual_start,actual_finish,baseline_start,baseline_end,baseline_duration,is_delayed,delay_days,delay_percentage,percent_complete,status,is_milestone,is_critical,is_active,risk_flag,severity_score,severity_factors,update_phase
+Gamma,TSK-001,Task 001,2025-08-14,2025-10-31,2025-08-11,2025-09-21,41,False,0,0.0,100%,Complete,False,True,False,Low,0,,Update_006
+Gamma,TSK-002,Task 002,2025-10-26,2025-12-09,2025-10-25,2025-11-15,21,False,0,0.0,100%,Complete,False,True,False,H,0,,Update_006
+Gamma,TSK-003,Task 003,2025-04-15,,2025-04-15,2025-04-29,14,False,0,0.0,43%,In Progress,False,False,True,High,2,Risk Level: High (+2 points),Update_006
+Gamma,TSK-004,Task 004,2025-08-06,2025-09-28,2025-08-08,2025-09-04,27,True,23,85.2,Complete,Complete,False,False,False,Low,3,Delayed by 23 days (+3 points),Update_006
+Gamma,TSK-005,Task 005,2025-05-17,2025-06-09,2025-05-14,2025-05-24,10,True,16,160.0,100%,Complete,False,True,False,Medium,5,Delayed by 16 days (+2 points); Risk Level: Medium (+1 points); On Critical Path (+2 points),Update_006
+Gamma,TSK-006,Task 006,2025-02-26,2025-04-19,2025-02-27,2025-03-19,20,True,31,155.0,100%,Complete,True,False,False,Low,5,Delayed by 31 days (+4 points); Milestone Task (+1 point),Update_006
+Gamma,TSK-007,Task 007,2024-12-21,2025-02-16,2024-12-21,2025-01-08,18,False,0,0.0,100%,Complete,False,True,False,L,0,,Update_006
+Gamma,TSK-008,Task 008,2025-03-28,2025-05-14,2025-03-25,2025-05-09,45,True,4,8.9,100%,Complete,False,False,False,Low,1,Delayed by 4 days (+1 points),Update_006
+Gamma,TSK-009,Task 009,2024-11-05,2024-12-15,2024-11-05,2024-11-21,16,False,0,0.0,100%,Complete,False,False,False,High,0,,Update_006
+Gamma,TSK-010,Task 010,2024-12-24,2025-01-29,2024-12-23,2025-01-16,24,True,12,50.0,100%,Complete,True,True,False,H,7,Delayed by 12 days (+2 points); Risk Level: H (+2 points); On Critical Path (+2 points); Milestone Task (+1 point),Update_006
+Gamma,TSK-011,Task 011,2024-11-07,2024-12-17,2024-11-05,2024-11-20,15,False,0,0.0,100%,Complete,True,False,False,Medium,0,,Update_006
+Gamma,TSK-012,Task 012,2025-01-04,2025-03-28,2025-01-05,2025-03-02,56,False,0,0.0,100%,Complete,False,False,False,High,0,,Update_006
+Gamma,TSK-013,Task 013,2025-02-08,2025-03-27,2025-02-08,2025-03-09,29,False,0,0.0,100%,Complete,False,False,False,L,0,,Update_006
+Gamma,TSK-014,Task 014,2025-09-26,2025-11-15,2025-09-24,2025-11-05,42,False,0,0.0,100%,Complete,False,False,False,,0,,Update_006
+Gamma,TSK-015,Task 015,2025-06-04,2025-09-07,2025-06-02,2025-07-27,55,True,41,74.5,100%,Complete,True,False,False,H,8,Delayed by 41 days (+5 points); Risk Level: H (+2 points); Milestone Task (+1 point),Update_006
+Gamma,TSK-016,Task 016,2025-05-06,2025-07-30,2025-05-03,2025-06-26,54,False,0,0.0,100%,Complete,False,False,False,Medium,0,,Update_006
+Gamma,TSK-017,Task 017,2025-06-23,2025-07-06,2025-06-25,2025-08-04,40,False,0,0.0,100%,Complete,False,True,False,L,0,,Update_006
+Gamma,TSK-018,Task 018,2024-11-27,2025-01-16,2024-11-24,2024-12-27,33,True,19,57.6,100%,Complete,False,True,False,L,4,Delayed by 19 days (+2 points); On Critical Path (+2 points),Update_006
+Gamma,TSK-019,Task 019,2025-10-04,2025-11-14,2025-10-01,2025-11-05,35,True,9,25.7,Complete,Complete,False,True,False,L,3,Delayed by 9 days (+1 points); On Critical Path (+2 points),Update_006
+Gamma,TSK-020,Task 020,2025-11-01,2025-12-05,2025-10-29,2025-11-09,11,False,0,0.0,100%,Complete,False,False,False,L,0,,Update_006
+Gamma,TSK-021,Task 021,2025-04-10,2025-06-18,2025-04-07,2025-06-03,57,False,0,0.0,100%,Complete,False,True,False,Low,0,,Update_006
+Gamma,TSK-022,Task 022,2025-04-20,2025-08-02,2025-04-17,2025-06-14,58,False,0,0.0,100%,Complete,False,False,False,H,0,,Update_006
+Gamma,TSK-023,Task 023,2024-12-05,2025-03-28,2024-12-08,2025-02-03,57,False,0,0.0,100%,Complete,True,False,False,Low,0,,Update_006
+Gamma,TSK-024,Task 024,2025-03-20,,2025-03-22,2025-05-11,50,False,0,0.0,,In Progress,True,False,True,,1,Milestone Task (+1 point),Update_006
+Gamma,TSK-025,Task 025,2025-08-11,,2025-08-09,2025-08-25,16,False,0,0.0,34%,In Progress,False,False,True,Medium,1,Risk Level: Medium (+1 points),Update_006
+Gamma,TSK-026,Task 026,2025-05-16,2025-06-20,2025-05-16,2025-06-07,22,False,0,0.0,100%,Complete,False,True,False,L,0,,Update_006
+Gamma,TSK-027,Task 027,2025-08-22,2025-12-03,2025-08-20,2025-10-04,45,False,0,0.0,100%,Complete,True,False,False,Medium,0,,Update_006
+Gamma,TSK-028,Task 028,2025-02-13,2025-05-09,2025-02-12,2025-03-31,47,False,0,0.0,100%,Complete,False,False,False,Low,0,,Update_006
+Gamma,TSK-029,Task 029,2024-11-09,,2024-11-08,2024-12-20,42,False,0,0.0,54%,Started,False,False,True,,0,,Update_006
+Gamma,TSK-030,Task 030,2025-01-03,2025-03-12,2025-01-04,2025-02-25,52,False,0,0.0,100%,Complete,False,False,False,High,0,,Update_006
+Gamma,TSK-031,Task 031,2025-06-29,2025-09-10,2025-07-01,2025-08-13,43,False,0,0.0,100%,Complete,False,False,False,,0,,Update_006
+Gamma,TSK-032,Task 032,2025-09-13,2025-12-29,2025-09-14,2025-10-13,29,False,0,0.0,100%,Complete,True,True,False,,0,,Update_006
+Gamma,TSK-033,Task 033,2025-06-30,,2025-06-27,2025-08-10,44,False,0,0.0,,Started,False,False,True,Medium,1,Risk Level: Medium (+1 points),Update_006
+Gamma,TSK-034,Task 034,2025-01-16,2025-04-14,2025-01-15,2025-03-10,54,False,0,0.0,100%,Complete,False,False,False,Low,0,,Update_006
+Gamma,TSK-035,Task 035,2025-01-17,2025-04-18,2025-01-20,2025-03-03,42,False,0,0.0,100%,Complete,False,False,False,High,0,,Update_006
+Gamma,TSK-036,Task 036,2025-07-05,2025-10-19,2025-07-02,2025-08-29,58,False,0,0.0,100%,Complete,False,True,False,H,0,,Update_006
+Gamma,TSK-037,Task 037,2025-04-19,2025-04-27,2025-04-20,2025-05-20,30,False,0,0.0,100%,Complete,False,False,False,High,0,,Update_006
+Gamma,TSK-038,Task 038,2025-09-09,2026-02-19,2025-09-11,2025-10-27,46,True,114,247.8,100%,Complete,False,False,False,,5,Delayed by 114 days (+5 points),Update_006
+Gamma,TSK-039,Task 039,2025-06-06,2025-07-30,2025-06-06,2025-07-04,28,False,0,0.0,100%,Complete,True,True,False,Medium,0,,Update_006
+Gamma,TSK-040,Task 040,2025-04-19,2025-06-17,2025-04-17,2025-05-28,41,True,20,48.8,100%,Complete,False,False,False,Low,2,Delayed by 20 days (+2 points),Update_006
+Gamma,TSK-041,Task 041,2025-07-28,2025-09-08,2025-07-30,2025-08-24,25,False,0,0.0,100%,Complete,True,False,False,Low,0,,Update_006
+Gamma,TSK-042,Task 042,2025-09-22,2025-11-12,2025-09-19,2025-10-20,31,False,0,0.0,100%,Complete,True,False,False,L,0,,Update_006
+Gamma,TSK-043,Task 043,2024-12-12,2025-03-06,2024-12-14,2025-02-12,60,False,0,0.0,100%,Complete,False,False,False,,0,,Update_006
+Gamma,TSK-044,Task 044,2025-09-21,2025-11-05,2025-09-22,2025-10-14,22,False,0,0.0,100%,Complete,False,False,False,,0,,Update_006
+Gamma,TSK-045,Task 045,2025-06-02,2025-06-13,2025-06-02,2025-06-12,10,False,0,0.0,100%,Complete,False,True,False,,0,,Update_006
+Gamma,TSK-046,Task 046,2025-07-29,2025-10-24,2025-07-29,2025-09-13,46,False,0,0.0,100%,Complete,False,True,False,High,0,,Update_006
+Gamma,TSK-047,Task 047,2025-09-12,2026-01-23,2025-09-12,2025-11-09,58,True,74,127.6,Complete,Complete,False,True,False,Low,7,Delayed by 74 days (+5 points); On Critical Path (+2 points),Update_006
+Gamma,TSK-048,Task 048,2025-10-26,2026-01-03,2025-10-29,2025-12-15,47,True,18,38.3,100%,Complete,False,True,False,Medium,5,Delayed by 18 days (+2 points); Risk Level: Medium (+1 points); On Critical Path (+2 points),Update_006
+Gamma,TSK-049,Task 049,2024-11-09,2025-01-30,2024-11-10,2024-12-21,41,False,0,0.0,100%,Complete,False,False,False,L,0,,Update_006
+Gamma,TSK-050,Task 050,2025-01-31,2025-05-13,2025-02-01,2025-03-30,57,False,0,0.0,100%,Complete,False,False,False,L,0,,Update_006
+Gamma,TSK-051,Task 051,2025-06-26,2025-08-06,2025-06-27,2025-08-08,42,False,-2,-4.8,100%,Complete,False,True,False,,2,On Critical Path (+2 points),Update_006
+Gamma,TSK-052,Task 052,2024-12-13,2025-02-01,2024-12-14,2024-12-27,13,False,0,0.0,100%,Complete,False,False,False,Medium,0,,Update_006
+Gamma,TSK-053,Task 053,2025-06-06,2025-07-24,2025-06-09,2025-06-28,19,False,0,0.0,100%,Complete,False,True,False,Medium,0,,Update_006
+Gamma,TSK-054,Task 054,2024-12-26,2025-05-24,2024-12-26,2025-01-31,36,False,0,0.0,100%,Complete,False,False,False,L,0,,Update_006
+Gamma,TSK-055,Task 055,2025-09-07,,2025-09-04,2025-11-01,58,False,0,0.0,,IP,True,True,True,High,5,Risk Level: High (+2 points); On Critical Path (+2 points); Milestone Task (+1 point),Update_006
+Gamma,TSK-056,Task 056,2025-09-08,2025-10-26,2025-09-08,2025-10-11,33,False,0,0.0,100%,Complete,False,True,False,Medium,0,,Update_006
+Gamma,TSK-057,Task 057,2025-05-14,2025-07-18,2025-05-12,2025-06-08,27,False,0,0.0,100%,Complete,False,False,False,,0,,Update_006
+Gamma,TSK-058,Task 058,2025-02-10,2025-02-27,2025-02-10,2025-02-25,15,False,0,0.0,100%,Complete,False,False,False,,0,,Update_006
+Gamma,TSK-059,Task 059,2025-05-18,2025-06-01,2025-05-17,2025-06-19,33,False,0,0.0,100%,Complete,False,False,False,H,0,,Update_006
+Gamma,TSK-060,Task 060,2025-02-25,2025-06-04,2025-02-27,2025-04-20,52,False,0,0.0,100%,Complete,False,True,False,Low,0,,Update_006
+Gamma,TSK-061,Task 061,2025-10-23,2026-02-02,2025-10-22,2025-12-15,54,True,48,88.9,Complete,Complete,False,False,False,,5,Delayed by 48 days (+5 points),Update_006
+Gamma,TSK-062,Task 062,2025-06-22,2025-08-03,2025-06-24,2025-07-16,22,False,0,0.0,100%,Complete,True,False,False,Medium,0,,Update_006
+Gamma,TSK-063,Task 063,2025-10-03,2025-12-27,2025-10-02,2025-10-30,28,False,0,0.0,100%,Complete,True,False,False,High,0,,Update_006
+Gamma,TSK-064,Task 064,2025-02-26,2025-06-01,2025-02-28,2025-03-26,26,True,67,257.7,1.0,Complete,True,False,False,Medium,7,Delayed by 67 days (+5 points); Risk Level: Medium (+1 points); Milestone Task (+1 point),Update_006
+Gamma,TSK-065,Task 065,2025-05-17,2025-08-26,2025-05-18,2025-07-08,51,False,0,0.0,100%,Complete,False,False,False,High,0,,Update_006
+Gamma,TSK-066,Task 066,2025-08-01,2025-10-29,2025-08-04,2025-08-23,19,True,66,347.4,1.0,Complete,False,True,False,Medium,8,Delayed by 66 days (+5 points); Risk Level: Medium (+1 points); On Critical Path (+2 points),Update_006
+Gamma,TSK-067,Task 067,2025-07-24,2025-09-27,2025-07-25,2025-08-23,29,False,0,0.0,100%,Complete,False,True,False,High,0,,Update_006
+Gamma,TSK-068,Task 068,2025-05-26,2025-08-19,2025-05-28,2025-07-20,53,False,0,0.0,100%,Complete,False,False,False,High,0,,Update_006
+Gamma,TSK-069,Task 069,2025-02-03,2025-04-08,2025-02-05,2025-04-03,57,False,0,0.0,100%,Complete,False,True,False,H,0,,Update_006
+Gamma,TSK-070,Task 070,2024-12-24,2025-03-01,2024-12-27,2025-02-04,39,True,24,61.5,Complete,Complete,False,False,False,H,5,Delayed by 24 days (+3 points); Risk Level: H (+2 points),Update_006
+Gamma,TSK-071,Task 071,2025-03-12,2025-05-24,2025-03-14,2025-04-13,30,False,0,0.0,100%,Complete,False,False,False,High,0,,Update_006
+Gamma,TSK-072,Task 072,2024-12-23,2025-03-18,2024-12-24,2025-01-22,29,True,55,189.7,100%,Complete,False,True,False,High,9,Delayed by 55 days (+5 points); Risk Level: High (+2 points); On Critical Path (+2 points),Update_006
+Gamma,TSK-073,Task 073,2024-11-14,2025-02-11,2024-11-11,2024-12-21,40,False,0,0.0,100%,Complete,True,False,False,L,0,,Update_006
+Gamma,TSK-074,Task 074,2025-07-04,2025-09-03,2025-07-03,2025-08-29,57,False,0,0.0,100%,Complete,False,True,False,H,0,,Update_006
+Gamma,TSK-075,Task 075,2025-09-29,2025-10-25,2025-10-01,2025-10-29,28,False,0,0.0,100%,Complete,False,False,False,High,0,,Update_006

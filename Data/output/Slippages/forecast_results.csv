@@ -1,50 +1,16 @@
-project_name,task_id,task_name,update_phase,predicted_end_date,forecast_confidence,model_type,low_confidence_flag
-Slippages,tsk-001,Task 001,update_9,2025-09-16 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-002,Task 002,update_9,2025-09-29 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-003,Task 003,update_9,2024-12-24 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-004,Task 004,update_9,2025-08-22 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-005,Task 005,update_9,2025-04-09 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-006,Task 006,update_9,2025-04-29 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-007,Task 007,update_9,2025-10-13 16:00:00.000000477,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-008,Task 008,update_9,2025-08-21 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-009,Task 009,update_9,2025-07-05 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-010,Task 010,update_9,2024-12-16 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-011,Task 011,update_9,2025-10-12 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-012,Task 012,update_9,2025-06-17 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-013,Task 013,update_9,2025-03-30 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-014,Task 014,update_9,2025-04-26 14:23:59.999999523,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-015,Task 015,update_9,2025-03-28 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-016,Task 016,update_9,2025-01-30 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-017,Task 017,update_9,2025-09-07 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-018,Task 018,update_9,2025-08-08 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-019,Task 019,update_9,2025-11-14 04:47:59.999999523,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-020,Task 020,update_9,2025-09-17 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-021,Task 021,update_9,2025-07-08 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-022,Task 022,update_9,2025-03-21 21:20:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-023,Task 023,update_9,2025-07-30 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-024,Task 024,update_9,2025-03-13 09:35:59.999999523,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-025,Task 025,update_9,2025-11-08 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-026,Task 026,update_9,2025-04-21 16:00:00.000000477,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-027,Task 027,update_9,2025-11-04 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-028,Task 028,update_9,2025-02-25 19:11:59.999999523,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-029,Task 029,update_9,2025-05-25 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-030,Task 030,update_9,2025-05-01 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-031,Task 031,update_9,2025-01-26 07:12:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-032,Task 032,update_9,2025-07-31 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-033,Task 033,update_9,2025-10-02 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-035,Task 035,update_9,2024-12-20 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-036,Task 036,update_9,2025-04-28 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-037,Task 037,update_9,2025-06-10 18:39:59.999999762,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-038,Task 038,update_9,2025-07-27 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-039,Task 039,update_9,2025-02-25 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-040,Task 040,update_9,2025-03-03 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-041,Task 041,update_9,2025-05-28 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-042,Task 042,update_9,2025-01-22 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-043,Task 043,update_9,2025-09-13 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-044,Task 044,update_9,2025-03-05 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-045,Task 045,update_9,2025-04-27 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-046,Task 046,update_9,2025-07-13 19:22:36.058695316,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-047,Task 047,update_9,2025-11-07 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-048,Task 048,update_9,2025-05-04 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-049,Task 049,update_9,2025-04-23 19:11:59.999999523,0.98,AutoARIMA (statsforecast),False
-Slippages,tsk-050,Task 050,update_9,2025-07-27 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
+project_name,task_id,task_name,update_phase,predicted_end_date,forecast_confidence,model_type,low_confidence_flag,severity_score
+Slippages,tsk-001,Task 001,latest,2025-05-20,0.8977042452595148,Synthetic Demo,False,0
+Slippages,tsk-002,Task 002,latest,2025-07-30,0.7323048117929879,Synthetic Demo,False,0
+Slippages,tsk-003,Task 003,latest,2025-01-30,0.8746876717379776,Synthetic Demo,False,0
+Slippages,tsk-004,Task 004,latest,2025-04-05,0.8700578467406611,Synthetic Demo,False,0
+Slippages,tsk-005,Task 005,latest,2025-10-05,0.4232018305586299,Synthetic Demo,True,0
+Slippages,tsk-006,Task 006,latest,2025-05-26,0.6947372671538542,Synthetic Demo,True,0
+Slippages,tsk-007,Task 007,latest,2025-03-17,0.5895774251706669,Synthetic Demo,True,0
+Slippages,tsk-008,Task 008,latest,2025-02-09,0.7092082975099312,Synthetic Demo,False,0
+Slippages,tsk-009,Task 009,latest,2025-08-01,0.3841377915852724,Synthetic Demo,True,0
+Slippages,tsk-010,Task 010,latest,2025-05-31,0.7393362033491414,Synthetic Demo,False,3
+Slippages,tsk-011,Task 011,latest,2025-08-07,0.4244412836713453,Synthetic Demo,True,0
+Slippages,tsk-012,Task 012,latest,2024-11-12,0.8428601048308157,Synthetic Demo,False,0
+Slippages,tsk-013,Task 013,latest,2025-05-26,0.5768221650609467,Synthetic Demo,True,0
+Slippages,tsk-014,Task 014,latest,2025-11-07,0.6669812827357257,Synthetic Demo,True,0
+Slippages,tsk-015,Task 015,latest,2025-07-28,0.7326955055595461,Synthetic Demo,False,0

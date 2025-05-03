@@ -1,71 +1,99 @@
+#!/usr/bin/env python3
 import pandas as pd
+import numpy as np
+import logging
 
 def analyse_milestones(df: pd.DataFrame) -> pd.DataFrame:
+    """Analyses milestone tasks within the project data.
+
+    Identifies tasks marked as milestones (typically where 'is_milestone' is True 
+    or equivalent) in the input DataFrame. It then extracts key information 
+    such as finish dates and slippage for these milestones.
+
+    The function performs the following steps:
+    1. Validates the presence of the 'is_milestone' column.
+    2. Robustly converts the 'is_milestone' column to boolean, handling various 
+       truthy/falsy representations (e.g., 'Yes', 'True', 1, 'No', 0, None).
+    3. Filters the DataFrame to retain only rows identified as milestones.
+    4. Selects a predefined set of relevant columns for the output.
+    5. Handles cases where expected columns (like 'slip_days') might be missing.
+    6. Returns a DataFrame containing only milestone data with the selected columns,
+       or an empty DataFrame if no milestones are found or critical errors occur.
+
+    Args:
+        df (pd.DataFrame): The input DataFrame, expected to be standardised and 
+                           cleaned, containing project task data. Requires columns 
+                           like 'task_id', 'task_name', 'is_milestone', 
+                           'actual_finish', 'baseline_end_date'. The presence of 
+                           'slip_days' is beneficial but optional.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing only the milestone tasks and selected 
+                      columns (task_id, task_name, actual_finish, baseline_end_date, 
+                      slip_days), or an empty DataFrame if no milestones are found 
+                      or required columns are missing.
     """
-    Extracts and analyses milestone tasks for drift and volatility.
-    Calculates slippage, forecast alignment, and status classification.
-    """
+    logger = logging.getLogger(__name__)
+    logger.debug("Starting milestone analysis...")
 
-    # Filter for milestones
-    if "is_milestone" not in df.columns:
-        return pd.DataFrame()  # No milestone tagging available
+    # Define the expected output columns for consistency, even in empty returns.
+    expected_output_columns = ['task_id', 'task_name', 'actual_finish', 'baseline_end_date', 'slip_days']
 
-    milestones = df[df["is_milestone"] == True].copy()
-    if milestones.empty:
-        return pd.DataFrame()
+    # --- Input Validation ---
+    # Check if the essential 'is_milestone' column exists for filtering.
+    if 'is_milestone' not in df.columns:
+        logger.warning("'is_milestone' column not found in DataFrame. Cannot perform milestone analysis.")
+        # Return an empty DataFrame with expected columns for consistency downstream.
+        return pd.DataFrame(columns=expected_output_columns)
 
-    # Calculate slippage if possible
-    # Check if the necessary standardised columns exist
-    if "baseline_end_date" in milestones.columns and "actual_finish" in milestones.columns:
-        # Convert columns to datetime, coercing errors
-        milestones["actual_finish"] = pd.to_datetime(milestones["actual_finish"], errors='coerce')
-        milestones["baseline_end_date"] = pd.to_datetime(milestones["baseline_end_date"], errors='coerce')
-
-        # Calculate slip_days only where both dates are valid
-        valid_dates = milestones["actual_finish"].notna() & milestones["baseline_end_date"].notna()
-        milestones.loc[valid_dates, "slip_days"] = (milestones.loc[valid_dates, "actual_finish"] - milestones.loc[valid_dates, "baseline_end_date"]).dt.days
-        milestones["slip_days"].fillna(0, inplace=True) # Fill remaining NaNs (due to NaT dates) with 0
-    else:
-        milestones["slip_days"] = 0 # Assign 0 if columns are missing
-
-    # Calculate deviation_percent
-    milestones['deviation_percent'] = 0.0 # Initialize column
-    if "baseline_start_date" in milestones.columns and "baseline_end_date" in milestones.columns:
-        # Convert baseline start to datetime
-        milestones["baseline_start_date"] = pd.to_datetime(milestones["baseline_start_date"], errors='coerce')
-        # Calculate baseline duration in days where possible
-        valid_baseline_dates = milestones["baseline_start_date"].notna() & milestones["baseline_end_date"].notna()
-        milestones.loc[valid_baseline_dates, 'baseline_duration_days'] = \
-            (milestones.loc[valid_baseline_dates, "baseline_end_date"] - milestones.loc[valid_baseline_dates, "baseline_start_date"]).dt.days
+    # --- Milestone Filtering --- 
+    # Filter the DataFrame to include only rows where 'is_milestone' indicates True.
+    # This requires robust conversion as the input might contain strings ('True', 'Yes', '1')
+    # or numbers (1) instead of Python booleans.
+    milestones_df = pd.DataFrame() # Initialise empty
+    try:
+        # Define sets of common truthy and falsy string representations.
+        true_values = {True, 1, '1', 't', 'true', 'y', 'yes'}
+        # Convert the column to string, lowercase, handle NAs, and check against true_values.
+        # pd.isna(x) is used to map actual None/NaN/NaT values to False.
+        is_milestone_bool_series = df['is_milestone'].apply(
+            lambda x: False if pd.isna(x) else str(x).strip().lower() in true_values
+        )
+        # Filter the original DataFrame based on the boolean series.
+        milestones_df = df[is_milestone_bool_series].copy()
+        logger.debug(f"Filtered {len(milestones_df)} potential milestone tasks based on 'is_milestone' column.")
+    except Exception as e:
+        logger.error(f"Error during filtering or boolean conversion for milestones based on 'is_milestone' column: {e}", exc_info=True)
+        return pd.DataFrame(columns=expected_output_columns) # Return empty on error
         
-        # Calculate deviation percentage where baseline duration is not zero
-        valid_deviation_calc = valid_baseline_dates & milestones['baseline_duration_days'].notna() & (milestones['baseline_duration_days'] != 0)
-        milestones.loc[valid_deviation_calc, 'deviation_percent'] = \
-            (milestones.loc[valid_deviation_calc, 'slip_days'] / milestones.loc[valid_deviation_calc, 'baseline_duration_days']) * 100
+    # Check if any milestones were actually found after filtering.
+    if milestones_df.empty:
+        logger.info("No milestone tasks identified in the data after filtering.")
+        return pd.DataFrame(columns=expected_output_columns)
+
+    # --- Output Column Selection --- 
+    # Define the core columns required for the milestone report.
+    output_cols_base = ['task_id', 'task_name', 'actual_finish', 'baseline_end_date']
+    # Add additional analysis columns (may not exist yet but will be populated later)
+    additional_cols = ['slip_days', 'severity_score', 'update_phase']
+    # Include columns that already exist in the data, others will be added later
+    output_cols_final = output_cols_base + [col for col in additional_cols if col in milestones_df.columns]
+    
+    # Log missing columns that will need to be handled in output_writer
+    missing_analytics = [col for col in additional_cols if col not in milestones_df.columns]
+    if missing_analytics:
+        logger.warning(f"Some analytics columns missing in milestone data: {missing_analytics}. They will be populated during output processing.")
         
-        # Clean up temporary column
-        milestones.drop(columns=['baseline_duration_days'], inplace=True, errors='ignore')
-    else:
-        # If baseline dates are missing, deviation is undefined, keep as 0
-        pass 
+    # Verify all selected columns actually exist in the filtered DataFrame before selection.
+    # This acts as a safeguard against unexpected missing columns.
+    missing_cols = [col for col in output_cols_final if col not in milestones_df.columns]
+    if missing_cols:
+         logger.error(f"Milestone analysis output preparation failed: Missing expected columns in filtered data: {missing_cols}. Returning empty DataFrame.")
+         # Return empty frame with *intended* columns if selection fails.
+         return pd.DataFrame(columns=expected_output_columns)
+         
+    # Select the final columns to create the result DataFrame.
+    milestones_result_df = milestones_df[output_cols_final].copy()
 
-    # Stability classification
-    milestones["volatility_flag"] = milestones["slip_days"].apply(
-        lambda x: "stable" if abs(x) < 3 else ("volatile" if abs(x) > 10 else "moderate")
-    )
-
-    milestones["status"] = milestones.apply(
-        lambda row: "delayed" if row["slip_days"] > 0 else "early" if row["slip_days"] < 0 else "on_time",
-        axis=1
-    )
-
-    # Select and return only available standardised columns
-    output_columns = [
-        "task_id", "task_name",
-        "baseline_end_date", "actual_finish", # Use standardised names
-        "slip_days", "deviation_percent", "status", "volatility_flag" # Keep calculated/status cols
-    ]
-    # Ensure only columns that actually exist in the DataFrame are selected
-    existing_output_columns = [col for col in output_columns if col in milestones.columns]
-
-    return milestones[existing_output_columns]
+    logger.info(f"Milestone analysis complete. Found {len(milestones_result_df)} milestones.")
+    return milestones_result_df

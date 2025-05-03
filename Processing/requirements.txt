@@ -1,8 +1,14 @@
-pandas
-numpy
-scikit-learn
-statsmodels
-ruptures
-openpyxl
-xlrd
-statsforecast
+# Core Data Handling & Numerics
+pandas>=1.5,<2.2
+numpy>=1.23,<1.27
+
+# Analysis Libraries
+statsforecast>=1.5,<1.8
+ruptures>=1.1,<1.2
+
+# Excel File Handling
+openpyxl>=3.0,<3.2
+xlrd>=2.0,<2.1  # For .xls files
+
+# Other Utilities
+python-dateutil>=2.8,<2.10

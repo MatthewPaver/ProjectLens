@@ -7,15 +7,65 @@ import pandas as pd
 import numpy as np
 import re
 
-# --- Helper function for simple string normalization ---
-def normalize_string(s):
+# --- Helper function for simple string normalisation ---
+def normalise_string(s):
     if not isinstance(s, str):
         return ""
     return re.sub(r"[^a-z0-9]", "", s.lower())
 
+# Backwards compatibility alias for normalise_string
+normalize_string = normalise_string
+
 class SchemaManager:
+    """Manages loading, standardising, and applying data schemas.
+    
+    This class loads a schema definition from a JSON file (e.g., `tasks_schema.json`)
+    and provides methods to standardise a DataFrame according to that schema.
+    
+    Expected Schema JSON Structure:
+    {
+        "properties": {
+            "standard_col_name_1": {"type": "string", "description": "Unique identifier for the task"},
+            "standard_col_name_2": {"type": "number", "format": "float"},
+            "standard_col_name_3": {"type": "date"},
+            "standard_col_name_4": {"type": "boolean"},
+            "standard_col_name_5": {
+                "type": "string",
+                "synonyms": ["alternate_name_a", "alternate_name_b"]
+            }
+
+        },
+        "required_columns": ["standard_col_name_1", "standard_col_name_3"],
+        "synonyms": { 
+            // Top-level synonyms (can be overridden by property-level synonyms)
+            "standard_col_name_1": ["alternative_1", "legacy_name_1"],
+            "standard_col_name_2": ["alternative_2"]
+        }
+    }
+    
+    Key functionalities:
+    - Loads schema from `Data/schemas/<schema_type>_schema.json` (with fallback).
+    - Merges top-level and property-level synonyms.
+    - `standardise_columns`: Renames DataFrame columns to match schema using exact,
+      synonym, and normalised matching strategies.
+    - `convert_data_types`: Converts columns to types specified in schema properties.
+    - `enforce_not_null`: Checks for nulls in columns marked as required.
+    """
     def __init__(self, schema_type):
-        print(f"--- DEBUG: Initializing SchemaManager for type: {schema_type} ---")
+        """Initialises the SchemaManager for a specific schema type.
+        
+        Loads the schema file, extracts standard column names, required columns,
+        and merges top-level and property-level synonyms.
+        
+        Args:
+            schema_type (str): The name of the schema to load (e.g., 'tasks'),
+                               corresponding to a file in `Data/schemas/`.
+                               
+        Raises:
+            FileNotFoundError: If the schema file cannot be found.
+            json.JSONDecodeError: If the schema file contains invalid JSON.
+            IOError: For other file reading errors.
+        """
         # Try with _schema.json suffix first (new convention)
         schema_path = resolve_path(f"Data/schemas/{schema_type}_schema.json")
         
@@ -32,9 +82,9 @@ class SchemaManager:
         self.suggestions_path = resolve_path("Data/schemas/schema_suggestions.json")
         self.schema = self.load_schema()
         
-        # --- CHANGE: Load synonyms from top level AND from properties --- 
-        # 1. Initialize with top-level synonyms
-        self.synonyms = self.schema.get("synonyms", {}).copy() # Use .copy() 
+        # --- Load synonyms from top level AND from properties --- 
+        # 1. Initialise with top-level synonyms
+        self.synonyms = self.schema.get("synonyms", {}).copy()
 
         # 2. Get standard column names from properties
         properties = self.schema.get("properties", {})
@@ -60,10 +110,11 @@ class SchemaManager:
                     logging.warning(f"Synonyms defined for property '{prop_name}' are not a list: {prop_synonyms}")
         
         # Load required columns (can be done after loading properties)
+        # These are columns defined in the schema's "required_columns" list.
         self.required = self.schema.get("required_columns", [])
         
         # Log final loaded synonyms for debugging
-        logging.debug(f"Schema Manager initialized for '{schema_type}'. Standard columns: {self.standard_cols}")
+        logging.debug(f"Schema Manager initialised for '{schema_type}'. Standard columns: {self.standard_cols}")
         logging.debug(f"FINAL Loaded synonyms after merging: {self.synonyms}")
 
     def load_schema(self):
@@ -72,46 +123,41 @@ class SchemaManager:
                 return json.load(f)
         except FileNotFoundError:
             logging.error(f"Schema file not found: {self.schema_path}")
-            # --- Raise exception instead of returning default ---
-            # return {"properties": {}, "required_columns": [], "synonyms": {}}
             raise FileNotFoundError(f"Schema file not found: {self.schema_path}")
-        except json.JSONDecodeError as e: # Capture the exception object
+        except json.JSONDecodeError as e:
             logging.error(f"Invalid JSON in schema file: {self.schema_path} - {e}")
-            # --- Raise exception instead of returning default ---
-            # return {"properties": {}, "required_columns": [], "synonyms": {}}
             raise json.JSONDecodeError(f"Invalid JSON in schema file: {self.schema_path} - {e.msg}", e.doc, e.pos)
-        except Exception as e: # Catch any other potential file reading errors
+        except Exception as e:
             logging.error(f"Error loading schema file {self.schema_path}: {e}", exc_info=True)
             raise IOError(f"Error loading schema file {self.schema_path}: {e}")
 
     def standardise_columns(self, df):
-        # --- Ensure logger is capturing DEBUG messages for this method --- 
-        logger = logging.getLogger() # Get the root logger (or specific if SchemaManager uses its own)
+        # Ensure logger is capturing DEBUG messages for this method
+        logger = logging.getLogger()
         effective_level = logger.getEffectiveLevel()
         # Temporarily set level to DEBUG if it's higher
         original_level = logger.level
         if effective_level > logging.DEBUG:
             logger.setLevel(logging.DEBUG)
             logging.debug(f"Temporarily set logger level to DEBUG (was {logging.getLevelName(effective_level)})")
-        # --- End logger level adjustment --- 
 
         logging.debug("--- Starting SchemaManager.standardise_columns ---")
         rename_map = {}
         processed_input_cols = set() # Keep track of input cols already mapped
 
-        # --- Assume df.columns are already cleaned by data_cleaning.py ---
+        # Assume df.columns are already cleaned by data_cleaning.py
         input_cols_present = set(df.columns)
-        # Create a mapping of normalized input column names to original names for faster lookup
-        normalized_input_cols_map = {normalize_string(col): col for col in input_cols_present}
+        # Create a mapping of normalised input column names to original names for faster lookup
+        normalised_input_cols_map = {normalise_string(col): col for col in input_cols_present}
         logging.debug(f"SchemaManager - Input columns received: {list(input_cols_present)}")
-        logging.debug(f"SchemaManager - Normalized input map created.")
+        logging.debug(f"SchemaManager - Normalised input map created.")
 
         # Iterate through the standard columns defined in the schema
         logging.debug(f"SchemaManager - Iterating through standard columns: {self.standard_cols}")
         for std_col in self.standard_cols:
             logging.debug(f"--- SchemaManager - Processing standard column: '{std_col}' ---")
-            normalized_std_col = normalize_string(std_col) # Normalize standard column name once
-            logging.debug(f"    Normalized standard column: '{normalized_std_col}'")
+            normalised_std_col = normalise_string(std_col) # Normalise standard column name once
+            logging.debug(f"    Normalised standard column: '{normalised_std_col}'")
             found_match = False
             input_col_to_map = None # Track which input column matched
 
@@ -133,27 +179,18 @@ class SchemaManager:
             # 2. Check for synonym match
             if not found_match and std_col in self.synonyms:
                 logging.debug(f"  SchemaManager - Checking Synonyms for '{std_col}': {self.synonyms[std_col]}")
-                # --- Enhanced Debugging --- 
-                normalized_keys_in_map = list(normalized_input_cols_map.keys())
-                logging.debug(f"    Available normalized input keys for matching: {normalized_keys_in_map}")
-                # --- End Enhanced Debugging ---
                 for synonym in self.synonyms[std_col]:
                     # Clean the synonym itself using the same logic as data_cleaning.py (or similar)
-                    # Let's assume synonyms in the schema are already reasonably clean or match input style.
-                    # If not, apply cleaning:
-                    # cleaned_synonym = re.sub(r"[^a-zA-Z0-9_]+", "", synonym.lower().strip().replace(" ", "_"))
-                    cleaned_synonym = normalize_string(synonym)
-                    logging.debug(f"    Checking normalized synonym: '{cleaned_synonym}' (original: '{synonym}') for std_col: '{std_col}'")
+                    cleaned_synonym = normalise_string(synonym)
+                    logging.debug(f"    Checking normalised synonym: '{cleaned_synonym}' (original: '{synonym}') for std_col: '{std_col}'")
                     
-                    # --- Enhanced Debugging --- 
-                    match_in_map = cleaned_synonym in normalized_input_cols_map
-                    logging.debug(f"      Is '{cleaned_synonym}' in normalized map keys? {match_in_map}")
-                    # --- End Enhanced Debugging ---
+                    match_in_map = cleaned_synonym in normalised_input_cols_map
+                    logging.debug(f"      Is '{cleaned_synonym}' in normalised map keys? {match_in_map}")
 
-                    if match_in_map: # Check against *normalized* input cols
-                        logging.debug(f"    Synonym Match Found: Normalized synonym '{cleaned_synonym}' is present in normalized input columns.")
-                        # Find the original input column name corresponding to the normalized match
-                        input_col_to_map = normalized_input_cols_map[cleaned_synonym]
+                    if match_in_map: # Check against *normalised* input cols
+                        logging.debug(f"    Synonym Match Found: Normalised synonym '{cleaned_synonym}' is present in normalised input columns.")
+                        # Find the original input column name corresponding to the normalised match
+                        input_col_to_map = normalised_input_cols_map[cleaned_synonym]
                         logging.debug(f"    Mapped to original input column: '{input_col_to_map}'")
                         if input_col_to_map not in processed_input_cols:
                              if std_col not in rename_map.values():
@@ -173,50 +210,50 @@ class SchemaManager:
             elif not found_match:
                  logging.debug(f"  SchemaManager - No synonyms defined or checked for '{std_col}'.")
 
-            # 3. --- Simplified Fuzzy Matching Fallback (using normalization) ---
+            # 3. --- Simplified Fuzzy Matching Fallback (using normalisation) ---
             if not found_match:
-                logging.debug(f"  SchemaManager - Checking Normalized Fallback for '{std_col}' (normalized: '{normalized_std_col}')")
-                # Check if normalized standard column matches any *unprocessed* normalized input column
+                logging.debug(f"  SchemaManager - Checking Normalised Fallback for '{std_col}' (normalised: '{normalised_std_col}')")
+                # Check if normalised standard column matches any *unprocessed* normalised input column
                 match_found_via_norm = False
-                for norm_input, orig_input in normalized_input_cols_map.items():
-                    if norm_input == normalized_std_col:
-                        # Found a potential match via normalization
+                for norm_input, orig_input in normalised_input_cols_map.items():
+                    if norm_input == normalised_std_col:
+                        # Found a potential match via normalisation
                         input_col_to_map = orig_input
-                        logging.debug(f"    Normalized Match Found: Standard '{std_col}' (norm: '{normalized_std_col}') matches Input '{input_col_to_map}' (norm: '{norm_input}')")
+                        logging.debug(f"    Normalised Match Found: Standard '{std_col}' (norm: '{normalised_std_col}') matches Input '{input_col_to_map}' (norm: '{norm_input}')")
                         if input_col_to_map not in processed_input_cols:
                             if std_col not in rename_map.values():
                                 rename_map[input_col_to_map] = std_col
                                 processed_input_cols.add(input_col_to_map)
-                                logging.info(f"  Schema Mapping (Normalized): Input '{input_col_to_map}' -> '{std_col}'")
+                                logging.info(f"  Schema Mapping (Normalised): Input '{input_col_to_map}' -> '{std_col}'")
                                 found_match = True
                                 match_found_via_norm = True
                                 break # Found match for this std_col
                             else:
-                                logging.debug(f"    Target standard column '{std_col}' is already mapped. Skipping normalized match for '{input_col_to_map}'.")
+                                logging.debug(f"    Target standard column '{std_col}' is already mapped. Skipping normalised match for '{input_col_to_map}'.")
                         else:
-                            logging.debug(f"    Input column '{input_col_to_map}' (matched by normalization) already processed. Skipping.")
+                            logging.debug(f"    Input column '{input_col_to_map}' (matched by normalisation) already processed. Skipping.")
 
                 if not match_found_via_norm:
-                    # Check if normalized *synonyms* match any normalized input column
+                    # Check if normalised *synonyms* match any normalised input column
                     if std_col in self.synonyms:
-                        logging.debug(f"    Checking Normalized Synonyms for '{std_col}'")
+                        logging.debug(f"    Checking Normalised Synonyms for '{std_col}'")
                         for synonym in self.synonyms[std_col]:
-                             normalized_synonym = normalize_string(synonym)
-                             if normalized_synonym in normalized_input_cols_map:
-                                input_col_to_map = normalized_input_cols_map[normalized_synonym]
-                                logging.debug(f"    Normalized Synonym Match: Std '{std_col}', Synonym '{synonym}' (norm: '{normalized_synonym}') matches Input '{input_col_to_map}' (norm: '{normalized_synonym}')")
+                             normalised_synonym = normalise_string(synonym)
+                             if normalised_synonym in normalised_input_cols_map:
+                                input_col_to_map = normalised_input_cols_map[normalised_synonym]
+                                logging.debug(f"    Normalised Synonym Match: Std '{std_col}', Synonym '{synonym}' (norm: '{normalised_synonym}') matches Input '{input_col_to_map}' (norm: '{normalised_synonym}')")
                                 if input_col_to_map not in processed_input_cols:
                                     if std_col not in rename_map.values():
                                         rename_map[input_col_to_map] = std_col
                                         processed_input_cols.add(input_col_to_map)
-                                        logging.info(f"  Schema Mapping (Normalized Synonym): Input '{input_col_to_map}' -> '{std_col}'")
+                                        logging.info(f"  Schema Mapping (Normalised Synonym): Input '{input_col_to_map}' -> '{std_col}'")
                                         found_match = True
                                         break # Found match for this std_col
                                     else:
-                                         logging.debug(f"    Target standard column '{std_col}' is already mapped. Skipping normalized synonym match for '{input_col_to_map}'.")
+                                         logging.debug(f"    Target standard column '{std_col}' is already mapped. Skipping normalised synonym match for '{input_col_to_map}'.")
                                 else:
-                                     logging.debug(f"    Input column '{input_col_to_map}' (matched by normalized synonym) already processed. Skipping.")
-                        if found_match: break # Exit outer loop if match found via normalized synonym
+                                     logging.debug(f"    Input column '{input_col_to_map}' (matched by normalised synonym) already processed. Skipping.")
+                        if found_match: break # Exit outer loop if match found via normalised synonym
 
 
             if not found_match:
@@ -271,44 +308,58 @@ class SchemaManager:
         if effective_level > logging.DEBUG:
             logger.setLevel(original_level)
             logging.debug(f"Restored logger level to {logging.getLevelName(original_level)}")
-        # --- End restore --- 
         return df_final
 
-    # --- Placeholder Method: convert_data_types ---
     def convert_data_types(self, df):
-        logging.info("SchemaManager: Running convert_data_types (Placeholder - No conversions applied yet)")
-        # TODO: Implement actual data type conversion based on self.schema["properties"][col]["type"]
-        # Example: date conversion 
-        # for col, props in self.schema.get("properties", {}).items():
-        #     if col in df.columns and props.get("type") == "string" and props.get("format") == "date-time":
-        #         try:
-        #             df[col] = pd.to_datetime(df[col], errors='coerce')
-        #             logging.debug(f"Converted column '{col}' to datetime.")
-        #         except Exception as e:
-        #             logging.warning(f"Could not convert column '{col}' to datetime: {e}")
-        #     elif col in df.columns and props.get("type") == "number":
-        #          try:
-        #             df[col] = pd.to_numeric(df[col], errors='coerce')
-        #             logging.debug(f"Converted column '{col}' to numeric.")
-        #         except Exception as e:
-        #             logging.warning(f"Could not convert column '{col}' to numeric: {e}")
+        """
+        Converts DataFrame columns to types specified in the schema properties.
+        Handles string, number, integer, boolean, and date/datetime types.
+        Coerces errors to NaN/NaT and logs warnings for any conversion issues.
+        """
+        import pandas as pd
+        import numpy as np
+        import logging
+        properties = self.schema.get("properties", {})
+        for col, props in properties.items():
+            if col not in df.columns:
+                continue
+            target_type = props.get("type", None)
+            if not target_type:
+                continue
+            try:
+                if target_type == "number":
+                    df[col] = pd.to_numeric(df[col], errors="coerce")
+                elif target_type == "integer":
+                    df[col] = pd.to_numeric(df[col], errors="coerce").astype('Int64')
+                elif target_type == "boolean":
+                    # Map common string representations to boolean
+                    bool_map = {
+                        'true': True, 't': True, 'yes': True, 'y': True, '1': True,
+                        'false': False, 'f': False, 'no': False, 'n': False, '0': False,
+                        '': False, np.nan: False
+                    }
+                    df[col] = df[col].fillna(False).astype(str).str.lower().str.strip().map(bool_map).fillna(False)
+                    df[col] = df[col].astype('boolean')
+                elif target_type == "string":
+                    df[col] = df[col].astype(str)
+                elif target_type == "date" or (target_type == "string" and props.get("format") in ["date", "date-time"]):
+                    df[col] = pd.to_datetime(df[col], errors="coerce")
+            except Exception as e:
+                logging.warning(f"Could not convert column '{col}' to type '{target_type}': {e}")
         return df
 
-    # --- ADDED Placeholder Method: enforce_not_null ---
     def enforce_not_null(self, df):
-        logging.info("SchemaManager: Running enforce_not_null (Placeholder - No enforcement applied yet)")
-        # TODO: Implement actual check/handling based on self.required list
-        # Example:
-        # required_cols_in_df = [col for col in self.required if col in df.columns]
-        # if required_cols_in_df:
-        #     null_counts = df[required_cols_in_df].isnull().sum()
-        #     null_cols = null_counts[null_counts > 0]
-        #     if not null_cols.empty:
-        #         logging.warning(f"Found null values in required columns: {null_cols.to_dict()}")
-        #         # Option 1: Drop rows with nulls in required columns
-        #         # df.dropna(subset=required_cols_in_df, inplace=True)
-        #         # Option 2: Fill with default (less ideal)
-        #         # Option 3: Raise error or just log warning
+        """
+        Checks required columns for null values and logs a warning if any are found.
+        Does not drop rows or fill values automatically.
+        """
+        import logging
+        required_cols_in_df = [col for col in self.required if col in df.columns]
+        if required_cols_in_df:
+            null_counts = df[required_cols_in_df].isnull().sum()
+            null_cols = null_counts[null_counts > 0]
+            if not null_cols.empty:
+                logging.warning(f"Found null values in required columns: {null_cols.to_dict()}")
         return df
 
     def log_suggestion(self, column_name):

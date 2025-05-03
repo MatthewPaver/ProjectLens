@@ -1,337 +1,1126 @@
-project_name,task_id,update_phase,task_name,baseline_end,end_date,slip_days,severity_score,change_type
-Updates,tsk-010,update_1,Task 010,2024-11-30,2024-12-08,8,2,Delay
-Updates,tsk-022,update_1,Task 022,2025-08-16,2025-08-18,2,1,Delay
-Updates,tsk-036,update_1,Task 036,2025-08-27,2025-08-27,0,0,On Time
-Updates,tsk-049,update_1,Task 049,2025-06-03,2025-05-30,-4,0,Early Finish
-Updates,tsk-010,update_2,Task 010,2024-11-30,2024-12-08,8,2,Delay
-Updates,tsk-013,update_2,Task 013,2025-10-31,2025-10-29,-2,0,Early Finish
-Updates,tsk-022,update_2,Task 022,2025-08-16,2025-08-24,8,2,Delay
-Updates,tsk-023,update_2,Task 023,2025-10-13,2025-10-10,-3,0,Early Finish
-Updates,tsk-024,update_2,Task 024,2025-04-26,2025-05-09,13,2,Delay
-Updates,tsk-026,update_2,Task 026,2025-06-05,2025-06-02,-3,0,Early Finish
-Updates,tsk-027,update_2,Task 027,2025-04-08,2025-04-05,-3,0,Early Finish
-Updates,tsk-036,update_2,Task 036,2025-08-27,2025-08-27,0,0,On Time
-Updates,tsk-044,update_2,Task 044,2025-05-03,2025-04-29,-4,0,Early Finish
-Updates,tsk-049,update_2,Task 049,2025-06-03,2025-05-30,-4,0,Early Finish
-Updates,tsk-002,update_3,Task 002,2025-08-27,2025-08-22,-5,0,Early Finish
-Updates,tsk-003,update_3,Task 003,2024-12-08,2024-12-14,6,1,Delay
-Updates,tsk-010,update_3,Task 010,2024-11-30,2024-12-08,8,2,Delay
-Updates,tsk-013,update_3,Task 013,2025-10-31,2025-10-29,-2,0,Early Finish
-Updates,tsk-015,update_3,Task 015,2025-07-04,2025-07-06,2,1,Delay
-Updates,tsk-017,update_3,Task 017,2025-06-24,2025-06-29,5,1,Delay
-Updates,tsk-020,update_3,Task 020,2025-09-12,2025-09-23,11,2,Delay
-Updates,tsk-022,update_3,Task 022,2025-08-16,2025-08-26,10,2,Delay
-Updates,tsk-023,update_3,Task 023,2025-10-13,2025-10-10,-3,0,Early Finish
-Updates,tsk-024,update_3,Task 024,2025-04-26,2025-05-09,13,2,Delay
-Updates,tsk-026,update_3,Task 026,2025-06-05,2025-06-02,-3,0,Early Finish
-Updates,tsk-027,update_3,Task 027,2025-04-08,2025-04-05,-3,0,Early Finish
-Updates,tsk-032,update_3,Task 032,2025-10-20,2025-10-26,6,1,Delay
-Updates,tsk-036,update_3,Task 036,2025-08-27,2025-08-27,0,0,On Time
-Updates,tsk-044,update_3,Task 044,2025-05-03,2025-04-29,-4,0,Early Finish
-Updates,tsk-049,update_3,Task 049,2025-06-03,2025-05-30,-4,0,Early Finish
-Updates,tsk-050,update_3,Task 050,2025-09-08,2025-09-24,16,2,Delay
-Updates,tsk-001,update_4,Task 001,2025-06-19,2025-06-29,10,2,Delay
-Updates,tsk-002,update_4,Task 002,2025-08-27,2025-08-27,0,0,On Time
-Updates,tsk-003,update_4,Task 003,2024-12-08,2024-12-14,6,1,Delay
-Updates,tsk-004,update_4,Task 004,2025-07-02,2025-06-27,-5,0,Early Finish
-Updates,tsk-005,update_4,Task 005,2025-02-11,2025-02-25,14,2,Delay
-Updates,tsk-006,update_4,Task 006,2025-09-08,2025-09-10,2,1,Delay
-Updates,tsk-009,update_4,Task 009,2025-05-01,2025-05-24,23,2,Delay
-Updates,tsk-010,update_4,Task 010,2024-11-30,2024-12-14,14,2,Delay
-Updates,tsk-013,update_4,Task 013,2025-10-31,2025-10-29,-2,0,Early Finish
-Updates,tsk-014,update_4,Task 014,2025-09-06,2025-09-14,8,2,Delay
-Updates,tsk-015,update_4,Task 015,2025-07-04,2025-07-09,5,1,Delay
-Updates,tsk-017,update_4,Task 017,2025-06-24,2025-06-29,5,1,Delay
-Updates,tsk-018,update_4,Task 018,2025-06-13,2025-06-16,3,1,Delay
-Updates,tsk-020,update_4,Task 020,2025-09-12,2025-09-23,11,2,Delay
-Updates,tsk-022,update_4,Task 022,2025-08-16,2025-08-26,10,2,Delay
-Updates,tsk-023,update_4,Task 023,2025-10-13,2025-10-10,-3,0,Early Finish
-Updates,tsk-024,update_4,Task 024,2025-04-26,2025-05-14,18,2,Delay
-Updates,tsk-026,update_4,Task 026,2025-06-05,2025-06-02,-3,0,Early Finish
-Updates,tsk-027,update_4,Task 027,2025-04-08,2025-04-05,-3,0,Early Finish
-Updates,tsk-029,update_4,Task 029,2024-12-13,2024-12-15,2,1,Delay
-Updates,tsk-032,update_4,Task 032,2025-10-20,2025-10-26,6,1,Delay
-Updates,tsk-034,update_4,Task 034,2025-09-05,2025-09-09,4,1,Delay
-Updates,tsk-036,update_4,Task 036,2025-08-27,2025-08-31,4,1,Delay
-Updates,tsk-038,update_4,Task 038,2025-10-01,2025-10-04,3,1,Delay
-Updates,tsk-043,update_4,Task 043,2025-03-19,2025-04-24,36,3,Delay
-Updates,tsk-044,update_4,Task 044,2025-05-03,2025-04-29,-4,0,Early Finish
-Updates,tsk-047,update_4,Task 047,2025-02-24,2025-03-09,13,2,Delay
-Updates,tsk-048,update_4,Task 048,2025-08-19,2025-09-21,33,3,Delay
-Updates,tsk-049,update_4,Task 049,2025-06-03,2025-06-03,0,0,On Time
-Updates,tsk-050,update_4,Task 050,2025-09-08,2025-10-13,35,3,Delay
-Updates,tsk-001,update_5,Task 001,2025-06-19,2025-06-29,10,2,Delay
-Updates,tsk-002,update_5,Task 002,2025-08-27,2025-08-29,2,1,Delay
-Updates,tsk-003,update_5,Task 003,2024-12-08,2024-12-18,10,2,Delay
-Updates,tsk-004,update_5,Task 004,2025-07-02,2025-06-27,-5,0,Early Finish
-Updates,tsk-005,update_5,Task 005,2025-02-11,2025-02-25,14,2,Delay
-Updates,tsk-006,update_5,Task 006,2025-09-08,2025-09-10,2,1,Delay
-Updates,tsk-009,update_5,Task 009,2025-05-01,2025-05-24,23,2,Delay
-Updates,tsk-010,update_5,Task 010,2024-11-30,2024-12-14,14,2,Delay
-Updates,tsk-011,update_5,Task 011,2025-08-18,2025-09-10,23,2,Delay
-Updates,tsk-012,update_5,Task 012,2025-11-30,2025-12-15,15,2,Delay
-Updates,tsk-013,update_5,Task 013,2025-10-31,2025-10-29,-2,0,Early Finish
-Updates,tsk-014,update_5,Task 014,2025-09-06,2025-09-21,15,2,Delay
-Updates,tsk-015,update_5,Task 015,2025-07-04,2025-07-09,5,1,Delay
-Updates,tsk-016,update_5,Task 016,2025-07-20,2025-08-04,15,2,Delay
-Updates,tsk-017,update_5,Task 017,2025-06-24,2025-06-29,5,1,Delay
-Updates,tsk-018,update_5,Task 018,2025-06-13,2025-06-16,3,1,Delay
-Updates,tsk-020,update_5,Task 020,2025-09-12,2025-09-23,11,2,Delay
-Updates,tsk-022,update_5,Task 022,2025-08-16,2025-08-26,10,2,Delay
-Updates,tsk-023,update_5,Task 023,2025-10-13,2025-10-10,-3,0,Early Finish
-Updates,tsk-024,update_5,Task 024,2025-04-26,2025-05-14,18,2,Delay
-Updates,tsk-026,update_5,Task 026,2025-06-05,2025-06-02,-3,0,Early Finish
-Updates,tsk-027,update_5,Task 027,2025-04-08,2025-04-05,-3,0,Early Finish
-Updates,tsk-029,update_5,Task 029,2024-12-13,2024-12-15,2,1,Delay
-Updates,tsk-031,update_5,Task 031,2024-12-07,2024-12-20,13,2,Delay
-Updates,tsk-032,update_5,Task 032,2025-10-20,2025-10-26,6,1,Delay
-Updates,tsk-034,update_5,Task 034,2025-09-05,2025-09-09,4,1,Delay
-Updates,tsk-036,update_5,Task 036,2025-08-27,2025-08-31,4,1,Delay
-Updates,tsk-038,update_5,Task 038,2025-10-01,2025-11-12,42,3,Delay
-Updates,tsk-040,update_5,Task 040,2024-12-26,2024-12-23,-3,0,Early Finish
-Updates,tsk-041,update_5,Task 041,2025-11-12,2025-11-23,11,2,Delay
-Updates,tsk-043,update_5,Task 043,2025-03-19,2025-04-24,36,3,Delay
-Updates,tsk-044,update_5,Task 044,2025-05-03,2025-05-04,1,1,Delay
-Updates,tsk-047,update_5,Task 047,2025-02-24,2025-03-12,16,2,Delay
-Updates,tsk-048,update_5,Task 048,2025-08-19,2025-09-21,33,3,Delay
-Updates,tsk-049,update_5,Task 049,2025-06-03,2025-06-03,0,0,On Time
-Updates,tsk-050,update_5,Task 050,2025-09-08,2025-10-13,35,3,Delay
-Updates,tsk-001,update_6,Task 001,2025-06-19,2025-06-29,10,2,Delay
-Updates,tsk-002,update_6,Task 002,2025-08-27,2025-08-29,2,1,Delay
-Updates,tsk-003,update_6,Task 003,2024-12-08,2024-12-18,10,2,Delay
-Updates,tsk-004,update_6,Task 004,2025-07-02,2025-06-27,-5,0,Early Finish
-Updates,tsk-005,update_6,Task 005,2025-02-11,2025-02-25,14,2,Delay
-Updates,tsk-006,update_6,Task 006,2025-09-08,2025-09-10,2,1,Delay
-Updates,tsk-007,update_6,Task 007,2025-07-26,2025-07-31,5,1,Delay
-Updates,tsk-008,update_6,Task 008,2025-06-28,2025-07-12,14,2,Delay
-Updates,tsk-009,update_6,Task 009,2025-05-01,2025-05-24,23,2,Delay
-Updates,tsk-010,update_6,Task 010,2024-11-30,2024-12-21,21,2,Delay
-Updates,tsk-011,update_6,Task 011,2025-08-18,2025-09-10,23,2,Delay
-Updates,tsk-012,update_6,Task 012,2025-11-30,2025-12-17,17,2,Delay
-Updates,tsk-013,update_6,Task 013,2025-10-31,2025-10-29,-2,0,Early Finish
-Updates,tsk-014,update_6,Task 014,2025-09-06,2025-09-21,15,2,Delay
-Updates,tsk-015,update_6,Task 015,2025-07-04,2025-07-09,5,1,Delay
-Updates,tsk-016,update_6,Task 016,2025-07-20,2025-08-05,16,2,Delay
-Updates,tsk-017,update_6,Task 017,2025-06-24,2025-06-30,6,1,Delay
-Updates,tsk-018,update_6,Task 018,2025-06-13,2025-06-16,3,1,Delay
-Updates,tsk-019,update_6,Task 019,2025-08-07,2025-08-21,14,2,Delay
-Updates,tsk-020,update_6,Task 020,2025-09-12,2025-09-23,11,2,Delay
-Updates,tsk-022,update_6,Task 022,2025-08-16,2025-08-26,10,2,Delay
-Updates,tsk-023,update_6,Task 023,2025-10-13,2025-10-10,-3,0,Early Finish
-Updates,tsk-024,update_6,Task 024,2025-04-26,2025-05-20,24,2,Delay
-Updates,tsk-026,update_6,Task 026,2025-06-05,2025-06-02,-3,0,Early Finish
-Updates,tsk-027,update_6,Task 027,2025-04-08,2025-04-05,-3,0,Early Finish
-Updates,tsk-028,update_6,Task 028,2025-07-30,2025-07-29,-1,0,Early Finish
-Updates,tsk-029,update_6,Task 029,2024-12-13,2024-12-22,9,2,Delay
-Updates,tsk-031,update_6,Task 031,2024-12-07,2024-12-20,13,2,Delay
-Updates,tsk-032,update_6,Task 032,2025-10-20,2025-10-26,6,1,Delay
-Updates,tsk-034,update_6,Task 034,2025-09-05,2025-09-09,4,1,Delay
-Updates,tsk-036,update_6,Task 036,2025-08-27,2025-08-31,4,1,Delay
-Updates,tsk-037,update_6,Task 037,2025-06-16,2025-06-25,9,2,Delay
-Updates,tsk-038,update_6,Task 038,2025-10-01,2025-11-18,48,3,Delay
-Updates,tsk-040,update_6,Task 040,2024-12-26,2024-12-23,-3,0,Early Finish
-Updates,tsk-041,update_6,Task 041,2025-11-12,2025-11-23,11,2,Delay
-Updates,tsk-043,update_6,Task 043,2025-03-19,2025-04-24,36,3,Delay
-Updates,tsk-044,update_6,Task 044,2025-05-03,2025-05-04,1,1,Delay
-Updates,tsk-046,update_6,Task 046,2025-05-27,2025-06-10,14,2,Delay
-Updates,tsk-047,update_6,Task 047,2025-02-24,2025-03-12,16,2,Delay
-Updates,tsk-048,update_6,Task 048,2025-08-19,2025-09-21,33,3,Delay
-Updates,tsk-049,update_6,Task 049,2025-06-03,2025-06-03,0,0,On Time
-Updates,tsk-050,update_6,Task 050,2025-09-08,2025-10-13,35,3,Delay
-Updates,tsk-001,update_7,Task 001,2025-06-19,2025-06-29,10,2,Delay
-Updates,tsk-002,update_7,Task 002,2025-08-27,2025-08-31,4,1,Delay
-Updates,tsk-003,update_7,Task 003,2024-12-08,2024-12-25,17,2,Delay
-Updates,tsk-004,update_7,Task 004,2025-07-02,2025-06-27,-5,0,Early Finish
-Updates,tsk-005,update_7,Task 005,2025-02-11,2025-02-25,14,2,Delay
-Updates,tsk-006,update_7,Task 006,2025-09-08,2025-09-10,2,1,Delay
-Updates,tsk-007,update_7,Task 007,2025-07-26,2025-07-31,5,1,Delay
-Updates,tsk-008,update_7,Task 008,2025-06-28,2025-07-14,16,2,Delay
-Updates,tsk-009,update_7,Task 009,2025-05-01,2025-05-24,23,2,Delay
-Updates,tsk-010,update_7,Task 010,2024-11-30,2024-12-21,21,2,Delay
-Updates,tsk-011,update_7,Task 011,2025-08-18,2025-09-10,23,2,Delay
-Updates,tsk-012,update_7,Task 012,2025-11-30,2025-12-24,24,2,Delay
-Updates,tsk-013,update_7,Task 013,2025-10-31,2025-10-29,-2,0,Early Finish
-Updates,tsk-014,update_7,Task 014,2025-09-06,2025-09-21,15,2,Delay
-Updates,tsk-015,update_7,Task 015,2025-07-04,2025-07-09,5,1,Delay
-Updates,tsk-016,update_7,Task 016,2025-07-20,2025-08-05,16,2,Delay
-Updates,tsk-017,update_7,Task 017,2025-06-24,2025-06-30,6,1,Delay
-Updates,tsk-018,update_7,Task 018,2025-06-13,2025-06-16,3,1,Delay
-Updates,tsk-019,update_7,Task 019,2025-08-07,2025-08-21,14,2,Delay
-Updates,tsk-020,update_7,Task 020,2025-09-12,2025-09-23,11,2,Delay
-Updates,tsk-022,update_7,Task 022,2025-08-16,2025-08-27,11,2,Delay
-Updates,tsk-023,update_7,Task 023,2025-10-13,2025-10-10,-3,0,Early Finish
-Updates,tsk-024,update_7,Task 024,2025-04-26,2025-05-20,24,2,Delay
-Updates,tsk-025,update_7,Task 025,2025-01-14,2025-01-27,13,2,Delay
-Updates,tsk-026,update_7,Task 026,2025-06-05,2025-06-02,-3,0,Early Finish
-Updates,tsk-027,update_7,Task 027,2025-04-08,2025-04-05,-3,0,Early Finish
-Updates,tsk-028,update_7,Task 028,2025-07-30,2025-07-29,-1,0,Early Finish
-Updates,tsk-029,update_7,Task 029,2024-12-13,2024-12-22,9,2,Delay
-Updates,tsk-030,update_7,Task 030,2025-08-10,2025-08-15,5,1,Delay
-Updates,tsk-031,update_7,Task 031,2024-12-07,2024-12-20,13,2,Delay
-Updates,tsk-032,update_7,Task 032,2025-10-20,2025-10-26,6,1,Delay
-Updates,tsk-034,update_7,Task 034,2025-09-05,2025-09-09,4,1,Delay
-Updates,tsk-035,update_7,Task 035,2025-02-24,2025-04-03,38,3,Delay
-Updates,tsk-036,update_7,Task 036,2025-08-27,2025-08-31,4,1,Delay
-Updates,tsk-037,update_7,Task 037,2025-06-16,2025-06-25,9,2,Delay
-Updates,tsk-038,update_7,Task 038,2025-10-01,2025-11-18,48,3,Delay
-Updates,tsk-039,update_7,Task 039,2025-04-04,2025-04-05,1,1,Delay
-Updates,tsk-040,update_7,Task 040,2024-12-26,2024-12-24,-2,0,Early Finish
-Updates,tsk-041,update_7,Task 041,2025-11-12,2025-11-23,11,2,Delay
-Updates,tsk-042,update_7,Task 042,2025-02-05,2025-02-07,2,1,Delay
-Updates,tsk-043,update_7,Task 043,2025-03-19,2025-04-24,36,3,Delay
-Updates,tsk-044,update_7,Task 044,2025-05-03,2025-05-04,1,1,Delay
-Updates,tsk-045,update_7,Task 045,2025-03-06,2025-03-17,11,2,Delay
-Updates,tsk-046,update_7,Task 046,2025-05-27,2025-06-10,14,2,Delay
-Updates,tsk-047,update_7,Task 047,2025-02-24,2025-03-12,16,2,Delay
-Updates,tsk-048,update_7,Task 048,2025-08-19,2025-09-21,33,3,Delay
-Updates,tsk-049,update_7,Task 049,2025-06-03,2025-06-04,1,1,Delay
-Updates,tsk-050,update_7,Task 050,2025-09-08,2025-10-13,35,3,Delay
-Updates,tsk-001,update_8,Task 001,2025-06-19,2025-07-04,15,2,Delay
-Updates,tsk-002,update_8,Task 002,2025-08-27,2025-09-06,10,2,Delay
-Updates,tsk-003,update_8,Task 003,2024-12-08,2024-12-25,17,2,Delay
-Updates,tsk-004,update_8,Task 004,2025-07-02,2025-06-27,-5,0,Early Finish
-Updates,tsk-005,update_8,Task 005,2025-02-11,2025-02-25,14,2,Delay
-Updates,tsk-006,update_8,Task 006,2025-09-08,2025-09-10,2,1,Delay
-Updates,tsk-007,update_8,Task 007,2025-07-26,2025-08-01,6,1,Delay
-Updates,tsk-008,update_8,Task 008,2025-06-28,2025-07-14,16,2,Delay
-Updates,tsk-009,update_8,Task 009,2025-05-01,2025-05-24,23,2,Delay
-Updates,tsk-010,update_8,Task 010,2024-11-30,2024-12-21,21,2,Delay
-Updates,tsk-011,update_8,Task 011,2025-08-18,2025-09-10,23,2,Delay
-Updates,tsk-012,update_8,Task 012,2025-11-30,2025-12-31,31,3,Delay
-Updates,tsk-013,update_8,Task 013,2025-10-31,2025-10-30,-1,0,Early Finish
-Updates,tsk-014,update_8,Task 014,2025-09-06,2025-09-21,15,2,Delay
-Updates,tsk-015,update_8,Task 015,2025-07-04,2025-07-09,5,1,Delay
-Updates,tsk-016,update_8,Task 016,2025-07-20,2025-08-05,16,2,Delay
-Updates,tsk-017,update_8,Task 017,2025-06-24,2025-06-30,6,1,Delay
-Updates,tsk-018,update_8,Task 018,2025-06-13,2025-06-16,3,1,Delay
-Updates,tsk-019,update_8,Task 019,2025-08-07,2025-08-21,14,2,Delay
-Updates,tsk-020,update_8,Task 020,2025-09-12,2025-09-23,11,2,Delay
-Updates,tsk-022,update_8,Task 022,2025-08-16,2025-08-27,11,2,Delay
-Updates,tsk-023,update_8,Task 023,2025-10-13,2025-10-10,-3,0,Early Finish
-Updates,tsk-024,update_8,Task 024,2025-04-26,2025-05-20,24,2,Delay
-Updates,tsk-025,update_8,Task 025,2025-01-14,2025-01-27,13,2,Delay
-Updates,tsk-026,update_8,Task 026,2025-06-05,2025-06-02,-3,0,Early Finish
-Updates,tsk-027,update_8,Task 027,2025-04-08,2025-04-10,2,1,Delay
-Updates,tsk-028,update_8,Task 028,2025-07-30,2025-07-29,-1,0,Early Finish
-Updates,tsk-029,update_8,Task 029,2024-12-13,2024-12-22,9,2,Delay
-Updates,tsk-030,update_8,Task 030,2025-08-10,2025-08-15,5,1,Delay
-Updates,tsk-031,update_8,Task 031,2024-12-07,2024-12-20,13,2,Delay
-Updates,tsk-032,update_8,Task 032,2025-10-20,2025-10-29,9,2,Delay
-Updates,tsk-033,update_8,Task 033,2025-09-22,2025-10-19,27,2,Delay
-Updates,tsk-034,update_8,Task 034,2025-09-05,2025-09-09,4,1,Delay
-Updates,tsk-035,update_8,Task 035,2025-02-24,2025-04-07,42,3,Delay
-Updates,tsk-036,update_8,Task 036,2025-08-27,2025-09-06,10,2,Delay
-Updates,tsk-037,update_8,Task 037,2025-06-16,2025-06-21,5,1,Delay
-Updates,tsk-038,update_8,Task 038,2025-10-01,2025-11-22,52,3,Delay
-Updates,tsk-039,update_8,Task 039,2025-04-04,2025-04-05,1,1,Delay
-Updates,tsk-040,update_8,Task 040,2024-12-26,2024-12-24,-2,0,Early Finish
-Updates,tsk-041,update_8,Task 041,2025-11-12,2025-11-23,11,2,Delay
-Updates,tsk-042,update_8,Task 042,2025-02-05,2025-02-10,5,1,Delay
-Updates,tsk-043,update_8,Task 043,2025-03-19,2025-04-24,36,3,Delay
-Updates,tsk-044,update_8,Task 044,2025-05-03,2025-05-04,1,1,Delay
-Updates,tsk-045,update_8,Task 045,2025-03-06,2025-03-17,11,2,Delay
-Updates,tsk-046,update_8,Task 046,2025-05-27,2025-06-10,14,2,Delay
-Updates,tsk-047,update_8,Task 047,2025-02-24,2025-03-16,20,2,Delay
-Updates,tsk-048,update_8,Task 048,2025-08-19,2025-09-21,33,3,Delay
-Updates,tsk-049,update_8,Task 049,2025-06-03,2025-06-04,1,1,Delay
-Updates,tsk-050,update_8,Task 050,2025-09-08,2025-10-13,35,3,Delay
-Updates,tsk-001,update_9,Task 001,2025-06-19,2025-07-04,15,2,Delay
-Updates,tsk-002,update_9,Task 002,2025-08-27,2025-09-06,10,2,Delay
-Updates,tsk-003,update_9,Task 003,2024-12-08,2024-12-25,17,2,Delay
-Updates,tsk-004,update_9,Task 004,2025-07-02,2025-06-27,-5,0,Early Finish
-Updates,tsk-005,update_9,Task 005,2025-02-11,2025-02-26,15,2,Delay
-Updates,tsk-006,update_9,Task 006,2025-09-08,2025-09-10,2,1,Delay
-Updates,tsk-007,update_9,Task 007,2025-07-26,2025-08-01,6,1,Delay
-Updates,tsk-008,update_9,Task 008,2025-06-28,2025-07-14,16,2,Delay
-Updates,tsk-009,update_9,Task 009,2025-05-01,2025-05-24,23,2,Delay
-Updates,tsk-010,update_9,Task 010,2024-11-30,2024-12-21,21,2,Delay
-Updates,tsk-011,update_9,Task 011,2025-08-18,2025-09-16,29,2,Delay
-Updates,tsk-012,update_9,Task 012,2025-11-30,2025-12-31,31,3,Delay
-Updates,tsk-013,update_9,Task 013,2025-10-31,2025-10-30,-1,0,Early Finish
-Updates,tsk-014,update_9,Task 014,2025-09-06,2025-09-21,15,2,Delay
-Updates,tsk-015,update_9,Task 015,2025-07-04,2025-07-09,5,1,Delay
-Updates,tsk-016,update_9,Task 016,2025-07-20,2025-08-05,16,2,Delay
-Updates,tsk-017,update_9,Task 017,2025-06-24,2025-08-08,45,3,Delay
-Updates,tsk-018,update_9,Task 018,2025-06-13,2025-06-16,3,1,Delay
-Updates,tsk-019,update_9,Task 019,2025-08-07,2025-08-22,15,2,Delay
-Updates,tsk-020,update_9,Task 020,2025-09-12,2025-09-23,11,2,Delay
-Updates,tsk-021,update_9,Task 021,2025-06-14,2025-06-12,-2,0,Early Finish
-Updates,tsk-022,update_9,Task 022,2025-08-16,2025-08-29,13,2,Delay
-Updates,tsk-023,update_9,Task 023,2025-10-13,2025-10-13,0,0,On Time
-Updates,tsk-024,update_9,Task 024,2025-04-26,2025-06-09,44,3,Delay
-Updates,tsk-025,update_9,Task 025,2025-01-14,2025-01-28,14,2,Delay
-Updates,tsk-026,update_9,Task 026,2025-06-05,2025-06-02,-3,0,Early Finish
-Updates,tsk-027,update_9,Task 027,2025-04-08,2025-04-10,2,1,Delay
-Updates,tsk-028,update_9,Task 028,2025-07-30,2025-07-29,-1,0,Early Finish
-Updates,tsk-029,update_9,Task 029,2024-12-13,2024-12-26,13,2,Delay
-Updates,tsk-030,update_9,Task 030,2025-08-10,2025-08-15,5,1,Delay
-Updates,tsk-031,update_9,Task 031,2024-12-07,2024-12-20,13,2,Delay
-Updates,tsk-032,update_9,Task 032,2025-10-20,2025-10-29,9,2,Delay
-Updates,tsk-033,update_9,Task 033,2025-09-22,2025-10-19,27,2,Delay
-Updates,tsk-034,update_9,Task 034,2025-09-05,2025-09-09,4,1,Delay
-Updates,tsk-035,update_9,Task 035,2025-02-24,2025-04-07,42,3,Delay
-Updates,tsk-036,update_9,Task 036,2025-08-27,2025-09-09,13,2,Delay
-Updates,tsk-037,update_9,Task 037,2025-06-16,2025-06-28,12,2,Delay
-Updates,tsk-038,update_9,Task 038,2025-10-01,2025-11-22,52,3,Delay
-Updates,tsk-039,update_9,Task 039,2025-04-04,2025-04-05,1,1,Delay
-Updates,tsk-040,update_9,Task 040,2024-12-26,2024-12-24,-2,0,Early Finish
-Updates,tsk-041,update_9,Task 041,2025-11-12,2025-11-27,15,2,Delay
-Updates,tsk-042,update_9,Task 042,2025-02-05,2025-02-10,5,1,Delay
-Updates,tsk-043,update_9,Task 043,2025-03-19,2025-04-24,36,3,Delay
-Updates,tsk-044,update_9,Task 044,2025-05-03,2025-05-11,8,2,Delay
-Updates,tsk-045,update_9,Task 045,2025-03-06,2025-03-17,11,2,Delay
-Updates,tsk-046,update_9,Task 046,2025-05-27,2025-06-15,19,2,Delay
-Updates,tsk-047,update_9,Task 047,2025-02-24,2025-03-16,20,2,Delay
-Updates,tsk-048,update_9,Task 048,2025-08-19,2025-09-23,35,3,Delay
-Updates,tsk-049,update_9,Task 049,2025-06-03,2025-06-04,1,1,Delay
-Updates,tsk-050,update_9,Task 050,2025-09-08,2025-10-13,35,3,Delay
-Updates,tsk-001,update_10,Task 001,2025-06-19,2025-07-04,15,2,Delay
-Updates,tsk-002,update_10,Task 002,2025-08-27,2025-09-06,10,2,Delay
-Updates,tsk-003,update_10,Task 003,2024-12-08,2024-12-31,23,2,Delay
-Updates,tsk-004,update_10,Task 004,2025-07-02,2025-07-01,-1,0,Early Finish
-Updates,tsk-005,update_10,Task 005,2025-02-11,2025-02-26,15,2,Delay
-Updates,tsk-006,update_10,Task 006,2025-09-08,2025-09-10,2,1,Delay
-Updates,tsk-007,update_10,Task 007,2025-07-26,2025-08-01,6,1,Delay
-Updates,tsk-008,update_10,Task 008,2025-06-28,2025-07-21,23,2,Delay
-Updates,tsk-009,update_10,Task 009,2025-05-01,2025-05-24,23,2,Delay
-Updates,tsk-010,update_10,Task 010,2024-11-30,2024-12-21,21,2,Delay
-Updates,tsk-011,update_10,Task 011,2025-08-18,2025-09-16,29,2,Delay
-Updates,tsk-012,update_10,Task 012,2025-11-30,2025-12-31,31,3,Delay
-Updates,tsk-013,update_10,Task 013,2025-10-31,2025-10-30,-1,0,Early Finish
-Updates,tsk-014,update_10,Task 014,2025-09-06,2025-09-21,15,2,Delay
-Updates,tsk-015,update_10,Task 015,2025-07-04,2025-07-09,5,1,Delay
-Updates,tsk-016,update_10,Task 016,2025-07-20,2025-08-05,16,2,Delay
-Updates,tsk-017,update_10,Task 017,2025-06-24,2025-08-08,45,3,Delay
-Updates,tsk-018,update_10,Task 018,2025-06-13,2025-06-16,3,1,Delay
-Updates,tsk-019,update_10,Task 019,2025-08-07,2025-08-22,15,2,Delay
-Updates,tsk-020,update_10,Task 020,2025-09-12,2025-09-23,11,2,Delay
-Updates,tsk-021,update_10,Task 021,2025-06-14,2025-06-12,-2,0,Early Finish
-Updates,tsk-022,update_10,Task 022,2025-08-16,2025-08-29,13,2,Delay
-Updates,tsk-023,update_10,Task 023,2025-10-13,2025-10-18,5,1,Delay
-Updates,tsk-024,update_10,Task 024,2025-04-26,2025-06-14,49,3,Delay
-Updates,tsk-025,update_10,Task 025,2025-01-14,2025-03-11,56,3,Delay
-Updates,tsk-026,update_10,Task 026,2025-06-05,2025-06-02,-3,0,Early Finish
-Updates,tsk-027,update_10,Task 027,2025-04-08,2025-04-10,2,1,Delay
-Updates,tsk-028,update_10,Task 028,2025-07-30,2025-07-29,-1,0,Early Finish
-Updates,tsk-029,update_10,Task 029,2024-12-13,2024-12-26,13,2,Delay
-Updates,tsk-030,update_10,Task 030,2025-08-10,2025-08-15,5,1,Delay
-Updates,tsk-031,update_10,Task 031,2024-12-07,2024-12-20,13,2,Delay
-Updates,tsk-032,update_10,Task 032,2025-10-20,2025-10-31,11,2,Delay
-Updates,tsk-033,update_10,Task 033,2025-09-22,2025-10-19,27,2,Delay
-Updates,tsk-034,update_10,Task 034,2025-09-05,2025-09-09,4,1,Delay
-Updates,tsk-035,update_10,Task 035,2025-02-24,2025-04-07,42,3,Delay
-Updates,tsk-036,update_10,Task 036,2025-08-27,2025-09-09,13,2,Delay
-Updates,tsk-037,update_10,Task 037,2025-06-16,2025-06-28,12,2,Delay
-Updates,tsk-038,update_10,Task 038,2025-10-01,2025-11-22,52,3,Delay
-Updates,tsk-039,update_10,Task 039,2025-04-04,2025-04-05,1,1,Delay
-Updates,tsk-040,update_10,Task 040,2024-12-26,2024-12-24,-2,0,Early Finish
-Updates,tsk-041,update_10,Task 041,2025-11-12,2025-11-27,15,2,Delay
-Updates,tsk-042,update_10,Task 042,2025-02-05,2025-02-10,5,1,Delay
-Updates,tsk-043,update_10,Task 043,2025-03-19,2025-04-24,36,3,Delay
-Updates,tsk-044,update_10,Task 044,2025-05-03,2025-05-11,8,2,Delay
-Updates,tsk-045,update_10,Task 045,2025-03-06,2025-03-20,14,2,Delay
-Updates,tsk-046,update_10,Task 046,2025-05-27,2025-06-15,19,2,Delay
-Updates,tsk-047,update_10,Task 047,2025-02-24,2025-03-16,20,2,Delay
-Updates,tsk-048,update_10,Task 048,2025-08-19,2025-09-23,35,3,Delay
-Updates,tsk-049,update_10,Task 049,2025-06-03,2025-06-04,1,1,Delay
-Updates,tsk-050,update_10,Task 050,2025-09-08,2025-10-15,37,3,Delay
+project_name,task_id,update_phase,task_name,baseline_end_date,actual_finish,slip_days,severity_score,change_type
+Updates,tsk-001,Update_001,Task 001,2025-07-29,NA,0.0,0.0,Initial
+Updates,tsk-001,Update_002,Task 001,2025-07-29,2025-08-24,26.0,10.0,Initial
+Updates,tsk-001,Update_003,Task 001,2025-07-29,2025-08-24,26.0,10.0,No Change
+Updates,tsk-001,Update_004,Task 001,2025-07-29,2025-08-24,26.0,10.0,No Change
+Updates,tsk-001,Update_005,Task 001,2025-07-29,2025-08-24,26.0,10.0,No Change
+Updates,tsk-001,Update_006,Task 001,2025-07-29,2025-08-24,26.0,10.0,No Change
+Updates,tsk-001,Update_007,Task 001,2025-07-29,2025-08-24,26.0,10.0,No Change
+Updates,tsk-001,Update_008,Task 001,2025-07-29,2025-08-24,26.0,10.0,No Change
+Updates,tsk-001,Update_009,Task 001,2025-07-29,2025-08-24,26.0,10.0,No Change
+Updates,tsk-001,Update_010,Task 001,NA,NA,0.0,0.0,Initial
+Updates,tsk-001,Update_011,Task 001,2025-07-29,2025-08-24,26.0,10.0,Initial
+Updates,tsk-001,Update_012,Task 001,2025-07-29,2025-08-24,26.0,10.0,No Change
+Updates,tsk-001,Update_013,Task 001,2025-07-29,2025-08-24,26.0,10.0,No Change
+Updates,tsk-001,Update_014,Task 001,2025-07-29,2025-08-24,26.0,10.0,No Change
+Updates,tsk-001,Update_015,Task 001,2025-07-29,2025-08-24,26.0,10.0,No Change
+Updates,tsk-002,Update_001,Task 002,2025-06-19,NA,0.0,0.0,Initial
+Updates,tsk-002,Update_002,Task 002,2025-06-19,NA,0.0,0.0,Initial
+Updates,tsk-002,Update_003,Task 002,2025-06-19,NA,0.0,0.0,Initial
+Updates,tsk-002,Update_004,Task 002,2025-06-19,NA,0.0,0.0,Initial
+Updates,tsk-002,Update_005,Task 002,2025-06-19,2025-07-14,25.0,10.0,Initial
+Updates,tsk-002,Update_006,Task 002,2025-06-19,2025-07-14,25.0,10.0,No Change
+Updates,tsk-002,Update_007,Task 002,2025-06-19,2025-07-14,25.0,10.0,No Change
+Updates,tsk-002,Update_008,Task 002,2025-06-19,2025-07-14,25.0,10.0,No Change
+Updates,tsk-002,Update_009,Task 002,2025-06-19,2025-07-14,25.0,10.0,No Change
+Updates,tsk-002,Update_010,Task 002,NA,NA,0.0,0.0,Initial
+Updates,tsk-002,Update_011,Task 002,2025-06-19,2025-07-14,25.0,10.0,Initial
+Updates,tsk-002,Update_012,Task 002,2025-06-19,2025-07-14,25.0,10.0,No Change
+Updates,tsk-002,Update_013,Task 002,2025-06-19,2025-07-14,25.0,10.0,No Change
+Updates,tsk-002,Update_014,Task 002,2025-06-19,2025-07-14,25.0,10.0,No Change
+Updates,tsk-002,Update_015,Task 002,2025-06-19,2025-07-14,25.0,10.0,No Change
+Updates,tsk-003,Update_001,Task 003,2025-05-10,NA,0.0,0.0,Initial
+Updates,tsk-003,Update_002,Task 003,2025-05-10,2025-05-27,17.0,10.0,Initial
+Updates,tsk-003,Update_003,Task 003,2025-05-10,2025-05-27,17.0,10.0,No Change
+Updates,tsk-003,Update_004,Task 003,2025-05-10,2025-05-27,17.0,10.0,No Change
+Updates,tsk-003,Update_005,Task 003,2025-05-10,2025-05-27,17.0,10.0,No Change
+Updates,tsk-003,Update_006,Task 003,2025-05-10,2025-05-27,17.0,10.0,No Change
+Updates,tsk-003,Update_007,Task 003,2025-05-10,2025-05-27,17.0,10.0,No Change
+Updates,tsk-003,Update_008,Task 003,2025-05-10,2025-05-27,17.0,10.0,No Change
+Updates,tsk-003,Update_009,Task 003,2025-05-10,2025-05-27,17.0,10.0,No Change
+Updates,tsk-003,Update_010,Task 003,NA,NA,0.0,0.0,Initial
+Updates,tsk-003,Update_011,Task 003,2025-05-10,2025-05-27,17.0,10.0,Initial
+Updates,tsk-003,Update_012,Task 003,2025-05-10,2025-05-27,17.0,10.0,No Change
+Updates,tsk-003,Update_013,Task 003,2025-05-10,2025-05-27,17.0,10.0,No Change
+Updates,tsk-003,Update_014,Task 003,2025-05-10,2025-05-27,17.0,10.0,No Change
+Updates,tsk-003,Update_015,Task 003,2025-05-10,2025-05-27,17.0,10.0,No Change
+Updates,tsk-004,Update_001,Task 004,2025-07-20,NA,0.0,0.0,Initial
+Updates,tsk-004,Update_002,Task 004,2025-07-20,NA,0.0,0.0,Initial
+Updates,tsk-004,Update_003,Task 004,2025-07-20,2025-09-10,52.0,10.0,Initial
+Updates,tsk-004,Update_004,Task 004,2025-07-20,2025-09-10,52.0,10.0,No Change
+Updates,tsk-004,Update_005,Task 004,2025-07-20,2025-09-10,52.0,10.0,No Change
+Updates,tsk-004,Update_006,Task 004,2025-07-20,2025-09-10,52.0,10.0,No Change
+Updates,tsk-004,Update_007,Task 004,2025-07-20,2025-09-10,52.0,10.0,No Change
+Updates,tsk-004,Update_008,Task 004,2025-07-20,2025-09-10,52.0,10.0,No Change
+Updates,tsk-004,Update_009,Task 004,2025-07-20,2025-09-10,52.0,10.0,No Change
+Updates,tsk-004,Update_010,Task 004,NA,NA,0.0,0.0,Initial
+Updates,tsk-004,Update_011,Task 004,2025-07-20,2025-09-10,52.0,10.0,Initial
+Updates,tsk-004,Update_012,Task 004,2025-07-20,2025-09-10,52.0,10.0,No Change
+Updates,tsk-004,Update_013,Task 004,2025-07-20,2025-09-10,52.0,10.0,No Change
+Updates,tsk-004,Update_014,Task 004,2025-07-20,2025-09-10,52.0,10.0,No Change
+Updates,tsk-004,Update_015,Task 004,2025-07-20,2025-09-10,52.0,10.0,No Change
+Updates,tsk-005,Update_001,Task 005,2025-02-28,NA,0.0,0.0,Initial
+Updates,tsk-005,Update_002,Task 005,2025-02-28,NA,0.0,0.0,Initial
+Updates,tsk-005,Update_003,Task 005,2025-02-28,2025-04-24,55.0,10.0,Initial
+Updates,tsk-005,Update_004,Task 005,2025-02-28,2025-04-24,55.0,10.0,No Change
+Updates,tsk-005,Update_005,Task 005,2025-02-28,2025-04-24,55.0,10.0,No Change
+Updates,tsk-005,Update_006,Task 005,2025-02-28,2025-04-24,55.0,10.0,No Change
+Updates,tsk-005,Update_007,Task 005,2025-02-28,2025-04-24,55.0,10.0,No Change
+Updates,tsk-005,Update_008,Task 005,2025-02-28,2025-04-24,55.0,10.0,No Change
+Updates,tsk-005,Update_009,Task 005,2025-02-28,2025-04-24,55.0,10.0,No Change
+Updates,tsk-005,Update_010,Task 005,NA,NA,0.0,0.0,Initial
+Updates,tsk-005,Update_011,Task 005,2025-02-28,2025-04-29,60.0,10.0,Initial
+Updates,tsk-005,Update_012,Task 005,2025-02-28,2025-04-29,60.0,10.0,No Change
+Updates,tsk-005,Update_013,Task 005,2025-02-28,2025-04-29,60.0,10.0,No Change
+Updates,tsk-005,Update_014,Task 005,2025-02-28,2025-04-29,60.0,10.0,No Change
+Updates,tsk-005,Update_015,Task 005,2025-02-28,2025-04-29,60.0,10.0,No Change
+Updates,tsk-006,Update_001,Task 006,2024-12-09,NA,0.0,0.0,Initial
+Updates,tsk-006,Update_002,Task 006,2024-12-09,NA,0.0,0.0,Initial
+Updates,tsk-006,Update_003,Task 006,2024-12-09,NA,0.0,0.0,Initial
+Updates,tsk-006,Update_004,Task 006,2024-12-09,2024-12-12,3.0,3.0,Initial
+Updates,tsk-006,Update_005,Task 006,2024-12-09,2024-12-12,3.0,3.0,No Change
+Updates,tsk-006,Update_006,Task 006,2024-12-09,2024-12-12,3.0,3.0,No Change
+Updates,tsk-006,Update_007,Task 006,2024-12-09,2024-12-12,3.0,3.0,No Change
+Updates,tsk-006,Update_008,Task 006,2024-12-09,2024-12-12,3.0,3.0,No Change
+Updates,tsk-006,Update_009,Task 006,2024-12-09,2024-12-12,3.0,3.0,No Change
+Updates,tsk-006,Update_010,Task 006,NA,NA,0.0,0.0,Initial
+Updates,tsk-006,Update_011,Task 006,2024-12-09,2024-12-12,3.0,3.0,Initial
+Updates,tsk-006,Update_012,Task 006,2024-12-09,2024-12-12,3.0,3.0,No Change
+Updates,tsk-006,Update_013,Task 006,2024-12-09,2024-12-12,3.0,3.0,No Change
+Updates,tsk-006,Update_014,Task 006,2024-12-09,2024-12-12,3.0,3.0,No Change
+Updates,tsk-006,Update_015,Task 006,2024-12-09,2024-12-12,3.0,3.0,No Change
+Updates,tsk-007,Update_001,Task 007,2025-03-22,NA,0.0,0.0,Initial
+Updates,tsk-007,Update_002,Task 007,2025-03-22,NA,0.0,0.0,Initial
+Updates,tsk-007,Update_003,Task 007,2025-03-22,NA,0.0,0.0,Initial
+Updates,tsk-007,Update_004,Task 007,2025-03-22,2025-04-08,17.0,10.0,Initial
+Updates,tsk-007,Update_005,Task 007,2025-03-22,2025-04-08,17.0,10.0,No Change
+Updates,tsk-007,Update_006,Task 007,2025-03-22,2025-04-08,17.0,10.0,No Change
+Updates,tsk-007,Update_007,Task 007,2025-03-22,2025-04-08,17.0,10.0,No Change
+Updates,tsk-007,Update_008,Task 007,2025-03-22,2025-04-08,17.0,10.0,No Change
+Updates,tsk-007,Update_009,Task 007,2025-03-22,2025-04-08,17.0,10.0,No Change
+Updates,tsk-007,Update_010,Task 007,NA,NA,0.0,0.0,Initial
+Updates,tsk-007,Update_011,Task 007,2025-03-22,2025-04-18,27.0,10.0,Initial
+Updates,tsk-007,Update_012,Task 007,2025-03-22,2025-06-20,90.0,10.0,Slipped Further
+Updates,tsk-007,Update_013,Task 007,2025-03-22,2025-06-20,90.0,10.0,No Change
+Updates,tsk-007,Update_014,Task 007,2025-03-22,2025-06-20,90.0,10.0,No Change
+Updates,tsk-007,Update_015,Task 007,2025-03-22,2025-06-20,90.0,10.0,No Change
+Updates,tsk-008,Update_001,Task 008,2025-03-08,NA,0.0,0.0,Initial
+Updates,tsk-008,Update_002,Task 008,2025-03-08,2025-03-06,-2.0,3.0,Initial
+Updates,tsk-008,Update_003,Task 008,2025-03-08,2025-03-06,-2.0,3.0,No Change
+Updates,tsk-008,Update_004,Task 008,2025-03-08,2025-03-06,-2.0,3.0,No Change
+Updates,tsk-008,Update_005,Task 008,2025-03-08,2025-03-06,-2.0,3.0,No Change
+Updates,tsk-008,Update_006,Task 008,2025-03-08,2025-03-06,-2.0,3.0,No Change
+Updates,tsk-008,Update_007,Task 008,2025-03-08,2025-03-06,-2.0,3.0,No Change
+Updates,tsk-008,Update_008,Task 008,2025-03-08,2025-03-06,-2.0,3.0,No Change
+Updates,tsk-008,Update_009,Task 008,2025-03-08,2025-03-06,-2.0,3.0,No Change
+Updates,tsk-008,Update_010,Task 008,NA,NA,0.0,0.0,Initial
+Updates,tsk-008,Update_011,Task 008,2025-03-08,2025-03-03,-5.0,0.0,Initial
+Updates,tsk-008,Update_012,Task 008,2025-03-08,2025-03-03,-5.0,0.0,No Change
+Updates,tsk-008,Update_013,Task 008,2025-03-08,2025-03-03,-5.0,0.0,No Change
+Updates,tsk-008,Update_014,Task 008,2025-03-08,2025-03-03,-5.0,0.0,No Change
+Updates,tsk-008,Update_015,Task 008,2025-03-08,2025-03-03,-5.0,0.0,No Change
+Updates,tsk-009,Update_001,Task 009,2025-04-29,NA,0.0,0.0,Initial
+Updates,tsk-009,Update_002,Task 009,2025-04-29,2025-05-16,17.0,10.0,Initial
+Updates,tsk-009,Update_003,Task 009,2025-04-29,2025-05-16,17.0,10.0,No Change
+Updates,tsk-009,Update_004,Task 009,2025-04-29,2025-05-16,17.0,10.0,No Change
+Updates,tsk-009,Update_005,Task 009,2025-04-29,2025-05-16,17.0,10.0,No Change
+Updates,tsk-009,Update_006,Task 009,2025-04-29,2025-05-16,17.0,10.0,No Change
+Updates,tsk-009,Update_007,Task 009,2025-04-29,2025-05-16,17.0,10.0,No Change
+Updates,tsk-009,Update_008,Task 009,2025-04-29,2025-05-16,17.0,10.0,No Change
+Updates,tsk-009,Update_009,Task 009,2025-04-29,2025-05-16,17.0,10.0,No Change
+Updates,tsk-009,Update_010,Task 009,NA,NA,0.0,0.0,Initial
+Updates,tsk-009,Update_011,Task 009,2025-04-29,2025-05-16,17.0,10.0,Initial
+Updates,tsk-009,Update_012,Task 009,2025-04-29,2025-05-16,17.0,10.0,No Change
+Updates,tsk-009,Update_013,Task 009,2025-04-29,2025-05-16,17.0,10.0,No Change
+Updates,tsk-009,Update_014,Task 009,2025-04-29,2025-05-16,17.0,10.0,No Change
+Updates,tsk-009,Update_015,Task 009,2025-04-29,2025-05-16,17.0,10.0,No Change
+Updates,tsk-010,Update_001,Task 010,2025-06-12,NA,0.0,0.0,Initial
+Updates,tsk-010,Update_002,Task 010,2025-06-12,2025-07-12,30.0,10.0,Initial
+Updates,tsk-010,Update_003,Task 010,2025-06-12,2025-07-12,30.0,10.0,No Change
+Updates,tsk-010,Update_004,Task 010,2025-06-12,2025-07-12,30.0,10.0,No Change
+Updates,tsk-010,Update_005,Task 010,2025-06-12,2025-07-12,30.0,10.0,No Change
+Updates,tsk-010,Update_006,Task 010,2025-06-12,2025-09-05,85.0,10.0,Slipped Further
+Updates,tsk-010,Update_007,Task 010,2025-06-12,2025-09-05,85.0,10.0,No Change
+Updates,tsk-010,Update_008,Task 010,2025-06-12,2025-09-05,85.0,10.0,No Change
+Updates,tsk-010,Update_009,Task 010,2025-06-12,2025-09-05,85.0,10.0,No Change
+Updates,tsk-010,Update_010,Task 010,NA,NA,0.0,0.0,Initial
+Updates,tsk-010,Update_011,Task 010,2025-06-12,2025-09-05,85.0,10.0,Initial
+Updates,tsk-010,Update_012,Task 010,2025-06-12,2025-09-05,85.0,10.0,No Change
+Updates,tsk-010,Update_013,Task 010,2025-06-12,2025-09-05,85.0,10.0,No Change
+Updates,tsk-010,Update_014,Task 010,2025-06-12,2025-09-05,85.0,10.0,No Change
+Updates,tsk-010,Update_015,Task 010,2025-06-12,2025-09-05,85.0,10.0,No Change
+Updates,tsk-011,Update_001,Task 011,2025-10-21,NA,0.0,0.0,Initial
+Updates,tsk-011,Update_002,Task 011,2025-10-21,NA,0.0,0.0,Initial
+Updates,tsk-011,Update_003,Task 011,2025-10-21,NA,0.0,0.0,Initial
+Updates,tsk-011,Update_004,Task 011,2025-10-21,2025-11-11,21.0,10.0,Initial
+Updates,tsk-011,Update_005,Task 011,2025-10-21,2025-11-11,21.0,10.0,No Change
+Updates,tsk-011,Update_006,Task 011,2025-10-21,2025-11-11,21.0,10.0,No Change
+Updates,tsk-011,Update_007,Task 011,2025-10-21,2025-11-11,21.0,10.0,No Change
+Updates,tsk-011,Update_008,Task 011,2025-10-21,2025-11-11,21.0,10.0,No Change
+Updates,tsk-011,Update_009,Task 011,2025-10-21,2025-11-11,21.0,10.0,No Change
+Updates,tsk-011,Update_010,Task 011,NA,NA,0.0,0.0,Initial
+Updates,tsk-011,Update_011,Task 011,2025-10-21,2025-11-18,28.0,10.0,Initial
+Updates,tsk-011,Update_012,Task 011,2025-10-21,2025-11-18,28.0,10.0,No Change
+Updates,tsk-011,Update_013,Task 011,2025-10-21,2025-11-18,28.0,10.0,No Change
+Updates,tsk-011,Update_014,Task 011,2025-10-21,2025-11-18,28.0,10.0,No Change
+Updates,tsk-011,Update_015,Task 011,2025-10-21,2025-11-18,28.0,10.0,No Change
+Updates,tsk-012,Update_001,Task 012,2025-04-16,2025-04-21,5.0,5.0,Initial
+Updates,tsk-012,Update_002,Task 012,2025-04-16,2025-04-21,5.0,5.0,No Change
+Updates,tsk-012,Update_003,Task 012,2025-04-16,2025-04-21,5.0,5.0,No Change
+Updates,tsk-012,Update_004,Task 012,2025-04-16,2025-04-21,5.0,5.0,No Change
+Updates,tsk-012,Update_005,Task 012,2025-04-16,2025-04-21,5.0,5.0,No Change
+Updates,tsk-012,Update_006,Task 012,2025-04-16,2025-04-21,5.0,5.0,No Change
+Updates,tsk-012,Update_007,Task 012,2025-04-16,2025-04-21,5.0,5.0,No Change
+Updates,tsk-012,Update_008,Task 012,2025-04-16,2025-04-21,5.0,5.0,No Change
+Updates,tsk-012,Update_009,Task 012,2025-04-16,2025-04-21,5.0,5.0,No Change
+Updates,tsk-012,Update_010,Task 012,NA,NA,0.0,0.0,Initial
+Updates,tsk-012,Update_011,Task 012,2025-04-16,2025-04-21,5.0,5.0,Initial
+Updates,tsk-012,Update_012,Task 012,2025-04-16,2025-04-21,5.0,5.0,No Change
+Updates,tsk-012,Update_013,Task 012,2025-04-16,2025-04-21,5.0,5.0,No Change
+Updates,tsk-012,Update_014,Task 012,2025-04-16,2025-04-21,5.0,5.0,No Change
+Updates,tsk-012,Update_015,Task 012,2025-04-16,2025-04-21,5.0,5.0,No Change
+Updates,tsk-013,Update_001,Task 013,2025-06-08,NA,0.0,0.0,Initial
+Updates,tsk-013,Update_002,Task 013,2025-06-08,2025-07-01,23.0,10.0,Initial
+Updates,tsk-013,Update_003,Task 013,2025-06-08,2025-07-01,23.0,10.0,No Change
+Updates,tsk-013,Update_004,Task 013,2025-06-08,2025-07-01,23.0,10.0,No Change
+Updates,tsk-013,Update_005,Task 013,2025-06-08,2025-07-01,23.0,10.0,No Change
+Updates,tsk-013,Update_006,Task 013,2025-06-08,2025-07-09,31.0,10.0,Slipped Further
+Updates,tsk-013,Update_007,Task 013,2025-06-08,2025-07-09,31.0,10.0,No Change
+Updates,tsk-013,Update_008,Task 013,2025-06-08,2025-07-09,31.0,10.0,No Change
+Updates,tsk-013,Update_009,Task 013,2025-06-08,2025-07-09,31.0,10.0,No Change
+Updates,tsk-013,Update_010,Task 013,NA,NA,0.0,0.0,Initial
+Updates,tsk-013,Update_011,Task 013,2025-06-08,2025-07-09,31.0,10.0,Initial
+Updates,tsk-013,Update_012,Task 013,2025-06-08,2025-07-09,31.0,10.0,No Change
+Updates,tsk-013,Update_013,Task 013,2025-06-08,2025-07-09,31.0,10.0,No Change
+Updates,tsk-013,Update_014,Task 013,2025-06-08,2025-07-09,31.0,10.0,No Change
+Updates,tsk-013,Update_015,Task 013,2025-06-08,2025-07-09,31.0,10.0,No Change
+Updates,tsk-014,Update_001,Task 014,2025-02-10,NA,0.0,0.0,Initial
+Updates,tsk-014,Update_002,Task 014,2025-02-10,NA,0.0,0.0,Initial
+Updates,tsk-014,Update_003,Task 014,2025-02-10,2025-03-10,28.0,10.0,Initial
+Updates,tsk-014,Update_004,Task 014,2025-02-10,2025-03-10,28.0,10.0,No Change
+Updates,tsk-014,Update_005,Task 014,2025-02-10,2025-03-10,28.0,10.0,No Change
+Updates,tsk-014,Update_006,Task 014,2025-02-10,2025-03-10,28.0,10.0,No Change
+Updates,tsk-014,Update_007,Task 014,2025-02-10,2025-03-10,28.0,10.0,No Change
+Updates,tsk-014,Update_008,Task 014,2025-02-10,2025-03-19,37.0,10.0,Slipped Further
+Updates,tsk-014,Update_009,Task 014,2025-02-10,2025-03-19,37.0,10.0,No Change
+Updates,tsk-014,Update_010,Task 014,NA,NA,0.0,0.0,Initial
+Updates,tsk-014,Update_011,Task 014,2025-02-10,2025-03-19,37.0,10.0,Initial
+Updates,tsk-014,Update_012,Task 014,2025-02-10,2025-03-19,37.0,10.0,No Change
+Updates,tsk-014,Update_013,Task 014,2025-02-10,2025-03-19,37.0,10.0,No Change
+Updates,tsk-014,Update_014,Task 014,2025-02-10,2025-03-19,37.0,10.0,No Change
+Updates,tsk-014,Update_015,Task 014,2025-02-10,2025-03-19,37.0,10.0,No Change
+Updates,tsk-015,Update_001,Task 015,2025-06-05,NA,0.0,0.0,Initial
+Updates,tsk-015,Update_002,Task 015,2025-06-05,NA,0.0,0.0,Initial
+Updates,tsk-015,Update_003,Task 015,2025-06-05,NA,0.0,0.0,Initial
+Updates,tsk-015,Update_004,Task 015,2025-06-05,2025-08-04,60.0,10.0,Initial
+Updates,tsk-015,Update_005,Task 015,2025-06-05,2025-08-04,60.0,10.0,No Change
+Updates,tsk-015,Update_006,Task 015,2025-06-05,2025-08-04,60.0,10.0,No Change
+Updates,tsk-015,Update_007,Task 015,2025-06-05,2025-08-04,60.0,10.0,No Change
+Updates,tsk-015,Update_008,Task 015,2025-06-05,2025-08-04,60.0,10.0,No Change
+Updates,tsk-015,Update_009,Task 015,2025-06-05,2025-08-04,60.0,10.0,No Change
+Updates,tsk-015,Update_010,Task 015,NA,NA,0.0,0.0,Initial
+Updates,tsk-015,Update_011,Task 015,2025-06-05,2025-08-04,60.0,10.0,Initial
+Updates,tsk-015,Update_012,Task 015,2025-06-05,2025-08-04,60.0,10.0,No Change
+Updates,tsk-015,Update_013,Task 015,2025-06-05,2025-08-04,60.0,10.0,No Change
+Updates,tsk-015,Update_014,Task 015,2025-06-05,2025-08-04,60.0,10.0,No Change
+Updates,tsk-015,Update_015,Task 015,2025-06-05,2025-11-06,154.0,10.0,Slipped Further
+Updates,tsk-016,Update_001,Task 016,2025-07-16,NA,0.0,0.0,Initial
+Updates,tsk-016,Update_002,Task 016,2025-07-16,NA,0.0,0.0,Initial
+Updates,tsk-016,Update_003,Task 016,2025-07-16,2025-09-25,71.0,10.0,Initial
+Updates,tsk-016,Update_004,Task 016,2025-07-16,2025-09-25,71.0,10.0,No Change
+Updates,tsk-016,Update_005,Task 016,2025-07-16,2025-09-25,71.0,10.0,No Change
+Updates,tsk-016,Update_006,Task 016,2025-07-16,2025-09-25,71.0,10.0,No Change
+Updates,tsk-016,Update_007,Task 016,2025-07-16,2025-10-03,79.0,10.0,Slipped Further
+Updates,tsk-016,Update_008,Task 016,2025-07-16,2025-10-03,79.0,10.0,No Change
+Updates,tsk-016,Update_009,Task 016,2025-07-16,2025-10-03,79.0,10.0,No Change
+Updates,tsk-016,Update_010,Task 016,NA,NA,0.0,0.0,Initial
+Updates,tsk-016,Update_011,Task 016,2025-07-16,2025-10-03,79.0,10.0,Initial
+Updates,tsk-016,Update_012,Task 016,2025-07-16,2025-10-03,79.0,10.0,No Change
+Updates,tsk-016,Update_013,Task 016,2025-07-16,2025-10-03,79.0,10.0,No Change
+Updates,tsk-016,Update_014,Task 016,2025-07-16,2025-10-03,79.0,10.0,No Change
+Updates,tsk-016,Update_015,Task 016,2025-07-16,2025-10-03,79.0,10.0,No Change
+Updates,tsk-017,Update_001,Task 017,2025-03-03,2025-03-28,25.0,10.0,Initial
+Updates,tsk-017,Update_002,Task 017,2025-03-03,2025-03-28,25.0,10.0,No Change
+Updates,tsk-017,Update_003,Task 017,2025-03-03,2025-03-28,25.0,10.0,No Change
+Updates,tsk-017,Update_004,Task 017,2025-03-03,2025-03-28,25.0,10.0,No Change
+Updates,tsk-017,Update_005,Task 017,2025-03-03,2025-03-28,25.0,10.0,No Change
+Updates,tsk-017,Update_006,Task 017,2025-03-03,2025-03-28,25.0,10.0,No Change
+Updates,tsk-017,Update_007,Task 017,2025-03-03,2025-03-28,25.0,10.0,No Change
+Updates,tsk-017,Update_008,Task 017,2025-03-03,2025-03-28,25.0,10.0,No Change
+Updates,tsk-017,Update_009,Task 017,2025-03-03,2025-03-28,25.0,10.0,No Change
+Updates,tsk-017,Update_010,Task 017,NA,NA,0.0,0.0,Initial
+Updates,tsk-017,Update_011,Task 017,2025-03-03,2025-03-28,25.0,10.0,Initial
+Updates,tsk-017,Update_012,Task 017,2025-03-03,2025-03-28,25.0,10.0,No Change
+Updates,tsk-017,Update_013,Task 017,2025-03-03,2025-03-28,25.0,10.0,No Change
+Updates,tsk-017,Update_014,Task 017,2025-03-03,2025-03-28,25.0,10.0,No Change
+Updates,tsk-017,Update_015,Task 017,2025-03-03,2025-04-06,34.0,10.0,Slipped Further
+Updates,tsk-018,Update_001,Task 018,2025-01-19,NA,0.0,0.0,Initial
+Updates,tsk-018,Update_002,Task 018,2025-01-19,NA,0.0,0.0,Initial
+Updates,tsk-018,Update_003,Task 018,2025-01-19,NA,0.0,0.0,Initial
+Updates,tsk-018,Update_004,Task 018,2025-01-19,NA,0.0,0.0,Initial
+Updates,tsk-018,Update_005,Task 018,2025-01-19,2025-02-11,23.0,10.0,Initial
+Updates,tsk-018,Update_006,Task 018,2025-01-19,2025-02-11,23.0,10.0,No Change
+Updates,tsk-018,Update_007,Task 018,2025-01-19,2025-02-11,23.0,10.0,No Change
+Updates,tsk-018,Update_008,Task 018,2025-01-19,2025-02-11,23.0,10.0,No Change
+Updates,tsk-018,Update_009,Task 018,2025-01-19,2025-02-11,23.0,10.0,No Change
+Updates,tsk-018,Update_010,Task 018,NA,NA,0.0,0.0,Initial
+Updates,tsk-018,Update_011,Task 018,2025-01-19,2025-02-11,23.0,10.0,Initial
+Updates,tsk-018,Update_012,Task 018,2025-01-19,2025-02-11,23.0,10.0,No Change
+Updates,tsk-018,Update_013,Task 018,2025-01-19,2025-02-11,23.0,10.0,No Change
+Updates,tsk-018,Update_014,Task 018,2025-01-19,2025-02-11,23.0,10.0,No Change
+Updates,tsk-018,Update_015,Task 018,2025-01-19,2025-02-11,23.0,10.0,No Change
+Updates,tsk-019,Update_001,Task 019,2025-08-14,NA,0.0,0.0,Initial
+Updates,tsk-019,Update_002,Task 019,2025-08-14,2025-10-02,49.0,10.0,Initial
+Updates,tsk-019,Update_003,Task 019,2025-08-14,2025-10-02,49.0,10.0,No Change
+Updates,tsk-019,Update_004,Task 019,2025-08-14,2025-10-02,49.0,10.0,No Change
+Updates,tsk-019,Update_005,Task 019,2025-08-14,2025-10-02,49.0,10.0,No Change
+Updates,tsk-019,Update_006,Task 019,2025-08-14,2025-10-02,49.0,10.0,No Change
+Updates,tsk-019,Update_007,Task 019,2025-08-14,2025-10-02,49.0,10.0,No Change
+Updates,tsk-019,Update_008,Task 019,2025-08-14,2025-10-02,49.0,10.0,No Change
+Updates,tsk-019,Update_009,Task 019,2025-08-14,2025-10-02,49.0,10.0,No Change
+Updates,tsk-019,Update_010,Task 019,NA,NA,0.0,0.0,Initial
+Updates,tsk-019,Update_011,Task 019,2025-08-14,2025-10-02,49.0,10.0,Initial
+Updates,tsk-019,Update_012,Task 019,2025-08-14,2025-10-02,49.0,10.0,No Change
+Updates,tsk-019,Update_013,Task 019,2025-08-14,2025-10-02,49.0,10.0,No Change
+Updates,tsk-019,Update_014,Task 019,2025-08-14,2025-10-02,49.0,10.0,No Change
+Updates,tsk-019,Update_015,Task 019,2025-08-14,2025-10-02,49.0,10.0,No Change
+Updates,tsk-020,Update_001,Task 020,2025-05-24,NA,0.0,0.0,Initial
+Updates,tsk-020,Update_002,Task 020,2025-05-24,NA,0.0,0.0,Initial
+Updates,tsk-020,Update_003,Task 020,2025-05-24,2025-07-08,45.0,10.0,Initial
+Updates,tsk-020,Update_004,Task 020,2025-05-24,2025-07-08,45.0,10.0,No Change
+Updates,tsk-020,Update_005,Task 020,2025-05-24,2025-07-08,45.0,10.0,No Change
+Updates,tsk-020,Update_006,Task 020,2025-05-24,2025-07-08,45.0,10.0,No Change
+Updates,tsk-020,Update_007,Task 020,2025-05-24,2025-07-08,45.0,10.0,No Change
+Updates,tsk-020,Update_008,Task 020,2025-05-24,2025-07-08,45.0,10.0,No Change
+Updates,tsk-020,Update_009,Task 020,2025-05-24,2025-07-08,45.0,10.0,No Change
+Updates,tsk-020,Update_010,Task 020,NA,NA,0.0,0.0,Initial
+Updates,tsk-020,Update_011,Task 020,2025-05-24,2025-07-08,45.0,10.0,Initial
+Updates,tsk-020,Update_012,Task 020,2025-05-24,2025-08-14,82.0,10.0,Slipped Further
+Updates,tsk-020,Update_013,Task 020,2025-05-24,2025-08-14,82.0,10.0,No Change
+Updates,tsk-020,Update_014,Task 020,2025-05-24,2025-08-14,82.0,10.0,No Change
+Updates,tsk-020,Update_015,Task 020,2025-05-24,2025-08-14,82.0,10.0,No Change
+Updates,tsk-021,Update_001,Task 021,2025-02-04,NA,0.0,0.0,Initial
+Updates,tsk-021,Update_002,Task 021,2025-02-04,NA,0.0,0.0,Initial
+Updates,tsk-021,Update_003,Task 021,2025-02-04,2025-02-25,21.0,10.0,Initial
+Updates,tsk-021,Update_004,Task 021,2025-02-04,2025-02-25,21.0,10.0,No Change
+Updates,tsk-021,Update_005,Task 021,2025-02-04,2025-02-25,21.0,10.0,No Change
+Updates,tsk-021,Update_006,Task 021,2025-02-04,2025-02-25,21.0,10.0,No Change
+Updates,tsk-021,Update_007,Task 021,2025-02-04,2025-02-25,21.0,10.0,No Change
+Updates,tsk-021,Update_008,Task 021,2025-02-04,2025-02-25,21.0,10.0,No Change
+Updates,tsk-021,Update_009,Task 021,2025-02-04,2025-02-25,21.0,10.0,No Change
+Updates,tsk-021,Update_010,Task 021,NA,NA,0.0,0.0,Initial
+Updates,tsk-021,Update_011,Task 021,2025-02-04,2025-02-25,21.0,10.0,Initial
+Updates,tsk-021,Update_012,Task 021,2025-02-04,2025-02-25,21.0,10.0,No Change
+Updates,tsk-021,Update_013,Task 021,2025-02-04,2025-02-25,21.0,10.0,No Change
+Updates,tsk-021,Update_014,Task 021,2025-02-04,2025-02-25,21.0,10.0,No Change
+Updates,tsk-021,Update_015,Task 021,2025-02-04,2025-02-25,21.0,10.0,No Change
+Updates,tsk-022,Update_001,Task 022,2025-09-01,NA,0.0,0.0,Initial
+Updates,tsk-022,Update_002,Task 022,2025-09-01,NA,0.0,0.0,Initial
+Updates,tsk-022,Update_003,Task 022,2025-09-01,NA,0.0,0.0,Initial
+Updates,tsk-022,Update_004,Task 022,2025-09-01,NA,0.0,0.0,Initial
+Updates,tsk-022,Update_005,Task 022,2025-09-01,2025-09-12,11.0,10.0,Initial
+Updates,tsk-022,Update_006,Task 022,2025-09-01,2025-09-12,11.0,10.0,No Change
+Updates,tsk-022,Update_007,Task 022,2025-09-01,2025-09-12,11.0,10.0,No Change
+Updates,tsk-022,Update_008,Task 022,2025-09-01,2025-09-21,20.0,10.0,Slipped Further
+Updates,tsk-022,Update_009,Task 022,2025-09-01,2025-09-21,20.0,10.0,No Change
+Updates,tsk-022,Update_010,Task 022,NA,NA,0.0,0.0,Initial
+Updates,tsk-022,Update_011,Task 022,2025-09-01,2025-09-21,20.0,10.0,Initial
+Updates,tsk-022,Update_012,Task 022,2025-09-01,2025-09-21,20.0,10.0,No Change
+Updates,tsk-022,Update_013,Task 022,2025-09-01,2025-09-21,20.0,10.0,No Change
+Updates,tsk-022,Update_014,Task 022,2025-09-01,2025-09-21,20.0,10.0,No Change
+Updates,tsk-022,Update_015,Task 022,2025-09-01,2025-09-21,20.0,10.0,No Change
+Updates,tsk-023,Update_001,Task 023,2025-01-30,NA,0.0,0.0,Initial
+Updates,tsk-023,Update_002,Task 023,2025-01-30,NA,0.0,0.0,Initial
+Updates,tsk-023,Update_003,Task 023,2025-01-30,NA,0.0,0.0,Initial
+Updates,tsk-023,Update_004,Task 023,2025-01-30,2025-01-30,0.0,0.0,Initial
+Updates,tsk-023,Update_005,Task 023,2025-01-30,2025-01-30,0.0,0.0,No Change
+Updates,tsk-023,Update_006,Task 023,2025-01-30,2025-01-30,0.0,0.0,No Change
+Updates,tsk-023,Update_007,Task 023,2025-01-30,2025-01-30,0.0,0.0,No Change
+Updates,tsk-023,Update_008,Task 023,2025-01-30,2025-01-30,0.0,0.0,No Change
+Updates,tsk-023,Update_009,Task 023,2025-01-30,2025-01-30,0.0,0.0,No Change
+Updates,tsk-023,Update_010,Task 023,NA,NA,0.0,0.0,Initial
+Updates,tsk-023,Update_011,Task 023,2025-01-30,2025-01-30,0.0,0.0,Initial
+Updates,tsk-023,Update_012,Task 023,2025-01-30,2025-01-30,0.0,0.0,No Change
+Updates,tsk-023,Update_013,Task 023,2025-01-30,2025-02-07,8.0,8.0,Slipped Further
+Updates,tsk-023,Update_014,Task 023,2025-01-30,2025-02-07,8.0,8.0,No Change
+Updates,tsk-023,Update_015,Task 023,2025-01-30,2025-02-07,8.0,8.0,No Change
+Updates,tsk-024,Update_001,Task 024,2025-03-27,NA,0.0,0.0,Initial
+Updates,tsk-024,Update_002,Task 024,2025-03-27,2025-05-19,53.0,10.0,Initial
+Updates,tsk-024,Update_003,Task 024,2025-03-27,2025-05-19,53.0,10.0,No Change
+Updates,tsk-024,Update_004,Task 024,2025-03-27,2025-06-19,84.0,10.0,Slipped Further
+Updates,tsk-024,Update_005,Task 024,2025-03-27,2025-06-19,84.0,10.0,No Change
+Updates,tsk-024,Update_006,Task 024,2025-03-27,2025-06-19,84.0,10.0,No Change
+Updates,tsk-024,Update_007,Task 024,2025-03-27,2025-06-19,84.0,10.0,No Change
+Updates,tsk-024,Update_008,Task 024,2025-03-27,2025-06-19,84.0,10.0,No Change
+Updates,tsk-024,Update_009,Task 024,2025-03-27,2025-06-19,84.0,10.0,No Change
+Updates,tsk-024,Update_010,Task 024,NA,NA,0.0,0.0,Initial
+Updates,tsk-024,Update_011,Task 024,2025-03-27,2025-06-19,84.0,10.0,Initial
+Updates,tsk-024,Update_012,Task 024,2025-03-27,2025-06-19,84.0,10.0,No Change
+Updates,tsk-024,Update_013,Task 024,2025-03-27,2025-06-19,84.0,10.0,No Change
+Updates,tsk-024,Update_014,Task 024,2025-03-27,2025-06-19,84.0,10.0,No Change
+Updates,tsk-024,Update_015,Task 024,2025-03-27,2025-06-19,84.0,10.0,No Change
+Updates,tsk-025,Update_001,Task 025,2025-06-21,NA,0.0,0.0,Initial
+Updates,tsk-025,Update_002,Task 025,2025-06-21,NA,0.0,0.0,Initial
+Updates,tsk-025,Update_003,Task 025,2025-06-21,NA,0.0,0.0,Initial
+Updates,tsk-025,Update_004,Task 025,2025-06-21,NA,0.0,0.0,Initial
+Updates,tsk-025,Update_005,Task 025,2025-06-21,NA,0.0,0.0,Initial
+Updates,tsk-025,Update_006,Task 025,2025-06-21,NA,0.0,0.0,Initial
+Updates,tsk-025,Update_007,Task 025,2025-06-21,NA,0.0,0.0,Initial
+Updates,tsk-025,Update_008,Task 025,2025-06-21,2025-06-22,1.0,1.0,Initial
+Updates,tsk-025,Update_009,Task 025,2025-06-21,2025-06-22,1.0,1.0,No Change
+Updates,tsk-025,Update_010,Task 025,NA,NA,0.0,0.0,Initial
+Updates,tsk-025,Update_011,Task 025,2025-06-21,2025-09-09,80.0,10.0,Initial
+Updates,tsk-025,Update_012,Task 025,2025-06-21,2025-09-09,80.0,10.0,No Change
+Updates,tsk-025,Update_013,Task 025,2025-06-21,2025-09-09,80.0,10.0,No Change
+Updates,tsk-025,Update_014,Task 025,2025-06-21,2025-09-09,80.0,10.0,No Change
+Updates,tsk-025,Update_015,Task 025,2025-06-21,2025-09-09,80.0,10.0,No Change
+Updates,tsk-026,Update_001,Task 026,2025-07-25,NA,0.0,0.0,Initial
+Updates,tsk-026,Update_002,Task 026,2025-07-25,NA,0.0,0.0,Initial
+Updates,tsk-026,Update_003,Task 026,2025-07-25,NA,0.0,0.0,Initial
+Updates,tsk-026,Update_004,Task 026,2025-07-25,NA,0.0,0.0,Initial
+Updates,tsk-026,Update_005,Task 026,2025-07-25,2025-08-14,20.0,10.0,Initial
+Updates,tsk-026,Update_006,Task 026,2025-07-25,2025-08-14,20.0,10.0,No Change
+Updates,tsk-026,Update_007,Task 026,2025-07-25,2025-08-14,20.0,10.0,No Change
+Updates,tsk-026,Update_008,Task 026,2025-07-25,2025-08-14,20.0,10.0,No Change
+Updates,tsk-026,Update_009,Task 026,2025-07-25,2025-08-14,20.0,10.0,No Change
+Updates,tsk-026,Update_010,Task 026,NA,NA,0.0,0.0,Initial
+Updates,tsk-026,Update_011,Task 026,2025-07-25,2025-08-14,20.0,10.0,Initial
+Updates,tsk-026,Update_012,Task 026,2025-07-25,2025-08-14,20.0,10.0,No Change
+Updates,tsk-026,Update_013,Task 026,2025-07-25,2025-08-19,25.0,10.0,Slipped Further
+Updates,tsk-026,Update_014,Task 026,2025-07-25,2025-08-19,25.0,10.0,No Change
+Updates,tsk-026,Update_015,Task 026,2025-07-25,2025-08-19,25.0,10.0,No Change
+Updates,tsk-027,Update_001,Task 027,2025-10-27,NA,0.0,0.0,Initial
+Updates,tsk-027,Update_002,Task 027,2025-10-27,NA,0.0,0.0,Initial
+Updates,tsk-027,Update_003,Task 027,2025-10-27,2025-11-18,22.0,10.0,Initial
+Updates,tsk-027,Update_004,Task 027,2025-10-27,2025-11-18,22.0,10.0,No Change
+Updates,tsk-027,Update_005,Task 027,2025-10-27,2025-11-18,22.0,10.0,No Change
+Updates,tsk-027,Update_006,Task 027,2025-10-27,2025-11-18,22.0,10.0,No Change
+Updates,tsk-027,Update_007,Task 027,2025-10-27,2025-11-18,22.0,10.0,No Change
+Updates,tsk-027,Update_008,Task 027,2025-10-27,2025-11-18,22.0,10.0,No Change
+Updates,tsk-027,Update_009,Task 027,2025-10-27,2025-11-19,23.0,10.0,Slipped Further
+Updates,tsk-027,Update_010,Task 027,NA,NA,0.0,0.0,Initial
+Updates,tsk-027,Update_011,Task 027,2025-10-27,2025-11-19,23.0,10.0,Initial
+Updates,tsk-027,Update_012,Task 027,2025-10-27,2025-11-19,23.0,10.0,No Change
+Updates,tsk-027,Update_013,Task 027,2025-10-27,2025-11-19,23.0,10.0,No Change
+Updates,tsk-027,Update_014,Task 027,2025-10-27,2025-11-19,23.0,10.0,No Change
+Updates,tsk-027,Update_015,Task 027,2025-10-27,2025-11-19,23.0,10.0,No Change
+Updates,tsk-028,Update_001,Task 028,2025-08-11,NA,0.0,0.0,Initial
+Updates,tsk-028,Update_002,Task 028,2025-08-11,NA,0.0,0.0,Initial
+Updates,tsk-028,Update_003,Task 028,2025-08-11,NA,0.0,0.0,Initial
+Updates,tsk-028,Update_004,Task 028,2025-08-11,2025-09-03,23.0,10.0,Initial
+Updates,tsk-028,Update_005,Task 028,2025-08-11,2025-09-03,23.0,10.0,No Change
+Updates,tsk-028,Update_006,Task 028,2025-08-11,2025-09-03,23.0,10.0,No Change
+Updates,tsk-028,Update_007,Task 028,2025-08-11,2025-09-03,23.0,10.0,No Change
+Updates,tsk-028,Update_008,Task 028,2025-08-11,2025-09-03,23.0,10.0,No Change
+Updates,tsk-028,Update_009,Task 028,2025-08-11,2025-09-03,23.0,10.0,No Change
+Updates,tsk-028,Update_010,Task 028,NA,NA,0.0,0.0,Initial
+Updates,tsk-028,Update_011,Task 028,2025-08-11,2025-09-03,23.0,10.0,Initial
+Updates,tsk-028,Update_012,Task 028,2025-08-11,2025-09-03,23.0,10.0,No Change
+Updates,tsk-028,Update_013,Task 028,2025-08-11,2025-09-03,23.0,10.0,No Change
+Updates,tsk-028,Update_014,Task 028,2025-08-11,2025-09-03,23.0,10.0,No Change
+Updates,tsk-028,Update_015,Task 028,2025-08-11,2025-09-03,23.0,10.0,No Change
+Updates,tsk-029,Update_001,Task 029,2025-04-13,NA,0.0,0.0,Initial
+Updates,tsk-029,Update_002,Task 029,2025-04-13,NA,0.0,0.0,Initial
+Updates,tsk-029,Update_003,Task 029,2025-04-13,NA,0.0,0.0,Initial
+Updates,tsk-029,Update_004,Task 029,2025-04-13,NA,0.0,0.0,Initial
+Updates,tsk-029,Update_005,Task 029,2025-04-13,2025-04-25,12.0,10.0,Initial
+Updates,tsk-029,Update_006,Task 029,2025-04-13,2025-04-25,12.0,10.0,No Change
+Updates,tsk-029,Update_007,Task 029,2025-04-13,2025-04-25,12.0,10.0,No Change
+Updates,tsk-029,Update_008,Task 029,2025-04-13,2025-04-25,12.0,10.0,No Change
+Updates,tsk-029,Update_009,Task 029,2025-04-13,2025-04-25,12.0,10.0,No Change
+Updates,tsk-029,Update_010,Task 029,NA,NA,0.0,0.0,Initial
+Updates,tsk-029,Update_011,Task 029,2025-04-13,2025-04-25,12.0,10.0,Initial
+Updates,tsk-029,Update_012,Task 029,2025-04-13,2025-04-25,12.0,10.0,No Change
+Updates,tsk-029,Update_013,Task 029,2025-04-13,2025-04-25,12.0,10.0,No Change
+Updates,tsk-029,Update_014,Task 029,2025-04-13,2025-04-25,12.0,10.0,No Change
+Updates,tsk-029,Update_015,Task 029,2025-04-13,2025-04-25,12.0,10.0,No Change
+Updates,tsk-030,Update_001,Task 030,2024-12-17,NA,0.0,0.0,Initial
+Updates,tsk-030,Update_002,Task 030,2024-12-17,NA,0.0,0.0,Initial
+Updates,tsk-030,Update_003,Task 030,2024-12-17,2024-12-20,3.0,3.0,Initial
+Updates,tsk-030,Update_004,Task 030,2024-12-17,2024-12-20,3.0,3.0,No Change
+Updates,tsk-030,Update_005,Task 030,2024-12-17,2024-12-20,3.0,3.0,No Change
+Updates,tsk-030,Update_006,Task 030,2024-12-17,2024-12-20,3.0,3.0,No Change
+Updates,tsk-030,Update_007,Task 030,2024-12-17,2024-12-20,3.0,3.0,No Change
+Updates,tsk-030,Update_008,Task 030,2024-12-17,2024-12-20,3.0,3.0,No Change
+Updates,tsk-030,Update_009,Task 030,2024-12-17,2024-12-20,3.0,3.0,No Change
+Updates,tsk-030,Update_010,Task 030,NA,NA,0.0,0.0,Initial
+Updates,tsk-030,Update_011,Task 030,2024-12-17,2024-12-20,3.0,3.0,Initial
+Updates,tsk-030,Update_012,Task 030,2024-12-17,2024-12-20,3.0,3.0,No Change
+Updates,tsk-030,Update_013,Task 030,2024-12-17,2024-12-20,3.0,3.0,No Change
+Updates,tsk-030,Update_014,Task 030,2024-12-17,2024-12-20,3.0,3.0,No Change
+Updates,tsk-030,Update_015,Task 030,2024-12-17,2024-12-20,3.0,3.0,No Change
+Updates,tsk-031,Update_001,Task 031,2025-07-01,NA,0.0,0.0,Initial
+Updates,tsk-031,Update_002,Task 031,2025-07-01,NA,0.0,0.0,Initial
+Updates,tsk-031,Update_003,Task 031,2025-07-01,NA,0.0,0.0,Initial
+Updates,tsk-031,Update_004,Task 031,2025-07-01,NA,0.0,0.0,Initial
+Updates,tsk-031,Update_005,Task 031,2025-07-01,2025-08-05,35.0,10.0,Initial
+Updates,tsk-031,Update_006,Task 031,2025-07-01,2025-08-05,35.0,10.0,No Change
+Updates,tsk-031,Update_007,Task 031,2025-07-01,2025-08-05,35.0,10.0,No Change
+Updates,tsk-031,Update_008,Task 031,2025-07-01,2025-08-05,35.0,10.0,No Change
+Updates,tsk-031,Update_009,Task 031,2025-07-01,2025-08-05,35.0,10.0,No Change
+Updates,tsk-031,Update_010,Task 031,NA,NA,0.0,0.0,Initial
+Updates,tsk-031,Update_011,Task 031,2025-07-01,2025-08-05,35.0,10.0,Initial
+Updates,tsk-031,Update_012,Task 031,2025-07-01,2025-08-05,35.0,10.0,No Change
+Updates,tsk-031,Update_013,Task 031,2025-07-01,2025-08-05,35.0,10.0,No Change
+Updates,tsk-031,Update_014,Task 031,2025-07-01,2025-08-05,35.0,10.0,No Change
+Updates,tsk-031,Update_015,Task 031,2025-07-01,2025-08-05,35.0,10.0,No Change
+Updates,tsk-032,Update_001,Task 032,2025-05-17,NA,0.0,0.0,Initial
+Updates,tsk-032,Update_002,Task 032,2025-05-17,NA,0.0,0.0,Initial
+Updates,tsk-032,Update_003,Task 032,2025-05-17,2025-05-23,6.0,10.0,Initial
+Updates,tsk-032,Update_004,Task 032,2025-05-17,2025-05-23,6.0,10.0,No Change
+Updates,tsk-032,Update_005,Task 032,2025-05-17,2025-05-23,6.0,10.0,No Change
+Updates,tsk-032,Update_006,Task 032,2025-05-17,2025-05-23,6.0,10.0,No Change
+Updates,tsk-032,Update_007,Task 032,2025-05-17,2025-05-23,6.0,10.0,No Change
+Updates,tsk-032,Update_008,Task 032,2025-05-17,2025-05-23,6.0,10.0,No Change
+Updates,tsk-032,Update_009,Task 032,2025-05-17,2025-05-23,6.0,10.0,No Change
+Updates,tsk-032,Update_010,Task 032,NA,NA,0.0,0.0,Initial
+Updates,tsk-032,Update_011,Task 032,2025-05-17,2025-06-01,15.0,10.0,Initial
+Updates,tsk-032,Update_012,Task 032,2025-05-17,2025-06-01,15.0,10.0,No Change
+Updates,tsk-032,Update_013,Task 032,2025-05-17,2025-06-01,15.0,10.0,No Change
+Updates,tsk-032,Update_014,Task 032,2025-05-17,2025-06-01,15.0,10.0,No Change
+Updates,tsk-032,Update_015,Task 032,2025-05-17,2025-06-01,15.0,10.0,No Change
+Updates,tsk-033,Update_001,Task 033,2025-07-08,NA,0.0,0.0,Initial
+Updates,tsk-033,Update_002,Task 033,2025-07-08,NA,0.0,0.0,Initial
+Updates,tsk-033,Update_003,Task 033,2025-07-08,2025-07-22,14.0,10.0,Initial
+Updates,tsk-033,Update_004,Task 033,2025-07-08,2025-07-22,14.0,10.0,No Change
+Updates,tsk-033,Update_005,Task 033,2025-07-08,2025-07-22,14.0,10.0,No Change
+Updates,tsk-033,Update_006,Task 033,2025-07-08,2025-07-22,14.0,10.0,No Change
+Updates,tsk-033,Update_007,Task 033,2025-07-08,2025-07-22,14.0,10.0,No Change
+Updates,tsk-033,Update_008,Task 033,2025-07-08,2025-07-22,14.0,10.0,No Change
+Updates,tsk-033,Update_009,Task 033,2025-07-08,2025-07-22,14.0,10.0,No Change
+Updates,tsk-033,Update_010,Task 033,NA,NA,0.0,0.0,Initial
+Updates,tsk-033,Update_011,Task 033,2025-07-08,2025-07-22,14.0,10.0,Initial
+Updates,tsk-033,Update_012,Task 033,2025-07-08,2025-07-22,14.0,10.0,No Change
+Updates,tsk-033,Update_013,Task 033,2025-07-08,2025-07-22,14.0,10.0,No Change
+Updates,tsk-033,Update_014,Task 033,2025-07-08,2025-07-22,14.0,10.0,No Change
+Updates,tsk-033,Update_015,Task 033,2025-07-08,2025-07-22,14.0,10.0,No Change
+Updates,tsk-034,Update_001,Task 034,2025-07-16,NA,0.0,0.0,Initial
+Updates,tsk-034,Update_002,Task 034,2025-07-16,NA,0.0,0.0,Initial
+Updates,tsk-034,Update_003,Task 034,2025-07-16,NA,0.0,0.0,Initial
+Updates,tsk-034,Update_004,Task 034,2025-07-16,2025-07-13,-3.0,0.0,Initial
+Updates,tsk-034,Update_005,Task 034,2025-07-16,2025-07-13,-3.0,0.0,No Change
+Updates,tsk-034,Update_006,Task 034,2025-07-16,2025-07-13,-3.0,0.0,No Change
+Updates,tsk-034,Update_007,Task 034,2025-07-16,2025-07-13,-3.0,0.0,No Change
+Updates,tsk-034,Update_008,Task 034,2025-07-16,2025-07-13,-3.0,0.0,No Change
+Updates,tsk-034,Update_009,Task 034,2025-07-16,2025-07-13,-3.0,0.0,No Change
+Updates,tsk-034,Update_010,Task 034,NA,NA,0.0,0.0,Initial
+Updates,tsk-034,Update_011,Task 034,2025-07-16,2025-07-13,-3.0,0.0,Initial
+Updates,tsk-034,Update_012,Task 034,2025-07-16,2025-07-13,-3.0,0.0,No Change
+Updates,tsk-034,Update_013,Task 034,2025-07-16,2025-07-13,-3.0,0.0,No Change
+Updates,tsk-034,Update_014,Task 034,2025-07-16,2025-07-13,-3.0,0.0,No Change
+Updates,tsk-034,Update_015,Task 034,2025-07-16,2025-07-13,-3.0,0.0,No Change
+Updates,tsk-035,Update_001,Task 035,2025-02-02,NA,0.0,0.0,Initial
+Updates,tsk-035,Update_002,Task 035,2025-02-02,NA,0.0,0.0,Initial
+Updates,tsk-035,Update_003,Task 035,2025-02-02,NA,0.0,0.0,Initial
+Updates,tsk-035,Update_004,Task 035,2025-02-02,NA,0.0,0.0,Initial
+Updates,tsk-035,Update_005,Task 035,2025-02-02,NA,0.0,0.0,Initial
+Updates,tsk-035,Update_006,Task 035,2025-02-02,2025-02-13,11.0,10.0,Initial
+Updates,tsk-035,Update_007,Task 035,2025-02-02,2025-02-13,11.0,10.0,No Change
+Updates,tsk-035,Update_008,Task 035,2025-02-02,2025-04-21,78.0,10.0,Slipped Further
+Updates,tsk-035,Update_009,Task 035,2025-02-02,2025-04-21,78.0,10.0,No Change
+Updates,tsk-035,Update_010,Task 035,NA,NA,0.0,0.0,Initial
+Updates,tsk-035,Update_011,Task 035,2025-02-02,2025-04-21,78.0,10.0,Initial
+Updates,tsk-035,Update_012,Task 035,2025-02-02,2025-04-21,78.0,10.0,No Change
+Updates,tsk-035,Update_013,Task 035,2025-02-02,2025-04-21,78.0,10.0,No Change
+Updates,tsk-035,Update_014,Task 035,2025-02-02,2025-04-21,78.0,10.0,No Change
+Updates,tsk-035,Update_015,Task 035,2025-02-02,2025-04-21,78.0,10.0,No Change
+Updates,tsk-036,Update_001,Task 036,2025-08-29,NA,0.0,0.0,Initial
+Updates,tsk-036,Update_002,Task 036,2025-08-29,NA,0.0,0.0,Initial
+Updates,tsk-036,Update_003,Task 036,2025-08-29,NA,0.0,0.0,Initial
+Updates,tsk-036,Update_004,Task 036,2025-08-29,2025-10-01,33.0,10.0,Initial
+Updates,tsk-036,Update_005,Task 036,2025-08-29,2025-10-01,33.0,10.0,No Change
+Updates,tsk-036,Update_006,Task 036,2025-08-29,2025-10-01,33.0,10.0,No Change
+Updates,tsk-036,Update_007,Task 036,2025-08-29,2025-10-01,33.0,10.0,No Change
+Updates,tsk-036,Update_008,Task 036,2025-08-29,2025-10-01,33.0,10.0,No Change
+Updates,tsk-036,Update_009,Task 036,2025-08-29,2025-10-01,33.0,10.0,No Change
+Updates,tsk-036,Update_010,Task 036,NA,NA,0.0,0.0,Initial
+Updates,tsk-036,Update_011,Task 036,2025-08-29,2025-10-01,33.0,10.0,Initial
+Updates,tsk-036,Update_012,Task 036,2025-08-29,2025-10-01,33.0,10.0,No Change
+Updates,tsk-036,Update_013,Task 036,2025-08-29,2025-10-01,33.0,10.0,No Change
+Updates,tsk-036,Update_014,Task 036,2025-08-29,2025-10-01,33.0,10.0,No Change
+Updates,tsk-036,Update_015,Task 036,2025-08-29,2025-10-01,33.0,10.0,No Change
+Updates,tsk-037,Update_001,Task 037,2025-04-06,NA,0.0,0.0,Initial
+Updates,tsk-037,Update_002,Task 037,2025-04-06,NA,0.0,0.0,Initial
+Updates,tsk-037,Update_003,Task 037,2025-04-06,NA,0.0,0.0,Initial
+Updates,tsk-037,Update_004,Task 037,2025-04-06,NA,0.0,0.0,Initial
+Updates,tsk-037,Update_005,Task 037,2025-04-06,2025-04-16,10.0,10.0,Initial
+Updates,tsk-037,Update_006,Task 037,2025-04-06,2025-04-16,10.0,10.0,No Change
+Updates,tsk-037,Update_007,Task 037,2025-04-06,2025-04-16,10.0,10.0,No Change
+Updates,tsk-037,Update_008,Task 037,2025-04-06,2025-04-16,10.0,10.0,No Change
+Updates,tsk-037,Update_009,Task 037,2025-04-06,2025-04-16,10.0,10.0,No Change
+Updates,tsk-037,Update_010,Task 037,NA,NA,0.0,0.0,Initial
+Updates,tsk-037,Update_011,Task 037,2025-04-06,2025-04-16,10.0,10.0,Initial
+Updates,tsk-037,Update_012,Task 037,2025-04-06,2025-04-16,10.0,10.0,No Change
+Updates,tsk-037,Update_013,Task 037,2025-04-06,2025-04-16,10.0,10.0,No Change
+Updates,tsk-037,Update_014,Task 037,2025-04-06,2025-04-18,12.0,10.0,Slipped Further
+Updates,tsk-037,Update_015,Task 037,2025-04-06,2025-04-18,12.0,10.0,No Change
+Updates,tsk-038,Update_001,Task 038,2025-03-07,NA,0.0,0.0,Initial
+Updates,tsk-038,Update_002,Task 038,2025-03-07,NA,0.0,0.0,Initial
+Updates,tsk-038,Update_003,Task 038,2025-03-07,NA,0.0,0.0,Initial
+Updates,tsk-038,Update_004,Task 038,2025-03-07,NA,0.0,0.0,Initial
+Updates,tsk-038,Update_005,Task 038,2025-03-07,2025-03-09,2.0,2.0,Initial
+Updates,tsk-038,Update_006,Task 038,2025-03-07,2025-03-17,10.0,10.0,Slipped Further
+Updates,tsk-038,Update_007,Task 038,2025-03-07,2025-03-17,10.0,10.0,No Change
+Updates,tsk-038,Update_008,Task 038,2025-03-07,2025-03-17,10.0,10.0,No Change
+Updates,tsk-038,Update_009,Task 038,2025-03-07,2025-03-17,10.0,10.0,No Change
+Updates,tsk-038,Update_010,Task 038,NA,NA,0.0,0.0,Initial
+Updates,tsk-038,Update_011,Task 038,2025-03-07,2025-03-17,10.0,10.0,Initial
+Updates,tsk-038,Update_012,Task 038,2025-03-07,2025-03-17,10.0,10.0,No Change
+Updates,tsk-038,Update_013,Task 038,2025-03-07,2025-03-17,10.0,10.0,No Change
+Updates,tsk-038,Update_014,Task 038,2025-03-07,2025-03-17,10.0,10.0,No Change
+Updates,tsk-038,Update_015,Task 038,2025-03-07,2025-03-17,10.0,10.0,No Change
+Updates,tsk-039,Update_001,Task 039,2025-02-24,NA,0.0,0.0,Initial
+Updates,tsk-039,Update_002,Task 039,2025-02-24,2025-04-17,52.0,10.0,Initial
+Updates,tsk-039,Update_003,Task 039,2025-02-24,2025-04-23,58.0,10.0,Slipped Further
+Updates,tsk-039,Update_004,Task 039,2025-02-24,2025-04-23,58.0,10.0,No Change
+Updates,tsk-039,Update_005,Task 039,2025-02-24,2025-04-23,58.0,10.0,No Change
+Updates,tsk-039,Update_006,Task 039,2025-02-24,2025-04-23,58.0,10.0,No Change
+Updates,tsk-039,Update_007,Task 039,2025-02-24,2025-04-23,58.0,10.0,No Change
+Updates,tsk-039,Update_008,Task 039,2025-02-24,2025-04-23,58.0,10.0,No Change
+Updates,tsk-039,Update_009,Task 039,2025-02-24,2025-04-23,58.0,10.0,No Change
+Updates,tsk-039,Update_010,Task 039,NA,NA,0.0,0.0,Initial
+Updates,tsk-039,Update_011,Task 039,2025-02-24,2025-04-23,58.0,10.0,Initial
+Updates,tsk-039,Update_012,Task 039,2025-02-24,2025-04-23,58.0,10.0,No Change
+Updates,tsk-039,Update_013,Task 039,2025-02-24,2025-04-23,58.0,10.0,No Change
+Updates,tsk-039,Update_014,Task 039,2025-02-24,2025-04-23,58.0,10.0,No Change
+Updates,tsk-039,Update_015,Task 039,2025-02-24,2025-04-23,58.0,10.0,No Change
+Updates,tsk-040,Update_001,Task 040,2025-03-12,NA,0.0,0.0,Initial
+Updates,tsk-040,Update_002,Task 040,2025-03-12,NA,0.0,0.0,Initial
+Updates,tsk-040,Update_003,Task 040,2025-03-12,NA,0.0,0.0,Initial
+Updates,tsk-040,Update_004,Task 040,2025-03-12,2025-04-02,21.0,10.0,Initial
+Updates,tsk-040,Update_005,Task 040,2025-03-12,2025-04-02,21.0,10.0,No Change
+Updates,tsk-040,Update_006,Task 040,2025-03-12,2025-04-02,21.0,10.0,No Change
+Updates,tsk-040,Update_007,Task 040,2025-03-12,2025-04-02,21.0,10.0,No Change
+Updates,tsk-040,Update_008,Task 040,2025-03-12,2025-04-02,21.0,10.0,No Change
+Updates,tsk-040,Update_009,Task 040,2025-03-12,2025-04-02,21.0,10.0,No Change
+Updates,tsk-040,Update_010,Task 040,NA,NA,0.0,0.0,Initial
+Updates,tsk-040,Update_011,Task 040,2025-03-12,2025-04-02,21.0,10.0,Initial
+Updates,tsk-040,Update_012,Task 040,2025-03-12,2025-04-02,21.0,10.0,No Change
+Updates,tsk-040,Update_013,Task 040,2025-03-12,2025-04-02,21.0,10.0,No Change
+Updates,tsk-040,Update_014,Task 040,2025-03-12,2025-04-02,21.0,10.0,No Change
+Updates,tsk-040,Update_015,Task 040,2025-03-12,2025-04-02,21.0,10.0,No Change
+Updates,tsk-041,Update_001,Task 041,2025-03-22,NA,0.0,0.0,Initial
+Updates,tsk-041,Update_002,Task 041,2025-03-22,2025-05-09,48.0,10.0,Initial
+Updates,tsk-041,Update_003,Task 041,2025-03-22,2025-05-09,48.0,10.0,No Change
+Updates,tsk-041,Update_004,Task 041,2025-03-22,2025-05-09,48.0,10.0,No Change
+Updates,tsk-041,Update_005,Task 041,2025-03-22,2025-05-09,48.0,10.0,No Change
+Updates,tsk-041,Update_006,Task 041,2025-03-22,2025-05-09,48.0,10.0,No Change
+Updates,tsk-041,Update_007,Task 041,2025-03-22,2025-05-09,48.0,10.0,No Change
+Updates,tsk-041,Update_008,Task 041,2025-03-22,2025-05-09,48.0,10.0,No Change
+Updates,tsk-041,Update_009,Task 041,2025-03-22,2025-05-16,55.0,10.0,Slipped Further
+Updates,tsk-041,Update_010,Task 041,NA,NA,0.0,0.0,Initial
+Updates,tsk-041,Update_011,Task 041,2025-03-22,2025-05-16,55.0,10.0,Initial
+Updates,tsk-041,Update_012,Task 041,2025-03-22,2025-05-16,55.0,10.0,No Change
+Updates,tsk-041,Update_013,Task 041,2025-03-22,2025-05-16,55.0,10.0,No Change
+Updates,tsk-041,Update_014,Task 041,2025-03-22,2025-05-16,55.0,10.0,No Change
+Updates,tsk-041,Update_015,Task 041,2025-03-22,2025-05-16,55.0,10.0,No Change
+Updates,tsk-042,Update_001,Task 042,2025-02-24,NA,0.0,0.0,Initial
+Updates,tsk-042,Update_002,Task 042,2025-02-24,NA,0.0,0.0,Initial
+Updates,tsk-042,Update_003,Task 042,2025-02-24,NA,0.0,0.0,Initial
+Updates,tsk-042,Update_004,Task 042,2025-02-24,2025-02-20,-4.0,0.0,Initial
+Updates,tsk-042,Update_005,Task 042,2025-02-24,2025-02-20,-4.0,0.0,No Change
+Updates,tsk-042,Update_006,Task 042,2025-02-24,2025-02-21,-3.0,0.0,Slipped Further
+Updates,tsk-042,Update_007,Task 042,2025-02-24,2025-02-21,-3.0,0.0,No Change
+Updates,tsk-042,Update_008,Task 042,2025-02-24,2025-02-21,-3.0,0.0,No Change
+Updates,tsk-042,Update_009,Task 042,2025-02-24,2025-02-21,-3.0,0.0,No Change
+Updates,tsk-042,Update_010,Task 042,NA,NA,0.0,0.0,Initial
+Updates,tsk-042,Update_011,Task 042,2025-02-24,2025-02-21,-3.0,0.0,Initial
+Updates,tsk-042,Update_012,Task 042,2025-02-24,2025-02-21,-3.0,0.0,No Change
+Updates,tsk-042,Update_013,Task 042,2025-02-24,2025-02-21,-3.0,0.0,No Change
+Updates,tsk-042,Update_014,Task 042,2025-02-24,2025-02-21,-3.0,0.0,No Change
+Updates,tsk-042,Update_015,Task 042,2025-02-24,2025-02-21,-3.0,0.0,No Change
+Updates,tsk-043,Update_001,Task 043,2025-08-25,NA,0.0,0.0,Initial
+Updates,tsk-043,Update_002,Task 043,2025-08-25,2025-09-15,21.0,10.0,Initial
+Updates,tsk-043,Update_003,Task 043,2025-08-25,2025-09-15,21.0,10.0,No Change
+Updates,tsk-043,Update_004,Task 043,2025-08-25,2025-09-15,21.0,10.0,No Change
+Updates,tsk-043,Update_005,Task 043,2025-08-25,2025-09-15,21.0,10.0,No Change
+Updates,tsk-043,Update_006,Task 043,2025-08-25,2025-09-15,21.0,10.0,No Change
+Updates,tsk-043,Update_007,Task 043,2025-08-25,2025-09-15,21.0,10.0,No Change
+Updates,tsk-043,Update_008,Task 043,2025-08-25,2025-09-15,21.0,10.0,No Change
+Updates,tsk-043,Update_009,Task 043,2025-08-25,2025-09-15,21.0,10.0,No Change
+Updates,tsk-043,Update_010,Task 043,NA,NA,0.0,0.0,Initial
+Updates,tsk-043,Update_011,Task 043,2025-08-25,2025-09-15,21.0,10.0,Initial
+Updates,tsk-043,Update_012,Task 043,2025-08-25,2025-09-15,21.0,10.0,No Change
+Updates,tsk-043,Update_013,Task 043,2025-08-25,2025-09-15,21.0,10.0,No Change
+Updates,tsk-043,Update_014,Task 043,2025-08-25,2025-09-15,21.0,10.0,No Change
+Updates,tsk-043,Update_015,Task 043,2025-08-25,2025-09-15,21.0,10.0,No Change
+Updates,tsk-044,Update_001,Task 044,2025-06-21,NA,0.0,0.0,Initial
+Updates,tsk-044,Update_002,Task 044,2025-06-21,NA,0.0,0.0,Initial
+Updates,tsk-044,Update_003,Task 044,2025-06-21,NA,0.0,0.0,Initial
+Updates,tsk-044,Update_004,Task 044,2025-06-21,NA,0.0,0.0,Initial
+Updates,tsk-044,Update_005,Task 044,2025-06-21,NA,0.0,0.0,Initial
+Updates,tsk-044,Update_006,Task 044,2025-06-21,2025-08-21,61.0,10.0,Initial
+Updates,tsk-044,Update_007,Task 044,2025-06-21,2025-08-21,61.0,10.0,No Change
+Updates,tsk-044,Update_008,Task 044,2025-06-21,2025-08-21,61.0,10.0,No Change
+Updates,tsk-044,Update_009,Task 044,2025-06-21,2025-08-21,61.0,10.0,No Change
+Updates,tsk-044,Update_010,Task 044,NA,NA,0.0,0.0,Initial
+Updates,tsk-044,Update_011,Task 044,2025-06-21,2025-08-21,61.0,10.0,Initial
+Updates,tsk-044,Update_012,Task 044,2025-06-21,2025-08-21,61.0,10.0,No Change
+Updates,tsk-044,Update_013,Task 044,2025-06-21,2025-08-21,61.0,10.0,No Change
+Updates,tsk-044,Update_014,Task 044,2025-06-21,2025-08-21,61.0,10.0,No Change
+Updates,tsk-044,Update_015,Task 044,2025-06-21,2025-08-21,61.0,10.0,No Change
+Updates,tsk-045,Update_001,Task 045,2025-05-23,NA,0.0,0.0,Initial
+Updates,tsk-045,Update_002,Task 045,2025-05-23,2025-05-19,-4.0,0.0,Initial
+Updates,tsk-045,Update_003,Task 045,2025-05-23,2025-05-19,-4.0,0.0,No Change
+Updates,tsk-045,Update_004,Task 045,2025-05-23,2025-05-19,-4.0,0.0,No Change
+Updates,tsk-045,Update_005,Task 045,2025-05-23,2025-05-21,-2.0,0.0,Slipped Further
+Updates,tsk-045,Update_006,Task 045,2025-05-23,2025-05-21,-2.0,0.0,No Change
+Updates,tsk-045,Update_007,Task 045,2025-05-23,2025-05-21,-2.0,0.0,No Change
+Updates,tsk-045,Update_008,Task 045,2025-05-23,2025-05-21,-2.0,0.0,No Change
+Updates,tsk-045,Update_009,Task 045,2025-05-23,2025-05-21,-2.0,0.0,No Change
+Updates,tsk-045,Update_010,Task 045,NA,NA,0.0,0.0,Initial
+Updates,tsk-045,Update_011,Task 045,2025-05-23,2025-05-21,-2.0,0.0,Initial
+Updates,tsk-045,Update_012,Task 045,2025-05-23,2025-05-21,-2.0,0.0,No Change
+Updates,tsk-045,Update_013,Task 045,2025-05-23,2025-05-21,-2.0,0.0,No Change
+Updates,tsk-045,Update_014,Task 045,2025-05-23,2025-05-21,-2.0,0.0,No Change
+Updates,tsk-045,Update_015,Task 045,2025-05-23,2025-05-21,-2.0,0.0,No Change
+Updates,tsk-046,Update_001,Task 046,2025-11-29,NA,0.0,0.0,Initial
+Updates,tsk-046,Update_002,Task 046,2025-11-29,NA,0.0,0.0,Initial
+Updates,tsk-046,Update_003,Task 046,2025-11-29,2025-12-24,25.0,10.0,Initial
+Updates,tsk-046,Update_004,Task 046,2025-11-29,2025-12-24,25.0,10.0,No Change
+Updates,tsk-046,Update_005,Task 046,2025-11-29,2025-12-24,25.0,10.0,No Change
+Updates,tsk-046,Update_006,Task 046,2025-11-29,2025-12-24,25.0,10.0,No Change
+Updates,tsk-046,Update_007,Task 046,2025-11-29,2025-12-24,25.0,10.0,No Change
+Updates,tsk-046,Update_008,Task 046,2025-11-29,2025-12-24,25.0,10.0,No Change
+Updates,tsk-046,Update_009,Task 046,2025-11-29,2025-12-24,25.0,10.0,No Change
+Updates,tsk-046,Update_010,Task 046,NA,NA,0.0,0.0,Initial
+Updates,tsk-046,Update_011,Task 046,2025-11-29,2025-12-24,25.0,10.0,Initial
+Updates,tsk-046,Update_012,Task 046,2025-11-29,2025-12-24,25.0,10.0,No Change
+Updates,tsk-046,Update_013,Task 046,2025-11-29,2025-12-24,25.0,10.0,No Change
+Updates,tsk-046,Update_014,Task 046,2025-11-29,2025-12-24,25.0,10.0,No Change
+Updates,tsk-046,Update_015,Task 046,2025-11-29,2025-12-24,25.0,10.0,No Change
+Updates,tsk-047,Update_001,Task 047,2025-05-30,NA,0.0,0.0,Initial
+Updates,tsk-047,Update_002,Task 047,2025-05-30,NA,0.0,0.0,Initial
+Updates,tsk-047,Update_003,Task 047,2025-05-30,NA,0.0,0.0,Initial
+Updates,tsk-047,Update_004,Task 047,2025-05-30,2025-06-12,13.0,10.0,Initial
+Updates,tsk-047,Update_005,Task 047,2025-05-30,2025-06-12,13.0,10.0,No Change
+Updates,tsk-047,Update_006,Task 047,2025-05-30,2025-06-12,13.0,10.0,No Change
+Updates,tsk-047,Update_007,Task 047,2025-05-30,2025-06-12,13.0,10.0,No Change
+Updates,tsk-047,Update_008,Task 047,2025-05-30,2025-06-12,13.0,10.0,No Change
+Updates,tsk-047,Update_009,Task 047,2025-05-30,2025-06-12,13.0,10.0,No Change
+Updates,tsk-047,Update_010,Task 047,NA,NA,0.0,0.0,Initial
+Updates,tsk-047,Update_011,Task 047,2025-05-30,2025-06-12,13.0,10.0,Initial
+Updates,tsk-047,Update_012,Task 047,2025-05-30,2025-06-12,13.0,10.0,No Change
+Updates,tsk-047,Update_013,Task 047,2025-05-30,2025-06-12,13.0,10.0,No Change
+Updates,tsk-047,Update_014,Task 047,2025-05-30,2025-06-12,13.0,10.0,No Change
+Updates,tsk-047,Update_015,Task 047,2025-05-30,2025-06-12,13.0,10.0,No Change
+Updates,tsk-048,Update_001,Task 048,2025-06-04,NA,0.0,0.0,Initial
+Updates,tsk-048,Update_002,Task 048,2025-06-04,2025-06-22,18.0,10.0,Initial
+Updates,tsk-048,Update_003,Task 048,2025-06-04,2025-06-22,18.0,10.0,No Change
+Updates,tsk-048,Update_004,Task 048,2025-06-04,2025-06-22,18.0,10.0,No Change
+Updates,tsk-048,Update_005,Task 048,2025-06-04,2025-06-22,18.0,10.0,No Change
+Updates,tsk-048,Update_006,Task 048,2025-06-04,2025-06-22,18.0,10.0,No Change
+Updates,tsk-048,Update_007,Task 048,2025-06-04,2025-06-22,18.0,10.0,No Change
+Updates,tsk-048,Update_008,Task 048,2025-06-04,2025-08-15,72.0,10.0,Slipped Further
+Updates,tsk-048,Update_009,Task 048,2025-06-04,2025-08-15,72.0,10.0,No Change
+Updates,tsk-048,Update_010,Task 048,NA,NA,0.0,0.0,Initial
+Updates,tsk-048,Update_011,Task 048,2025-06-04,2025-08-15,72.0,10.0,Initial
+Updates,tsk-048,Update_012,Task 048,2025-06-04,2025-08-15,72.0,10.0,No Change
+Updates,tsk-048,Update_013,Task 048,2025-06-04,2025-08-15,72.0,10.0,No Change
+Updates,tsk-048,Update_014,Task 048,2025-06-04,2025-08-15,72.0,10.0,No Change
+Updates,tsk-048,Update_015,Task 048,2025-06-04,2025-08-15,72.0,10.0,No Change
+Updates,tsk-049,Update_001,Task 049,2025-05-21,NA,0.0,0.0,Initial
+Updates,tsk-049,Update_002,Task 049,2025-05-21,2025-06-15,25.0,10.0,Initial
+Updates,tsk-049,Update_003,Task 049,2025-05-21,2025-06-15,25.0,10.0,No Change
+Updates,tsk-049,Update_004,Task 049,2025-05-21,2025-06-15,25.0,10.0,No Change
+Updates,tsk-049,Update_005,Task 049,2025-05-21,2025-06-15,25.0,10.0,No Change
+Updates,tsk-049,Update_006,Task 049,2025-05-21,2025-06-18,28.0,10.0,Slipped Further
+Updates,tsk-049,Update_007,Task 049,2025-05-21,2025-06-18,28.0,10.0,No Change
+Updates,tsk-049,Update_008,Task 049,2025-05-21,2025-06-18,28.0,10.0,No Change
+Updates,tsk-049,Update_009,Task 049,2025-05-21,2025-06-18,28.0,10.0,No Change
+Updates,tsk-049,Update_010,Task 049,NA,NA,0.0,0.0,Initial
+Updates,tsk-049,Update_011,Task 049,2025-05-21,2025-06-18,28.0,10.0,Initial
+Updates,tsk-049,Update_012,Task 049,2025-05-21,2025-06-18,28.0,10.0,No Change
+Updates,tsk-049,Update_013,Task 049,2025-05-21,2025-06-18,28.0,10.0,No Change
+Updates,tsk-049,Update_014,Task 049,2025-05-21,2025-06-18,28.0,10.0,No Change
+Updates,tsk-049,Update_015,Task 049,2025-05-21,2025-06-18,28.0,10.0,No Change
+Updates,tsk-050,Update_001,Task 050,2024-12-16,NA,0.0,0.0,Initial
+Updates,tsk-050,Update_002,Task 050,2024-12-16,NA,0.0,0.0,Initial
+Updates,tsk-050,Update_003,Task 050,2024-12-16,NA,0.0,0.0,Initial
+Updates,tsk-050,Update_004,Task 050,2024-12-16,2024-12-12,-4.0,0.0,Initial
+Updates,tsk-050,Update_005,Task 050,2024-12-16,2024-12-12,-4.0,0.0,No Change
+Updates,tsk-050,Update_006,Task 050,2024-12-16,2024-12-12,-4.0,0.0,No Change
+Updates,tsk-050,Update_007,Task 050,2024-12-16,2024-12-12,-4.0,0.0,No Change
+Updates,tsk-050,Update_008,Task 050,2024-12-16,2024-12-12,-4.0,0.0,No Change
+Updates,tsk-050,Update_009,Task 050,2024-12-16,2024-12-12,-4.0,0.0,No Change
+Updates,tsk-050,Update_010,Task 050,NA,NA,0.0,0.0,Initial
+Updates,tsk-050,Update_011,Task 050,2024-12-16,2024-12-12,-4.0,0.0,Initial
+Updates,tsk-050,Update_012,Task 050,2024-12-16,2024-12-12,-4.0,0.0,No Change
+Updates,tsk-050,Update_013,Task 050,2024-12-16,2024-12-12,-4.0,0.0,No Change
+Updates,tsk-050,Update_014,Task 050,2024-12-16,2024-12-12,-4.0,0.0,No Change
+Updates,tsk-050,Update_015,Task 050,2024-12-16,2024-12-12,-4.0,0.0,No Change
+Updates,tsk-051,Update_001,Task 051,2025-03-25,NA,0.0,0.0,Initial
+Updates,tsk-051,Update_002,Task 051,2025-03-25,NA,0.0,0.0,Initial
+Updates,tsk-051,Update_003,Task 051,2025-03-25,NA,0.0,0.0,Initial
+Updates,tsk-051,Update_004,Task 051,2025-03-25,NA,0.0,0.0,Initial
+Updates,tsk-051,Update_005,Task 051,2025-03-25,2025-04-22,28.0,10.0,Initial
+Updates,tsk-051,Update_006,Task 051,2025-03-25,2025-04-22,28.0,10.0,No Change
+Updates,tsk-051,Update_007,Task 051,2025-03-25,2025-04-22,28.0,10.0,No Change
+Updates,tsk-051,Update_008,Task 051,2025-03-25,2025-04-22,28.0,10.0,No Change
+Updates,tsk-051,Update_009,Task 051,2025-03-25,2025-04-22,28.0,10.0,No Change
+Updates,tsk-051,Update_010,Task 051,NA,NA,0.0,0.0,Initial
+Updates,tsk-051,Update_011,Task 051,2025-03-25,2025-04-22,28.0,10.0,Initial
+Updates,tsk-051,Update_012,Task 051,2025-03-25,2025-04-22,28.0,10.0,No Change
+Updates,tsk-051,Update_013,Task 051,2025-03-25,2025-04-22,28.0,10.0,No Change
+Updates,tsk-051,Update_014,Task 051,2025-03-25,2025-04-22,28.0,10.0,No Change
+Updates,tsk-051,Update_015,Task 051,2025-03-25,2025-04-22,28.0,10.0,No Change
+Updates,tsk-052,Update_001,Task 052,2025-10-12,NA,0.0,0.0,Initial
+Updates,tsk-052,Update_002,Task 052,2025-10-12,NA,0.0,0.0,Initial
+Updates,tsk-052,Update_003,Task 052,2025-10-12,NA,0.0,0.0,Initial
+Updates,tsk-052,Update_004,Task 052,2025-10-12,NA,0.0,0.0,Initial
+Updates,tsk-052,Update_005,Task 052,2025-10-12,NA,0.0,0.0,Initial
+Updates,tsk-052,Update_006,Task 052,2025-10-12,NA,0.0,0.0,Initial
+Updates,tsk-052,Update_007,Task 052,2025-10-12,NA,0.0,0.0,Initial
+Updates,tsk-052,Update_008,Task 052,2025-10-12,2025-10-15,3.0,8.0,Initial
+Updates,tsk-052,Update_009,Task 052,2025-10-12,2025-10-15,3.0,8.0,No Change
+Updates,tsk-052,Update_010,Task 052,NA,NA,0.0,0.0,Initial
+Updates,tsk-052,Update_011,Task 052,2025-10-12,2025-10-15,3.0,8.0,Initial
+Updates,tsk-052,Update_012,Task 052,2025-10-12,2025-10-15,3.0,8.0,No Change
+Updates,tsk-052,Update_013,Task 052,2025-10-12,2025-10-15,3.0,8.0,No Change
+Updates,tsk-052,Update_014,Task 052,2025-10-12,2025-10-15,3.0,8.0,No Change
+Updates,tsk-052,Update_015,Task 052,2025-10-12,2025-10-15,3.0,8.0,No Change
+Updates,tsk-053,Update_001,Task 053,2025-01-06,NA,0.0,0.0,Initial
+Updates,tsk-053,Update_002,Task 053,2025-01-06,NA,0.0,0.0,Initial
+Updates,tsk-053,Update_003,Task 053,2025-01-06,2025-01-30,24.0,10.0,Initial
+Updates,tsk-053,Update_004,Task 053,2025-01-06,2025-01-30,24.0,10.0,No Change
+Updates,tsk-053,Update_005,Task 053,2025-01-06,2025-01-30,24.0,10.0,No Change
+Updates,tsk-053,Update_006,Task 053,2025-01-06,2025-01-30,24.0,10.0,No Change
+Updates,tsk-053,Update_007,Task 053,2025-01-06,2025-01-30,24.0,10.0,No Change
+Updates,tsk-053,Update_008,Task 053,2025-01-06,2025-01-30,24.0,10.0,No Change
+Updates,tsk-053,Update_009,Task 053,2025-01-06,2025-01-30,24.0,10.0,No Change
+Updates,tsk-053,Update_010,Task 053,NA,NA,0.0,0.0,Initial
+Updates,tsk-053,Update_011,Task 053,2025-01-06,2025-01-30,24.0,10.0,Initial
+Updates,tsk-053,Update_012,Task 053,2025-01-06,2025-04-21,105.0,10.0,Slipped Further
+Updates,tsk-053,Update_013,Task 053,2025-01-06,2025-04-24,108.0,10.0,Slipped Further
+Updates,tsk-053,Update_014,Task 053,2025-01-06,2025-04-24,108.0,10.0,No Change
+Updates,tsk-053,Update_015,Task 053,2025-01-06,2025-04-24,108.0,10.0,No Change
+Updates,tsk-054,Update_001,Task 054,2025-05-05,2025-04-30,-5.0,0.0,Initial
+Updates,tsk-054,Update_002,Task 054,2025-05-05,2025-04-30,-5.0,0.0,No Change
+Updates,tsk-054,Update_003,Task 054,2025-05-05,2025-04-30,-5.0,0.0,No Change
+Updates,tsk-054,Update_004,Task 054,2025-05-05,2025-04-30,-5.0,0.0,No Change
+Updates,tsk-054,Update_005,Task 054,2025-05-05,2025-04-30,-5.0,0.0,No Change
+Updates,tsk-054,Update_006,Task 054,2025-05-05,2025-04-30,-5.0,0.0,No Change
+Updates,tsk-054,Update_007,Task 054,2025-05-05,2025-04-30,-5.0,0.0,No Change
+Updates,tsk-054,Update_008,Task 054,2025-05-05,2025-04-30,-5.0,0.0,No Change
+Updates,tsk-054,Update_009,Task 054,2025-05-05,2025-04-30,-5.0,0.0,No Change
+Updates,tsk-054,Update_010,Task 054,NA,NA,0.0,0.0,Initial
+Updates,tsk-054,Update_011,Task 054,2025-05-05,2025-04-30,-5.0,0.0,Initial
+Updates,tsk-054,Update_012,Task 054,2025-05-05,2025-04-30,-5.0,0.0,No Change
+Updates,tsk-054,Update_013,Task 054,2025-05-05,2025-04-30,-5.0,0.0,No Change
+Updates,tsk-054,Update_014,Task 054,2025-05-05,2025-04-30,-5.0,0.0,No Change
+Updates,tsk-054,Update_015,Task 054,2025-05-05,2025-04-30,-5.0,0.0,No Change
+Updates,tsk-055,Update_001,Task 055,2025-01-22,NA,0.0,0.0,Initial
+Updates,tsk-055,Update_002,Task 055,2025-01-22,NA,0.0,0.0,Initial
+Updates,tsk-055,Update_003,Task 055,2025-01-22,2025-01-23,1.0,1.0,Initial
+Updates,tsk-055,Update_004,Task 055,2025-01-22,2025-01-23,1.0,1.0,No Change
+Updates,tsk-055,Update_005,Task 055,2025-01-22,2025-01-23,1.0,1.0,No Change
+Updates,tsk-055,Update_006,Task 055,2025-01-22,2025-01-23,1.0,1.0,No Change
+Updates,tsk-055,Update_007,Task 055,2025-01-22,2025-01-23,1.0,1.0,No Change
+Updates,tsk-055,Update_008,Task 055,2025-01-22,2025-01-23,1.0,1.0,No Change
+Updates,tsk-055,Update_009,Task 055,2025-01-22,2025-01-23,1.0,1.0,No Change
+Updates,tsk-055,Update_010,Task 055,NA,NA,0.0,0.0,Initial
+Updates,tsk-055,Update_011,Task 055,2025-01-22,2025-01-23,1.0,1.0,Initial
+Updates,tsk-055,Update_012,Task 055,2025-01-22,2025-01-23,1.0,1.0,No Change
+Updates,tsk-055,Update_013,Task 055,2025-01-22,2025-01-23,1.0,1.0,No Change
+Updates,tsk-055,Update_014,Task 055,2025-01-22,2025-01-23,1.0,1.0,No Change
+Updates,tsk-055,Update_015,Task 055,2025-01-22,2025-01-23,1.0,1.0,No Change
+Updates,tsk-056,Update_001,Task 056,2025-08-20,NA,0.0,0.0,Initial
+Updates,tsk-056,Update_002,Task 056,2025-08-20,NA,0.0,0.0,Initial
+Updates,tsk-056,Update_003,Task 056,2025-08-20,2025-09-27,38.0,10.0,Initial
+Updates,tsk-056,Update_004,Task 056,2025-08-20,2025-09-27,38.0,10.0,No Change
+Updates,tsk-056,Update_005,Task 056,2025-08-20,2025-09-27,38.0,10.0,No Change
+Updates,tsk-056,Update_006,Task 056,2025-08-20,2025-09-27,38.0,10.0,No Change
+Updates,tsk-056,Update_007,Task 056,2025-08-20,2025-09-27,38.0,10.0,No Change
+Updates,tsk-056,Update_008,Task 056,2025-08-20,2025-09-27,38.0,10.0,No Change
+Updates,tsk-056,Update_009,Task 056,2025-08-20,2025-09-27,38.0,10.0,No Change
+Updates,tsk-056,Update_010,Task 056,NA,NA,0.0,0.0,Initial
+Updates,tsk-056,Update_011,Task 056,2025-08-20,2025-09-27,38.0,10.0,Initial
+Updates,tsk-056,Update_012,Task 056,2025-08-20,2025-09-27,38.0,10.0,No Change
+Updates,tsk-056,Update_013,Task 056,2025-08-20,2025-09-27,38.0,10.0,No Change
+Updates,tsk-056,Update_014,Task 056,2025-08-20,2025-09-27,38.0,10.0,No Change
+Updates,tsk-056,Update_015,Task 056,2025-08-20,2025-09-27,38.0,10.0,No Change
+Updates,tsk-057,Update_001,Task 057,2025-06-24,NA,0.0,0.0,Initial
+Updates,tsk-057,Update_002,Task 057,2025-06-24,2025-08-05,42.0,10.0,Initial
+Updates,tsk-057,Update_003,Task 057,2025-06-24,2025-08-05,42.0,10.0,No Change
+Updates,tsk-057,Update_004,Task 057,2025-06-24,2025-08-05,42.0,10.0,No Change
+Updates,tsk-057,Update_005,Task 057,2025-06-24,2025-08-05,42.0,10.0,No Change
+Updates,tsk-057,Update_006,Task 057,2025-06-24,2025-08-05,42.0,10.0,No Change
+Updates,tsk-057,Update_007,Task 057,2025-06-24,2025-08-14,51.0,10.0,Slipped Further
+Updates,tsk-057,Update_008,Task 057,2025-06-24,2025-08-14,51.0,10.0,No Change
+Updates,tsk-057,Update_009,Task 057,2025-06-24,2025-08-14,51.0,10.0,No Change
+Updates,tsk-057,Update_010,Task 057,NA,NA,0.0,0.0,Initial
+Updates,tsk-057,Update_011,Task 057,2025-06-24,2025-08-21,58.0,10.0,Initial
+Updates,tsk-057,Update_012,Task 057,2025-06-24,2025-08-21,58.0,10.0,No Change
+Updates,tsk-057,Update_013,Task 057,2025-06-24,2025-08-21,58.0,10.0,No Change
+Updates,tsk-057,Update_014,Task 057,2025-06-24,2025-08-21,58.0,10.0,No Change
+Updates,tsk-057,Update_015,Task 057,2025-06-24,2025-08-21,58.0,10.0,No Change
+Updates,tsk-058,Update_001,Task 058,2025-04-13,NA,0.0,0.0,Initial
+Updates,tsk-058,Update_002,Task 058,2025-04-13,NA,0.0,0.0,Initial
+Updates,tsk-058,Update_003,Task 058,2025-04-13,NA,0.0,0.0,Initial
+Updates,tsk-058,Update_004,Task 058,2025-04-13,NA,0.0,0.0,Initial
+Updates,tsk-058,Update_005,Task 058,2025-04-13,2025-05-01,18.0,10.0,Initial
+Updates,tsk-058,Update_006,Task 058,2025-04-13,2025-05-01,18.0,10.0,No Change
+Updates,tsk-058,Update_007,Task 058,2025-04-13,2025-05-01,18.0,10.0,No Change
+Updates,tsk-058,Update_008,Task 058,2025-04-13,2025-05-01,18.0,10.0,No Change
+Updates,tsk-058,Update_009,Task 058,2025-04-13,2025-05-01,18.0,10.0,No Change
+Updates,tsk-058,Update_010,Task 058,NA,NA,0.0,0.0,Initial
+Updates,tsk-058,Update_011,Task 058,2025-04-13,2025-05-01,18.0,10.0,Initial
+Updates,tsk-058,Update_012,Task 058,2025-04-13,2025-05-01,18.0,10.0,No Change
+Updates,tsk-058,Update_013,Task 058,2025-04-13,2025-05-01,18.0,10.0,No Change
+Updates,tsk-058,Update_014,Task 058,2025-04-13,2025-05-01,18.0,10.0,No Change
+Updates,tsk-058,Update_015,Task 058,2025-04-13,2025-05-01,18.0,10.0,No Change
+Updates,tsk-059,Update_001,Task 059,2025-05-20,NA,0.0,0.0,Initial
+Updates,tsk-059,Update_002,Task 059,2025-05-20,NA,0.0,0.0,Initial
+Updates,tsk-059,Update_003,Task 059,2025-05-20,NA,0.0,0.0,Initial
+Updates,tsk-059,Update_004,Task 059,2025-05-20,NA,0.0,0.0,Initial
+Updates,tsk-059,Update_005,Task 059,2025-05-20,2025-05-27,7.0,10.0,Initial
+Updates,tsk-059,Update_006,Task 059,2025-05-20,2025-05-27,7.0,10.0,No Change
+Updates,tsk-059,Update_007,Task 059,2025-05-20,2025-05-27,7.0,10.0,No Change
+Updates,tsk-059,Update_008,Task 059,2025-05-20,2025-05-27,7.0,10.0,No Change
+Updates,tsk-059,Update_009,Task 059,2025-05-20,2025-05-27,7.0,10.0,No Change
+Updates,tsk-059,Update_010,Task 059,NA,NA,0.0,0.0,Initial
+Updates,tsk-059,Update_011,Task 059,2025-05-20,2025-05-27,7.0,10.0,Initial
+Updates,tsk-059,Update_012,Task 059,2025-05-20,2025-05-27,7.0,10.0,No Change
+Updates,tsk-059,Update_013,Task 059,2025-05-20,2025-05-27,7.0,10.0,No Change
+Updates,tsk-059,Update_014,Task 059,2025-05-20,2025-05-27,7.0,10.0,No Change
+Updates,tsk-059,Update_015,Task 059,2025-05-20,2025-05-27,7.0,10.0,No Change
+Updates,tsk-060,Update_001,Task 060,2024-12-28,NA,0.0,0.0,Initial
+Updates,tsk-060,Update_002,Task 060,2024-12-28,NA,0.0,0.0,Initial
+Updates,tsk-060,Update_003,Task 060,2024-12-28,NA,0.0,0.0,Initial
+Updates,tsk-060,Update_004,Task 060,2024-12-28,2025-02-22,56.0,10.0,Initial
+Updates,tsk-060,Update_005,Task 060,2024-12-28,2025-02-22,56.0,10.0,No Change
+Updates,tsk-060,Update_006,Task 060,2024-12-28,2025-02-22,56.0,10.0,No Change
+Updates,tsk-060,Update_007,Task 060,2024-12-28,2025-02-22,56.0,10.0,No Change
+Updates,tsk-060,Update_008,Task 060,2024-12-28,2025-02-22,56.0,10.0,No Change
+Updates,tsk-060,Update_009,Task 060,2024-12-28,2025-02-22,56.0,10.0,No Change
+Updates,tsk-060,Update_010,Task 060,NA,NA,0.0,0.0,Initial
+Updates,tsk-060,Update_011,Task 060,2024-12-28,2025-02-22,56.0,10.0,Initial
+Updates,tsk-060,Update_012,Task 060,2024-12-28,2025-02-22,56.0,10.0,No Change
+Updates,tsk-060,Update_013,Task 060,2024-12-28,2025-02-22,56.0,10.0,No Change
+Updates,tsk-060,Update_014,Task 060,2024-12-28,2025-02-22,56.0,10.0,No Change
+Updates,tsk-060,Update_015,Task 060,2024-12-28,2025-02-22,56.0,10.0,No Change
+Updates,tsk-061,Update_001,Task 061,2025-08-07,NA,0.0,0.0,Initial
+Updates,tsk-061,Update_002,Task 061,2025-08-07,NA,0.0,0.0,Initial
+Updates,tsk-061,Update_003,Task 061,2025-08-07,2025-08-03,-4.0,0.0,Initial
+Updates,tsk-061,Update_004,Task 061,2025-08-07,2025-08-03,-4.0,0.0,No Change
+Updates,tsk-061,Update_005,Task 061,2025-08-07,2025-08-03,-4.0,0.0,No Change
+Updates,tsk-061,Update_006,Task 061,2025-08-07,2025-08-03,-4.0,0.0,No Change
+Updates,tsk-061,Update_007,Task 061,2025-08-07,2025-08-03,-4.0,0.0,No Change
+Updates,tsk-061,Update_008,Task 061,2025-08-07,2025-08-03,-4.0,0.0,No Change
+Updates,tsk-061,Update_009,Task 061,2025-08-07,2025-08-03,-4.0,0.0,No Change
+Updates,tsk-061,Update_010,Task 061,NA,NA,0.0,0.0,Initial
+Updates,tsk-061,Update_011,Task 061,2025-08-07,2025-08-03,-4.0,0.0,Initial
+Updates,tsk-061,Update_012,Task 061,2025-08-07,2025-08-03,-4.0,0.0,No Change
+Updates,tsk-061,Update_013,Task 061,2025-08-07,2025-08-03,-4.0,0.0,No Change
+Updates,tsk-061,Update_014,Task 061,2025-08-07,2025-08-03,-4.0,0.0,No Change
+Updates,tsk-061,Update_015,Task 061,2025-08-07,2025-08-03,-4.0,0.0,No Change
+Updates,tsk-062,Update_001,Task 062,2025-05-28,NA,0.0,0.0,Initial
+Updates,tsk-062,Update_002,Task 062,2025-05-28,2025-07-19,52.0,10.0,Initial
+Updates,tsk-062,Update_003,Task 062,2025-05-28,2025-07-19,52.0,10.0,No Change
+Updates,tsk-062,Update_004,Task 062,2025-05-28,2025-07-19,52.0,10.0,No Change
+Updates,tsk-062,Update_005,Task 062,2025-05-28,2025-07-19,52.0,10.0,No Change
+Updates,tsk-062,Update_006,Task 062,2025-05-28,2025-07-19,52.0,10.0,No Change
+Updates,tsk-062,Update_007,Task 062,2025-05-28,2025-07-19,52.0,10.0,No Change
+Updates,tsk-062,Update_008,Task 062,2025-05-28,2025-07-19,52.0,10.0,No Change
+Updates,tsk-062,Update_009,Task 062,2025-05-28,2025-07-19,52.0,10.0,No Change
+Updates,tsk-062,Update_010,Task 062,NA,NA,0.0,0.0,Initial
+Updates,tsk-062,Update_011,Task 062,2025-05-28,2025-07-19,52.0,10.0,Initial
+Updates,tsk-062,Update_012,Task 062,2025-05-28,2025-07-19,52.0,10.0,No Change
+Updates,tsk-062,Update_013,Task 062,2025-05-28,2025-07-19,52.0,10.0,No Change
+Updates,tsk-062,Update_014,Task 062,2025-05-28,2025-07-19,52.0,10.0,No Change
+Updates,tsk-062,Update_015,Task 062,2025-05-28,2025-07-19,52.0,10.0,No Change
+Updates,tsk-063,Update_001,Task 063,2025-01-26,NA,0.0,0.0,Initial
+Updates,tsk-063,Update_002,Task 063,2025-01-26,2025-03-15,48.0,10.0,Initial
+Updates,tsk-063,Update_003,Task 063,2025-01-26,2025-03-15,48.0,10.0,No Change
+Updates,tsk-063,Update_004,Task 063,2025-01-26,2025-03-15,48.0,10.0,No Change
+Updates,tsk-063,Update_005,Task 063,2025-01-26,2025-03-15,48.0,10.0,No Change
+Updates,tsk-063,Update_006,Task 063,2025-01-26,2025-03-15,48.0,10.0,No Change
+Updates,tsk-063,Update_007,Task 063,2025-01-26,2025-03-15,48.0,10.0,No Change
+Updates,tsk-063,Update_008,Task 063,2025-01-26,2025-03-15,48.0,10.0,No Change
+Updates,tsk-063,Update_009,Task 063,2025-01-26,2025-03-15,48.0,10.0,No Change
+Updates,tsk-063,Update_010,Task 063,NA,NA,0.0,0.0,Initial
+Updates,tsk-063,Update_011,Task 063,2025-01-26,2025-03-15,48.0,10.0,Initial
+Updates,tsk-063,Update_012,Task 063,2025-01-26,2025-03-15,48.0,10.0,No Change
+Updates,tsk-063,Update_013,Task 063,2025-01-26,2025-03-15,48.0,10.0,No Change
+Updates,tsk-063,Update_014,Task 063,2025-01-26,2025-03-15,48.0,10.0,No Change
+Updates,tsk-063,Update_015,Task 063,2025-01-26,2025-03-15,48.0,10.0,No Change
+Updates,tsk-064,Update_001,Task 064,2025-07-10,NA,0.0,0.0,Initial
+Updates,tsk-064,Update_002,Task 064,2025-07-10,2025-08-11,32.0,10.0,Initial
+Updates,tsk-064,Update_003,Task 064,2025-07-10,2025-08-11,32.0,10.0,No Change
+Updates,tsk-064,Update_004,Task 064,2025-07-10,2025-08-11,32.0,10.0,No Change
+Updates,tsk-064,Update_005,Task 064,2025-07-10,2025-08-11,32.0,10.0,No Change
+Updates,tsk-064,Update_006,Task 064,2025-07-10,2025-08-11,32.0,10.0,No Change
+Updates,tsk-064,Update_007,Task 064,2025-07-10,2025-08-11,32.0,10.0,No Change
+Updates,tsk-064,Update_008,Task 064,2025-07-10,2025-08-11,32.0,10.0,No Change
+Updates,tsk-064,Update_009,Task 064,2025-07-10,2025-08-11,32.0,10.0,No Change
+Updates,tsk-064,Update_010,Task 064,NA,NA,0.0,0.0,Initial
+Updates,tsk-064,Update_011,Task 064,2025-07-10,2025-08-11,32.0,10.0,Initial
+Updates,tsk-064,Update_012,Task 064,2025-07-10,2025-08-11,32.0,10.0,No Change
+Updates,tsk-064,Update_013,Task 064,2025-07-10,2025-08-11,32.0,10.0,No Change
+Updates,tsk-064,Update_014,Task 064,2025-07-10,2025-08-11,32.0,10.0,No Change
+Updates,tsk-064,Update_015,Task 064,2025-07-10,2025-08-11,32.0,10.0,No Change
+Updates,tsk-065,Update_001,Task 065,2025-02-24,NA,0.0,0.0,Initial
+Updates,tsk-065,Update_002,Task 065,2025-02-24,NA,0.0,0.0,Initial
+Updates,tsk-065,Update_003,Task 065,2025-02-24,NA,0.0,0.0,Initial
+Updates,tsk-065,Update_004,Task 065,2025-02-24,NA,0.0,0.0,Initial
+Updates,tsk-065,Update_005,Task 065,2025-02-24,NA,0.0,0.0,Initial
+Updates,tsk-065,Update_006,Task 065,2025-02-24,2025-03-16,20.0,10.0,Initial
+Updates,tsk-065,Update_007,Task 065,2025-02-24,2025-03-22,26.0,10.0,Slipped Further
+Updates,tsk-065,Update_008,Task 065,2025-02-24,2025-03-22,26.0,10.0,No Change
+Updates,tsk-065,Update_009,Task 065,2025-02-24,2025-03-22,26.0,10.0,No Change
+Updates,tsk-065,Update_010,Task 065,NA,NA,0.0,0.0,Initial
+Updates,tsk-065,Update_011,Task 065,2025-02-24,2025-03-22,26.0,10.0,Initial
+Updates,tsk-065,Update_012,Task 065,2025-02-24,2025-03-22,26.0,10.0,No Change
+Updates,tsk-065,Update_013,Task 065,2025-02-24,2025-03-22,26.0,10.0,No Change
+Updates,tsk-065,Update_014,Task 065,2025-02-24,2025-03-22,26.0,10.0,No Change
+Updates,tsk-065,Update_015,Task 065,2025-02-24,2025-03-22,26.0,10.0,No Change
+Updates,tsk-066,Update_001,Task 066,2024-12-07,NA,0.0,0.0,Initial
+Updates,tsk-066,Update_002,Task 066,2024-12-07,2024-12-05,-2.0,0.0,Initial
+Updates,tsk-066,Update_003,Task 066,2024-12-07,2024-12-05,-2.0,0.0,No Change
+Updates,tsk-066,Update_004,Task 066,2024-12-07,2024-12-05,-2.0,0.0,No Change
+Updates,tsk-066,Update_005,Task 066,2024-12-07,2024-12-05,-2.0,0.0,No Change
+Updates,tsk-066,Update_006,Task 066,2024-12-07,2024-12-05,-2.0,0.0,No Change
+Updates,tsk-066,Update_007,Task 066,2024-12-07,2024-12-05,-2.0,0.0,No Change
+Updates,tsk-066,Update_008,Task 066,2024-12-07,2024-12-05,-2.0,0.0,No Change
+Updates,tsk-066,Update_009,Task 066,2024-12-07,2024-12-05,-2.0,0.0,No Change
+Updates,tsk-066,Update_010,Task 066,NA,NA,0.0,0.0,Initial
+Updates,tsk-066,Update_011,Task 066,2024-12-07,2024-12-05,-2.0,0.0,Initial
+Updates,tsk-066,Update_012,Task 066,2024-12-07,2024-12-05,-2.0,0.0,No Change
+Updates,tsk-066,Update_013,Task 066,2024-12-07,2024-12-05,-2.0,0.0,No Change
+Updates,tsk-066,Update_014,Task 066,2024-12-07,2024-12-05,-2.0,0.0,No Change
+Updates,tsk-066,Update_015,Task 066,2024-12-07,2024-12-05,-2.0,0.0,No Change
+Updates,tsk-067,Update_001,Task 067,2025-04-24,NA,0.0,0.0,Initial
+Updates,tsk-067,Update_002,Task 067,2025-04-24,2025-05-25,31.0,10.0,Initial
+Updates,tsk-067,Update_003,Task 067,2025-04-24,2025-05-25,31.0,10.0,No Change
+Updates,tsk-067,Update_004,Task 067,2025-04-24,2025-05-25,31.0,10.0,No Change
+Updates,tsk-067,Update_005,Task 067,2025-04-24,2025-05-25,31.0,10.0,No Change
+Updates,tsk-067,Update_006,Task 067,2025-04-24,2025-05-25,31.0,10.0,No Change
+Updates,tsk-067,Update_007,Task 067,2025-04-24,2025-05-25,31.0,10.0,No Change
+Updates,tsk-067,Update_008,Task 067,2025-04-24,2025-05-25,31.0,10.0,No Change
+Updates,tsk-067,Update_009,Task 067,2025-04-24,2025-05-25,31.0,10.0,No Change
+Updates,tsk-067,Update_010,Task 067,NA,NA,0.0,0.0,Initial
+Updates,tsk-067,Update_011,Task 067,2025-04-24,2025-05-18,24.0,10.0,Initial
+Updates,tsk-067,Update_012,Task 067,2025-04-24,2025-05-18,24.0,10.0,No Change
+Updates,tsk-067,Update_013,Task 067,2025-04-24,2025-05-18,24.0,10.0,No Change
+Updates,tsk-067,Update_014,Task 067,2025-04-24,2025-05-18,24.0,10.0,No Change
+Updates,tsk-067,Update_015,Task 067,2025-04-24,2025-05-18,24.0,10.0,No Change
+Updates,tsk-068,Update_001,Task 068,2025-07-08,NA,0.0,0.0,Initial
+Updates,tsk-068,Update_002,Task 068,2025-07-08,2025-08-28,51.0,10.0,Initial
+Updates,tsk-068,Update_003,Task 068,2025-07-08,2025-08-28,51.0,10.0,No Change
+Updates,tsk-068,Update_004,Task 068,2025-07-08,2025-08-28,51.0,10.0,No Change
+Updates,tsk-068,Update_005,Task 068,2025-07-08,2025-08-28,51.0,10.0,No Change
+Updates,tsk-068,Update_006,Task 068,2025-07-08,2025-08-28,51.0,10.0,No Change
+Updates,tsk-068,Update_007,Task 068,2025-07-08,2025-08-28,51.0,10.0,No Change
+Updates,tsk-068,Update_008,Task 068,2025-07-08,2025-08-28,51.0,10.0,No Change
+Updates,tsk-068,Update_009,Task 068,2025-07-08,2025-08-28,51.0,10.0,No Change
+Updates,tsk-068,Update_010,Task 068,NA,NA,0.0,0.0,Initial
+Updates,tsk-068,Update_011,Task 068,2025-07-08,2025-08-28,51.0,10.0,Initial
+Updates,tsk-068,Update_012,Task 068,2025-07-08,2025-08-28,51.0,10.0,No Change
+Updates,tsk-068,Update_013,Task 068,2025-07-08,2025-08-28,51.0,10.0,No Change
+Updates,tsk-068,Update_014,Task 068,2025-07-08,2025-08-28,51.0,10.0,No Change
+Updates,tsk-068,Update_015,Task 068,2025-07-08,2025-08-28,51.0,10.0,No Change
+Updates,tsk-069,Update_001,Task 069,2025-07-11,NA,0.0,0.0,Initial
+Updates,tsk-069,Update_002,Task 069,2025-07-11,2025-08-01,21.0,10.0,Initial
+Updates,tsk-069,Update_003,Task 069,2025-07-11,2025-08-01,21.0,10.0,No Change
+Updates,tsk-069,Update_004,Task 069,2025-07-11,2025-08-01,21.0,10.0,No Change
+Updates,tsk-069,Update_005,Task 069,2025-07-11,2025-08-01,21.0,10.0,No Change
+Updates,tsk-069,Update_006,Task 069,2025-07-11,2025-08-01,21.0,10.0,No Change
+Updates,tsk-069,Update_007,Task 069,2025-07-11,2025-08-01,21.0,10.0,No Change
+Updates,tsk-069,Update_008,Task 069,2025-07-11,2025-08-01,21.0,10.0,No Change
+Updates,tsk-069,Update_009,Task 069,2025-07-11,2025-08-01,21.0,10.0,No Change
+Updates,tsk-069,Update_010,Task 069,NA,NA,0.0,0.0,Initial
+Updates,tsk-069,Update_011,Task 069,2025-07-11,2025-08-01,21.0,10.0,Initial
+Updates,tsk-069,Update_012,Task 069,2025-07-11,2025-08-01,21.0,10.0,No Change
+Updates,tsk-069,Update_013,Task 069,2025-07-11,2025-08-01,21.0,10.0,No Change
+Updates,tsk-069,Update_014,Task 069,2025-07-11,2025-08-01,21.0,10.0,No Change
+Updates,tsk-069,Update_015,Task 069,2025-07-11,2025-08-01,21.0,10.0,No Change
+Updates,tsk-070,Update_001,Task 070,2025-12-05,NA,0.0,0.0,Initial
+Updates,tsk-070,Update_002,Task 070,2025-12-05,2026-01-15,41.0,10.0,Initial
+Updates,tsk-070,Update_003,Task 070,2025-12-05,2026-01-15,41.0,10.0,No Change
+Updates,tsk-070,Update_004,Task 070,2025-12-05,2026-01-15,41.0,10.0,No Change
+Updates,tsk-070,Update_005,Task 070,2025-12-05,2026-01-15,41.0,10.0,No Change
+Updates,tsk-070,Update_006,Task 070,2025-12-05,2026-01-15,41.0,10.0,No Change
+Updates,tsk-070,Update_007,Task 070,2025-12-05,2026-01-15,41.0,10.0,No Change
+Updates,tsk-070,Update_008,Task 070,2025-12-05,2026-01-15,41.0,10.0,No Change
+Updates,tsk-070,Update_009,Task 070,2025-12-05,2026-01-15,41.0,10.0,No Change
+Updates,tsk-070,Update_010,Task 070,NA,NA,0.0,0.0,Initial
+Updates,tsk-070,Update_011,Task 070,2025-12-05,2026-01-15,41.0,10.0,Initial
+Updates,tsk-070,Update_012,Task 070,2025-12-05,2026-01-15,41.0,10.0,No Change
+Updates,tsk-070,Update_013,Task 070,2025-12-05,2026-01-15,41.0,10.0,No Change
+Updates,tsk-070,Update_014,Task 070,2025-12-05,2026-01-15,41.0,10.0,No Change
+Updates,tsk-070,Update_015,Task 070,2025-12-05,2026-01-15,41.0,10.0,No Change
+Updates,tsk-071,Update_001,Task 071,2025-10-09,2025-10-15,6.0,10.0,Initial
+Updates,tsk-071,Update_002,Task 071,2025-10-09,2025-10-15,6.0,10.0,No Change
+Updates,tsk-071,Update_003,Task 071,2025-10-09,2025-10-15,6.0,10.0,No Change
+Updates,tsk-071,Update_004,Task 071,2025-10-09,2025-10-15,6.0,10.0,No Change
+Updates,tsk-071,Update_005,Task 071,2025-10-09,2025-10-15,6.0,10.0,No Change
+Updates,tsk-071,Update_006,Task 071,2025-10-09,2025-10-15,6.0,10.0,No Change
+Updates,tsk-071,Update_007,Task 071,2025-10-09,2025-10-15,6.0,10.0,No Change
+Updates,tsk-071,Update_008,Task 071,2025-10-09,2025-10-21,12.0,10.0,Slipped Further
+Updates,tsk-071,Update_009,Task 071,2025-10-09,2025-10-21,12.0,10.0,No Change
+Updates,tsk-071,Update_010,Task 071,NA,NA,0.0,0.0,Initial
+Updates,tsk-071,Update_011,Task 071,2025-10-09,2025-10-21,12.0,10.0,Initial
+Updates,tsk-071,Update_012,Task 071,2025-10-09,2025-10-21,12.0,10.0,No Change
+Updates,tsk-071,Update_013,Task 071,2025-10-09,2025-10-21,12.0,10.0,No Change
+Updates,tsk-071,Update_014,Task 071,2025-10-09,2025-10-21,12.0,10.0,No Change
+Updates,tsk-071,Update_015,Task 071,2025-10-09,2025-10-21,12.0,10.0,No Change
+Updates,tsk-072,Update_001,Task 072,2025-08-09,NA,0.0,0.0,Initial
+Updates,tsk-072,Update_002,Task 072,2025-08-09,2025-09-01,23.0,10.0,Initial
+Updates,tsk-072,Update_003,Task 072,2025-08-09,2025-09-01,23.0,10.0,No Change
+Updates,tsk-072,Update_004,Task 072,2025-08-09,2025-09-01,23.0,10.0,No Change
+Updates,tsk-072,Update_005,Task 072,2025-08-09,2025-09-01,23.0,10.0,No Change
+Updates,tsk-072,Update_006,Task 072,2025-08-09,2025-09-01,23.0,10.0,No Change
+Updates,tsk-072,Update_007,Task 072,2025-08-09,2025-09-01,23.0,10.0,No Change
+Updates,tsk-072,Update_008,Task 072,2025-08-09,2025-09-01,23.0,10.0,No Change
+Updates,tsk-072,Update_009,Task 072,2025-08-09,2025-09-01,23.0,10.0,No Change
+Updates,tsk-072,Update_010,Task 072,NA,NA,0.0,0.0,Initial
+Updates,tsk-072,Update_011,Task 072,2025-08-09,2025-09-01,23.0,10.0,Initial
+Updates,tsk-072,Update_012,Task 072,2025-08-09,2025-09-01,23.0,10.0,No Change
+Updates,tsk-072,Update_013,Task 072,2025-08-09,2025-09-01,23.0,10.0,No Change
+Updates,tsk-072,Update_014,Task 072,2025-08-09,2025-09-01,23.0,10.0,No Change
+Updates,tsk-072,Update_015,Task 072,2025-08-09,2025-09-01,23.0,10.0,No Change
+Updates,tsk-073,Update_001,Task 073,2025-03-10,NA,0.0,0.0,Initial
+Updates,tsk-073,Update_002,Task 073,2025-03-10,2025-04-29,50.0,10.0,Initial
+Updates,tsk-073,Update_003,Task 073,2025-03-10,2025-04-29,50.0,10.0,No Change
+Updates,tsk-073,Update_004,Task 073,2025-03-10,2025-04-29,50.0,10.0,No Change
+Updates,tsk-073,Update_005,Task 073,2025-03-10,2025-05-02,53.0,10.0,Slipped Further
+Updates,tsk-073,Update_006,Task 073,2025-03-10,2025-05-02,53.0,10.0,No Change
+Updates,tsk-073,Update_007,Task 073,2025-03-10,2025-05-02,53.0,10.0,No Change
+Updates,tsk-073,Update_008,Task 073,2025-03-10,2025-05-02,53.0,10.0,No Change
+Updates,tsk-073,Update_009,Task 073,2025-03-10,2025-05-02,53.0,10.0,No Change
+Updates,tsk-073,Update_010,Task 073,NA,NA,0.0,0.0,Initial
+Updates,tsk-073,Update_011,Task 073,2025-03-10,2025-05-02,53.0,10.0,Initial
+Updates,tsk-073,Update_012,Task 073,2025-03-10,2025-05-02,53.0,10.0,No Change
+Updates,tsk-073,Update_013,Task 073,2025-03-10,2025-05-02,53.0,10.0,No Change
+Updates,tsk-073,Update_014,Task 073,2025-03-10,2025-05-02,53.0,10.0,No Change
+Updates,tsk-073,Update_015,Task 073,2025-03-10,2025-05-02,53.0,10.0,No Change
+Updates,tsk-074,Update_001,Task 074,2025-08-04,NA,0.0,0.0,Initial
+Updates,tsk-074,Update_002,Task 074,2025-08-04,NA,0.0,0.0,Initial
+Updates,tsk-074,Update_003,Task 074,2025-08-04,NA,0.0,0.0,Initial
+Updates,tsk-074,Update_004,Task 074,2025-08-04,2025-07-30,-5.0,0.0,Initial
+Updates,tsk-074,Update_005,Task 074,2025-08-04,2025-09-28,55.0,10.0,Slipped Further
+Updates,tsk-074,Update_006,Task 074,2025-08-04,2025-09-28,55.0,10.0,No Change
+Updates,tsk-074,Update_007,Task 074,2025-08-04,2025-09-28,55.0,10.0,No Change
+Updates,tsk-074,Update_008,Task 074,2025-08-04,2025-09-28,55.0,10.0,No Change
+Updates,tsk-074,Update_009,Task 074,2025-08-04,2025-09-28,55.0,10.0,No Change
+Updates,tsk-074,Update_010,Task 074,NA,NA,0.0,0.0,Initial
+Updates,tsk-074,Update_011,Task 074,2025-08-04,2025-09-28,55.0,10.0,Initial
+Updates,tsk-074,Update_012,Task 074,2025-08-04,2025-09-28,55.0,10.0,No Change
+Updates,tsk-074,Update_013,Task 074,2025-08-04,2025-09-28,55.0,10.0,No Change
+Updates,tsk-074,Update_014,Task 074,2025-08-04,2025-10-04,61.0,10.0,Slipped Further
+Updates,tsk-074,Update_015,Task 074,2025-08-04,2025-10-04,61.0,10.0,No Change
+Updates,tsk-075,Update_001,Task 075,2025-03-25,2025-04-01,7.0,7.0,Initial
+Updates,tsk-075,Update_002,Task 075,2025-03-25,2025-04-01,7.0,7.0,No Change
+Updates,tsk-075,Update_003,Task 075,2025-03-25,2025-04-01,7.0,7.0,No Change
+Updates,tsk-075,Update_004,Task 075,2025-03-25,2025-04-01,7.0,7.0,No Change
+Updates,tsk-075,Update_005,Task 075,2025-03-25,2025-04-01,7.0,7.0,No Change
+Updates,tsk-075,Update_006,Task 075,2025-03-25,2025-04-01,7.0,7.0,No Change
+Updates,tsk-075,Update_007,Task 075,2025-03-25,2025-04-01,7.0,7.0,No Change
+Updates,tsk-075,Update_008,Task 075,2025-03-25,2025-04-01,7.0,7.0,No Change
+Updates,tsk-075,Update_009,Task 075,2025-03-25,2025-04-01,7.0,7.0,No Change
+Updates,tsk-075,Update_010,Task 075,NA,NA,0.0,0.0,Initial
+Updates,tsk-075,Update_011,Task 075,2025-03-25,2025-04-06,12.0,10.0,Initial
+Updates,tsk-075,Update_012,Task 075,2025-03-25,2025-04-06,12.0,10.0,No Change
+Updates,tsk-075,Update_013,Task 075,2025-03-25,2025-04-06,12.0,10.0,No Change
+Updates,tsk-075,Update_014,Task 075,2025-03-25,2025-04-06,12.0,10.0,No Change
+Updates,tsk-075,Update_015,Task 075,2025-03-25,2025-04-06,12.0,10.0,No Change

@@ -1,1 +1,13 @@
-project_name,task_id,update_phase,task_name,change_date,change_score,method
+project_name,task_id,task_name,update_phase,slip_days,severity_score,change_type
+Alpha,tsk-005,Task tsk-005,Update_013,119.0,10.0,Slipped Further
+Alpha,tsk-007,Task tsk-007,Update_008,87.0,10.0,Initial
+Alpha,tsk-012,Task tsk-012,Update_009,37.0,10.0,No Change
+Alpha,tsk-015,Task tsk-015,Update_008,88.0,10.0,Initial
+Alpha,tsk-022,Task tsk-022,Update_010,98.0,10.0,Slipped Further
+Alpha,tsk-034,Task tsk-034,Update_013,42.0,10.0,Slipped Further
+Alpha,tsk-036,Task tsk-036,Update_009,59.0,10.0,No Change
+Alpha,tsk-050,Task tsk-050,Update_009,20.0,10.0,Slipped Further
+Alpha,tsk-051,Task tsk-051,Update_009,55.0,10.0,Slipped Further
+Alpha,tsk-064,Task tsk-064,Update_006,25.0,10.0,Slipped Further
+Alpha,tsk-066,Task tsk-066,Update_010,32.0,10.0,Slipped Further
+Alpha,tsk-072,Task tsk-072,Update_006,14.0,10.0,No Change

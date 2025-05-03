@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Files - ProjectLens{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card shadow-lg border-0 glass-card" style="border-radius: 1.5rem; background: rgba(255,255,255,0.85); backdrop-filter: blur(8px);">
+    <div class="card-body p-4">
+      <!-- Stepper -->
+      <div class="mb-4">
+        <div class="stepper d-flex justify-content-between align-items-center position-relative mb-3" style="max-width: 600px; margin: 0 auto;">
+          <div class="step-item text-center flex-fill">
+            <div class="step-circle step-active mx-auto mb-1"><i class="bi bi-folder-plus"></i></div>
+            <div class="step-label">Project</div>
+          </div>
+          <div class="step-line flex-fill"></div>
+          <div class="step-item text-center flex-fill">
+            <div class="step-circle step-inactive mx-auto mb-1"><i class="bi bi-upload"></i></div>
+            <div class="step-label">Files</div>
+          </div>
+        </div>
+      </div>
+      <!-- Step 1: Project Selection -->
+      <div id="step1" class="step-content fade-in">
+        <div class="row">
+          <div class="col-md-6 mb-4 mb-md-0">
+            <div class="glass-section p-4 rounded-4 h-100">
+              <h5 class="mb-3"><i class="bi bi-plus-circle me-2 text-primary"></i>Create New Project</h5>
+              <div class="mb-3">
+                <label for="projectName" class="form-label">Project Name</label>
+                <input type="text" class="form-control" id="projectName" placeholder="Enter project name">
+                <div id="projectNameError" class="invalid-feedback"></div>
+              </div>
+              <button class="btn btn-primary w-100" id="createProjectBtn">Create Project</button>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="glass-section p-4 rounded-4 h-100 d-flex flex-column">
+              <h5 class="mb-3"><i class="bi bi-list-ul me-2 text-primary"></i>Select Existing Project</h5>
+              <input type="text" class="form-control form-control-sm mb-2" id="projectSearch" placeholder="Search projects...">
+              <div class="flex-grow-1 overflow-auto" style="max-height: 260px;">
+                <ul class="list-group" id="projectList">
+                  <li class="list-group-item text-center text-muted">Loading projects...</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Step 2: File Upload -->
+      <div id="step2" class="step-content fade-in" style="display: none;">
+        <div class="mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+          <h5 class="mb-0"><i class="bi bi-folder-check me-2 text-primary"></i>Selected Project: <span id="selectedProjectName" class="fw-bold"></span></h5>
+          <button class="btn btn-outline-secondary btn-sm" id="changeProjectBtn"><i class="bi bi-arrow-left"></i> Change Project</button>
+        </div>
+        <div class="upload-zone p-4 border-0 rounded-4 text-center mb-3 glass-section position-relative animate-upload-zone" id="dropZone" style="background: rgba(240,248,255,0.7); cursor: pointer; transition: box-shadow 0.2s;">
+          <i class="bi bi-cloud-upload display-3 text-primary mb-2 animate-bounce"></i>
+          <p class="mb-2 fs-5">Drag and drop files here or <span class="text-primary text-decoration-underline">click to browse</span></p>
+          <small class="text-muted d-block">Supported formats: CSV, XLSX</small>
+          <input type="file" id="fileInput" class="d-none" multiple accept=".csv,.xlsx">
+        </div>
+        <div class="mb-3">
+          <h6 class="mb-2">Uploaded Files</h6>
+          <div class="row g-2" id="fileList">
+            <div class="col-12 text-muted text-center">No files uploaded yet</div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div id="uploadStatus"></div>
+          <button class="btn btn-primary px-4" id="processBtn" disabled>
+            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+            <span class="btn-text">Process Project</span>
+          </button>
+        </div>
+        <div id="processStatus" class="mt-2 text-center"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Toast for feedback -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+  <div id="uploadToast" class="toast align-items-center text-white bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="toastMsg">Uploading...</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+{% endblock %}

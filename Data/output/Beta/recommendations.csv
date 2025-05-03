@@ -1,19 +1,75 @@
-project_name,task_id,recommendation_type,description,confidence_score,recommended_action
-Beta,Multiple,forecasting,Forecasting skipped for tasks (tsk-018) due to insufficient historical data (< 3 points).,1.0,ACTION: Provide more historical data points (at least 3) for affected tasks to enable forecasting.
-Beta,tsk-016,severity_clusters,High severity task: Task 016 (Score: 3.00),1.0,"ACTION: Prioritise investigation of high-severity task 'Task 016' (ID: tsk-016). Check root causes (e.g., slippage, milestone delays)."
-Beta,tsk-008,severity_clusters,High severity task: Task 008 (Score: 3.00),1.0,"ACTION: Prioritise investigation of high-severity task 'Task 008' (ID: tsk-008). Check root causes (e.g., slippage, milestone delays)."
-Beta,tsk-041,severity_clusters,High severity task: Task 041 (Score: 3.00),1.0,"ACTION: Prioritise investigation of high-severity task 'Task 041' (ID: tsk-041). Check root causes (e.g., slippage, milestone delays)."
-Beta,tsk-001,severity_clusters,High severity task: Task 001 (Score: 3.00),1.0,"ACTION: Prioritise investigation of high-severity task 'Task 001' (ID: tsk-001). Check root causes (e.g., slippage, milestone delays)."
-Beta,tsk-035,severity_clusters,High severity task: Task 035 (Score: 3.00),1.0,"ACTION: Prioritise investigation of high-severity task 'Task 035' (ID: tsk-035). Check root causes (e.g., slippage, milestone delays)."
-Beta,tsk-019,performance_alerts,Critical task 'Task 019' (ID: tsk-019) has slipped by 9 days.,1.0,ACTION: Immediately investigate critical task 'Task 019' (ID: tsk-019). Assess impact and mitigation plan.
-Beta,tsk-005,performance_alerts,Critical task 'Task 005' (ID: tsk-005) has slipped by 20 days.,1.0,ACTION: Immediately investigate critical task 'Task 005' (ID: tsk-005). Assess impact and mitigation plan.
-Beta,tsk-044,performance_alerts,Critical task 'Task 044' (ID: tsk-044) has slipped by 13 days.,1.0,ACTION: Immediately investigate critical task 'Task 044' (ID: tsk-044). Assess impact and mitigation plan.
-Beta,tsk-043,performance_alerts,Critical task 'Task 043' (ID: tsk-043) has slipped by 11 days.,1.0,ACTION: Immediately investigate critical task 'Task 043' (ID: tsk-043). Assess impact and mitigation plan.
-Beta,tsk-042,performance_alerts,Critical task 'Task 042' (ID: tsk-042) has slipped by 8 days.,1.0,ACTION: Immediately investigate critical task 'Task 042' (ID: tsk-042). Assess impact and mitigation plan.
-Beta,Multiple,performance_alerts,...and 3 more critical tasks with significant slippage.,0.9,ACTION: Review the full slippage report for all critical tasks.
-Beta,tsk-001,performance_alerts,Forecast for 'Task 001' (ID: tsk-001) deviates significantly (73 days later) from baseline.,1.0,ACTION: Review task 'Task 001' (ID: tsk-001). Understand the deviation. Update baseline if necessary.
-Beta,tsk-003,performance_alerts,Forecast for 'Task 003' (ID: tsk-003) deviates significantly (33 days later) from baseline.,1.0,ACTION: Review task 'Task 003' (ID: tsk-003). Understand the deviation. Update baseline if necessary.
-Beta,tsk-005,performance_alerts,Forecast for 'Task 005' (ID: tsk-005) deviates significantly (20 days later) from baseline.,1.0,ACTION: Review task 'Task 005' (ID: tsk-005). Understand the deviation. Update baseline if necessary.
-Beta,tsk-007,performance_alerts,Forecast for 'Task 007' (ID: tsk-007) deviates significantly (20 days later) from baseline.,1.0,ACTION: Review task 'Task 007' (ID: tsk-007). Understand the deviation. Update baseline if necessary.
-Beta,tsk-008,performance_alerts,Forecast for 'Task 008' (ID: tsk-008) deviates significantly (36 days later) from baseline.,1.0,ACTION: Review task 'Task 008' (ID: tsk-008). Understand the deviation. Update baseline if necessary.
-Beta,Multiple,performance_alerts,...and 13 more tasks with significant forecast vs baseline deviation.,0.9,ACTION: Review the full forecast report for deviations from baseline.
+project_name,task_id,task_name,recommendation,severity,confidence,trigger
+Beta,tsk-001,Task 001,"Task shows significant slippage (24 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-003,Task 003,"Task shows significant slippage (79 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-004,Task 004,"Task shows significant slippage (24 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-005,Task 005,"Task shows significant slippage (93 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-006,Task 006,"Task shows significant slippage (21 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-007,Task 007,"Task shows significant slippage (41 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-008,Task 008,"Task shows significant slippage (123 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-010,Task 010,"Task shows significant slippage (50 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-011,Task 011,"Task shows significant slippage (25 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-012,Task 012,"Task shows significant slippage (34 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-013,Task 013,"Task shows significant slippage (15 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-014,Task 014,"Task shows significant slippage (30 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-015,Task 015,"Task shows significant slippage (72 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-017,Task 017,"Task shows significant slippage (28 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-018,Task 018,"Task shows significant slippage (94 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-019,Task 019,"Task shows significant slippage (73 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-020,Task 020,"Task shows significant slippage (71 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-021,Task 021,"Task shows significant slippage (24 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-022,Task 022,"Task shows significant slippage (55 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-023,Task 023,"Task shows significant slippage (45 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-024,Task 024,"Task shows significant slippage (84 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-025,Task 025,"Task shows significant slippage (73 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-027,Task 027,"Task shows significant slippage (50 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-029,Task 029,"Task shows significant slippage (61 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-030,Task 030,"Task shows significant slippage (14 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-031,Task 031,"Task shows significant slippage (45 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-032,Task 032,"Task shows significant slippage (32 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-033,Task 033,"Task shows significant slippage (80 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-034,Task 034,"Task shows significant slippage (10 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-035,Task 035,"Task shows significant slippage (15 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-036,Task 036,"Task shows significant slippage (40 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-039,Task 039,"Task shows significant slippage (57 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-040,Task 040,"Task shows significant slippage (49 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-041,Task 041,"Task shows significant slippage (37 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-042,Task 042,"Task shows significant slippage (42 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-043,Task 043,"Task shows significant slippage (54 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-044,Task 044,"Task shows significant slippage (64 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-045,Task 045,"Task shows significant slippage (51 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-046,Task 046,"Task shows significant slippage (15 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-047,Task 047,"Task shows significant slippage (43 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-048,Task 048,"Task shows significant slippage (38 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-050,Task 050,"Task shows significant slippage (32 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-051,Task 051,"Task shows significant slippage (56 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-052,Task 052,"Task shows significant slippage (62 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-053,Task 053,"Task shows significant slippage (20 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-054,Task 054,"Task shows significant slippage (39 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-055,Task 055,"Task shows significant slippage (50 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-056,Task 056,"Task shows significant slippage (37 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-058,Task 058,"Task shows significant slippage (66 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-059,Task 059,"Task shows significant slippage (99 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-060,Task 060,"Task shows significant slippage (24 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-061,Task 061,"Task shows significant slippage (53 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-062,Task 062,"Task shows significant slippage (68 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-063,Task 063,"Task shows significant slippage (62 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-064,Task 064,"Task shows significant slippage (46 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-065,Task 065,"Task shows significant slippage (34 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-066,Task 066,"Task shows significant slippage (54 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-067,Task 067,"Task shows significant slippage (53 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-068,Task 068,"Task shows significant slippage (35 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-069,Task 069,"Task shows significant slippage (54 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-070,Task 070,"Task shows significant slippage (32 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-071,Task 071,"Task shows significant slippage (81 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-072,Task 072,"Task shows significant slippage (17 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-073,Task 073,"Task shows significant slippage (116 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-074,Task 074,"Task shows significant slippage (82 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,tsk-075,Task 075,"Task shows significant slippage (67 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Beta,0,Task tsk-006,A significant change point in slippage trend was detected around update phase 'Update_009' (Slippage: 21 days). Investigate events or factors causing this shift.,Medium,0.75,Change Point Detected (PELT)
+Beta,1,Task tsk-032,A significant change point in slippage trend was detected around update phase 'Update_013' (Slippage: 32 days). Investigate events or factors causing this shift.,Medium,0.75,Change Point Detected (PELT)
+Beta,2,Task tsk-041,A significant change point in slippage trend was detected around update phase 'Update_013' (Slippage: 37 days). Investigate events or factors causing this shift.,Medium,0.75,Change Point Detected (PELT)
+Beta,3,Task tsk-045,A significant change point in slippage trend was detected around update phase 'Update_008' (Slippage: 51 days). Investigate events or factors causing this shift.,Medium,0.75,Change Point Detected (PELT)
+Beta,4,Task tsk-055,A significant change point in slippage trend was detected around update phase 'Update_008' (Slippage: 50 days). Investigate events or factors causing this shift.,Medium,0.75,Change Point Detected (PELT)
+Beta,5,Task tsk-059,A significant change point in slippage trend was detected around update phase 'Update_013' (Slippage: 99 days). Investigate events or factors causing this shift.,Medium,0.75,Change Point Detected (PELT)
+Beta,6,Task tsk-063,A significant change point in slippage trend was detected around update phase 'Update_008' (Slippage: 62 days). Investigate events or factors causing this shift.,Medium,0.75,Change Point Detected (PELT)
+Beta,7,Task tsk-071,A significant change point in slippage trend was detected around update phase 'Update_008' (Slippage: 81 days). Investigate events or factors causing this shift.,Medium,0.75,Change Point Detected (PELT)

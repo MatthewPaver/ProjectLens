@@ -1,1 +1,6 @@
-project_name,task_id,update_phase,task_name,change_date,change_score,method
+project_name,task_id,task_name,update_phase,slip_days,severity_score,change_type
+Slippages,tsk-001,Task tsk-001,Update_001,14,7.0,Slipped Further
+Slippages,tsk-002,Task tsk-002,Update_001,6,3.0,Slipped Further
+Slippages,tsk-003,Task tsk-003,Update_001,6,3.0,Slipped Further
+Slippages,tsk-004,Task tsk-004,Update_001,10,5.0,Slipped Further
+Slippages,tsk-005,Task tsk-005,Update_001,9,4.5,Slipped Further

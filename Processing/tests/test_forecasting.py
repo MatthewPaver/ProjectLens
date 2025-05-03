@@ -10,7 +10,13 @@ class TestForecasting(unittest.TestCase):
     """Test forecasting functionality with full isolation"""
     
     def test_forecasting_stub(self):
-        """Completely isolated test that simulates what forecasting would do"""
+        """Conceptually checks expected forecasting output structure (stub).
+        
+        NOTE: This test is intentionally isolated and does NOT import or run the 
+        actual forecasting modules to avoid dependency issues (e.g., TensorFlow).
+        It verifies the *expected format* of the output DataFrame if forecasting
+        were to run successfully.
+        """
         # Create test data (what would be input to the forecasting module)
         today = datetime.today()
         input_df = pd.DataFrame({
@@ -34,9 +40,16 @@ class TestForecasting(unittest.TestCase):
         self.assertIn("forecast_date_gann", output_df.columns)
         self.assertIn("forecast_date_arima", output_df.columns)
         self.assertEqual(len(output_df), 1)
+        self.assertEqual(output_df['task_id'].iloc[0], "a")
         
     def test_linear_extrapolation(self):
-        """Test simple linear extrapolation without needing TensorFlow"""
+        """Tests the simple linear extrapolation fallback logic.
+        
+        Provides a sequence of dates with a consistent interval and verifies that
+        the calculated average delta correctly predicts the next date in the sequence.
+        This tests the fallback mechanism used in `forecast_engine.forecast_gann`
+        when complex forecasting (like GANN) is unavailable or fails.
+        """
         # Sample dates representing task completion over time
         dates = [
             datetime(2023, 1, 1),
@@ -54,6 +67,7 @@ class TestForecasting(unittest.TestCase):
         
         # Verify the prediction is correct (15 days after Feb 15 = March 2)
         expected_date = datetime(2023, 3, 2)  # Based on the 15-day pattern
+        # Check components for robustness against potential time differences
         self.assertEqual(predicted_date.day, expected_date.day)
         self.assertEqual(predicted_date.month, expected_date.month)
         self.assertEqual(predicted_date.year, expected_date.year)

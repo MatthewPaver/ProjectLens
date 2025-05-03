@@ -4,6 +4,14 @@ from unittest.mock import patch, MagicMock
 from Processing.core.data_cleaning import clean_dataframe
 
 def test_cleaning_logic():
+    """Tests the core logic of `clean_dataframe` using mocks.
+    
+    This test focuses on verifying the interaction with a mocked SchemaManager
+    and checking the post-standardisation logic within `clean_dataframe`,
+    such as boolean conversion and status inference.
+    It does *not* test the `SchemaManager` itself, only that `clean_dataframe`
+    calls its methods as expected and processes the returned (mocked) data.
+    """
     # Create raw input data for the test
     raw_data = {
         "Task Name": ["A", "B"],

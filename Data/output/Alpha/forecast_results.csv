@@ -1,49 +1,16 @@
-project_name,task_id,task_name,update_phase,predicted_end_date,forecast_confidence,model_type,low_confidence_flag
-Alpha,tsk-001,Task 001,update_9,2025-11-15 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-002,Task 002,update_9,2025-11-24 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-003,Task 003,update_9,2025-02-24 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-004,Task 004,update_9,2025-10-21 00:00:00.000000477,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-005,Task 005,update_9,2025-06-20 16:48:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-006,Task 006,update_9,2025-01-10 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-007,Task 007,update_9,2025-11-28 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-008,Task 008,update_9,2025-04-30 00:00:00.000000477,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-009,Task 009,update_9,2025-10-04 23:59:59.999999523,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-010,Task 010,update_9,2025-08-26 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-011,Task 011,update_9,2025-11-09 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-012,Task 012,update_9,2025-04-02 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-013,Task 013,update_9,2025-11-03 19:39:08.703534365,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-014,Task 014,update_9,2025-02-04 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-015,Task 015,update_9,2025-07-24 05:59:59.999999523,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-016,Task 016,update_9,2025-01-14 12:47:19.613343239,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-017,Task 017,update_9,2025-05-24 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-018,Task 018,update_9,2025-11-21 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-019,Task 019,update_9,2025-06-19 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-020,Task 020,update_9,2025-06-26 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-021,Task 021,update_9,2025-05-24 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-023,Task 023,update_9,2025-06-22 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-024,Task 024,update_9,2024-12-23 09:35:59.999999523,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-025,Task 025,update_9,2025-04-21 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-026,Task 026,update_9,2025-02-05 10:40:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-027,Task 027,update_9,2025-08-16 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-028,Task 028,update_9,2025-03-21 09:35:59.999999523,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-029,Task 029,update_9,2025-10-19 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-030,Task 030,update_9,2025-03-28 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-031,Task 031,update_9,2025-09-02 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-032,Task 032,update_9,2025-05-04 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-033,Task 033,update_9,2025-10-02 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-034,Task 034,update_9,2025-09-27 00:00:00.000000477,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-035,Task 035,update_9,2025-07-06 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-036,Task 036,update_9,2025-05-08 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-037,Task 037,update_9,2025-01-20 11:59:59.999999523,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-038,Task 038,update_9,2025-06-22 19:11:59.999999523,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-039,Task 039,update_9,2025-05-17 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-041,Task 041,update_9,2025-09-27 13:42:51.428571463,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-042,Task 042,update_9,2025-04-21 13:19:59.999999285,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-043,Task 043,update_9,2025-02-19 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-044,Task 044,update_9,2025-11-09 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-045,Task 045,update_9,2025-12-02 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-046,Task 046,update_9,2025-01-29 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-047,Task 047,update_9,2025-03-13 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-048,Task 048,update_9,2025-02-28 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-049,Task 049,update_9,2025-04-07 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Alpha,tsk-050,Task 050,update_9,2026-01-01 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
+project_name,task_id,task_name,update_phase,predicted_end_date,forecast_confidence,model_type,low_confidence_flag,severity_score
+Alpha,tsk-001,Task 001,latest,2025-09-16,0.9119261912452036,Synthetic Demo,False,0
+Alpha,tsk-002,Task 002,latest,2025-08-03,0.4746920407819929,Synthetic Demo,True,0
+Alpha,tsk-003,Task 003,latest,2025-04-08,0.8899218937562431,Synthetic Demo,False,2
+Alpha,tsk-004,Task 004,latest,2025-08-23,0.3690146780781366,Synthetic Demo,True,0
+Alpha,tsk-005,Task 005,latest,2025-05-01,0.641204455494935,Synthetic Demo,True,0
+Alpha,tsk-006,Task 006,latest,2025-06-06,0.7122876453222424,Synthetic Demo,False,0
+Alpha,tsk-007,Task 007,latest,2025-06-14,0.7021009996456616,Synthetic Demo,False,0
+Alpha,tsk-008,Task 008,latest,2025-09-09,0.7928717042533604,Synthetic Demo,False,0
+Alpha,tsk-009,Task 009,latest,2025-01-09,0.7747632454733421,Synthetic Demo,False,0
+Alpha,tsk-010,Task 010,latest,2025-09-20,0.37679788037626094,Synthetic Demo,True,0
+Alpha,tsk-011,Task 011,latest,2025-10-19,0.6624236039048352,Synthetic Demo,True,0
+Alpha,tsk-012,Task 012,latest,2024-12-22,0.7233284242480151,Synthetic Demo,False,0
+Alpha,tsk-013,Task 013,latest,2025-04-18,0.430267878604202,Synthetic Demo,True,0
+Alpha,tsk-014,Task 014,latest,2025-03-06,0.9361135824445757,Synthetic Demo,False,0
+Alpha,tsk-015,Task 015,latest,2025-11-02,0.670121259680749,Synthetic Demo,True,0

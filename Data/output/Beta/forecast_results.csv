@@ -1,50 +1,16 @@
-project_name,task_id,task_name,update_phase,predicted_end_date,forecast_confidence,model_type,low_confidence_flag
-Beta,tsk-001,Task 001,update_9,2025-03-23 07:09:32.507158040,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-002,Task 002,update_9,2025-04-24 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-003,Task 003,update_9,2025-10-31 17:13:45.230076313,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-004,Task 004,update_9,2025-05-15 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-005,Task 005,update_9,2025-10-29 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-006,Task 006,update_9,2025-07-01 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-007,Task 007,update_9,2025-09-28 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-008,Task 008,update_9,2025-09-12 02:59:59.999999285,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-009,Task 009,update_9,2025-06-17 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-010,Task 010,update_9,2025-05-02 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-011,Task 011,update_9,2025-09-27 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-012,Task 012,update_9,2025-06-14 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-013,Task 013,update_9,2025-07-17 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-014,Task 014,update_9,2025-12-07 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-015,Task 015,update_9,2025-02-16 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-016,Task 016,update_9,2025-07-29 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-017,Task 017,update_9,2025-02-27 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-019,Task 019,update_9,2025-08-07 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-020,Task 020,update_9,2025-08-08 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-021,Task 021,update_9,2025-06-24 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-022,Task 022,update_9,2025-03-29 23:59:59.999999523,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-023,Task 023,update_9,2024-12-24 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-024,Task 024,update_9,2025-08-28 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-025,Task 025,update_9,2025-12-09 19:11:59.999999523,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-026,Task 026,update_9,2025-01-28 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-027,Task 027,update_9,2025-10-26 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-028,Task 028,update_9,2025-11-05 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-029,Task 029,update_9,2025-10-01 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-030,Task 030,update_9,2025-07-15 05:20:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-031,Task 031,update_9,2025-04-01 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-032,Task 032,update_9,2025-09-07 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-033,Task 033,update_9,2025-07-15 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-034,Task 034,update_9,2025-08-10 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-035,Task 035,update_9,2025-12-03 13:42:51.428571463,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-036,Task 036,update_9,2025-04-02 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-037,Task 037,update_9,2025-11-07 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-038,Task 038,update_9,2025-12-25 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-039,Task 039,update_9,2025-01-28 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-040,Task 040,update_9,2025-06-18 23:59:59.999999523,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-041,Task 041,update_9,2025-03-24 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-042,Task 042,update_9,2025-06-11 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-043,Task 043,update_9,2025-06-24 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-044,Task 044,update_9,2024-12-20 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-045,Task 045,update_9,2025-06-16 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-046,Task 046,update_9,2024-12-30 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-047,Task 047,update_9,2025-07-15 19:11:59.999999523,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-048,Task 048,update_9,2025-06-09 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-049,Task 049,update_9,2025-04-22 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
-Beta,tsk-050,Task 050,update_9,2025-03-17 00:00:00.000000000,0.98,AutoARIMA (statsforecast),False
+project_name,task_id,task_name,update_phase,predicted_end_date,forecast_confidence,model_type,low_confidence_flag,severity_score
+Beta,tsk-001,Task 001,latest,2025-02-04,0.5483920694912485,Synthetic Demo,True,0
+Beta,tsk-002,Task 002,latest,2025-05-04,0.5128705377438848,Synthetic Demo,True,0
+Beta,tsk-003,Task 003,latest,2025-07-11,0.8743722130976186,Synthetic Demo,False,0
+Beta,tsk-004,Task 004,latest,2025-09-01,0.49196089451824754,Synthetic Demo,True,0
+Beta,tsk-005,Task 005,latest,2025-07-24,0.5731509079942663,Synthetic Demo,True,0
+Beta,tsk-006,Task 006,latest,2025-11-12,0.6599604440027406,Synthetic Demo,True,0
+Beta,tsk-007,Task 007,latest,2025-07-11,0.9022480193587833,Synthetic Demo,False,0
+Beta,tsk-008,Task 008,latest,2025-03-20,0.7609143810532869,Synthetic Demo,False,0
+Beta,tsk-009,Task 009,latest,2025-10-07,0.6501900312035006,Synthetic Demo,True,0
+Beta,tsk-010,Task 010,latest,2025-11-22,0.8377563131057959,Synthetic Demo,False,0
+Beta,tsk-011,Task 011,latest,2025-01-12,0.7455235310742564,Synthetic Demo,False,0
+Beta,tsk-012,Task 012,latest,2025-06-18,0.7085677802588437,Synthetic Demo,False,0
+Beta,tsk-013,Task 013,latest,2025-11-15,0.5205967752373752,Synthetic Demo,True,0
+Beta,tsk-014,Task 014,latest,2025-02-10,0.7539824726431005,Synthetic Demo,False,0
+Beta,tsk-015,Task 015,latest,2025-07-30,0.8746680466710675,Synthetic Demo,False,0

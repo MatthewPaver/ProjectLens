@@ -1,19 +1,81 @@
-project_name,task_id,recommendation_type,description,confidence_score,recommended_action
-Slippages,Multiple,forecasting,Forecasting skipped for tasks (tsk-034) due to insufficient historical data (< 3 points).,1.0,ACTION: Provide more historical data points (at least 3) for affected tasks to enable forecasting.
-Slippages,tsk-039,severity_clusters,High severity task: Task 039 (Score: 3.00),1.0,"ACTION: Prioritise investigation of high-severity task 'Task 039' (ID: tsk-039). Check root causes (e.g., slippage, milestone delays)."
-Slippages,tsk-022,severity_clusters,High severity task: Task 022 (Score: 3.00),1.0,"ACTION: Prioritise investigation of high-severity task 'Task 022' (ID: tsk-022). Check root causes (e.g., slippage, milestone delays)."
-Slippages,tsk-016,severity_clusters,High severity task: Task 016 (Score: 3.00),1.0,"ACTION: Prioritise investigation of high-severity task 'Task 016' (ID: tsk-016). Check root causes (e.g., slippage, milestone delays)."
-Slippages,tsk-014,severity_clusters,High severity task: Task 014 (Score: 3.00),1.0,"ACTION: Prioritise investigation of high-severity task 'Task 014' (ID: tsk-014). Check root causes (e.g., slippage, milestone delays)."
-Slippages,tsk-019,severity_clusters,High severity task: Task 019 (Score: 2.00),1.0,"ACTION: Prioritise investigation of high-severity task 'Task 019' (ID: tsk-019). Check root causes (e.g., slippage, milestone delays)."
-Slippages,tsk-016,performance_alerts,Critical task 'Task 016' (ID: tsk-016) has slipped by 29 days.,1.0,ACTION: Immediately investigate critical task 'Task 016' (ID: tsk-016). Assess impact and mitigation plan.
-Slippages,tsk-015,performance_alerts,Critical task 'Task 015' (ID: tsk-015) has slipped by 10 days.,1.0,ACTION: Immediately investigate critical task 'Task 015' (ID: tsk-015). Assess impact and mitigation plan.
-Slippages,tsk-014,performance_alerts,Critical task 'Task 014' (ID: tsk-014) has slipped by 10 days.,1.0,ACTION: Immediately investigate critical task 'Task 014' (ID: tsk-014). Assess impact and mitigation plan.
-Slippages,tsk-008,performance_alerts,Critical task 'Task 008' (ID: tsk-008) has slipped by 8 days.,1.0,ACTION: Immediately investigate critical task 'Task 008' (ID: tsk-008). Assess impact and mitigation plan.
-Slippages,tsk-042,performance_alerts,Critical task 'Task 042' (ID: tsk-042) has slipped by 8 days.,1.0,ACTION: Immediately investigate critical task 'Task 042' (ID: tsk-042). Assess impact and mitigation plan.
-Slippages,Multiple,performance_alerts,...and 1 more critical tasks with significant slippage.,0.9,ACTION: Review the full slippage report for all critical tasks.
-Slippages,tsk-002,performance_alerts,Forecast for 'Task 002' (ID: tsk-002) deviates significantly (17 days later) from baseline.,1.0,ACTION: Review task 'Task 002' (ID: tsk-002). Understand the deviation. Update baseline if necessary.
-Slippages,tsk-004,performance_alerts,Forecast for 'Task 004' (ID: tsk-004) deviates significantly (15 days later) from baseline.,1.0,ACTION: Review task 'Task 004' (ID: tsk-004). Understand the deviation. Update baseline if necessary.
-Slippages,tsk-009,performance_alerts,Forecast for 'Task 009' (ID: tsk-009) deviates significantly (20 days later) from baseline.,1.0,ACTION: Review task 'Task 009' (ID: tsk-009). Understand the deviation. Update baseline if necessary.
-Slippages,tsk-014,performance_alerts,Forecast for 'Task 014' (ID: tsk-014) deviates significantly (24 days later) from baseline.,1.0,ACTION: Review task 'Task 014' (ID: tsk-014). Understand the deviation. Update baseline if necessary.
-Slippages,tsk-016,performance_alerts,Forecast for 'Task 016' (ID: tsk-016) deviates significantly (35 days later) from baseline.,1.0,ACTION: Review task 'Task 016' (ID: tsk-016). Understand the deviation. Update baseline if necessary.
-Slippages,Multiple,performance_alerts,...and 8 more tasks with significant forecast vs baseline deviation.,0.9,ACTION: Review the full forecast report for deviations from baseline.
+project_name,task_id,task_name,recommendation,severity,confidence,trigger
+Slippages,tsk-002,Task 002,"Task shows significant slippage (25 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-004,Task 004,"Task shows significant slippage (33 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-005,Task 005,"Task shows significant slippage (74 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-006,Task 006,"Task shows significant slippage (37 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-007,Task 007,"Task shows significant slippage (53 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-008,Task 008,"Task shows significant slippage (50 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-009,Task 009,"Task shows significant slippage (39 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-011,Task 011,"Task shows significant slippage (35 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-012,Task 012,"Task shows significant slippage (10 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-013,Task 013,"Task shows significant slippage (50 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-014,Task 014,"Task shows significant slippage (39 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-015,Task 015,"Task shows significant slippage (15 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-016,Task 016,"Task shows significant slippage (56 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-017,Task 017,"Task shows significant slippage (75 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-019,Task 019,"Task shows significant slippage (98 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-021,Task 021,"Task shows significant slippage (23 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-022,Task 022,"Task shows significant slippage (98 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-023,Task 023,"Task shows significant slippage (62 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-024,Task 024,"Task shows significant slippage (15 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-026,Task 026,"Task shows significant slippage (42 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-027,Task 027,"Task shows significant slippage (37 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-029,Task 029,"Task shows significant slippage (56 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-030,Task 030,"Task shows significant slippage (22 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-032,Task 032,"Task shows significant slippage (29 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-033,Task 033,"Task shows significant slippage (27 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-036,Task 036,"Task shows significant slippage (8 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-037,Task 037,"Task shows significant slippage (105 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-038,Task 038,"Task shows significant slippage (20 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-039,Task 039,"Task shows significant slippage (55 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-040,Task 040,"Task shows significant slippage (22 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-043,Task 043,"Task shows significant slippage (36 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-044,Task 044,"Task shows significant slippage (37 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-045,Task 045,"Task shows significant slippage (68 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-046,Task 046,"Task shows significant slippage (20 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-047,Task 047,"Task shows significant slippage (70 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-048,Task 048,"Task shows significant slippage (26 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-049,Task 049,"Task shows significant slippage (44 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-050,Task 050,"Task shows significant slippage (34 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-051,Task 051,"Task shows significant slippage (22 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-052,Task 052,"Task shows significant slippage (22 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-053,Task 053,"Task shows significant slippage (22 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-054,Task 054,"Task shows significant slippage (45 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-056,Task 056,"Task shows significant slippage (47 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-057,Task 057,"Task shows significant slippage (23 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-058,Task 058,"Task shows significant slippage (23 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-059,Task 059,"Task shows significant slippage (35 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-060,Task 060,"Task shows significant slippage (35 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-061,Task 061,"Task shows significant slippage (39 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-062,Task 062,"Task shows significant slippage (115 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-063,Task 063,"Task shows significant slippage (70 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-064,Task 064,"Task shows significant slippage (41 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-065,Task 065,"Task shows significant slippage (43 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-066,Task 066,"Task shows significant slippage (65 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-068,Task 068,"Task shows significant slippage (14 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-069,Task 069,"Task shows significant slippage (10 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-070,Task 070,"Task shows significant slippage (46 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-071,Task 071,"Task shows significant slippage (21 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-072,Task 072,"Task shows significant slippage (27 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-073,Task 073,"Task shows significant slippage (11 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,tsk-075,Task 075,"Task shows significant slippage (30 days). Investigate root causes (resource constraints, scope creep, dependencies).",High,0.85,Slippage > 7 days
+Slippages,0,Task tsk-001,A significant change point in slippage trend was detected around update phase 'Update_001' (Slippage: 14 days). Investigate events or factors causing this shift.,Medium,0.75,Change Point Detected (PELT)
+Slippages,1,Task tsk-002,A significant change point in slippage trend was detected around update phase 'Update_001' (Slippage: 6 days). Investigate events or factors causing this shift.,Medium,0.75,Change Point Detected (PELT)
+Slippages,2,Task tsk-003,A significant change point in slippage trend was detected around update phase 'Update_001' (Slippage: 6 days). Investigate events or factors causing this shift.,Medium,0.75,Change Point Detected (PELT)
+Slippages,3,Task tsk-004,A significant change point in slippage trend was detected around update phase 'Update_001' (Slippage: 10 days). Investigate events or factors causing this shift.,Medium,0.75,Change Point Detected (PELT)
+Slippages,4,Task tsk-005,A significant change point in slippage trend was detected around update phase 'Update_001' (Slippage: 9 days). Investigate events or factors causing this shift.,Medium,0.75,Change Point Detected (PELT)
+Slippages,tsk-001,Task 001,"Forecasting models failed to produce a reliable prediction for this task. Data might be too sparse, erratic, or contain non-numeric values. Manual review of task history is recommended.",Low,0.95,Forecast Engine Failed
+Slippages,tsk-055,Task 055,"Forecasting models failed to produce a reliable prediction for this task. Data might be too sparse, erratic, or contain non-numeric values. Manual review of task history is recommended.",Low,0.95,Forecast Engine Failed
+Slippages,tsk-042,Task 042,"Forecasting models failed to produce a reliable prediction for this task. Data might be too sparse, erratic, or contain non-numeric values. Manual review of task history is recommended.",Low,0.95,Forecast Engine Failed
+Slippages,tsk-041,Task 041,"Forecasting models failed to produce a reliable prediction for this task. Data might be too sparse, erratic, or contain non-numeric values. Manual review of task history is recommended.",Low,0.95,Forecast Engine Failed
+Slippages,tsk-074,Task 074,"Forecasting models failed to produce a reliable prediction for this task. Data might be too sparse, erratic, or contain non-numeric values. Manual review of task history is recommended.",Low,0.95,Forecast Engine Failed
+Slippages,tsk-067,Task 067,"Forecasting models failed to produce a reliable prediction for this task. Data might be too sparse, erratic, or contain non-numeric values. Manual review of task history is recommended.",Low,0.95,Forecast Engine Failed
+Slippages,tsk-010,Task 010,"Forecasting models failed to produce a reliable prediction for this task. Data might be too sparse, erratic, or contain non-numeric values. Manual review of task history is recommended.",Low,0.95,Forecast Engine Failed
+Slippages,tsk-003,Task 003,"Forecasting models failed to produce a reliable prediction for this task. Data might be too sparse, erratic, or contain non-numeric values. Manual review of task history is recommended.",Low,0.95,Forecast Engine Failed
+Slippages,tsk-018,Task 018,"Forecasting models failed to produce a reliable prediction for this task. Data might be too sparse, erratic, or contain non-numeric values. Manual review of task history is recommended.",Low,0.95,Forecast Engine Failed
+Slippages,tsk-020,Task 020,"Forecasting models failed to produce a reliable prediction for this task. Data might be too sparse, erratic, or contain non-numeric values. Manual review of task history is recommended.",Low,0.95,Forecast Engine Failed
+Slippages,tsk-035,Task 035,"Forecasting models failed to produce a reliable prediction for this task. Data might be too sparse, erratic, or contain non-numeric values. Manual review of task history is recommended.",Low,0.95,Forecast Engine Failed
+Slippages,tsk-034,Task 034,"Forecasting models failed to produce a reliable prediction for this task. Data might be too sparse, erratic, or contain non-numeric values. Manual review of task history is recommended.",Low,0.95,Forecast Engine Failed
+Slippages,tsk-031,Task 031,"Forecasting models failed to produce a reliable prediction for this task. Data might be too sparse, erratic, or contain non-numeric values. Manual review of task history is recommended.",Low,0.95,Forecast Engine Failed
+Slippages,tsk-028,Task 028,"Forecasting models failed to produce a reliable prediction for this task. Data might be too sparse, erratic, or contain non-numeric values. Manual review of task history is recommended.",Low,0.95,Forecast Engine Failed
+Slippages,tsk-025,Task 025,"Forecasting models failed to produce a reliable prediction for this task. Data might be too sparse, erratic, or contain non-numeric values. Manual review of task history is recommended.",Low,0.95,Forecast Engine Failed

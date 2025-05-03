@@ -1,8 +1,30 @@
+#!/usr/bin/env python3
+"""Data Processing Pipeline Orchestration Module.
+
+This module defines the main workflow for processing a single project's data.
+It orchestrates the sequence of loading, cleaning, analysing, and outputting results.
+
+Key Components:
+- Directory Constants: Defines standard paths for input, output, archive, schemas.
+- `_archive_project`: Helper function to move processed project folders.
+- `process_project`: The core function that takes a project folder path and:
+    1. Loads data using `file_loader`.
+    2. Cleans data using `data_cleaning` and `SchemaManager`.
+    3. Runs analysis modules (`slippage_analysis`, `forecast_engine`, etc.).
+    4. Generates recommendations using `recommendation_engine`.
+    5. Writes all outputs using `output_writer`.
+    6. Archives the input folder based on overall success.
+
+The pipeline is designed to be somewhat fault-tolerant; failures in individual 
+analysis modules are logged but typically don't stop processing for the project.
+However, critical failures in loading, cleaning, or output writing will mark the
+project as failed for archiving.
+"""
 import os
 import pandas as pd
 import logging
 import traceback
-import shutil # Import shutil for archive_project
+import shutil
 
 from Processing.core.config_loader import resolve_path
 from Processing.core.schema_manager import SchemaManager
@@ -10,73 +32,63 @@ from Processing.core.data_cleaning import clean_dataframe
 
 from Processing.ingestion.file_loader import load_project_files
 
-# --- Restore analysis imports ---
+# Analysis module imports
 from Processing.analysis.slippage_analysis import run_slippage_analysis
 from Processing.analysis.forecast_engine import run_forecasting
 from Processing.analysis.changepoint_detector import detect_change_points
 from Processing.analysis.milestone_analysis import analyse_milestones
 from Processing.analysis.recommendation_engine import generate_recommendations
-# --- End restore ---
 
+# Output module import
 from Processing.output.output_writer import write_outputs
 
-# --- Logging Setup --- 
-# --->>> REMOVE Logging Configuration from data_pipeline.py <<<---
-# # Configure logging (basic setup, customize as needed)
-# log_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'logs')) # Use absolute path based on current file
-# os.makedirs(log_dir, exist_ok=True)
-# log_file = os.path.join(log_dir, 'pipeline.log')
-# 
-# # Configure basic logging (adjust level and format as needed)
-# # Ensure file handler uses 'w' mode to overwrite log each run
-# logging.basicConfig(level=logging.DEBUG, 
-#                     format='%(asctime)s - %(levelname)s - [%(module)s:%(lineno)d] - %(message)s',
-#                     handlers=[
-#                         logging.FileHandler(log_file, mode='w'), 
-#                         logging.StreamHandler() # Keep console output
-#                     ])
-# logger = logging.getLogger(__name__) # Use module-specific logger if preferred
-# logger.info(f"--- Logging configured in data_pipeline.py (Level: {logging.getLevelName(logger.getEffectiveLevel())}) ---")
-# --- End Logging Setup --- 
-
-# --->>> Get Logger Instance <<<---
-# Modules should get the logger instance configured by the main entry point (main_runner.py)
+# --- Logger Setup ---
+# Get the logger instance configured by the main entry point (main_runner.py)
 logger = logging.getLogger(__name__) 
-# --->>> END Get Logger Instance <<<---
 
-# --- Define Directory Constants --- 
-# Use resolve_path to correctly locate the Data directories in the project root
-INPUT_DIR   = resolve_path("Data/input")    # Input folder in project Data
-OUTPUT_DIR  = resolve_path("Data/output")   # Output folder in project Data
-ARCHIVE_DIR = resolve_path("Data/archive")  # Archive folder in project Data
-SCHEMA_DIR  = resolve_path("Data/schemas")  # Schemas folder in project Data
+# --- Directory Constants --- 
+# Use resolve_path to locate Data directories relative to project root
+INPUT_DIR   = resolve_path("Data/input")    
+OUTPUT_DIR  = resolve_path("Data/output")   
+ARCHIVE_DIR = resolve_path("Data/archive")  
+SCHEMA_DIR  = resolve_path("Data/schemas")  
 
 # Ensure Output and Archive directories exist (essential for this script)
-os.makedirs(OUTPUT_DIR, exist_ok=True)
-os.makedirs(os.path.join(ARCHIVE_DIR, 'success'), exist_ok=True)
-os.makedirs(os.path.join(ARCHIVE_DIR, 'failed'), exist_ok=True)
-# --- End Directory Constants --- 
-
-# --- Archive Function (defined locally as it's used only here) ---
-def archive_project(project_folder_path: str, success: bool):
-    """Moves the processed project folder to the success or failed archive directory."""
-    project_folder = os.path.basename(project_folder_path)
+try:
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    os.makedirs(os.path.join(ARCHIVE_DIR, 'success'), exist_ok=True)
+    os.makedirs(os.path.join(ARCHIVE_DIR, 'failed'), exist_ok=True)
+except OSError as e:
+     logger.critical(f"Failed to create necessary Output/Archive directories: {e}")
+     # Consider exiting if these cannot be created
+     # sys.exit(1)
+     
+# --- Archive Function (Local Helper) ---
+def _archive_project(project_folder_path: str, success: bool):
+    """Moves the processed project folder to the success or failed archive directory.
+    
+    Handles existing destinations by removing them first.
+    
+    Args:
+        project_folder_path (str): Full path to the project folder in the input directory.
+        success (bool): Whether the processing was successful.
+    """
+    project_folder_name = os.path.basename(project_folder_path)
     target_dir_suffix = 'success' if success else 'failed'
-    target_archive_dir = os.path.join(ARCHIVE_DIR, target_dir_suffix)
-    # The destination *directory* path
-    destination_path = os.path.join(target_archive_dir, project_folder)
+    target_archive_base = os.path.join(ARCHIVE_DIR, target_dir_suffix)
+    destination_path = os.path.join(target_archive_base, project_folder_name)
     
-    logger.info(f"Attempting to archive '{project_folder}' to '{target_archive_dir}' (Success: {success})")
+    logger.info(f"Archiving '{project_folder_name}' to '{target_archive_base}' (Success: {success})")
     
-    # Ensure the target archive directory exists (redundant if created above, but safe)
-    os.makedirs(target_archive_dir, exist_ok=True)
+    # Ensure the specific success/failed directory exists
+    os.makedirs(target_archive_base, exist_ok=True)
     
-    # Check if the source path still exists before moving
+    # Check source exists
     if not os.path.exists(project_folder_path):
-        logger.warning(f"Source path {project_folder_path} does not exist. Cannot archive.")
+        logger.warning(f"Source path for archiving not found: {project_folder_path}. Skipping archive.")
         return
         
-    # Ensure the destination doesn't already exist to avoid errors during move
+    # Remove existing destination if necessary
     if os.path.exists(destination_path):
         logger.warning(f"Destination archive path {destination_path} already exists. Removing before archiving.")
         try:
@@ -86,392 +98,255 @@ def archive_project(project_folder_path: str, success: bool):
                  os.remove(destination_path)
             logger.debug(f"Removed existing item at {destination_path}.")
         except Exception as e_rem:
-            logger.error(f"Failed to remove existing item at {destination_path}: {e_rem}")
-            # Decide if we should proceed or stop
+            logger.error(f"Failed to remove existing item at {destination_path}: {e_rem}. Archiving aborted.")
             return # Stop if we can't clear the destination
              
+    # Move the source folder to the target base directory (success/failed)
     try:
-        shutil.move(project_folder_path, target_archive_dir) # Move into the target success/failed dir
-        logger.info(f"Successfully moved project {project_folder} to {target_archive_dir}")
+        shutil.move(project_folder_path, target_archive_base) 
+        logger.info(f"Successfully moved project '{project_folder_name}' to {target_archive_base}")
     except Exception as e_mov:
-        logger.error(f"Failed to move project {project_folder} to archive directory {target_archive_dir}: {e_mov}", exc_info=True)
-# --- End Archive Function ---
+        logger.error(f"Failed to move project '{project_folder_name}' to archive directory {target_archive_base}: {e_mov}", exc_info=True)
 
-# --- Save Function Placeholder --- 
-def save_analysis_results(analysis_results: dict, output_dir: str, project_name: str):
-    """Saves each analysis DataFrame to a CSV file."""
-    logger.info(f"[{project_name}] Saving analysis results to {output_dir}...")
-    for name, df in analysis_results.items():
-        # Standardize output filenames
-        if name == 'slippage': filename = 'slippage_summary.csv'
-        elif name == 'forecast': filename = 'forecast_results.csv'
-        elif name == 'changepoints': filename = 'changepoints.csv'
-        # Add other analysis types here
-        # elif name == 'milestones': filename = 'milestone_analysis.csv' 
-        # elif name == 'recommendations': filename = 'recommendations.csv'
-        else: 
-            filename = f'{name}_output.csv' # Generic fallback
-            
-        file_path = os.path.join(output_dir, filename)
+# Note: This module relies on output_writer.write_outputs for saving analysis results
+
+def process_project(project_folder_path: str, schema_manager: SchemaManager) -> str | None:
+    """
+    Processes a single project's data through the entire analysis pipeline.
+    
+    This function orchestrates the sequence of operations for one project:
+    1.  Loads data from files within the specified project folder.
+    2.  Cleans and standardises the loaded data using the provided SchemaManager.
+    3.  Executes various analysis modules (slippage, forecasting, changepoints, milestones).
+    4.  Generates project recommendations based on analysis results.
+    5.  Writes all generated outputs (cleaned data, analysis results, recommendations) 
+        to a corresponding folder in the main output directory.
+    6.  Archives the original input project folder to 'success' or 'failed' based on 
+        whether all steps (including output writing) completed without critical errors.
+    
+    Individual analysis module failures are logged but do not necessarily stop the entire 
+    pipeline for the project; subsequent steps will proceed with potentially incomplete results.
+    However, critical failures during loading, cleaning, or output writing will result in 
+    the project being marked as failed for archiving.
+    
+    Args:
+        project_folder_path (str): The full path to the specific project folder 
+                                   located within the main input directory.
+        schema_manager (SchemaManager): A pre-initialised instance of the SchemaManager, 
+                                        configured for the appropriate schema (e.g., 'tasks').
         
-        if df is not None and not df.empty:
-            try:
-                df.to_csv(file_path, index=False)
-                logger.info(f"[{project_name}] Saved {name} analysis ({len(df)} rows) to {filename}")
-            except Exception as e:
-                logger.error(f"[{project_name}] Failed to save {name} analysis to {file_path}: {e}", exc_info=True)
-        elif df is None:
-             logger.warning(f"[{project_name}] No data to save for {name} analysis (result was None).")
-             # Optionally create empty file with headers if df structure known (difficult if None)
-        else: # DataFrame is empty
-            logger.warning(f"[{project_name}] No data to save for {name} analysis (result DataFrame is empty).")
-            # Optionally save empty file with headers
-            try:
-                 # Attempt to get headers if df is empty but has columns defined
-                 pd.DataFrame(columns=df.columns).to_csv(file_path, index=False)
-                 logger.info(f"[{project_name}] Saved empty file with headers for {name} to {filename}")
-            except Exception as e_empty:
-                 logger.error(f"[{project_name}] Failed to save empty file for {name} to {file_path}: {e_empty}")
-# --- End Save Function --- 
+    Returns:
+        str or None: The path to the project's dedicated output directory if processing 
+                     and output writing were successful. Returns None if any critical step 
+                     failed, leading to the project being archived as 'failed'.
+    """
+    success = False  # Flag to track overall success for final archiving decision.
+    project_name = os.path.basename(project_folder_path)
+    # Define the target output directory specific to this project.
+    output_project_dir = os.path.join(OUTPUT_DIR, project_name)
+    logger.info(f"--- Starting Project Processing: {project_name} --- Path: {project_folder_path} ---")
 
-def process_project(project_folder_path: str, schema_manager: SchemaManager):
-    """Loads, cleans, analyses, and archives data for a single project folder."""
-    project_folder = os.path.basename(project_folder_path)
-    project_name = project_folder
-    logger.info(f"Processing project: {project_folder} (Name: {project_name})") # Optionally add name to log
-    
-    output_project_dir = os.path.join(OUTPUT_DIR, project_folder)
-    os.makedirs(output_project_dir, exist_ok=True)
-
-    # Initialize empty dataframes
-    raw_df = pd.DataFrame()
-    cleaned_df = pd.DataFrame()
-    slippages = pd.DataFrame()
-    forecasts = pd.DataFrame()
-    changepoints = pd.DataFrame()
-    milestones = pd.DataFrame()
-    recommendations = pd.DataFrame()
-    failed_tasks_for_recommendations = [] # Initialize list for failed task IDs
-    
-    # --- CHANGE: Restore success variable --- 
-    success = True
-
-    # --->>> ADD INPUT EXISTENCE CHECK 1 <<< ---
-    logger.debug(f"CHECK 1: At start of process_project for '{project_name}'")
-    logger.debug(f"  Input Dir '{INPUT_DIR}' exists: {os.path.exists(INPUT_DIR)}")
-    logger.debug(f"  Project Path '{project_folder_path}' exists: {os.path.exists(project_folder_path)}")
-    # --->>> END CHECK 1 <<< ---
-
+    # The following ensures archiving always occurs, regardless of errors in processing steps.
     try:
-        logger.info(f"Started processing: {project_folder}")
-
-        # STEP 1: LOAD
+        # STEP 1: LOAD DATA
+        # ==================
+        logger.info(f"[{project_name}] Phase 1: Loading project data files...")
         try:
+            # Call the file loader to read CSV/Excel files from the project folder.
             raw_df = load_project_files(project_folder_path)
-            if raw_df.empty:
-                 logger.warning(f"No data loaded from {project_folder_path}. Skipping further processing for {project_folder}.")
-                 # Archive handled in finally block
-                 return None # Indicate failure
-            # Log message regardless of debug flag, level controlled by logger config
-            logger.info(f"[{project_name}] Loaded {len(raw_df)} rows from {project_folder}")
-            logger.debug(f"[{project_name}] Raw DataFrame shape: {raw_df.shape}") # Log raw shape
-        except Exception as e:
-            logger.error(f"[{project_name}] File loading failed for {project_folder}: {e}")
-            # Log traceback regardless of debug flag, level controlled by logger config
-            logger.error(traceback.format_exc())
-            success = False
-            # Archive handled in finally block
-            return None # Indicate failure
-
-        # STEP 2: CLEAN
+            # Check if loading returned a valid, non-empty DataFrame.
+            if raw_df is None or raw_df.empty:
+                logger.error(f"[{project_name}] Data loading failed or returned no data. Cannot proceed. Archiving as failed.")
+                # Critical failure: Archive immediately and return None.
+                _archive_project(project_folder_path, success=False)
+                return None
+            # Log successful load, including number of rows and source files.
+            # Assuming 'file_name' column is added by load_project_files.
+            file_count = raw_df['file_name'].nunique() if 'file_name' in raw_df.columns else '(unknown number)'
+            logger.info(f"[{project_name}] Successfully loaded {len(raw_df)} raw rows from {file_count} files.")
+        except Exception as e_load:
+            # Catch any unexpected errors during file loading.
+            logger.error(f"[{project_name}] CRITICAL ERROR during data loading: {e_load}", exc_info=True)
+            # Critical failure: Archive and return None.
+            _archive_project(project_folder_path, success=False)
+            return None
+        
+        # STEP 2: CLEAN DATA
+        # =================
+        logger.info(f"[{project_name}] Phase 2: Cleaning and standardising loaded data...")
         try:
-            # Ensure clean_data uses schema_manager correctly if needed
+            # Call the data cleaning function, passing the raw data.
+            # It will initialise its own SchemaManager internally based on schema_type.
+            # Pass project_name for context-specific logging within the cleaning function.
+            # Determine the schema type to use (e.g., 'tasks' is common)
+            schema_type_for_cleaning = "tasks" # Or potentially load from config if needed
             cleaned_df = clean_dataframe(
-                raw_df,
-                schema_type="tasks",
-                project_name=project_folder,
-                update_phase="auto"
+                df=raw_df.copy(), # Pass a copy to avoid modifying the raw DataFrame.
+                schema_type=schema_type_for_cleaning, # Pass the schema type name
+                project_name=project_name
+                # Contextual parameters can be extended here if needed
             )
-            if cleaned_df.empty:
-                 logger.warning(f"Data cleaning resulted in an empty DataFrame for {project_folder}. Schema issues?")
-                 success = False # Treat empty cleaned DF as failure for archiving
-                 # Continue processing to allow writing empty files if needed, but mark as failed
-            # Log message regardless of debug flag
-            logger.info(f"[{project_name}] Cleaned data: {len(cleaned_df)} rows for {project_folder}")
-            logger.debug(f"[{project_name}] Cleaned DataFrame shape: {cleaned_df.shape}") # Log cleaned shape
-        except Exception as e:
-            logger.error(f"[{project_name}] Data cleaning failed for {project_folder}: {e}", exc_info=True)
-            success = False
-            cleaned_df = pd.DataFrame() # Ensure cleaned_df is empty on critical cleaning error
+            # Check if cleaning resulted in a valid, non-empty DataFrame.
+            if cleaned_df is None or cleaned_df.empty:
+                logger.error(f"[{project_name}] Data cleaning resulted in an empty or invalid DataFrame. Cannot proceed. Archiving as failed.")
+                # Critical failure: Archive and return None.
+                _archive_project(project_folder_path, success=False)
+                return None
+            logger.info(f"[{project_name}] Successfully cleaned data. Standardised shape: {cleaned_df.shape}")
 
-        # --- STEP 3: ANALYSE - Re-enabled --- 
-        if not cleaned_df.empty: 
-            logger.info(f"[{project_name}] Starting analysis steps for {project_folder}...")
-            # --->>> ADD INPUT EXISTENCE CHECK 2 <<< ---
-            logger.debug(f"CHECK 2: Before analysis for '{project_name}'")
-            logger.debug(f"  Input Dir '{INPUT_DIR}' exists: {os.path.exists(INPUT_DIR)}")
-            logger.debug(f"  Project Path '{project_folder_path}' exists: {os.path.exists(project_folder_path)}")
-            # --->>> END CHECK 2 <<< ---
-            analysis_results = {}
-            try:
-                # Pass project_name for context in logging/output
-                slippages = run_slippage_analysis(cleaned_df.copy(), project_name) # Assign to variable
-                logger.info(f"[{project_name}] Slippage analysis complete. Found {len(slippages) if slippages is not None else 0} records.")
-                logger.info(f"[{project_name}] Slippage analysis completed. Result shape: {slippages.shape}")
-            except Exception as e:
-                logger.error(f"[{project_name}] Error during slippage analysis for {project_folder}: {e}", exc_info=True)
-                slippages = pd.DataFrame() # Assign empty DF on error
+        except Exception as e_clean:
+            # Catch any unexpected errors during data cleaning.
+            logger.error(f"[{project_name}] CRITICAL ERROR during data cleaning: {e_clean}", exc_info=True)
+            # Critical failure: Archive and return None.
+            _archive_project(project_folder_path, success=False)
+            return None
 
-            try:
-                # Pass project_name for context
-                forecasts, failed_tasks_for_recommendations = run_forecasting(cleaned_df.copy(), project_name)
-                logger.info(f"[{project_name}] Forecasting complete. Generated {len(forecasts) if forecasts is not None else 0} forecasts. {len(failed_tasks_for_recommendations)} tasks failed due to insufficient data.")
-                logger.info(f"[{project_name}] Forecasting completed. Result shape: {forecasts.shape}. Failed tasks for recs: {len(failed_tasks_for_recommendations)}")
-            except Exception as e:
-                logger.error(f"[{project_name}] Error during forecasting for {project_folder}: {e}", exc_info=True)
-                forecasts = pd.DataFrame() # Assign empty DF on error
-                failed_tasks_for_recommendations = [] # Ensure list is empty on major forecast error
-                
-            try:
-                # Pass project_name for context
-                changepoints = detect_change_points(cleaned_df.copy(), project_name) # Assign to variable
-                logger.info(f"[{project_name}] Change point detection complete. Found {len(changepoints) if changepoints is not None else 0} points.")
-                logger.info(f"[{project_name}] Changepoint detection completed. Result shape: {changepoints.shape}")
-            except Exception as e:
-                logger.error(f"[{project_name}] Error during change point detection for {project_folder}: {e}", exc_info=True)
-                changepoints = pd.DataFrame() # Assign empty DF on error
+        # Store a pristine copy of the cleaned data for the final output writer.
+        # Analysis functions receive copies, but we save this original cleaned version for output.
+        original_cleaned_df_for_output = cleaned_df.copy()
 
-            try:
-                # Pass project_name for context
-                milestones = analyse_milestones(cleaned_df.copy()) # REMOVED project_name arg
-                logger.info(f"[{project_name}] Milestone analysis complete. Analysed {len(milestones) if milestones is not None else 0} milestones.")
-                logger.info(f"[{project_name}] Milestone analysis completed. Result shape: {milestones.shape}")
-            except Exception as e:
-                logger.error(f"[{project_name}] Error during milestone analysis for {project_folder}: {e}", exc_info=True)
-                milestones = pd.DataFrame() # Assign empty DF on error
-        else:
-            logger.warning(f"[{project_name}] Skipping analysis for {project_folder} due to empty cleaned DataFrame.")
-            # Ensure analysis dataframes remain empty
-            slippages, forecasts, changepoints, milestones = pd.DataFrame(), pd.DataFrame(), pd.DataFrame(), pd.DataFrame()
+        # STEP 3: ANALYSIS MODULES
+        # ========================
+        logger.info(f"[{project_name}] Phase 3: Running analysis modules...")
+        # Dictionary to store results from each analysis module.
+        analysis_results = {}
 
-        # --- STEP 4: RECOMMENDATIONS - Re-enabled --- 
-        logger.info(f"[{project_name}] Starting recommendation generation for {project_folder}...")
+        # Run each analysis module in a separate try-except block.
+        # This allows the pipeline to continue even if one module fails.
+        # Failed modules will typically result in an empty DataFrame or list being stored.
+
+        # 3a. Slippage Analysis
         try:
-            # Pass potentially empty analysis dataframes
-            recommendations_dict = generate_recommendations(
-                df=cleaned_df, 
-                slippages=slippages, 
-                forecasts=forecasts, 
-                changepoints=changepoints, 
-                milestones=milestones,
-                failed_forecast_tasks=failed_tasks_for_recommendations # Pass the new list
-            )
-            logger.info(f"[{project_name}] Recommendation generation complete for {project_folder}.")
-        except Exception as e:
-            logger.error(f"[{project_name}] Error generating recommendations for {project_folder}: {e}", exc_info=True)
-            # recommendations remains an empty dict/structure if generation fails
-            recommendations_dict = {} # Ensure it's an empty dict on error
+            logger.debug(f"[{project_name}] Running slippage analysis...")
+            slippages = run_slippage_analysis(cleaned_df.copy(), project_name=project_name)
+            analysis_results['slippages'] = slippages if slippages is not None else pd.DataFrame()
+            logger.info(f"[{project_name}] Slippage analysis complete. Rows: {len(analysis_results['slippages'])}")
+        except Exception as e_slip:
+            logger.error(f"[{project_name}] Error during slippage analysis: {e_slip}", exc_info=True)
+            analysis_results['slippages'] = pd.DataFrame()
 
-        # --->>> ADD INPUT EXISTENCE CHECK 3 <<< ---
-        logger.debug(f"CHECK 3: Before output write for '{project_name}'")
-        logger.debug(f"  Input Dir '{INPUT_DIR}' exists: {os.path.exists(INPUT_DIR)}")
-        logger.debug(f"  Project Path '{project_folder_path}' exists: {os.path.exists(project_folder_path)}")
-        # --->>> END CHECK 3 <<< ---
-
-        # --- CHANGE: Restore STEP 5 (Output writing) --- 
-        # STEP 5: OUTPUT - Write to project-specific path
+        # 3b. Forecasting
         try:
-            # Ensure output directory exists before attempting to write or archive
-            if output_project_dir:
-                os.makedirs(output_project_dir, exist_ok=True)
+            logger.debug(f"[{project_name}] Running forecasting analysis...")
+            forecasts, failed_forecast_tasks = run_forecasting(cleaned_df.copy(), project_name=project_name)
+            analysis_results['forecasts'] = forecasts if forecasts is not None else pd.DataFrame()
+            analysis_results['failed_forecast_tasks'] = failed_forecast_tasks if failed_forecast_tasks else []
+            logger.info(f"[{project_name}] Forecasting complete. Rows: {len(analysis_results['forecasts'])}, Failed tasks: {len(analysis_results['failed_forecast_tasks'])}")
+        except Exception as e_forecast:
+            logger.error(f"[{project_name}] Error during forecasting analysis: {e_forecast}", exc_info=True)
+            analysis_results['forecasts'] = pd.DataFrame()
+            analysis_results['failed_forecast_tasks'] = []
 
-                # --->>> Add Diagnostic Prints Here <<<---
-                print(f"\n--- DEBUG [{project_name}]: Checking DataFrames before write_outputs ---")
-                print("Slippages DataFrame:")
-                if slippages is not None:
-                    print(f"  Shape: {slippages.shape}")
-                    print(slippages.head())
-                else:
-                    print("  DataFrame is None")
-
-                print("Forecasts DataFrame:")
-                if forecasts is not None:
-                    print(f"  Shape: {forecasts.shape}")
-                    print(forecasts.head())
-                else:
-                    print("  DataFrame is None")
-                print("--- END DEBUG ---\n")
-                # --->>> End Diagnostic Prints <<<---
-
-                # Call the centralized output writer
-                try:
-                    logger.info(f"[{project_name}] Attempting to write outputs using output_writer.write_outputs for {project_name}")
-                    write_outputs(
-                        output_path=output_project_dir,
-                        cleaned_df=cleaned_df, # Pass the final cleaned df
-                        slippages=slippages,
-                        forecasts=forecasts,
-                        changepoints=changepoints,
-                        milestones=milestones,
-                        recommendations=recommendations_dict # Pass recommendations
+        # 3c. Changepoint Detection
+        try:
+            logger.debug(f"[{project_name}] Running change point detection...")
+            slippages_df = analysis_results.get('slippages')
+            if slippages_df is not None and not slippages_df.empty and 'slip_days' in slippages_df.columns:
+                if 'task_id' in cleaned_df.columns and 'update_phase' in cleaned_df.columns:
+                    if 'task_name' in cleaned_df.columns:
+                        context_cols = ['task_id', 'task_name', 'update_phase']
+                        cleaned_context = cleaned_df[context_cols].drop_duplicates(subset=['task_id', 'update_phase'])
+                    else:
+                        logger.warning(f"[{project_name}] task_name column missing in cleaned_df. Creating fallback from task_id.")
+                        context_cols = ['task_id', 'update_phase']
+                        cleaned_context = cleaned_df[context_cols].drop_duplicates(subset=['task_id', 'update_phase'])
+                        cleaned_context['task_name'] = cleaned_context['task_id'].apply(lambda x: f"Task {x}")
+                    changepoint_input_df = pd.merge(
+                        slippages_df,
+                        cleaned_context,
+                        on=['task_id', 'update_phase'],
+                        how='left'
                     )
-                    logger.info(f"[{project_name}] Output writing process completed for {output_project_dir}")
-
-                    # --->>> ADD DIAGNOSTIC FILE CHECK <<<---
-                    logger.info(f"--- DEBUG CHECK: Verifying files after write_outputs for {project_name} ---")
-                    forecast_file = os.path.join(output_project_dir, 'forecast_results.csv')
-                    slippage_file = os.path.join(output_project_dir, 'slippage_summary.csv')
-                    logger.info(f"Checking existence of {output_project_dir}: {os.path.exists(output_project_dir)}")
-                    logger.info(f"Checking existence of {forecast_file}: {os.path.exists(forecast_file)}")
-                    logger.info(f"Checking existence of {slippage_file}: {os.path.exists(slippage_file)}")
-                    logger.info(f"--- END DEBUG CHECK ---")
-                    # --->>> END DIAGNOSTIC FILE CHECK <<<---
-
-                    success = True # Mark as success only if writing succeeds
-                except Exception as write_e:
-                    logger.error(f"[{project_name}] Error during output writing for {project_name} in {output_project_dir}: {write_e}", exc_info=True)
-                    success = False # Mark as failed if writing fails
-
-                # Archive project based on success flag - THIS CALL IS REDUNDANT DUE TO FINALLY BLOCK
-                # archive_project(project_folder_path, success=success) # Removed redundant call
+                    logger.debug(f"[{project_name}] Prepared merged DataFrame for changepoint detection. Rows: {len(changepoint_input_df)}")
+                else:
+                    logger.warning(f"[{project_name}] Cannot run changepoint: Missing crucial columns in cleaned_df. Using slippages_df directly.")
+                    changepoint_input_df = slippages_df.copy()
+                    if 'task_name' not in changepoint_input_df.columns and 'task_id' in changepoint_input_df.columns:
+                        changepoint_input_df['task_name'] = changepoint_input_df['task_id'].apply(lambda x: f"Task {x}")
             else:
-                # Handle case where output_dir wasn't determined (e.g., initial loading error)
-                logger.error(f"[{project_name}] Output directory not set for {project_name}. Archiving as failed.")
-                # archive_project(project_folder_path, success=False) # Removed redundant call
-
-            # --- CHANGE: Return the success boolean --- 
-            if success:
-                logger.info(f"[{project_name}] Successfully processed {project_folder}.")
+                 logger.warning(f"[{project_name}] Skipping changepoint detection: No valid slippages data found.")
+                 changepoint_input_df = pd.DataFrame()
+            if not changepoint_input_df.empty:
+                 changepoints = detect_change_points(changepoint_input_df, project_name=project_name)
             else:
-                logger.warning(f"[{project_name}] Processing {project_folder} completed with errors.")
-            return output_project_dir if success else None
+                 changepoints = pd.DataFrame()
+            analysis_results['changepoints'] = changepoints if changepoints is not None else pd.DataFrame()
+            logger.info(f"[{project_name}] Change point detection complete. Rows: {len(analysis_results['changepoints'])}")
+        except Exception as e_change:
+            logger.error(f"[{project_name}] Error during change point detection: {e_change}", exc_info=True)
+            analysis_results['changepoints'] = pd.DataFrame()
 
-        except Exception as e:
-            logger.error(f"[{project_name}] Output writing failed for {project_folder} to {output_project_dir}: {e}")
-            # Log traceback regardless of debug flag
-            logger.error(traceback.format_exc())
-            success = False # Mark as failed if writing output fails
+        # 3d. Milestone Analysis
+        try:
+            logger.debug(f"[{project_name}] Running milestone analysis...")
+            milestones = analyse_milestones(cleaned_df.copy()) 
+            analysis_results['milestones'] = milestones if milestones is not None else pd.DataFrame()
+            logger.info(f"[{project_name}] Milestone analysis complete. Rows: {len(analysis_results['milestones'])}")
+        except Exception as e_milestone:
+            logger.error(f"[{project_name}] Error during milestone analysis: {e_milestone}", exc_info=True)
+            analysis_results['milestones'] = pd.DataFrame()
 
-    except Exception as e:
-        # Catch any other unexpected errors during the main processing block
-        logger.error(f"[{project_name}] Top-level exception during processing {project_folder}: {e}")
-        logger.error(traceback.format_exc())
-        success = False
-        # Ensure archiving still happens in finally block
-        # return None # Return removed, success flag handles outcome, finally block archives
+        # STEP 4: RECOMMENDATION GENERATION
+        logger.info(f"[{project_name}] Phase 4: Generating recommendations...")
+        try:
+            recommendations_list = generate_recommendations(
+                df=cleaned_df,
+                slippages=analysis_results.get('slippages'), 
+                forecasts=analysis_results.get('forecasts'), 
+                changepoints=analysis_results.get('changepoints'), 
+                milestones=analysis_results.get('milestones'),
+                failed_forecast_tasks=analysis_results.get('failed_forecast_tasks')
+            )
+            if recommendations_list is None:
+                recommendations_list = []
+            logger.info(f"[{project_name}] Recommendation generation complete. Count: {len(recommendations_list)}")
+        except Exception as e_rec:
+            logger.error(f"[{project_name}] Error generating recommendations: {e_rec}", exc_info=True)
+            recommendations_list = []
+
+        # STEP 5: WRITE OUTPUTS
+        # =====================
+        # This step is considered critical. Failure here marks the project processing as failed.
+        logger.info(f"[{project_name}] Phase 5: Writing outputs to directory: {output_project_dir}")
+        try:
+            # Ensure the project-specific output directory exists.
+            os.makedirs(output_project_dir, exist_ok=True)
+            # Call the output writer function to save all relevant DataFrames and lists.
+            
+            # Create analysis_results dict with recommendations included
+            analysis_results['recommendations'] = recommendations_list
+            
+            # Call with updated signature matching output_writer.py
+            write_outputs(
+                output_path=output_project_dir,
+                project_name=project_name,
+                cleaned_df=original_cleaned_df_for_output,
+                analysis_results=analysis_results
+            )
+            
+            logger.info(f"[{project_name}] Output writing completed successfully.")
+            # Set success flag to True ONLY if output writing completes without error.
+            success = True 
+        except Exception as e_write:
+            # Catch any errors during file writing.
+            logger.error(f"[{project_name}] CRITICAL ERROR during output writing: {e_write}", exc_info=True)
+            # Ensure success flag remains False if output writing fails.
+            success = False 
+
+    except Exception as e_main:
+        # Catch any top-level unexpected errors occurring outside the specific steps above.
+        logger.critical(f"[{project_name}] UNHANDLED CRITICAL EXCEPTION during main processing workflow: {e_main}", exc_info=True)
+        success = False # Ensure marked as failed if an unexpected error occurs.
     
     finally:
-        # Always attempt to archive based on the final success status
-        # This ensures archiving happens even if an error occurred mid-process
-        logger.info(f"[{project_name}] Finally block: Archiving '{project_folder}' based on success={success}")
-        # --->>> TEMPORARILY DISABLED ARCHIVING FOR DEBUGGING <<<---
-        # archive_project(project_folder_path, success=success)
-        # logger.warning(f"--- ARCHIVING TEMPORARILY DISABLED in finally block for {project_folder} ---") # Original commented out line
+        # STEP 6: ARCHIVE INPUT DATA
+        # ==========================
+        # This block executes regardless of whether exceptions occurred in the 'try' block.
+        # The 'success' flag (set after output writing) determines the archive location.
+        logger.info(f"[{project_name}] Phase 6: Archiving input data based on final success status ({success})...")
+        _archive_project(project_folder_path, success=success)
+        logger.info(f"--- Finished Project Processing: {project_name} --- Outcome: {'Success' if success else 'Failed'} ---")
 
-        # --->>> RE-ENABLE ARCHIVING <<<--- # Logic from previous restore
-        project_name = os.path.basename(project_folder_path) # Ensure project_name is defined in finally context
-        source_path = project_folder_path  # Use the passed-in project_folder_path for archiving
-
-        # --->>> FIX: Define destination_dir within finally block <<<---
-        target_dir_suffix = 'success' if success else 'failed'
-        # Ensure ARCHIVE_DIR is accessible here (it's defined at module level)
-        destination_dir = os.path.join(ARCHIVE_DIR, target_dir_suffix)
-        destination_path = os.path.join(destination_dir, project_name) # Full path for the project within success/failed
-        # --->>> END FIX <<<---
-
-        # --->>> ADD ARCHIVING DEBUG LOGGING <<<---
-        logger.debug(f"--- Archiving Debug ---")
-        logger.debug(f"Project Name in finally: {project_name}")
-        logger.debug(f"Success flag value: {success}")
-        logger.debug(f"Calculated source_path for move: {source_path}")
-        logger.debug(f"Checking existence of source_path ({source_path})...")
-        source_exists = os.path.exists(source_path)
-        logger.debug(f"Result of os.path.exists(source_path): {source_exists}")
-        if not source_exists:
-            logger.warning(f"Source path '{source_path}' reported as non-existent *immediately before* move attempt.")
-            # Optionally list contents of INPUT_DIR to see what IS there
-            try:
-                input_contents = os.listdir(INPUT_DIR)
-                logger.debug(f"Contents of INPUT_DIR ({INPUT_DIR}): {input_contents}")
-            except Exception as list_e:
-                logger.error(f"Could not list contents of INPUT_DIR: {list_e}")
-        # --->>> END ARCHIVING DEBUG LOGGING <<<---
-
-        success_archive = os.path.join(ARCHIVE_DIR, 'success', project_name)
-        failed_archive = os.path.join(ARCHIVE_DIR, 'failed', project_name)
-        os.makedirs(success_archive, exist_ok=True)
-        os.makedirs(failed_archive, exist_ok=True)
-
-        # Move the entire project directory from input to the appropriate archive folder
-        # source_path = os.path.join(INPUT_DIR, project_name) # Defined above now
-        try:
-            if source_exists: # Use the checked value
-                # --->>> Use destination_dir defined above <<<---
-                logger.info(f"[{project_name}] Moving processed project '{project_name}' from '{source_path}' to '{destination_dir}'")
-                
-                # --- FIX: Remove destination if it exists before moving ---
-                # --->>> Use destination_path defined above <<<---
-                if os.path.exists(destination_path):
-                    logger.warning(f"[{project_name}] Destination archive path '{destination_path}' already exists. Removing it before move.")
-                    try:
-                        # --->>> Use destination_path defined above <<<---
-                        if os.path.isdir(destination_path):
-                             shutil.rmtree(destination_path)
-                        else:
-                             os.remove(destination_path)
-                    except OSError as rm_err:
-                        logger.error(f"[{project_name}] Failed to remove existing archive item at '{destination_path}': {rm_err}. Skipping archive.", exc_info=True)
-                        # Skip the move if removal fails
-                        # Consider setting success=False here?
-                        # return # Removing return to allow final block to complete fully
-                    else:
-                         logger.debug(f"Successfully removed existing item at {destination_path}")
-
-                # --- End FIX ---
-
-                # --->>> Use destination_dir defined above <<<---
-                shutil.move(source_path, destination_dir) # Move project *into* the success/failed dir
-                logger.info(f"[{project_name}] Successfully moved '{project_name}' to archive: {destination_dir}")
-            else:
-                # Log already handled by the debug check above
-                logger.warning(f"[{project_name}] Skipping move of '{project_name}' because source path was not found.")
-                # logger.warning(f"Source path '{source_path}' does not exist. Cannot archive '{project_name}'. This might happen if it was already moved or deleted.") # Redundant log
-        except Exception as e:
-             # --->>> Use destination_dir defined above <<<---
-             logger.error(f"[{project_name}] Error archiving project '{project_name}' to '{destination_dir}': {e}", exc_info=True)
-        # --->>> END RE-ENABLE <<<---
-
-        # --- ADDED: Archiving logic --- # THIS SECTION SEEMS REDUNDANT NOW
-        # logger.info(f"[{project_name}] Attempting to archive {project_folder} (Success: {success})")
-        # try:
-        #     # --->>> ADD INPUT EXISTENCE CHECK 3 <<< ---
-        #     logger.debug(f"CHECK 3: Before archiving '{project_name}'")
-        #     logger.debug(f"  Input Dir '{INPUT_DIR}' exists: {os.path.exists(INPUT_DIR)}")
-        #     logger.debug(f"  Project Path '{project_folder_path}' exists: {os.path.exists(project_folder_path)}")
-        #     # --->>> END CHECK 3 <<< ---
-        #     
-        #     # Only attempt to archive if the source exists
-        #     if os.path.exists(project_folder_path):
-        #         # --- REMOVE call to archive_project as logic is now inline --- 
-        #         # archive_project(project_folder_path, success)
-        #         pass # Logic is handled above now
-        #     else:
-        #         logger.warning(f"[{project_name}] Cannot archive {project_folder}, source path {project_folder_path} no longer exists.")
-        #         # If the source is gone, we probably still want to signal overall failure if success wasn't True
-        #         if not success: 
-        #             logger.warning(f"[{project_name}] Marking process as failed since source is gone and success was not True.")
-        #             success = False # Setting success flag is handled by the main try/except block
-        #             
-        # except Exception as e_archive:
-        #     logger.critical(f"[{project_name}] CRITICAL: Failed to archive project {project_folder} from path {project_folder_path}: {e_archive}", exc_info=True)
-        #     success = False # Mark overall success as False if archive fails
-        # --- END REDUNDANT SECTION ---
-
-        # Return the output directory path only if processing was successful *overall*
-        # The 'success' variable now reflects the status *after* attempting archiving.
-        if success:
-            logger.info(f"[{project_name}] process_project completed successfully for {project_folder}. Returning output path: {output_project_dir}")
-            return output_project_dir
-        else:
-            logger.warning(f"[{project_name}] process_project finished with errors or failed archiving for {project_folder}. Returning None.")
-            return None
+    # Return the path to the output directory only if the process was successful.
+    # Otherwise, return None to indicate failure.
+    return output_project_dir if success else None

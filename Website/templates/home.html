@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - ProjectLens{% endblock %}
+
+{% block hero %}{% endblock %}
+
+{% block content %}
+<!-- Main hero section, no wave animation -->
+<section class="hero-section-wrapper animated-gradient-bg" data-aos="fade-in">
+  <div class="container">
+    <div class="hero text-center glassmorph-card position-relative py-5 px-3 mx-auto" style="max-width: 650px;">
+      <div class="floating-hero-icon mb-3">
+        <i class="bi bi-cloud-upload display-3 animate-bounce"></i>
+      </div>
+      <div class="hero__bg" aria-hidden="true"></div>
+      <h1 class="mb-3 display-4 fw-bold">Unlock Project <span class="highlight">Insights</span></h1>
+      <p class="lead mb-4 text-muted">
+        Upload CSVs, process data, and visualise results to gain valuable insights into your projects.
+      </p>
+      <div class="hero__cta d-flex justify-content-center gap-3 flex-wrap mb-2">
+        <a href="{{ url_for('upload_page') }}" class="btn btn--primary vibrant-btn btn-lg px-4">Start Uploading</a>
+        <a href="{{ url_for('dashboard') }}" class="btn btn--secondary vibrant-btn btn-lg px-4">View Dashboard</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Core Features Carousel Section -->
+<section class="features py-5" data-aos="fade-up">
+  <div class="container">
+    <h2 class="text-center mb-2 display-6 fw-semibold">Core Features</h2>
+    <p class="subtitle text-center text-muted mb-4 fs-5">
+      ProjectLens offers powerful tools to process, analyse and visualise your CSV data with ease.
+    </p>
+    <div class="features-carousel d-flex gap-4 flex-nowrap overflow-auto pb-3">
+      <!-- Card 1: Upload -->
+      <div class="feature-card flex-shrink-0 p-4 text-center mx-1">
+        <i class="bi bi-cloud-upload card__icon mb-2 fs-2"></i>
+        <h3 class="h5 mb-2">Upload</h3>
+        <p class="mb-3">Drag & drop CSVs or folders. Intuitive and fast.</p>
+        <a href="{{ url_for('upload_page') }}" class="btn btn--primary btn-sm">Go to Upload</a>
+      </div>
+      <!-- Card 2: Dashboard -->
+      <div class="feature-card flex-shrink-0 p-4 text-center mx-1">
+        <i class="bi bi-layout-wtf card__icon mb-2 fs-2"></i>
+        <h3 class="h5 mb-2">Dashboard</h3>
+        <p class="mb-3">Visualise insights with an interactive dashboard.</p>
+        <a href="{{ url_for('dashboard') }}" class="btn btn--primary btn-sm">View Dashboard</a>
+      </div>
+      <!-- Card 3: Files -->
+      <div class="feature-card flex-shrink-0 p-4 text-center mx-1">
+        <i class="bi bi-file-earmark-text card__icon mb-2 fs-2"></i>
+        <h3 class="h5 mb-2">Files</h3>
+        <p class="mb-3">Manage your uploaded and processed output files.</p>
+        <a href="{{ url_for('files_page') }}" class="btn btn--primary btn-sm">Manage Files</a>
+      </div>
+      <!-- Card 4: Archive -->
+      <div class="feature-card flex-shrink-0 p-4 text-center mx-1">
+        <i class="bi bi-archive card__icon mb-2 fs-2"></i>
+        <h3 class="h5 mb-2">Archive</h3>
+        <p class="mb-3">Access older analysis results from the archive.</p>
+        <a href="{{ url_for('archive_page') }}" class="btn btn--primary btn-sm">View Archive</a>
+      </div>
+      <!-- Card 5: FAQ -->
+      <div class="feature-card flex-shrink-0 p-4 text-center mx-1">
+        <i class="bi bi-question-circle card__icon mb-2 fs-2"></i>
+        <h3 class="h5 mb-2">FAQ</h3>
+        <p class="mb-3">Find answers to common questions about ProjectLens.</p>
+        <a href="{{ url_for('faq') }}" class="btn btn--primary btn-sm">Read FAQ</a>
+      </div>
+    </div>
+    <div class="carousel-nav text-center mt-3 d-none">
+        <button class="carousel-prev btn btn--secondary">&larr;</button>
+        <button class="carousel-next btn btn--secondary">&rarr;</button>
+    </div>
+  </div>
+</section>
+
+<!-- 3. How It Works Strip -->
+<section class="how-it-works-wrapper py-5" data-aos="fade-up">
+  <div class="container">
+    <div class="how-it-works glassmorph-card p-4 mx-auto" style="max-width: 900px;">
+      <h2 class="text-center mb-4 display-6 fw-semibold">How It Works</h2>
+      <div class="steps d-flex flex-wrap justify-content-center gap-4">
+        <!-- Step 1 -->
+        <div class="step flex-fill text-center p-3 mx-2">
+          <div class="icon-wrapper mb-2">
+              <i class="bi bi-file-earmark-arrow-up fs-2"></i>
+          </div>
+          <h4 class="h6 mb-2">1. Upload Your Data</h4>
+          <p class="mb-0">Provide your project schedule data via simple drag-and-drop or file selection.</p>
+        </div>
+        <!-- Step 2 -->
+        <div class="step flex-fill text-center p-3 mx-2">
+          <div class="icon-wrapper mb-2">
+              <i class="bi bi-gear fs-2"></i>
+          </div>
+          <h4 class="h6 mb-2">2. Process Data</h4>
+          <p class="mb-0">Our backend pipeline automatically analyses slippage, milestones, and trends.</p>
+        </div>
+        <!-- Step 3 -->
+        <div class="step flex-fill text-center p-3 mx-2">
+          <div class="icon-wrapper mb-2">
+              <i class="bi bi-eye fs-2"></i>
+          </div>
+          <h4 class="h6 mb-2">3. Visualise Results</h4>
+          <p class="mb-0">Explore interactive charts and tables on the dashboard or download reports.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Live Metrics Preview -->
+<section class="metrics-wrapper glassmorph-card py-5" data-aos="fade-up">
+  <div class="container">
+    <div class="metrics d-flex flex-wrap justify-content-center gap-4">
+      <div class="metric text-center flex-fill p-3">
+        <h2 class="metric__value countup mb-1 display-5 fw-bold" id="metric-projects">1572</h2>
+        <p class="metric__label mb-0 text-muted">Projects Processed</p>
+      </div>
+      <div class="metric text-center flex-fill p-3">
+        <h2 class="metric__value countup mb-1 display-5 fw-bold" id="metric-slippage">3.1</h2>
+        <p class="metric__label mb-0 text-muted">Average Slippage (Days)</p>
+      </div>
+      <div class="metric text-center flex-fill p-3">
+        <h2 class="metric__value countup mb-1 display-5 fw-bold" id="metric-accuracy">92%</h2>
+        <p class="metric__label mb-0 text-muted">Forecast Accuracy</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. Gradient CTA Banner -->
+<section class="cta-wrapper animated-gradient-bg py-5" data-aos="fade-up">
+  <div class="container">
+    <div class="cta-banner glassmorph-card vibrant-shadow p-4 text-center mx-auto" style="max-width: 600px;">
+      <h3 class="mb-2 display-6 fw-semibold">Ready to Get Started?</h3>
+      <p class="mb-4 fs-5 text-muted">Upload your project files now and start gaining insights from your data.</p>
+      <a href="{{ url_for('upload_page') }}" class="btn btn--primary vibrant-btn btn-lg px-4">Get Started</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    // Initialise the features carousel using Tiny Slider
+    document.addEventListener('DOMContentLoaded', () => {
+      const carousel = document.querySelector('.features-carousel');
+      const controls = document.querySelector('.carousel-nav');
+      if (carousel) {
+          if(controls) controls.classList.add('d-none');
+          const slider = tns({
+            container: carousel,
+            items: 1.2,
+            gutter: 16,
+            slideBy: 1,
+            autoplay: true,
+            autoplayButtonOutput: false,
+            autoplayTimeout: 8000,
+            mouseDrag: true,
+            nav: false,
+            controls: false,
+            preventScrollOnTouch: 'auto',
+            responsive: {
+              640: { items: 2, gutter: 24 },
+              900: { items: 3, gutter: 32 },
+              1200: { items: 4, gutter: 32 }
+            }
+          });
+      } else {
+          console.warn('Features carousel not found.');
+      }
+    });
+</script>
+{% endblock %}

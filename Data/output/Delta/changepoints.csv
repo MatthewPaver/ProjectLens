@@ -1,11 +1,16 @@
-project_name,task_id,update_phase,task_name,change_date,change_score,method
-Unknown,tsk-046,Unknown,Unknown,2025-10-27,1.0,Pelt
-Unknown,tsk-046,Unknown,Unknown,2025-10-27,1.0,Pelt
-Unknown,tsk-046,Unknown,Unknown,2025-10-27,1.0,Pelt
-Unknown,tsk-046,Unknown,Unknown,2025-10-27,1.0,Pelt
-Unknown,tsk-046,Unknown,Unknown,2025-10-27,1.0,Pelt
-Unknown,tsk-046,Unknown,Unknown,2025-10-27,1.0,Pelt
-Unknown,tsk-046,Unknown,Unknown,2025-10-27,1.0,Pelt
-Unknown,tsk-046,Unknown,Unknown,2025-10-27,1.0,Pelt
-Unknown,tsk-046,Unknown,Unknown,2025-10-27,1.0,Pelt
-Unknown,tsk-046,Unknown,Unknown,2025-10-27,1.0,Pelt
+project_name,task_id,task_name,update_phase,slip_days,severity_score,change_type
+Delta,tsk-003,Task tsk-003,Update_008,53.0,10.0,No Change
+Delta,tsk-005,Task tsk-005,Update_013,68.0,10.0,No Change
+Delta,tsk-008,Task tsk-008,Update_008,70.0,10.0,Slipped Further
+Delta,tsk-009,Task tsk-009,Update_008,65.0,10.0,No Change
+Delta,tsk-011,Task tsk-011,Update_013,33.0,10.0,Recovered
+Delta,tsk-014,Task tsk-014,Update_008,67.0,10.0,No Change
+Delta,tsk-028,Task tsk-028,Update_009,83.0,10.0,Slipped Further
+Delta,tsk-032,Task tsk-032,Update_009,11.0,10.0,No Change
+Delta,tsk-037,Task tsk-037,Update_008,43.0,10.0,No Change
+Delta,tsk-039,Task tsk-039,Update_013,44.0,10.0,Slipped Further
+Delta,tsk-041,Task tsk-041,Update_013,33.0,10.0,No Change
+Delta,tsk-049,Task tsk-049,Update_008,10.0,10.0,No Change
+Delta,tsk-056,Task tsk-056,Update_009,87.0,10.0,No Change
+Delta,tsk-074,Task tsk-074,Update_009,42.0,10.0,Slipped Further
+Delta,tsk-075,Task tsk-075,Update_008,7.0,7.0,Slipped Further

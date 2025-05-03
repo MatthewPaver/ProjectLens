@@ -1,21 +1,14 @@
-project_name,task_id,update_phase,task_name,change_date,change_score,method
-Unknown,tsk-028,Unknown,Unknown,2025-04-05,1.0,Pelt
-Unknown,tsk-028,Unknown,Unknown,2025-04-05,1.0,Pelt
-Unknown,tsk-028,Unknown,Unknown,2025-04-05,1.0,Pelt
-Unknown,tsk-028,Unknown,Unknown,2025-04-05,1.0,Pelt
-Unknown,tsk-028,Unknown,Unknown,2025-04-05,1.0,Pelt
-Unknown,tsk-028,Unknown,Unknown,2025-04-05,1.0,Pelt
-Unknown,tsk-028,Unknown,Unknown,2025-04-05,1.0,Pelt
-Unknown,tsk-028,Unknown,Unknown,2025-04-05,1.0,Pelt
-Unknown,tsk-028,Unknown,Unknown,2025-04-05,1.0,Pelt
-Unknown,tsk-028,Unknown,Unknown,2025-04-05,1.0,Pelt
-Unknown,tsk-049,Unknown,Unknown,2025-04-09,1.0,Pelt
-Unknown,tsk-049,Unknown,Unknown,2025-04-09,1.0,Pelt
-Unknown,tsk-049,Unknown,Unknown,2025-04-09,1.0,Pelt
-Unknown,tsk-049,Unknown,Unknown,2025-04-09,1.0,Pelt
-Unknown,tsk-049,Unknown,Unknown,2025-04-09,1.0,Pelt
-Unknown,tsk-049,Unknown,Unknown,2025-04-09,1.0,Pelt
-Unknown,tsk-049,Unknown,Unknown,2025-04-09,1.0,Pelt
-Unknown,tsk-049,Unknown,Unknown,2025-04-09,1.0,Pelt
-Unknown,tsk-049,Unknown,Unknown,2025-04-09,1.0,Pelt
-Unknown,tsk-049,Unknown,Unknown,2025-04-09,1.0,Pelt
+project_name,task_id,task_name,update_phase,slip_days,severity_score,change_type
+Gamma,tsk-004,Task tsk-004,Update_012,-22.0,0.0,Recovered
+Gamma,tsk-010,Task tsk-010,Update_008,13.0,10.0,Initial
+Gamma,tsk-012,Task tsk-012,Update_008,-35.0,0.0,Initial
+Gamma,tsk-013,Task tsk-013,Update_006,18.0,10.0,No Change
+Gamma,tsk-016,Task tsk-016,Update_009,41.0,10.0,Slipped Further
+Gamma,tsk-023,Task tsk-023,Update_013,62.0,10.0,No Change
+Gamma,tsk-030,Task tsk-030,Update_011,69.0,10.0,Slipped Further
+Gamma,tsk-037,Task tsk-037,Update_009,-30.0,0.0,No Change
+Gamma,tsk-041,Task tsk-041,Update_008,35.0,10.0,Initial
+Gamma,tsk-047,Task tsk-047,Update_008,75.0,10.0,Initial
+Gamma,tsk-056,Task tsk-056,Update_006,15.0,10.0,No Change
+Gamma,tsk-061,Task tsk-061,Update_008,49.0,10.0,Initial
+Gamma,tsk-062,Task tsk-062,Update_008,25.0,10.0,Initial

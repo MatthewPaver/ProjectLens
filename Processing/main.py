@@ -1,30 +1,57 @@
+#!/usr/bin/env python3
+"""ProjectLens Main Entry Point & Environment Setup.
+
+This script is the primary entry point for the user to run the ProjectLens pipeline.
+Its main responsibilities are:
+
+1.  **Environment Check & Setup:**
+    - Determines the project root directory.
+    - Checks for platform compatibility issues (e.g., x86 Python on ARM Mac).
+    - Creates a Python virtual environment (`.venv`) in the project root if it 
+      doesn't exist, using a specific Python version (e.g., python3.11) for 
+      compatibility with dependencies like TensorFlow.
+    - Installs or updates dependencies from `requirements.txt` into the 
+      virtual environment using pip.
+    - Handles platform-specific dependency installation (e.g., `tensorflow-metal` 
+      for macOS ARM GPU acceleration).
+
+2.  **Pipeline Execution:**
+    - Identifies the correct Python executable within the created/verified 
+      virtual environment.
+    - Executes the main application logic script (`core/main_runner.py`) as a 
+      subprocess using the virtual environment's Python interpreter.
+    - Captures and prints the stdout/stderr from the subprocess for visibility.
+    - Exits with an appropriate status code based on the success or failure of 
+      the subprocess.
+
+Usage:
+    python Processing/main.py
+
+Note: This script uses `print` statements for status updates during the setup phase,
+as the main file logging is initialised later within `core/main_runner.py`.
+"""
 import os
 import sys
 import subprocess
 import platform
-import time  # Import time
+import time
 import logging
 import logging.config
 import re
-# Project-specific imports are moved into run_pipeline
-# # from analysis import slippage_analysis, changepoint_detector, milestone_analysis, forecast_engine, recommendation_engine
-# from analysis import slippage_analysis, changepoint_detector, milestone_analysis, forecast_engine, recommendation_engine
-# # from core import file_loader, data_cleaning, project_config # Incorrect: file_loader is in ingestion
-# from core import data_cleaning, project_config # Import only core modules
-# from ingestion import file_loader # Correctly import file_loader from ingestion
-# from output import output_writer
-# # from ingestion import data_loader # Redundant if file_loader is used?
 
 # Add project root to Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-# --- New setup_virtualenv function provided by user ---
+# Configure logging for setup phase
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+
 def setup_virtualenv():
-    venv_path = os.path.join(os.getcwd(), ".venv")
+    # Point venv_path to the project root
+    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    venv_path = os.path.join(project_root, ".venv") 
     is_macos_arm = (platform.system() == "Darwin" and platform.machine() == "arm64")
 
     # Detect if running with x86 Python on ARM Mac
-    # Check includes platform.platform() heuristic
     if is_macos_arm:
         try:
             # Refined check: Check if platform.platform() contains 'x86_64' when platform.machine() is 'arm64'
@@ -36,49 +63,48 @@ def setup_virtualenv():
                             (processor_type == 'i386')
 
             if is_x86_on_arm:
-                print("❌ ERROR: You appear to be using an x86_64 (Intel) Python interpreter on an ARM64 Mac.")
-                print(f"   Interpreter: {sys.executable}")
-                print(f"   Platform detected: {platform_str}")
-                print(f"   Processor reported: {processor_type}")
-                print("   This configuration is incompatible with required ML libraries (like TensorFlow/JAX).")
-                print("   Please install and run this script using a native ARM64 Python interpreter.")
-                print("   Common sources for ARM64 Python:")
-                print("     - Miniforge (conda-forge, arm64 version)")
-                print("     - Homebrew (`brew install python`)")
-                print("     - Official Python installer from python.org (universal2)")
+                logging.error("You appear to be using an x86_64 (Intel) Python interpreter on an ARM64 Mac.")
+                logging.error(f"   Interpreter: {sys.executable}")
+                logging.error(f"   Platform detected: {platform_str}")
+                logging.error(f"   Processor reported: {processor_type}")
+                logging.error("   This configuration is incompatible with required ML libraries (like TensorFlow/JAX).")
+                logging.error("   Please install and run this script using a native ARM64 Python interpreter.")
+                logging.error("   Common sources for ARM64 Python:")
+                logging.error("     - Miniforge (conda-forge, arm64 version)")
+                logging.error("     - Homebrew (`brew install python`)")
+                logging.error("     - Official Python installer from python.org (universal2)")
                 sys.exit("Exiting due to incompatible Python architecture.")
         except Exception as e:
-             print(f"⚠️ Warning: Could not definitively confirm Python architecture compatibility: {e}")
+             logging.warning(f"Could not definitively confirm Python architecture compatibility: {e}")
 
 
     # Create venv if not exists
     if not os.path.exists(venv_path):
-        print("🧱 Creating virtual environment...")
+        logging.info("Creating virtual environment...")
         try:
-            # --- Modification: Use python3.11 specifically for venv creation ---
+            # Use python3.11 specifically for venv creation
             # TensorFlow currently requires Python <= 3.11. The global python might be newer.
             # Ensure python3.11 is installed (e.g., via `brew install python@3.11`)
             python_for_venv = "python3.11"
-            print(f"   Using '{python_for_venv}' to create the virtual environment.")
+            logging.info(f"   Using '{python_for_venv}' to create the virtual environment.")
             # Use the specific python version to create the venv
             # Check=True will raise CalledProcessError on failure
             subprocess.run(
                 [python_for_venv, "-m", "venv", venv_path],
                 check=True, capture_output=True, text=True, encoding='utf-8'
             )
-            # --- End Modification ---
-            print("✅ Virtual environment created successfully.")
+            logging.info("Successfully created virtual environment.")
         except subprocess.CalledProcessError as e:
-            print(f"❌ Failed to create virtual environment using '{python_for_venv}'.")
-            print(f"   Command: {' '.join(e.cmd)}")
-            print(f"   Stderr: {e.stderr}")
-            print(f"   Stdout: {e.stdout}")
-            print(f"   Ensure '{python_for_venv}' is installed and in your PATH.")
+            logging.error(f"Failed to create virtual environment using '{python_for_venv}'.")
+            logging.error(f"   Command: {' '.join(e.cmd)}")
+            logging.error(f"   Stderr: {e.stderr}")
+            logging.error(f"   Stdout: {e.stdout}")
+            logging.error(f"   Ensure '{python_for_venv}' is installed and in your PATH.")
             sys.exit("Exiting due to venv creation failure.")
         except FileNotFoundError:
             # This error means the 'python3.11' command itself was not found
-            print(f"❌ Error: Could not find command '{python_for_venv}' to create the virtual environment.")
-            print(f"   Please install Python 3.11 (e.g., 'brew install python@3.11') and ensure it's in your PATH.")
+            logging.error(f"Could not find command '{python_for_venv}' to create the virtual environment.")
+            logging.error(f"   Please install Python 3.11 (e.g., 'brew install python@3.11') and ensure it's in your PATH.")
             sys.exit("Exiting due to missing Python executable for venv.")
 
     # Choose correct python executable path inside venv
@@ -92,142 +118,87 @@ def setup_virtualenv():
              if os.path.exists(python_exec_alt):
                   python_exec = python_exec_alt
              else:
-                  print(f"❌ Error: Could not find 'python' or 'python3' in venv bin directory: {os.path.join(venv_path, 'bin')}")
+                  logging.error(f"Could not find 'python' or 'python3' in venv bin directory: {os.path.join(venv_path, 'bin')}")
                   sys.exit("Exiting due to missing Python executable in venv.")
 
-    print(f"🐍 Using Python executable from venv: {python_exec}")
+    logging.info(f"Using Python executable from venv: {python_exec}")
 
     # Define the requirements file path
     requirements_file = os.path.join(os.path.dirname(__file__), "requirements.txt")
     if not os.path.exists(requirements_file):
-        print(f"⚠️ Warning: {requirements_file} not found. Skipping dependency installation.")
+        logging.warning(f"{requirements_file} not found. Skipping dependency installation.")
     else:
-        print("📦 Installing/Upgrading pip...")
+        logging.info("Installing/Upgrading pip...")
         try:
             subprocess.run([python_exec, "-m", "pip", "install", "--upgrade", "pip"], check=True, capture_output=True, text=True, encoding='utf-8')
         except subprocess.CalledProcessError as e:
-            print(f"⚠️ Failed to upgrade pip, proceeding anyway...")
-            print(f"   Command: {' '.join(e.cmd)}")
-            print(f"   Stderr: {e.stderr}")
+            logging.warning("Failed to upgrade pip, proceeding anyway...")
+            logging.warning(f"   Command: {' '.join(e.cmd)}")
+            logging.warning(f"   Stderr: {e.stderr}")
         except FileNotFoundError:
-             print(f"❌ Error: Could not find '{python_exec}' to upgrade pip.")
+             logging.error(f"Could not find '{python_exec}' to upgrade pip.")
              sys.exit("Exiting due to missing venv Python for pip upgrade.")
 
 
-        print(f"📦 Installing dependencies from {requirements_file}...")
+        logging.info(f"Installing dependencies from {requirements_file}...")
         try:
-            # Restore original simple install command
-            # install_cmd = [
-            #     python_exec, "-m", "pip", "install", "--force-reinstall", "numpy",
-            #     "--no-binary", ":all:", "pmdarima",
-            #     "-r", requirements_file
-            # ]
-            # print(f"   Running install command: {' '.join(install_cmd)}")
             subprocess.run([python_exec, "-m", "pip", "install", "-r", requirements_file], check=True, capture_output=True, text=True, encoding='utf-8')
-            # subprocess.run(install_cmd, check=True, capture_output=True, text=True, encoding='utf-8')
-
-            print(f"✅ Base dependencies installed from {requirements_file}.")
+            logging.info(f"Base dependencies installed from {requirements_file}.")
         except subprocess.CalledProcessError as e:
-            print(f"❌ Failed to install dependencies from {requirements_file}.")
-            print(f"   Command: {' '.join(e.cmd)}")
-            print(f"   Stderr: {e.stderr}")
-            print(f"   Stdout: {e.stdout}")
+            logging.error(f"Failed to install dependencies from {requirements_file}.")
+            logging.error(f"   Command: {' '.join(e.cmd)}")
+            if e.stderr:
+                sys.stderr.write("   --- pip stderr START ---\n")
+                sys.stderr.write(e.stderr.strip() + "\n")
+                sys.stderr.write("   --- pip stderr END ---\n")
+            else:
+                 sys.stderr.write("   (pip stderr not captured or empty)\n")
             sys.exit("Exiting due to requirements installation failure.")
         except FileNotFoundError:
-             print(f"❌ Error: Could not find '{python_exec}' to install requirements.")
+             logging.error(f"Could not find '{python_exec}' to install requirements.")
              sys.exit("Exiting due to missing venv Python for requirements install.")
 
 
         # Platform-specific TensorFlow installation for macOS ARM64
         if is_macos_arm:
-            print("🍏 Detected Apple Silicon (ARM64). Ensuring ARM-optimized TensorFlow...")
-
-            # --- Debugging Steps ---
-            print("   🔍 Checking Python version in venv...")
-            try:
-                subprocess.run([python_exec, "--version"], check=True)
-            except Exception as e:
-                print(f"   ⚠️ Failed to check Python version: {e}")
-
-            print("   🧹 Clearing pip cache...")
-            try:
-                subprocess.run([python_exec, "-m", "pip", "cache", "purge"], check=True, capture_output=True, text=True, encoding='utf-8')
-                print("   ✅ pip cache cleared.")
-            except subprocess.CalledProcessError as e:
-                print(f"   ⚠️ Failed to clear pip cache, proceeding anyway...")
-                # Optionally print stderr for debugging cache clear failure
-                # print(f"      Cache clear stderr: {e.stderr.strip()}")
-            except FileNotFoundError:
-                 print(f"   ❌ Error: Could not find '{python_exec}' to clear pip cache.")
-                 # Decide if this is critical - likely okay to continue if TF install works
-            # --- End Debugging Steps ---
+            logging.info("Detected Apple Silicon (ARM64). Ensuring ARM-optimised TensorFlow...")
 
             try:
-                # Update: Install standard 'tensorflow' and 'tensorflow-metal' for GPU acceleration.
-                # 'tensorflow-macos' seems deprecated or incorrect.
+                # Install standard 'tensorflow' and 'tensorflow-metal' for GPU acceleration.
                 # Use --upgrade to ensure latest compatible versions.
                 tf_install_cmd = [python_exec, "-m", "pip", "install", "--upgrade", "tensorflow", "tensorflow-metal"]
-                print(f"   Running: {' '.join(tf_install_cmd)}")
-                # Remove --force-reinstall unless necessary, let pip handle dependencies.
+                logging.info(f"   Running: {' '.join(tf_install_cmd)}")
                 subprocess.run(tf_install_cmd, check=True, capture_output=True, text=True, encoding='utf-8')
-                print("✅ Successfully installed/updated tensorflow and tensorflow-metal.")
+                logging.info("Successfully installed/updated tensorflow and tensorflow-metal.")
             except subprocess.CalledProcessError as e:
-                # Update error message
-                print(f"❌ Failed to install tensorflow/tensorflow-metal.")
-                print(f"   Command: {' '.join(e.cmd)}")
-                print(f"   Stderr: {e.stderr}")
-                print(f"   Stdout: {e.stdout}")
-                # Decide if we should exit or try to continue. Exit is safer.
+                logging.error("Failed to install tensorflow/tensorflow-metal.")
+                logging.error(f"   Command: {' '.join(e.cmd)}")
+                logging.error(f"   Stderr: {e.stderr}")
+                logging.error(f"   Stdout: {e.stdout}")
                 sys.exit("Exiting due to TensorFlow ARM installation failure.")
             except FileNotFoundError:
-                print(f"❌ Error: Could not find '{python_exec}' to install TensorFlow for ARM.")
+                logging.error(f"Could not find '{python_exec}' to install TensorFlow for ARM.")
                 sys.exit("Exiting due to missing venv Python for TensorFlow ARM install.")
 
-    print("✅ Virtual environment setup and dependency installation complete.")
+    logging.info("Virtual environment setup and dependency installation complete.")
     return python_exec
-# --- End new setup_virtualenv ---
 
 def run_pipeline(python_exec):
-    # --- Project-specific imports removed from here ---
-    # These imports were causing issues because they were run by the global python
-    # interpreter that launched main.py, not the venv interpreter.
-    # The actual project logic and imports should reside within the script
-    # executed by the subprocess below (e.g., core/main_runner.py).
-    # print("🐍 Importing project modules...")
-    # try:
-    #     # from analysis import slippage_analysis, changepoint_detector, milestone_analysis, forecast_engine, recommendation_engine
-    #     from analysis import slippage_analysis, changepoint_detector, milestone_analysis, forecast_engine, recommendation_engine
-    #     # from core import file_loader, data_cleaning, project_config # Incorrect: file_loader is in ingestion
-    #     from core import data_cleaning, project_config # Import only core modules
-    #     from ingestion import file_loader # Correctly import file_loader from ingestion
-    #     from output import output_writer
-    #     # from ingestion import data_loader # Redundant if file_loader is used?
-    #     print("✅ Project modules imported successfully.")
-    # except ImportError as e:
-    #     print(f"❌ Failed to import project modules: {e}")
-    #     print("   This might indicate an issue with the virtual environment or dependency installation.")
-    #     # Check if the venv python was used correctly by setup_virtualenv
-    #     print(f"   The script attempted to use Python executable: {python_exec}")
-    #     print(f"   Current sys.path: {sys.path}")
-    #     sys.exit("Exiting due to module import failure within run_pipeline.")
-    # --- End project-specific imports ---
-
-    print("🚀 Running main project pipeline via subprocess...\n")
+    logging.info("Running main project pipeline via subprocess...\n")
     # This script (main.py) now only sets up the environment and calls the main runner script
     # using the python executable from the virtual environment.
 
     main_runner_script = os.path.join(os.path.dirname(__file__), "core", "main_runner.py")
 
-    print(f"Attempting to run: {python_exec} {main_runner_script}") # Log the command
+    logging.info(f"Attempting to run: {python_exec} {main_runner_script}")
 
     try:
-        # Run the subprocess, capture output, don't check=True immediately
+        # Run the subprocess, capture output
         result = subprocess.run(
             [python_exec, main_runner_script],
             capture_output=True,  # Capture stdout and stderr
             text=True,            # Decode output as text
-            encoding='utf-8'     # Specify encoding
-            # check=False # Temporarily remove check=True to see output even on error
+            encoding='utf-8'      # Specify encoding
         )
 
         # Print captured output regardless of success
@@ -239,25 +210,23 @@ def run_pipeline(python_exec):
 
         # Now check the return code after printing output
         if result.returncode != 0:
-            print(f"❌ Pipeline execution failed with exit code {result.returncode}.")
+            logging.error(f"Pipeline execution failed with exit code {result.returncode}.")
             sys.exit(result.returncode)
         else:
-            print("✅ Pipeline subprocess completed successfully.")
+            logging.info("Pipeline subprocess completed successfully.")
 
-    # Keep FileNotFoundError handling
     except FileNotFoundError:
-        print(f"❌ Error: Could not find '{python_exec}' or '{main_runner_script}' to run the pipeline.")
+        logging.error(f"Could not find '{python_exec}' or '{main_runner_script}' to run the pipeline.")
         sys.exit(1)
-    # Add generic exception handling for other potential issues during subprocess setup/run
     except Exception as e:
-        print(f"❌ An unexpected error occurred while trying to run the pipeline subprocess: {e}")
+        logging.error(f"An unexpected error occurred while trying to run the pipeline subprocess: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":
     # Ensure the script is running from the intended project root directory
     expected_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     if os.getcwd() != expected_root:
-        print(f"Changing working directory to project root: {expected_root}")
+        logging.info(f"Changing working directory to project root: {expected_root}")
         os.chdir(expected_root)
 
     python_path = setup_virtualenv()

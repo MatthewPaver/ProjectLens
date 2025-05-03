@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Files • ProjectLens{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card shadow-lg border-0 archive-card" style="min-height: 600px;">
+    <div class="row g-0">
+      <!-- Sidebar Project List -->
+      <div class="col-12 col-md-3 border-end bg-light-subtle p-0" style="border-top-left-radius: 0.75rem; border-bottom-left-radius: 0.75rem; min-width: 220px;">
+        <div class="p-4 h-100 d-flex flex-column">
+          <div class="d-flex align-items-center mb-3">
+            <h4 class="mb-0 flex-grow-1 text-center" style="font-weight: 700; letter-spacing: -1px;">
+              <i class="bi bi-folder2-open me-2 text-primary"></i>Projects
+            </h4>
+          </div>
+          <input type="text" id="projectSearch" class="form-control form-control-sm mb-2" placeholder="Search projects...">
+          <ul class="list-group flex-grow-1 overflow-auto archive-project-list" id="projectSidebarList" style="border-radius: 0.5rem;">
+            <li class="list-group-item list-group-item-action active" data-project="">
+              <i class="bi bi-collection me-2"></i>All Projects
+            </li>
+            <li class="list-group-item list-group-item-action" data-project="Alpha"><i class="bi bi-folder me-2 text-secondary"></i>Alpha</li>
+            <li class="list-group-item list-group-item-action" data-project="Beta"><i class="bi bi-folder me-2 text-secondary"></i>Beta</li>
+            <li class="list-group-item list-group-item-action" data-project="Gamma"><i class="bi bi-folder me-2 text-secondary"></i>Gamma</li>
+            <li class="list-group-item list-group-item-action" data-project="Delta"><i class="bi bi-folder me-2 text-secondary"></i>Delta</li>
+            <li class="list-group-item list-group-item-action" data-project="Slippages"><i class="bi bi-folder me-2 text-secondary"></i>Slippages</li>
+            <li class="list-group-item list-group-item-action" data-project="Updates"><i class="bi bi-folder me-2 text-secondary"></i>Updates</li>
+          </ul>
+        </div>
+      </div>
+      <!-- Main Table -->
+      <div class="col-12 col-md-9 p-0">
+        <div class="p-4 h-100 d-flex flex-column">
+          <div class="d-flex align-items-center mb-3 flex-wrap gap-2">
+            <h4 class="mb-0 flex-grow-1"><i class="bi bi-file-earmark-text me-2 text-primary"></i>Output Files</h4>
+            <input type="text" id="fileSearch" class="form-control form-control-sm" style="max-width: 220px;" placeholder="Search files...">
+            <span class="badge bg-gradient bg-primary-subtle text-primary fs-6" id="fileCount"></span>
+          </div>
+          <div class="table-responsive flex-grow-1 mb-3">
+            <table class="table table-hover table-striped align-middle mb-0 shadow-sm cool-table" style="border-radius: 0.75rem; overflow: hidden;">
+              <thead class="table-light">
+                <tr>
+                  <th style="width: 28%; min-width: 180px;">Filename</th>
+                  <th style="width: 18%; min-width: 120px;">Project</th>
+                  <th style="width: 16%; min-width: 100px;">Type</th>
+                  <th style="width: 26%; min-width: 120px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="fileList">
+                <tr>
+                  <td colspan="4" class="text-center text-muted py-4">Loading files...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Preview Modal -->
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary-subtle text-primary">
+        <i class="bi bi-eye me-2"></i>
+        <span id="previewFileName" class="fw-bold text-truncate" style="max-width: 60vw;" title="">Preview</span>
+        <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div class="table-responsive">
+          <table class="table table-sm mb-0 w-100">
+            <thead id="previewTableHead"></thead>
+            <tbody id="previewTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/files-page.js') }}"></script>
+<script>
+// Sidebar project filter logic (like archive page)
+const sidebar = document.getElementById('projectSidebarList');
+const projectSearch = document.getElementById('projectSearch');
+if (sidebar) {
+  sidebar.addEventListener('click', function(e) {
+    const item = e.target.closest('li[data-project]');
+    if (!item) return;
+    sidebar.querySelectorAll('li').forEach(li => li.classList.remove('active'));
+    item.classList.add('active');
+    const event = new CustomEvent('projectFilter', { detail: item.getAttribute('data-project') });
+    window.dispatchEvent(event);
+  });
+}
+if (projectSearch) {
+  projectSearch.addEventListener('input', function() {
+    const val = this.value.toLowerCase();
+    sidebar.querySelectorAll('li[data-project]').forEach(li => {
+      if (!val || li.textContent.toLowerCase().includes(val)) {
+        li.classList.remove('d-none');
+      } else {
+        li.classList.add('d-none');
+      }
+    });
+  });
+}
+const fileSearch = document.getElementById('fileSearch');
+if (fileSearch) {
+  fileSearch.addEventListener('input', function() {
+    window.dispatchEvent(new CustomEvent('fileSearch', { detail: this.value }));
+  });
+}
+</script>
+<script src="{{ url_for('static', filename='js/files-preview.js') }}"></script>
+{% endblock %}
