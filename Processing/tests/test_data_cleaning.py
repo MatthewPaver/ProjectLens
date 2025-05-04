@@ -50,7 +50,7 @@ def test_cleaning_logic():
         # --- Run the function with the fully configured mock ---
         cleaned = clean_dataframe(df_input, schema_type="tasks", project_name="UnitTest")
 
-        # --- Assertions --- 
+        # --- Assertions ---
         # Assert that methods on the mock instance were called
         mock_instance.standardise_columns.assert_called_once()
         mock_instance.convert_data_types.assert_called_once()
@@ -58,9 +58,16 @@ def test_cleaning_logic():
 
         # Assertions on the final cleaned DataFrame
         assert isinstance(cleaned, pd.DataFrame)
+        # Check for columns expected after standardisation (based on mock setup)
+        assert "task_name" in cleaned.columns
+        assert "actual_finish" in cleaned.columns
+        assert "baseline_end_date" in cleaned.columns
+        assert "percent_complete" in cleaned.columns
+        # Check for columns added later in clean_dataframe
         assert "task_id" in cleaned.columns # Added by later steps in clean_dataframe
         assert "status" in cleaned.columns # Column where the error occurred
         assert "severity_score" in cleaned.columns
         # Check that the status inference worked (requires numeric percent_complete)
+        # Based on input: 50% -> in_progress, 100 -> complete
         assert cleaned.loc[0, 'status'] == 'in_progress'
         assert cleaned.loc[1, 'status'] == 'complete'

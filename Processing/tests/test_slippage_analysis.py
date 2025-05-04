@@ -33,5 +33,7 @@ def test_slippage():
     assert result.loc[result['task_id'] == 't2', 'slip_days'].iloc[0] == -2
     assert pd.isna(result.loc[result['task_id'] == 't1', 'change_in_slip'].iloc[0])
     assert result.loc[result['task_id'] == 't1', 'change_in_slip'].iloc[1] == 2 # 4 - 2 = 2
-    assert result.loc[result['task_id'] == 't1', 'change_type'].tolist() == ['New/No Prior', 'Slipped Further']
-    assert result.loc[result['task_id'] == 't2', 'change_type'].iloc[0] == 'New/No Prior'
+    # Verify change_type based on slip changes
+    assert result.loc[(result['task_id'] == 't1') & (result['update_phase'] == 'update_1'), 'change_type'].iloc[0] == 'New/No Prior'
+    assert result.loc[(result['task_id'] == 't1') & (result['update_phase'] == 'update_2'), 'change_type'].iloc[0] == 'Slipped Further'
+    assert result.loc[result['task_id'] == 't2', 'change_type'].iloc[0] == 'New/No Prior' # Finished early, but still first record
