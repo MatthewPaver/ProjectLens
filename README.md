@@ -1,193 +1,313 @@
-# ProjectLens - Web Application & Project Data Analysis Pipeline
+# ProjectLens
 
-ProjectLens provides a web interface and backend pipeline for analysing project schedule data, identifying risks, and generating actionable insights. Upload your project data, trigger the analysis, and view results—all from your browser.
+<div align="center">
 
----
+![Python](https://img.shields.io/badge/Python-3.11-3670A0?style=flat&logo=python&logoColor=ffdd54)
+![Flask](https://img.shields.io/badge/Flask-2.0+-000000?style=flat&logo=flask&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-blue?style=flat)
 
-<p align="center">
-  <img src="https://github.com/MatthewPaver/ProjectLens/blob/main/Portfolio%20Overview%20Thumbnail.png?raw=true" alt="Portfolio Overview" width="1000"/>
-</p>
+**Web Application & Project Data Analysis Pipeline**
 
-## 🚀 Quick Start: How to Run the Website
+*Upload your project data, trigger analysis, and view results—all from your browser.*
 
-1. **Open your terminal and navigate to the ProjectLens root directory:**
-   ```bash
-   cd /path/to/ProjectLens
-   ```
-   Replace `/path/to/ProjectLens` with the actual path where you have cloned or extracted the ProjectLens repository.
-
-2. **Start the website using Python 3.11:**
-   ```bash
-   python3.11 Website/run_website.py
-   ```
-   - **Do NOT** use `bash` or try to run the script as a shell script.
-   - If you see an error like `cannot execute binary file`, you likely used the wrong command. Always use `python3.11 Website/run_website.py`.
-   - The script will automatically set up a virtual environment (`.venv/`) and install all dependencies if needed.
-
-3. **Open your browser and go to:**
-   - [http://127.0.0.1:5000](http://127.0.0.1:5000) (or the address shown in your terminal)
-
-4. **Upload your project data** using the web interface and follow on-screen instructions to process and view results.
+</div>
 
 ---
 
-## 📁 Project Structure (Key Folders)
+## 📋 Table of Contents
 
-- `Website/` — Flask web app (frontend & API)
-- `Processing/` — Backend data pipeline (analysis, cleaning, output)
-- `Data/input/` — Place project folders here for processing (or upload via web)
-- `Data/output/` — Results and analysis outputs
-- `Data/archive/` — Processed input folders (success/failed)
-- `.venv/` — Shared Python virtual environment (auto-managed)
+- [Overview](#-overview)
+- [Features](#-features)
+- [Quick Start](#-quick-start)
+- [Project Structure](#-project-structure)
+- [Prerequisites](#-prerequisites)
+- [Installation & Usage](#-installation--usage)
+- [Workflow](#-workflow)
+- [Analysis Modules](#-analysis-modules)
+- [Dependencies](#-dependencies)
+- [FAQ](#-faq)
+
+---
+
+## 🎯 Overview
+
+ProjectLens is a comprehensive web-based platform for analysing project schedule data, identifying risks, and generating actionable insights. Built with Flask, it provides an intuitive interface for uploading project data and automatically processes it through a robust backend pipeline that performs multiple types of analysis including slippage detection, change point analysis, milestone tracking, and forecasting.
+
+### Key Capabilities
+
+- **Web Interface**: Upload project files, trigger processing, and view analysis results through a clean, user-friendly interface
+- **Automated Pipeline**: End-to-end data processing from ingestion to output generation
+- **Multiple Analysis Types**: Slippage analysis, change point detection, milestone tracking, forecasting, and recommendations
+- **Schema Validation**: JSON schema enforcement ensures data quality and standardisation
+- **Power BI Integration**: Generated outputs are compatible with Power BI dashboards for advanced visualisation
+
+---
+
+## ✨ Features
+
+### 🔍 Analysis Modules
+
+- **Slippage Analysis** — Identifies tasks and projects that are behind schedule
+- **Change Point Detection** — Uses the `ruptures` library to detect significant changes in project timelines
+- **Milestone Analysis** — Tracks and evaluates milestone completion
+- **Forecasting** — Time series forecasting using ARIMA models (via `pmdarima`)
+- **Recommendation Generation** — Provides actionable insights based on analysis results
+
+### 🏗️ Architecture
+
+- **Frontend**: Flask-based web application with responsive UI
+- **Backend Pipeline**: Modular processing stages (ingestion → cleaning → analysis → output)
+- **Data Management**: Structured input/output directories with automatic archiving
+- **Environment Management**: Shared virtual environment for both web and processing components
+
+---
+
+## 🚀 Quick Start
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/MatthewPaver/ProjectLens.git
+cd ProjectLens
+```
+
+### 2. Start the Web Application
+
+```bash
+python3.11 Website/run_website.py
+```
+
+**Important Notes:**
+- Use `python3.11` directly (not `bash` or `.venv/bin/python`)
+- The script automatically creates and manages the virtual environment
+- All dependencies will be installed automatically
+
+### 3. Access the Web Interface
+
+Open your browser and navigate to:
+```
+http://127.0.0.1:5000
+```
+
+### 4. Upload and Process Data
+
+1. Upload your project data files (CSV/Excel) via the web interface
+2. Trigger analysis for your uploaded project
+3. View results in the web interface or download from `Data/output/<project_name>/`
+
+---
+
+## 📁 Project Structure
+
+```
+ProjectLens/
+├── .venv/                 # Shared Python virtual environment (auto-managed)
+├── Data/
+│   ├── input/             # Upload project folders here (or via web interface)
+│   ├── output/            # Generated analysis results (Power BI compatible)
+│   ├── archive/           # Processed folders (success/failed)
+│   └── schemas/           # JSON schemas for data validation
+├── Processing/            # Backend data processing pipeline
+│   ├── core/              # Core pipeline logic
+│   ├── ingestion/         # Data loading module
+│   ├── analysis/          # Analysis modules (slippage, changepoint, etc.)
+│   ├── output/            # Output writing module
+│   ├── logs/              # Pipeline execution logs
+│   ├── tests/             # Unit and integration tests
+│   ├── main.py            # Pipeline entry point
+│   └── requirements.txt   # Processing dependencies
+├── Website/               # Flask web application
+│   ├── server.py          # Flask app and API endpoints
+│   ├── run_website.py     # Main startup script
+│   ├── static/            # CSS, JavaScript, images
+│   └── templates/         # HTML templates
+├── Output/
+│   └── ProjectLens.pbix   # Power BI dashboard
+└── README.md
+```
 
 ---
 
 ## 🛠️ Prerequisites
 
-- **Python 3.11** must be installed and available as `python3.11` in your terminal.
-  - On macOS, you can install it with:
-    ```bash
-    brew install python@3.11
-    ```
-- **C/C++ build tools** may be required for some dependencies:
-  - On macOS: `xcode-select --install`
+### Required
 
----
-
-## 📝 Typical Workflow
-
-1. **Start the website** (see Quick Start above).
-2. **Upload project data** via the web interface (CSV/Excel files, one folder per project).
-3. **Trigger analysis** for your uploaded project.
-4. **View/download results** from the web interface or in `Data/output/<project_name>/`.
-5. **Check logs** in `Processing/logs/pipeline.log` if you need troubleshooting info.
-
----
-
-## ⚙️ Advanced: Manual Data Processing
-
-- You can place project folders directly in `Data/input/` and run the backend pipeline manually:
+- **Python 3.11** — Must be installed and available as `python3.11` in your terminal
   ```bash
-  python3.11 Processing/main.py
+  # macOS
+  brew install python@3.11
   ```
-- Results will appear in `Data/output/` and processed folders will be moved to `Data/archive/`.
+
+### Optional (for some dependencies)
+
+- **C/C++ Build Tools** — Required for compiling certain packages
+  ```bash
+  # macOS
+  xcode-select --install
+  ```
 
 ---
 
-## 📦 Dependencies
+## 📦 Installation & Usage
 
-- All dependencies are managed in `.venv/` and installed automatically by `Website/run_website.py`.
-- Main libraries: `Flask`, `pandas`, `numpy`, `ruptures`, `pmdarima`, etc. (see `Processing/requirements.txt`)
+### Primary Method: Web Interface
+
+The recommended way to use ProjectLens is through the web interface:
+
+1. **Start the server:**
+   ```bash
+   python3.11 Website/run_website.py
+   ```
+
+2. **Access the web interface** at `http://127.0.0.1:5000`
+
+3. **Upload project data** via the web interface
+
+4. **Trigger processing** through the UI
+
+### Alternative Method: Manual Processing
+
+For command-line processing:
+
+1. **Place project folders** in `Data/input/`:
+   ```
+   Data/input/MyProject/task_updates.csv
+   ```
+
+2. **Run the pipeline manually:**
+   ```bash
+   python3.11 Processing/main.py
+   ```
+
+3. **Results** will appear in `Data/output/<project_name>/`
+
+---
+
+## 🔄 Workflow
+
+<div align="center">
+
+```
+Upload Data → Validate Schema → Process Pipeline → Generate Output → Archive Input
+     ↓              ↓                  ↓                ↓              ↓
+  Web UI      JSON Schemas      Analysis Modules    CSV Files    Archive Folder
+```
+
+</div>
+
+### Typical Steps
+
+1. **Start the website** using `python3.11 Website/run_website.py`
+2. **Upload project data** via the web interface (CSV/Excel files, one folder per project)
+3. **Trigger analysis** for your uploaded project
+4. **View/download results** from the web interface or in `Data/output/<project_name>/`
+5. **Check logs** in `Processing/logs/pipeline.log` for troubleshooting
+
+---
+
+## 🔬 Analysis Modules
+
+### Slippage Analysis
+Identifies tasks and projects that are behind schedule by comparing planned vs. actual completion dates.
+
+### Change Point Detection
+Uses the `ruptures` library to detect significant changes in project timelines, helping identify when projects deviate from expected patterns.
+
+### Milestone Analysis
+Tracks milestone completion and evaluates progress against key project deliverables.
+
+### Forecasting
+Time series forecasting using ARIMA models (via `pmdarima`) to predict future project performance.
+
+### Recommendation Generation
+Provides actionable insights and recommendations based on analysis results.
+
+---
+
+## 📚 Dependencies
+
+### Web Application
+- **Flask** — Web framework
+
+### Processing Pipeline
+Key dependencies (see `Processing/requirements.txt`):
+- `pandas` — Data manipulation
+- `numpy` — Numerical computing
+- `ruptures` — Change point detection
+- `pmdarima` — Time series forecasting
+
+All dependencies are automatically installed into the shared `.venv/` environment by `Website/run_website.py`.
 
 ---
 
 ## ❓ FAQ
 
-- **Q: I get `/opt/homebrew/bin/python3.11: cannot execute binary file`?**
-  - **A:** You tried to run the Python binary as a shell script. Use `python3.11 Website/run_website.py` (not `bash ...`).
-- **Q: Where do I put my data?**
-  - **A:** Upload via the web interface, or place folders in `Data/input/`.
-- **Q: Where are results?**
-  - **A:** In `Data/output/<project_name>/` after processing.
+### Q: I get `/opt/homebrew/bin/python3.11: cannot execute binary file`?
+
+**A:** You tried to run the Python binary as a shell script. Always use:
+```bash
+python3.11 Website/run_website.py
+```
+Not `bash Website/run_website.py` or `.venv/bin/python Website/run_website.py`.
+
+### Q: Where do I put my data?
+
+**A:** Upload via the web interface (recommended), or place folders directly in `Data/input/`.
+
+### Q: Where are the results?
+
+**A:** Results are saved in `Data/output/<project_name>/` after processing. You can also view them through the web interface.
+
+### Q: Can I use a different Python version?
+
+**A:** ProjectLens requires Python 3.11 specifically for compatibility with TensorFlow and ARM architecture support.
+
+### Q: How do I view the Power BI dashboard?
+
+**A:** Open `Output/ProjectLens.pbix` in Power BI Desktop. The dashboard connects to data in `Data/output/`.
 
 ---
 
-For more details, see comments in the code and the rest of this README.
+## 🎨 Screenshot
+
+<div align="center">
+
+![Portfolio Overview](https://github.com/MatthewPaver/ProjectLens/blob/main/Portfolio%20Overview%20Thumbnail.png?raw=true)
+
+</div>
 
 ---
 
-## Features
+## 💻 Tech Stack
 
-*   **Web Interface:** Allows users to upload project files, trigger processing, and potentially view analysis results (built with Flask).
-*   **Backend Pipeline:** Organised into distinct stages: ingestion, cleaning, analysis, and output.
-*   **Schema Enforcement:** Uses JSON schemas (`Data/schemas`) to validate and standardise input data during processing.
-*   **Multiple Analyses:** Includes modules for:
-    *   Slippage Analysis
-    *   Change Point Detection (using `ruptures` library)
-    *   Milestone Analysis
-    *   Forecasting (potentially using time series models like ARIMA via `pmdarima`)
-    *   Recommendation Generation (basic placeholder)
-*   **Shared Virtual Environment:** A single virtual environment (`.venv/`) at the project root manages dependencies for both the Website and Processing components, set up via the main run script.
-*   **Structured Output:** Generates cleaned data and analysis results as CSV files in the `Data/output/<project_name>/` directory.
+<div align="center">
 
-## Project Structure
+![Python](https://img.shields.io/badge/Python-3670A0?style=flat&logo=python&logoColor=ffdd54)
+![Flask](https://img.shields.io/badge/Flask-000000?style=flat&logo=flask&logoColor=white)
+![Pandas](https://img.shields.io/badge/pandas-150458?style=flat&logo=pandas&logoColor=white)
+![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat&logo=numpy&logoColor=white)
+![Power BI](https://img.shields.io/badge/Power_BI-F2C811?style=flat&logo=powerbi&logoColor=000000)
 
-```
-ProjectLens/
-├── .venv/                 # Shared Python virtual environment
-├── Data/
-│   ├── input/             # Place project folders (e.g., Alpha, Delta) here for processing
-│   │   ├── Alpha/
-│   │   │   └── task_updates.csv
-│   │   └── Delta/
-│   │       └── task_updates.csv
-│   ├── output/            # Generated analysis results (used by Power BI)
-│   ├── archive/           # Input folders moved here after processing (success/failed)
-│   └── schemas/           # JSON schemas for data validation (e.g., tasks.json)
-├── Processing/            # Backend data processing modules
-│   ├── core/              # Core pipeline logic (main_runner, data_pipeline, etc.)
-│   ├── ingestion/         # Data loading module
-│   ├── analysis/          # Analysis modules (slippage, changepoint, etc.)
-│   ├── output/            # Output writing module
-│   ├── logs/              # Pipeline execution logs (pipeline.log)
-│   ├── tests/             # Unit and integration tests
-│   ├── main.py            # Entry point for the processing pipeline (usually run via Website)
-│   └── requirements.txt   # Python dependencies for the Processing backend
-├── Website/
-│   ├── server.py          # Flask application logic and API endpoints
-│   ├── run_website.py     # Main script to set up venv and run the web server
-│   ├── static/            # CSS, JavaScript, images for the website
-│   └── templates/         # HTML templates for the website
-├── Output/
-│   └── ProjectLens.pbix   # Microsoft Power BI dashboard (linked to Data/output/)
-└── README.md              # Project setup and documentation
+</div>
 
-```
+---
 
-## Setup and Execution
+## 📝 License
 
-**The primary way to use ProjectLens is through the web interface.**
+This project is provided as-is for demonstration and educational purposes.
 
-1.  **Run the Web Application:**
-    *   Navigate to the project root directory (`ProjectLens/`) in your terminal.
-    *   Execute the main website run script **using your system's `python3.11` interpreter**:
-        ```bash
-        python3.11 Website/run_website.py
-        ```
-    *   **Important:** Do *not* try to run this script using the Python executable from within the `.venv` directory (e.g., `.venv/bin/python Website/run_website.py`). The script itself is responsible for creating and managing the virtual environment.
-    *   This script will:
-        *   Check Python environment compatibility (requires Python 3.11).
-        *   Create a shared virtual environment (`.venv/` at the project root) using `python3.11` if it doesn't exist, or verify an existing one.
-        *   Install/update dependencies for both the Website (Flask) and the Processing backend (from `Processing/requirements.txt`) into the shared virtual environment.
-        *   Launch the Flask web server.
+---
 
-2.  **Access the Web Interface:**
-    *   Open your web browser and navigate to the address provided by Flask (usually `http://127.0.0.1:5000` or similar).
-    *   Use the interface to upload new project data.
+## 🤝 Contributing
 
-3.  **Trigger Processing:**
-    *   The web interface should provide a mechanism (e.g., a button after upload) to trigger the backend processing pipeline for a specific project.
-    *   This typically involves the frontend calling the `/api/process/<project_name>` endpoint on the Flask server, which in turn executes `Processing/main.py`.
+This is a personal project, but suggestions and feedback are welcome! Feel free to open an issue or submit a pull request.
 
-4.  **Check Outputs & Logs:**
-    *   Processed data and analysis results will be saved in `Data/output/<project_name>/`.
-    *   Pipeline execution logs can be found in `Processing/logs/pipeline.log`.
-    *   The original project folder from `Data/input/` (if processing was triggered for it) will be moved to `Data/archive/success/` or `Data/archive/failed/`.
+---
 
-**Additional Information:**
+<div align="center">
 
-*   **Prerequisites:**
-    *   Python 3.11 (specifically required for the setup script and TensorFlow/ARM compatibility checks, ensure `python3.11` is available in your PATH). You might install it via `brew install python@3.11` on macOS.
-    *   Ensure you have the necessary C/C++ build tools if packages require compilation (e.g., run `xcode-select --install` on macOS). This might be needed for libraries like `numpy` or `ruptures`.
+**Made with ❤️ for project management and data analysis**
 
-*   **Prepare Input Data (Optional - for initial processing):**
-    *   If you want to process data *before* starting the web server (less common), you can place your project data folders (each containing relevant CSV/Excel files, e.g., `task_updates.csv`) inside the `Data/input/` directory.
-    *   Example: `Data/input/MyProject/tasks.csv`
-    *   However, the standard workflow is to upload files via the web interface once it's running.
+[⬆ Back to Top](#projectlens)
 
-## Dependencies
-
-*   **Website:** Flask
-*   **Processing:** Key dependencies are listed in `Processing/requirements.txt` and include libraries like `pandas`, `numpy`, `ruptures`, `pmdarima`, etc.
-
-All dependencies are installed into the shared `.venv/` environment by the `Website/run_website.py` script.
+</div>
