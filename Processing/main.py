@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ProjectLens Main Entry Point & Environment Setup.
+"""ProjectLens pipeline entry point and environment setup.
 
 This script is the primary entry point for the user to run the ProjectLens pipeline.
 Its main responsibilities are:
@@ -7,13 +7,10 @@ Its main responsibilities are:
 1.  **Environment Check & Setup:**
     - Determines the project root directory.
     - Checks for platform compatibility issues (e.g., x86 Python on ARM Mac).
-    - Creates a Python virtual environment (`.venv`) in the project root if it 
-      doesn't exist, using a specific Python version (e.g., python3.11) for 
-      compatibility with dependencies like TensorFlow.
-    - Installs or updates dependencies from `requirements.txt` into the 
-      virtual environment using pip.
-    - Handles platform-specific dependency installation (e.g., `tensorflow-metal` 
-      for macOS ARM GPU acceleration).
+    - Creates a Python virtual environment (`.venv`) in the project root if it
+      doesn't exist, using `python3.11`.
+    - Installs or updates dependencies from the canonical root
+      `requirements.txt` into the virtual environment using pip.
 
 2.  **Pipeline Execution:**
     - Identifies the correct Python executable within the created/verified 
@@ -67,7 +64,7 @@ def setup_virtualenv():
                 logging.error(f"   Interpreter: {sys.executable}")
                 logging.error(f"   Platform detected: {platform_str}")
                 logging.error(f"   Processor reported: {processor_type}")
-                logging.error("   This configuration is incompatible with required ML libraries (like TensorFlow/JAX).")
+                logging.error("   This configuration is incompatible with required compiled dependencies.")
                 logging.error("   Please install and run this script using a native ARM64 Python interpreter.")
                 logging.error("   Common sources for ARM64 Python:")
                 logging.error("     - Miniforge (conda-forge, arm64 version)")
@@ -82,9 +79,7 @@ def setup_virtualenv():
     if not os.path.exists(venv_path):
         logging.info("Creating virtual environment...")
         try:
-            # Use python3.11 specifically for venv creation
-            # TensorFlow currently requires Python <= 3.11. The global python might be newer.
-            # Ensure python3.11 is installed (e.g., via `brew install python@3.11`)
+            # Use python3.11 specifically for venv creation so install behaviour stays consistent.
             python_for_venv = "python3.11"
             logging.info(f"   Using '{python_for_venv}' to create the virtual environment.")
             # Use the specific python version to create the venv
@@ -123,8 +118,8 @@ def setup_virtualenv():
 
     logging.info(f"Using Python executable from venv: {python_exec}")
 
-    # Define the requirements file path
-    requirements_file = os.path.join(os.path.dirname(__file__), "requirements.txt")
+    # Use the canonical root requirements file for both website and pipeline flows.
+    requirements_file = os.path.join(project_root, "requirements.txt")
     if not os.path.exists(requirements_file):
         logging.warning(f"{requirements_file} not found. Skipping dependency installation.")
     else:
@@ -158,27 +153,6 @@ def setup_virtualenv():
              logging.error(f"Could not find '{python_exec}' to install requirements.")
              sys.exit("Exiting due to missing venv Python for requirements install.")
 
-
-        # Platform-specific TensorFlow installation for macOS ARM64
-        if is_macos_arm:
-            logging.info("Detected Apple Silicon (ARM64). Ensuring ARM-optimised TensorFlow...")
-
-            try:
-                # Install standard 'tensorflow' and 'tensorflow-metal' for GPU acceleration.
-                # Use --upgrade to ensure latest compatible versions.
-                tf_install_cmd = [python_exec, "-m", "pip", "install", "--upgrade", "tensorflow", "tensorflow-metal"]
-                logging.info(f"   Running: {' '.join(tf_install_cmd)}")
-                subprocess.run(tf_install_cmd, check=True, capture_output=True, text=True, encoding='utf-8')
-                logging.info("Successfully installed/updated tensorflow and tensorflow-metal.")
-            except subprocess.CalledProcessError as e:
-                logging.error("Failed to install tensorflow/tensorflow-metal.")
-                logging.error(f"   Command: {' '.join(e.cmd)}")
-                logging.error(f"   Stderr: {e.stderr}")
-                logging.error(f"   Stdout: {e.stdout}")
-                sys.exit("Exiting due to TensorFlow ARM installation failure.")
-            except FileNotFoundError:
-                logging.error(f"Could not find '{python_exec}' to install TensorFlow for ARM.")
-                sys.exit("Exiting due to missing venv Python for TensorFlow ARM install.")
 
     logging.info("Virtual environment setup and dependency installation complete.")
     return python_exec

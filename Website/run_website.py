@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 PYTHON_FOR_VENV = "python3.11"  # Explicitly require Python 3.11
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 VENV_PATH = os.path.join(PROJECT_ROOT, ".venv")
-PROCESSING_REQ_FILE = os.path.join(PROJECT_ROOT, 'Processing', 'requirements.txt')
+ROOT_REQ_FILE = os.path.join(PROJECT_ROOT, 'requirements.txt')
 
 
 def check_python_version(python_executable):
@@ -105,27 +105,13 @@ def setup_shared_venv():
         logging.error(f"   Error: Could not find '{python_in_venv}' to upgrade pip.")
         sys.exit("Exiting due to missing venv Python executable.")
 
-    # --- Install Flask ---
-    logging.info(f"   Checking/Installing Flask in venv...")
-    try:
-        subprocess.run([python_in_venv, "-m", "pip", "install", "Flask"], check=True, capture_output=True, text=True, encoding='utf-8')
-        logging.info("   Flask installed/verified.")
-    except subprocess.CalledProcessError as e:
-        logging.error(f"   Failed to install Flask.")
-        logging.error(f"   Command: {' '.join(e.cmd)}")
-        logging.error(f"   Stderr: {e.stderr}")
-        sys.exit("Exiting due to Flask installation failure.")
-    except FileNotFoundError:
-        logging.error(f"   Error: Could not find '{python_in_venv}' to install Flask.")
-        sys.exit("Exiting due to missing venv Python executable.")
-
-    # --- Install Processing Dependencies ---
-    logging.info(f"   Installing Processing dependencies from {PROCESSING_REQ_FILE}...")
-    if not os.path.exists(PROCESSING_REQ_FILE):
-        logging.warning(f"   Warning: Requirements file not found at {PROCESSING_REQ_FILE}. Skipping Processing dependencies.")
+    # --- Install Canonical Project Dependencies ---
+    logging.info(f"   Installing project dependencies from {ROOT_REQ_FILE}...")
+    if not os.path.exists(ROOT_REQ_FILE):
+        logging.warning(f"   Warning: Requirements file not found at {ROOT_REQ_FILE}. Skipping dependency install.")
     else:
         try:
-            install_cmd = [python_in_venv, "-m", "pip", "install", "-r", PROCESSING_REQ_FILE]
+            install_cmd = [python_in_venv, "-m", "pip", "install", "-r", ROOT_REQ_FILE]
             logging.info(f"   Running: {' '.join(install_cmd)}")
             result = subprocess.run(install_cmd, check=False, capture_output=True, text=True, encoding='utf-8', timeout=600)
 
@@ -141,11 +127,11 @@ def setup_shared_venv():
             if result.returncode != 0:
                 raise subprocess.CalledProcessError(result.returncode, install_cmd, output=result.stdout, stderr=result.stderr)
 
-            logging.info(f"   Processing dependencies installed successfully.")
+            logging.info("   Project dependencies installed successfully.")
         except subprocess.CalledProcessError as e:
-            logging.error(f"   Failed to install dependencies from {PROCESSING_REQ_FILE}.")
+            logging.error(f"   Failed to install dependencies from {ROOT_REQ_FILE}.")
             logging.error(f"   Command: {' '.join(e.cmd)}")
-            sys.exit("Exiting due to Processing requirements installation failure.")
+            sys.exit("Exiting due to requirements installation failure.")
         except subprocess.TimeoutExpired:
             logging.error(f"   Timeout expired while installing Processing dependencies.")
             sys.exit("Exiting due to installation timeout.")
