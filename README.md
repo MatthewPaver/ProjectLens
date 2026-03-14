@@ -2,9 +2,9 @@
 
 <div align="center">
 
-![Python](https://img.shields.io/badge/Python-3.11-3670A0?style=flat&logo=python&logoColor=ffdd54)
-![Flask](https://img.shields.io/badge/Flask-3.x-000000?style=flat&logo=flask&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-blue?style=flat)
+![Python](https://img.shields.io/badge/Python-3.11-3670A0?style=flat-square&logo=python&logoColor=ffdd54)
+![Flask](https://img.shields.io/badge/Flask-3.x-000000?style=flat-square&logo=flask&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
 
 **Project schedule analysis application**
 
