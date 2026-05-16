@@ -16,6 +16,17 @@ Upload project data, run the pipeline, and review risk-oriented output through a
 
 ---
 
+## Portfolio Quick Read
+
+| Section | Where to look |
+|:---|:---|
+| What it solves | Turns project schedule files into delivery-risk reporting and dashboard outputs |
+| Quick start | [`make serve`](#quick-start) or [`make pipeline`](#running-the-pipeline-directly) |
+| Screenshot | [Portfolio Store](https://matthewpaver.github.io/MatthewPaver/store/) |
+| Architecture | [What The Pipeline Does](#what-the-pipeline-does) |
+| Tests | `make test` |
+| Tech stack | `Python` `Flask` `pandas` `statsforecast` `Power BI` |
+
 ## Status
 
 `Runnable application`
