@@ -37,6 +37,19 @@ ProjectLens combines:
 - a data processing pipeline in [`Processing/`](Processing)
 - structured input/output folders under [`Data/`](Data)
 
+## Reviewer Pack
+
+| Area | Details |
+|:---|:---|
+| What it solves | Project schedule files become slippage, milestone, changepoint, forecast, and reporting outputs. |
+| Screenshot | [Portfolio Store preview](https://matthewpaver.github.io/MatthewPaver/store/preview.html?app=projectlens) |
+| Run locally | `make install && make serve`, then open `http://127.0.0.1:5000` |
+| Pipeline only | `make pipeline` |
+| Tests | `make test` |
+| Demo data | Sample project folders and output examples are included under `Data/`. |
+| Architecture | Flask upload UI -> file loader -> cleaning -> risk analysis modules -> CSV outputs -> Power BI artefacts |
+| Limitations | Designed as a local portfolio application; production use would need auth, storage hardening, and deployment packaging. |
+
 ## Reviewer Notes
 
 - **Reproducible path:** root `requirements.txt` and `make` targets are the supported setup route.
