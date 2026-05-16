@@ -37,6 +37,13 @@ ProjectLens combines:
 - a data processing pipeline in [`Processing/`](Processing)
 - structured input/output folders under [`Data/`](Data)
 
+## Reviewer Notes
+
+- **Reproducible path:** root `requirements.txt` and `make` targets are the supported setup route.
+- **Product signal:** the Flask UI wraps the analysis pipeline so a reviewer can use the workflow, not just read code.
+- **Analytics signal:** slippage, milestone pressure, changepoint detection, and forecasting are separated into pipeline outputs.
+- **Verification path:** run `make test`, then `make serve` or `make pipeline` depending on whether you want the UI or batch flow.
+
 ## Canonical Setup
 
 The canonical dependency entry point for this repo is the root [`requirements.txt`](requirements.txt).
