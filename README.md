@@ -5,6 +5,7 @@
 ![Python](https://img.shields.io/badge/Python-3.11-3670A0?style=flat-square&logo=python&logoColor=ffdd54)
 ![Flask](https://img.shields.io/badge/Flask-3.x-000000?style=flat-square&logo=flask&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
+[![Validate](https://github.com/MatthewPaver/ProjectLens/actions/workflows/validate.yml/badge.svg)](https://github.com/MatthewPaver/ProjectLens/actions/workflows/validate.yml)
 
 **Project schedule analysis application**
 
@@ -12,7 +13,7 @@ Upload project data, run the pipeline, and review risk-oriented output through a
 
 </div>
 
-![ProjectLens overview](Portfolio%20Overview%20Thumbnail.png)
+![ProjectLens overview](docs/assets/projectlens-overview.png)
 
 ---
 
@@ -103,6 +104,8 @@ make pipeline
 Results are written to `Data/output/<project_name>/`.
 
 ## What The Pipeline Does
+
+![ProjectLens architecture](docs/assets/architecture.svg)
 
 - validates project input structure
 - loads CSV and Excel source files
