@@ -1,6 +1,6 @@
 import pandas as pd
 from datetime import datetime, timedelta
-from Processing.analysis.changepoint_detector import detect_changepoints
+from Processing.analysis.changepoint_detector import detect_change_points
 
 def test_change_detection():
     """Tests basic execution of the change point detection function.
@@ -19,7 +19,7 @@ def test_change_detection():
         "update_phase": [f"update_{i}" for i in range(6)],
         "project_name": ["Demo"] * 6
     })
-    result = detect_changepoints(df, project_name="Demo")
+    result = detect_change_points(df, project_name="Demo")
     
     assert isinstance(result, pd.DataFrame)
     

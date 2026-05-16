@@ -5,15 +5,16 @@ import os
 import tempfile
 import shutil
 from unittest.mock import patch, MagicMock
+from pandas.testing import assert_frame_equal
 
 # Import the function to test
 from Processing.core.data_pipeline import process_project
 from Processing.core.schema_manager import SchemaManager
 
 # Mock data for input files
-SAMPLE_CSV_CONTENT = """Task Code,Task Name,Baseline Finish,Actual Finish
-TKA,Task A,2023-01-10,2023-01-12
-TKB,Task B,2023-01-15,2023-01-14"""
+SAMPLE_CSV_CONTENT = """Task Code,Task Name,Baseline Finish,Actual Start,Actual Finish,Status
+TKA,Task A,2023-01-10,2023-01-01,2023-01-12,Complete
+TKB,Task B,2023-01-15,2023-01-03,2023-01-14,Complete"""
 
 class TestPipelineIntegration(unittest.TestCase):
     """Test the pipeline integration with mocks for heavy analysis."""
@@ -48,26 +49,31 @@ class TestPipelineIntegration(unittest.TestCase):
         self.MockSchemaManager = self.schema_manager_patch.start()
         self.mock_schema_instance = MagicMock()
         # Configure mock methods needed by data_cleaning called within process_project
-        self.mock_schema_instance.standardise_columns.side_effect = lambda df: df.rename(columns={"Task Code": "task_id", "Task Name": "task_name", "Baseline Finish": "baseline_end_date", "Actual Finish": "actual_finish"})
+        self.mock_schema_instance.standardise_columns.side_effect = lambda df: df.rename(columns={"Task Code": "task_id", "Task Name": "task_name", "Baseline Finish": "baseline_end_date", "Actual Start": "actual_start", "Actual Finish": "actual_finish", "Status": "status"})
         self.mock_schema_instance.convert_data_types.side_effect = lambda df: df # Passthrough
         self.mock_schema_instance.enforce_not_null.side_effect = lambda df: df # Passthrough
         self.MockSchemaManager.return_value = self.mock_schema_instance
+
+        self.cleaning_schema_manager_patch = patch('Processing.core.data_cleaning.SchemaManager')
+        self.MockCleaningSchemaManager = self.cleaning_schema_manager_patch.start()
+        self.MockCleaningSchemaManager.return_value = self.mock_schema_instance
 
 
     def tearDown(self):
         """Clean up temporary directories and stop patches."""
         shutil.rmtree(self.test_dir)
+        self.cleaning_schema_manager_patch.stop()
         self.schema_manager_patch.stop()
 
 
     # Patch the analysis functions and output writer within the data_pipeline module
     @patch('Processing.core.data_pipeline.run_slippage_analysis')
     @patch('Processing.core.data_pipeline.run_forecasting')
-    @patch('Processing.core.data_pipeline.detect_changepoints')
+    @patch('Processing.core.data_pipeline.detect_change_points')
     @patch('Processing.core.data_pipeline.analyse_milestones')
     @patch('Processing.core.data_pipeline.generate_recommendations')
     @patch('Processing.core.data_pipeline.write_outputs')
-    @patch('Processing.core.data_pipeline.archive_project') # Also mock archiving
+    @patch('Processing.core.data_pipeline._archive_project')
     def test_pipeline_flow_and_basic_output(self,
                                            mock_archive,
                                            mock_write_outputs,
@@ -81,19 +87,22 @@ class TestPipelineIntegration(unittest.TestCase):
         # Configure mock return values for analysis functions
         # Return simple DataFrames or structures expected by write_outputs
         mock_run_slippage_analysis.return_value = pd.DataFrame({'task_id': ['TKA', 'TKB'], 'slip_days': [2, -1]})
-        mock_run_forecasting.return_value = pd.DataFrame({'task_id': ['TKA'], 'predicted_end_date': [pd.Timestamp('2023-01-13')]})
+        mock_run_forecasting.return_value = (
+            pd.DataFrame({'task_id': ['TKA'], 'predicted_end_date': [pd.Timestamp('2023-01-13')]}),
+            []
+        )
         mock_detect_changepoints.return_value = pd.DataFrame({'task_id': ['TKA'], 'update_phase': ['update_1']})
         mock_analyse_milestones.return_value = pd.DataFrame({'task_id': ['TKA'], 'is_milestone': [True]}) # Assuming milestone analysis returns a DF
         mock_generate_recommendations.return_value = [] # Return empty list or list of dicts
 
         # --- Execute the pipeline for the test project ---
         # Use the mocked SchemaManager instance
-        output_path = process_project(
-            project_folder_path=self.input_dir,
-            schema_manager=self.mock_schema_instance, # Pass the instance
-            base_output_dir=self.output_base_dir,
-            archive_dir=self.archive_dir
-        )
+        with patch('Processing.core.data_pipeline.OUTPUT_DIR', self.output_base_dir), \
+             patch('Processing.core.data_pipeline.ARCHIVE_DIR', self.archive_dir):
+            output_path = process_project(
+                project_folder_path=self.input_dir,
+                schema_manager=self.mock_schema_instance, # Pass the instance
+            )
 
         # --- Assertions ---
         # 1. Check that the main analysis functions were called
@@ -112,14 +121,14 @@ class TestPipelineIntegration(unittest.TestCase):
         self.assertTrue(isinstance(kwargs['cleaned_df'], pd.DataFrame))
         self.assertFalse(kwargs['cleaned_df'].empty)
         self.assertIn('task_id', kwargs['cleaned_df'].columns) # Check cleaning happened
-        self.assertEqual(kwargs['analysis_results']['slippages'], mock_run_slippage_analysis.return_value)
-        self.assertEqual(kwargs['analysis_results']['forecasts'], mock_run_forecasting.return_value)
+        assert_frame_equal(kwargs['analysis_results']['slippages'], mock_run_slippage_analysis.return_value)
+        assert_frame_equal(kwargs['analysis_results']['forecasts'], mock_run_forecasting.return_value[0])
         # ... check other analysis results if needed
 
         # 4. Check that archiving was called (assuming success)
         mock_archive.assert_called_once()
         self.assertEqual(mock_archive.call_args[0][0], self.input_dir) # Check correct source dir
-        self.assertTrue(mock_archive.call_args[0][1].startswith(os.path.join(self.archive_dir, 'success'))) # Check correct target base
+        self.assertTrue(mock_archive.call_args.kwargs["success"]) # Check successful archive path
 
         # 5. Check that an output path was returned and exists (basic check)
         # Note: write_outputs itself is mocked, so files aren't *actually* written

@@ -1,4 +1,4 @@
-from Processing.analysis.slippage_analysis import analyse_slippages
+from Processing.analysis.slippage_analysis import run_slippage_analysis
 import pandas as pd
 
 def test_slippage():
@@ -13,15 +13,16 @@ def test_slippage():
         # Task 2: -2 days slippage (finished early)
         "task_id": ["t1", "t1", "t2"], 
         "task_name": ["Task 1", "Task 1", "Task 2"],
-        "baseline_finish": pd.to_datetime(["2023-01-01", "2023-01-01", "2023-01-10"]),
+        "baseline_end_date": pd.to_datetime(["2023-01-01", "2023-01-01", "2023-01-10"]),
         "actual_finish": pd.to_datetime(["2023-01-03", "2023-01-05", "2023-01-08"]),
         "update_phase": ["update_1", "update_2", "update_1"],
         "project_name": ["TestProject"] * 3,
+        "is_critical": [False, False, False],
     })
     # Expected slip_days: [2, 4, -2]
     # Expected change_in_slip: [NaN, 2, NaN]
-    # Expected change_type: [New/No Prior, Slipped Further, New/No Prior]
-    result = analyse_slippages(df)
+    # Expected change_type: [Initial, Slipped Further, Initial]
+    result = run_slippage_analysis(df, project_name="TestProject")
     
     assert isinstance(result, pd.DataFrame)
     assert "slip_days" in result.columns
@@ -34,6 +35,6 @@ def test_slippage():
     assert pd.isna(result.loc[result['task_id'] == 't1', 'change_in_slip'].iloc[0])
     assert result.loc[result['task_id'] == 't1', 'change_in_slip'].iloc[1] == 2 # 4 - 2 = 2
     # Verify change_type based on slip changes
-    assert result.loc[(result['task_id'] == 't1') & (result['update_phase'] == 'update_1'), 'change_type'].iloc[0] == 'New/No Prior'
+    assert result.loc[(result['task_id'] == 't1') & (result['update_phase'] == 'update_1'), 'change_type'].iloc[0] == 'Initial'
     assert result.loc[(result['task_id'] == 't1') & (result['update_phase'] == 'update_2'), 'change_type'].iloc[0] == 'Slipped Further'
-    assert result.loc[result['task_id'] == 't2', 'change_type'].iloc[0] == 'New/No Prior' # Finished early, but still first record
+    assert result.loc[result['task_id'] == 't2', 'change_type'].iloc[0] == 'Initial' # Finished early, but still first record

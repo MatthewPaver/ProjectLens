@@ -18,8 +18,8 @@ serve: install
 web:
 	$(PYTHON) Website/run_website.py
 
-pipeline:
-	$(PYTHON) Processing/main.py
+pipeline: install
+	$(PYTHON_BIN) Processing/main.py
 
 test: install
 	$(PYTHON_BIN) -m pytest Processing/tests -q

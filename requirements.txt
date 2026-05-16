@@ -7,3 +7,4 @@ ruptures>=1.1,<1.2
 openpyxl>=3.0,<3.2
 xlrd>=2.0,<2.1
 python-dateutil>=2.8,<2.10
+pytest>=8.0,<9.0
