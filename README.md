@@ -51,6 +51,20 @@ ProjectLens combines:
 | Architecture | Flask upload UI -> file loader -> cleaning -> risk analysis modules -> CSV outputs -> Power BI artefacts |
 | Limitations | Designed as a local portfolio application; production use would need auth, storage hardening, and deployment packaging. |
 
+## Practical Test
+
+Can a project schedule file become a useful delivery-risk report?
+
+The useful check is the full path:
+
+1. Upload or place schedule data in the expected folder.
+2. Clean and standardise the file.
+3. Run slippage, milestone, changepoint, and forecast checks.
+4. Produce CSV outputs and reporting artefacts.
+5. Review the risk picture through the Flask app or downstream Power BI files.
+
+That is the point of the app: make schedule risk easier to inspect before it becomes obvious late in delivery.
+
 ## Reviewer Notes
 
 - **Reproducible path:** root `requirements.txt` and `make` targets are the supported setup route.
