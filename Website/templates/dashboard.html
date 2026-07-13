@@ -3,15 +3,17 @@
 {% block title %}Dashboard - ProjectLens{% endblock %}
 
 {% block content %}
-
-<div class="ratio ratio-16x9 border rounded">
-    <iframe
-      title="ProjectLens Dashboard"
-      src="https://app.powerbi.com/view?r=eyJrIjoiMDMyNGQ4Y2QtMTY2MC00NWJmLTgxNmYtYWZiNmYzYmUzNTllIiwidCI6IjhkY2M5NDc4LTEzYjctNGYxNS04ZWIxLWU1ZmE0ZThlY2U2ZSJ9"
-      allowFullScreen
-    ></iframe>
-    <!-- Example Embed URL Structure:
-    src="https://app.powerbi.com/reportEmbed?reportId=YOUR_REPORT_ID&groupId=YOUR_GROUP_ID&autoAuth=true&ctid=YOUR_TENANT_ID"
-    -->
-</div>
-{% endblock %} 
+<section class="container py-4">
+  <div class="d-flex justify-content-between align-items-end gap-3 flex-wrap mb-3">
+    <div>
+      <p class="text-uppercase text-muted small mb-1">Decision support</p>
+      <h1 class="h2 mb-1">Project Risk Command Centre</h1>
+      <p class="text-muted mb-0">Compare recovery options, explain the evidence and preserve the decision outcome.</p>
+    </div>
+    <a class="btn btn--primary" href="{{ url_for('command_centre') }}" target="_blank">Open full screen</a>
+  </div>
+  <div class="ratio ratio-16x9 border bg-dark">
+    <iframe title="ProjectLens Risk Command Centre" src="{{ url_for('command_centre') }}" allowfullscreen></iframe>
+  </div>
+</section>
+{% endblock %}

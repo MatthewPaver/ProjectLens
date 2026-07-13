@@ -148,6 +148,15 @@ def upload_files():
 def dashboard():
     return render_template('dashboard.html')
 
+@app.route('/command-centre/')
+def command_centre():
+    """Serve the portable decision-support demonstrator locally."""
+    return send_from_directory(os.path.join(PROJECT_ROOT, 'docs'), 'index.html')
+
+@app.route('/command-centre/<path:filename>')
+def command_centre_asset(filename):
+    return send_from_directory(os.path.join(PROJECT_ROOT, 'docs'), filename)
+
 @app.route('/files')
 def files_page():
     return render_template('files.html')

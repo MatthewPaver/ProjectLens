@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ProjectLens turns schedule analysis into accountable recovery decisions, then checks whether those decisions worked.">
+  <meta name="theme-color" content="#0b1620">
+  <meta property="og:title" content="ProjectLens Risk Command Centre">
+  <meta property="og:description" content="Compare recovery moves, explain the schedule evidence and check whether project decisions worked.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://matthewpaver.github.io/ProjectLens/assets/command-centre-preview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>ProjectLens | Risk Command Centre</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#workspace">Skip to command centre</a>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="topbar" id="top">
+    <a class="brand" href="#top" aria-label="ProjectLens home">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span><b>PROJECT</b>LENS</span>
+      <em>COMMAND CENTRE</em>
+    </a>
+    <div class="project-switcher">
+      <label for="projectSelect">Live portfolio</label>
+      <select id="projectSelect">
+        <option value="northstar">Northstar Rail Upgrade</option>
+        <option value="thames">Thames Energy Transition</option>
+        <option value="meridian">Meridian Systems Integration</option>
+      </select>
+      <span class="status"><i></i> Update 14 accepted</span>
+    </div>
+    <div class="topbar-actions">
+      <button class="icon-button" id="methodButton" type="button" aria-label="Open model methodology">?</button>
+      <a class="portfolio-credit" href="https://matthewpaver.github.io/MatthewPaver/store/" target="_blank" rel="noreferrer">Built by Matthew Paver ↗</a>
+    </div>
+  </header>
+
+  <aside class="rail" aria-label="Primary navigation">
+    <nav>
+      <button class="rail-item active" data-view-target="executive" type="button"><span>01</span><b>Executive</b></button>
+      <button class="rail-item" data-view-target="analyst" type="button"><span>02</span><b>Analyst</b></button>
+      <button class="rail-item" data-view-target="decisions" type="button"><span>03</span><b>Decisions</b><em id="decisionCount">2</em></button>
+    </nav>
+    <div class="rail-foot">
+      <span>MODEL</span>
+      <b>10,000</b>
+      <small>simulations</small>
+    </div>
+  </aside>
+
+  <main id="workspace" class="workspace">
+    <section class="view active" data-view="executive" aria-labelledby="executiveTitle">
+      <div class="page-heading reveal">
+        <div>
+          <p class="eyebrow"><span>Portfolio / Northstar</span> Reporting period 14 · 14 July 2026</p>
+          <h1 id="executiveTitle">Recovery decisions,<br><em>not another dashboard.</em></h1>
+        </div>
+        <div class="confidence-stamp">
+          <span>Decision confidence</span>
+          <strong id="decisionConfidence">MEDIUM</strong>
+          <small>3 evidence sources · 1 assumption to verify</small>
+        </div>
+      </div>
+
+      <div class="briefing-grid reveal delay-1">
+        <article class="briefing-card">
+          <div class="card-kicker"><span>Director briefing</span><time>09:42 today</time></div>
+          <p id="briefingText">Northstar remains outside the September commitment. Civil handover is the dominant driver, but resequencing commissioning can recover more time per unit of effort than adding another shift.</p>
+          <div class="evidence-row">
+            <span>Schedule updates ×14</span><span>Critical activities ×18</span><span>Change points ×3</span>
+          </div>
+        </article>
+        <button class="scenario-launch" id="openLab" type="button">
+          <span>Open scenario lab</span>
+          <strong>Test a recovery move</strong>
+          <i>↗</i>
+        </button>
+      </div>
+
+      <div class="metric-strip reveal delay-2" aria-label="Headline project metrics">
+        <article>
+          <span>On-time confidence</span>
+          <strong id="onTimeMetric">31<small>%</small></strong>
+          <em class="negative">▼ 8 pts since update 13</em>
+        </article>
+        <article>
+          <span>P80 completion</span>
+          <strong id="p80DateMetric">18<small> OCT</small></strong>
+          <em class="negative" id="p80Caption">35 days beyond commitment</em>
+        </article>
+        <article>
+          <span>Recoverable exposure</span>
+          <strong id="recoveryMetric">11<small> DAYS</small></strong>
+          <em class="positive">Across 3 viable interventions</em>
+        </article>
+        <article>
+          <span>Decisions due</span>
+          <strong id="dueMetric">03</strong>
+          <em>Before Friday control gate</em>
+        </article>
+      </div>
+
+      <div class="executive-grid reveal delay-3">
+        <article class="panel confidence-panel">
+          <div class="panel-head">
+            <div><span>Completion confidence</span><h2>Where the date can land</h2></div>
+            <div class="legend"><i class="base"></i> Current plan <i class="target"></i> Selected move</div>
+          </div>
+          <div class="distribution" aria-label="Completion date uncertainty distribution">
+            <svg viewBox="0 0 720 230" role="img" aria-labelledby="distributionTitle">
+              <title id="distributionTitle">Current and selected scenario completion distributions</title>
+              <defs>
+                <linearGradient id="baseFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f05a3c" stop-opacity=".45"/><stop offset="1" stop-color="#f05a3c" stop-opacity="0"/></linearGradient>
+                <linearGradient id="scenarioFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c6f35b" stop-opacity=".5"/><stop offset="1" stop-color="#c6f35b" stop-opacity="0"/></linearGradient>
+              </defs>
+              <line x1="60" y1="190" x2="685" y2="190" class="axis"/>
+              <line x1="385" y1="24" x2="385" y2="196" class="commit-line"/>
+              <text x="385" y="16" class="commit-label" text-anchor="middle">30 SEP COMMITMENT</text>
+              <path id="baseCurve" class="base-curve" d="M60 190 C150 190 185 170 240 120 C300 65 365 55 425 92 C505 142 545 180 685 190 L685 190 L60 190 Z"/>
+              <path id="scenarioCurve" class="scenario-curve" d="M60 190 C135 188 165 150 218 90 C270 38 330 52 378 105 C430 165 505 188 685 190 L685 190 L60 190 Z"/>
+              <g class="axis-labels"><text x="60" y="216">08 SEP</text><text x="218" y="216">22 SEP</text><text x="385" y="216">30 SEP</text><text x="535" y="216">10 OCT</text><text x="685" y="216">24 OCT</text></g>
+            </svg>
+          </div>
+          <div class="range-stats">
+            <div><span>P50</span><b id="p50Days">+12 days</b><small>Most likely</small></div>
+            <div><span>P80</span><b id="p80Days">+18 days</b><small>Planning confidence</small></div>
+            <div><span>Target</span><b id="targetChance">31%</b><small>On or before commitment</small></div>
+          </div>
+        </article>
+
+        <article class="panel driver-panel">
+          <div class="panel-head">
+            <div><span>Root-cause evidence</span><h2>What is moving the date</h2></div>
+            <button class="text-button" data-view-jump="analyst" type="button">Inspect evidence →</button>
+          </div>
+          <div class="driver-list" id="driverList"></div>
+          <p class="model-note"><b>How this is ranked:</b> probability × most-likely impact × critical-path exposure. Correlation is not yet modelled.</p>
+        </article>
+      </div>
+
+      <section class="recommendations reveal delay-4" aria-labelledby="recommendationTitle">
+        <div class="section-head">
+          <div><span>Recommended interventions</span><h2 id="recommendationTitle">Choose the move, preserve the reasoning</h2></div>
+          <p>Each option is compared against identical simulation draws so the difference comes from the intervention, not random noise.</p>
+        </div>
+        <div class="scenario-cards" id="scenarioCards"></div>
+      </section>
+    </section>
+
+    <section class="view" data-view="analyst" aria-labelledby="analystTitle" hidden>
+      <div class="page-heading compact">
+        <div>
+          <p class="eyebrow"><span>Analyst workspace</span> Evidence before narrative</p>
+          <h1 id="analystTitle">Trace every claim<br><em>back to the schedule.</em></h1>
+        </div>
+        <button class="outline-button" id="exportBrief" type="button">Export decision brief</button>
+      </div>
+
+      <div class="analyst-layout">
+        <article class="panel tornado-panel">
+          <div class="panel-head"><div><span>Sensitivity</span><h2>Expected delay contribution</h2></div><small>Days · weighted</small></div>
+          <div id="tornadoChart" class="tornado-chart"></div>
+        </article>
+        <article class="panel health-panel">
+          <div class="panel-head"><div><span>Input integrity</span><h2>Schedule health</h2></div><strong>72 / 100</strong></div>
+          <div class="health-grid">
+            <div><i style="--score: 84%"></i><span>Logic coverage</span><b>84%</b></div>
+            <div><i style="--score: 63%"></i><span>Update stability</span><b>63%</b></div>
+            <div><i style="--score: 91%"></i><span>Baseline coverage</span><b>91%</b></div>
+            <div><i style="--score: 51%"></i><span>Forecast confidence</span><b>51%</b></div>
+          </div>
+          <p>Forecast confidence is constrained by two sparse activity histories. They are excluded from the recommendation ranking.</p>
+        </article>
+      </div>
+
+      <article class="panel evidence-table-panel">
+        <div class="panel-head">
+          <div><span>Evidence register</span><h2>Activities requiring review</h2></div>
+          <label class="search-label">Filter <input id="evidenceFilter" type="search" placeholder="Task, owner or signal"></label>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Activity</th><th>Owner</th><th>Signal</th><th>Movement</th><th>Confidence</th><th>Next check</th></tr></thead>
+            <tbody id="evidenceTable"></tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="assumption-band">
+        <div><span>Model boundary 01</span><p>Activity effects are treated as independent. Shared causes and resource correlation require programme-specific calibration.</p></div>
+        <div><span>Model boundary 02</span><p>Recommendations are reviewable decision prompts. They do not alter the source schedule or replace professional judgement.</p></div>
+        <div><span>Data status</span><p>Public demonstration uses synthetic project data. The Python engine accepts organisation-defined drivers and interventions.</p></div>
+      </article>
+    </section>
+
+    <section class="view" data-view="decisions" aria-labelledby="decisionsTitle" hidden>
+      <div class="page-heading compact">
+        <div>
+          <p class="eyebrow"><span>Decision ledger</span> Promise versus observed recovery</p>
+          <h1 id="decisionsTitle">Did the intervention<br><em>actually work?</em></h1>
+        </div>
+        <button class="scenario-launch small" id="openLabFromLedger" type="button"><span>New scenario</span><strong>Compare a move</strong><i>+</i></button>
+      </div>
+
+      <div class="ledger-summary">
+        <article><span>Recovery promised</span><strong>19 days</strong><small>Across 4 decisions</small></article>
+        <article><span>Recovery observed</span><strong>13 days</strong><small>68% realised</small></article>
+        <article><span>Open commitments</span><strong id="openCommitments">02</strong><small>1 review overdue</small></article>
+      </div>
+
+      <div class="decision-ledger" id="decisionLedger"></div>
+    </section>
+  </main>
+
+  <dialog id="scenarioDialog" class="scenario-dialog">
+    <form method="dialog" class="dialog-shell">
+      <div class="dialog-head">
+        <div><span>Scenario lab</span><h2>Build a recovery case</h2><p>Adjust operational levers. ProjectLens reruns the same 10,000 futures for a fair comparison.</p></div>
+        <button class="close-button" value="cancel" aria-label="Close scenario lab">×</button>
+      </div>
+      <div class="lab-layout">
+        <div class="lab-controls">
+          <label><span>Handover impact reduction <output id="handoverOutput">45%</output></span><input id="handoverRange" type="range" min="0" max="75" value="45"></label>
+          <label><span>Approval cycle reduction <output id="approvalOutput">20%</output></span><input id="approvalRange" type="range" min="0" max="75" value="20"></label>
+          <label><span>Testing capacity uplift <output id="testingOutput">20%</output></span><input id="testingRange" type="range" min="0" max="75" value="20"></label>
+          <label><span>Supplier recovery <output id="supplierOutput">10%</output></span><input id="supplierRange" type="range" min="0" max="75" value="10"></label>
+          <div class="lab-meta"><label>Scenario name<input id="scenarioName" type="text" value="Resequence commissioning"></label><label>Decision owner<input id="scenarioOwner" type="text" value="Planning lead"></label></div>
+        </div>
+        <div class="lab-result">
+          <span>Modelled result</span>
+          <div class="lab-score"><strong id="labProbability">52%</strong><small>on-time confidence</small></div>
+          <div class="lab-comparison"><div><span>Current P80</span><b id="labBaseP80">+18 days</b></div><div><span>Scenario P80</span><b id="labScenarioP80">+10 days</b></div><div><span>Expected recovery</span><b id="labRecovery">8 days</b></div></div>
+          <p id="labNarrative">This move primarily reduces exposure to late civil handover while allowing testing preparation to begin earlier.</p>
+          <button id="commitScenario" class="commit-button" value="cancel" type="button">Commit to decision ledger <span>→</span></button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="methodDialog" class="method-dialog">
+    <form method="dialog">
+      <button class="close-button" value="cancel" aria-label="Close methodology">×</button>
+      <span>Transparent by design</span>
+      <h2>How the model works</h2>
+      <ol>
+        <li><b>Describe risk drivers.</b> Each driver has a probability, triangular impact range and critical-path exposure.</li>
+        <li><b>Run 10,000 futures.</b> The seeded simulation produces P10, P50, P80 and on-time confidence.</li>
+        <li><b>Apply an intervention.</b> A scenario reduces named driver impacts. Baseline and scenario use identical random draws.</li>
+        <li><b>Rank the evidence.</b> Root causes use probability × most-likely impact × criticality.</li>
+        <li><b>Record the outcome.</b> Selected interventions enter the decision ledger for review against the next update.</li>
+      </ol>
+      <p>This is an explainable decision-support demonstrator using synthetic data, not a certified schedule-risk model.</p>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>

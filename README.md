@@ -7,13 +7,15 @@
 ![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
 [![Validate](https://github.com/MatthewPaver/ProjectLens/actions/workflows/validate.yml/badge.svg)](https://github.com/MatthewPaver/ProjectLens/actions/workflows/validate.yml)
 
-**Project schedule analysis application**
+**Explainable schedule-risk analysis and recovery decision support**
 
-Upload project data, run the pipeline, and review risk-oriented output through a lightweight Flask interface.
+ProjectLens turns schedule analysis into accountable recovery decisions, then checks whether those decisions worked.
 
 </div>
 
 ![ProjectLens overview](docs/assets/projectlens-overview.png)
+
+![ProjectLens Risk Command Centre](docs/assets/command-centre-preview.png)
 
 ---
 
@@ -21,8 +23,9 @@ Upload project data, run the pipeline, and review risk-oriented output through a
 
 | Section | Where to look |
 |:---|:---|
-| What it solves | Turns project schedule files into delivery-risk reporting and dashboard outputs |
-| Quick start | [`make serve`](#quick-start) or [`make pipeline`](#running-the-pipeline-directly) |
+| What it solves | Turns schedule-risk evidence into accountable recovery decisions |
+| Live command centre | [Open the interactive decision-support demo](https://matthewpaver.github.io/ProjectLens/) |
+| Quick start | [`make serve`](#canonical-setup) or [`make pipeline`](#running-the-pipeline-directly) |
 | Screenshot | [Portfolio Store](https://matthewpaver.github.io/MatthewPaver/store/) |
 | Architecture | [What The Pipeline Does](#what-the-pipeline-does) |
 | Tests | `make test` |
@@ -36,34 +39,69 @@ ProjectLens combines:
 
 - a Flask web interface in [`Website/`](Website)
 - a data processing pipeline in [`Processing/`](Processing)
+- a transparent Monte Carlo decision engine in [`Processing/analysis/decision_support.py`](Processing/analysis/decision_support.py)
+- a portable executive and analyst command centre in [`docs/`](docs)
 - structured input/output folders under [`Data/`](Data)
+
+## What changed in v2
+
+The original application surfaced schedule analysis outputs. The command centre adds the decision layer required in a project-controls meeting:
+
+- executive and analyst views with different information density
+- P10, P50, P80 and on-time confidence ranges
+- evidence-linked root-cause ranking
+- intervention comparison using common random numbers
+- recommended recovery moves with effort, ownership and expected impact
+- a decision ledger that records promised and observed recovery
+- exportable decision briefs with explicit model boundaries
+
+The public demonstration uses synthetic data. Recommendations are explainable prompts for professional review, not autonomous schedule changes.
+
+## Market gap
+
+The schedule-risk market already contains deep diagnostics, Monte Carlo tools, AI summaries and scenario modelling. ProjectLens therefore focuses on a narrower operational gap: preserving the path from evidence, to selected intervention, to named owner, to measured outcome at the next reporting cycle.
+
+The dated quick scan and source notes are available in [`competitor-profiles/`](competitor-profiles).
+
+## Decision model
+
+Each risk driver has a probability, triangular day-impact range and critical-path exposure. A seeded simulation produces completion ranges. Interventions reduce specific driver impacts, and every scenario uses the same random draws as the baseline so differences are attributable to the intervention rather than sampling noise.
+
+Root causes are ranked using an inspectable expected-contribution score:
+
+```text
+expected delay = probability × most-likely impact × critical-path exposure
+```
+
+This deliberately simple model is suitable for scenario comparison and demonstration. Production use would require dependency correlation, calibrated distributions, access controls, secure storage and organisational validation.
 
 ## Reviewer Pack
 
 | Area | Details |
 |:---|:---|
-| What it solves | Project schedule files become slippage, milestone, changepoint, forecast, and reporting outputs. |
+| What it solves | Project schedule files become evidence-linked risks, comparable interventions and reviewable decisions. |
 | Screenshot | [Portfolio Store preview](https://matthewpaver.github.io/MatthewPaver/store/preview.html?app=projectlens) |
 | Run locally | `make install && make serve`, then open `http://127.0.0.1:5000` |
 | Pipeline only | `make pipeline` |
 | Tests | `make test` |
 | Demo data | Sample project folders and output examples are included under `Data/`. |
-| Architecture | Flask upload UI -> file loader -> cleaning -> risk analysis modules -> CSV outputs -> Power BI artefacts |
+| Architecture | Flask upload UI -> cleaning and forecasting -> decision model -> executive/analyst command centre -> decision ledger |
 | Limitations | Designed as a local portfolio application; production use would need auth, storage hardening, and deployment packaging. |
 
 ## Practical Test
 
-Can a project schedule file become a useful delivery-risk report?
+Can a project schedule update become a useful, reviewable recovery decision?
 
 The useful check is the full path:
 
 1. Upload or place schedule data in the expected folder.
 2. Clean and standardise the file.
 3. Run slippage, milestone, changepoint, and forecast checks.
-4. Produce CSV outputs and reporting artefacts.
-5. Review the risk picture through the Flask app or downstream Power BI files.
+4. Compare interventions against identical simulation draws.
+5. Commit a decision with an owner, expected recovery and review point.
+6. Compare promised recovery with the next observed schedule update.
 
-That is the point of the app: make schedule risk easier to inspect before it becomes obvious late in delivery.
+That is the point of the app: close the gap between seeing schedule risk and acting on it accountably.
 
 ## Reviewer Notes
 
