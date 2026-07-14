@@ -1,16 +1,76 @@
-project_name,task_id,task_name,update_phase,predicted_end_date,forecast_confidence,model_type,low_confidence_flag,severity_score
-Alpha,tsk-001,Task 001,latest,2025-09-16,0.9119261912452036,Synthetic Demo,False,0
-Alpha,tsk-002,Task 002,latest,2025-08-03,0.4746920407819929,Synthetic Demo,True,0
-Alpha,tsk-003,Task 003,latest,2025-04-08,0.8899218937562431,Synthetic Demo,False,2
-Alpha,tsk-004,Task 004,latest,2025-08-23,0.3690146780781366,Synthetic Demo,True,0
-Alpha,tsk-005,Task 005,latest,2025-05-01,0.641204455494935,Synthetic Demo,True,0
-Alpha,tsk-006,Task 006,latest,2025-06-06,0.7122876453222424,Synthetic Demo,False,0
-Alpha,tsk-007,Task 007,latest,2025-06-14,0.7021009996456616,Synthetic Demo,False,0
-Alpha,tsk-008,Task 008,latest,2025-09-09,0.7928717042533604,Synthetic Demo,False,0
-Alpha,tsk-009,Task 009,latest,2025-01-09,0.7747632454733421,Synthetic Demo,False,0
-Alpha,tsk-010,Task 010,latest,2025-09-20,0.37679788037626094,Synthetic Demo,True,0
-Alpha,tsk-011,Task 011,latest,2025-10-19,0.6624236039048352,Synthetic Demo,True,0
-Alpha,tsk-012,Task 012,latest,2024-12-22,0.7233284242480151,Synthetic Demo,False,0
-Alpha,tsk-013,Task 013,latest,2025-04-18,0.430267878604202,Synthetic Demo,True,0
-Alpha,tsk-014,Task 014,latest,2025-03-06,0.9361135824445757,Synthetic Demo,False,0
-Alpha,tsk-015,Task 015,latest,2025-11-02,0.670121259680749,Synthetic Demo,True,0
+project_name,task_id,task_name,update_phase,predicted_end_date,prediction_low_date,prediction_high_date,predicted_slip_days,forecast_confidence,model_type,low_confidence_flag,forecast_mae_days,forecast_p80_error_days,validation_windows,confidence_reason,severity_score
+Alpha,tsk-059,Task 059,after Update_015,2025-10-09,2025-09-13,2025-11-03,152.0,0.428,Last reported position,True,19.2,25.2,5,5 rolling tests; typical error 19.2 days; next update is stable,10.0
+Alpha,tsk-007,Task 007,after Update_015,2025-10-08,2025-09-28,2025-10-17,134.0,0.608,Last reported position,True,9.4,9.4,5,5 rolling tests; typical error 9.4 days; next update is stable,10.0
+Alpha,tsk-030,Task 030,after Update_015,2026-04-21,2026-04-10,2026-05-02,128.0,0.569,Last reported position,True,11.0,11.0,5,5 rolling tests; typical error 11.0 days; next update is stable,10.0
+Alpha,tsk-061,Task 061,after Update_015,2025-08-31,2025-08-18,2025-09-13,128.0,0.608,Last reported position,True,9.4,13.0,5,5 rolling tests; typical error 9.4 days; next update is stable,10.0
+Alpha,tsk-005,Task 005,after Update_015,2025-08-11,2025-07-24,2025-08-28,119.0,0.446,Last reported position,True,17.8,17.8,5,5 rolling tests; typical error 17.8 days; next update is stable,10.0
+Alpha,tsk-021,Task 021,after Update_015,2026-01-27,2026-01-12,2026-02-10,103.0,0.504,Last reported position,True,14.2,14.2,5,5 rolling tests; typical error 14.2 days; next update is stable,10.0
+Alpha,tsk-057,Task 057,after Update_015,2025-09-21,2025-09-10,2025-10-01,91.0,0.574,Last reported position,True,10.8,10.8,5,5 rolling tests; typical error 10.8 days; next update is stable,10.0
+Alpha,tsk-029,Task 029,after Update_015,2025-12-29,2025-12-16,2026-01-10,87.0,0.535,Last reported position,True,12.6,12.6,5,5 rolling tests; typical error 12.6 days; next update is stable,10.0
+Alpha,tsk-047,Task 047,after Update_015,2025-03-12,2025-03-05,2025-03-19,71.0,0.675,Last reported position,True,7.0,7.0,5,5 rolling tests; typical error 7.0 days; next update is stable,10.0
+Alpha,tsk-022,Task 022,after Update_015,2025-05-09,2025-05-08,2025-05-10,98.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-015,Task 015,after Update_015,2026-01-31,2026-01-30,2026-02-01,88.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-056,Task 056,after Update_015,2025-04-11,2025-04-10,2025-04-12,83.0,0.911,Last reported position,False,0.8,1.0,5,5 rolling tests; typical error 0.8 days; next update is stable,10.0
+Alpha,tsk-075,Task 075,after Update_015,2025-02-19,2025-02-18,2025-02-20,71.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-041,Task 041,after Update_015,2025-07-30,2025-07-29,2025-07-31,66.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-028,Task 028,after Update_015,2025-07-23,2025-07-22,2025-07-24,64.0,0.93,Last reported position,False,0.4,1.0,5,5 rolling tests; typical error 0.4 days; next update is stable,10.0
+Alpha,tsk-006,Task 006,after Update_015,2025-07-26,2025-07-25,2025-07-27,60.0,0.911,Last reported position,False,0.8,1.0,5,5 rolling tests; typical error 0.8 days; next update is stable,10.0
+Alpha,tsk-026,Task 026,after Update_015,2025-04-12,2025-04-11,2025-04-13,60.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-063,Task 063,after Update_015,2025-12-01,2025-11-30,2025-12-02,60.0,0.902,Last reported position,False,1.0,1.0,5,5 rolling tests; typical error 1.0 days; next update is stable,10.0
+Alpha,tsk-036,Task 036,after Update_015,2025-09-10,2025-09-09,2025-09-11,59.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-023,Task 023,after Update_015,2025-12-04,2025-12-03,2025-12-05,58.0,0.94,Last reported position,False,0.2,1.0,5,5 rolling tests; typical error 0.2 days; next update is stable,10.0
+Alpha,tsk-013,Task 013,after Update_015,2025-05-28,2025-05-26,2025-05-29,56.0,0.883,Last reported position,False,1.4,1.4,5,5 rolling tests; typical error 1.4 days; next update is stable,10.0
+Alpha,tsk-070,Task 070,after Update_015,2025-03-24,2025-03-23,2025-03-25,56.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-051,Task 051,after Update_015,2026-01-23,2026-01-22,2026-01-24,55.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-062,Task 062,after Update_015,2025-11-27,2025-11-26,2025-11-28,55.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-032,Task 032,after Update_015,2025-02-15,2025-02-14,2025-02-16,53.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-016,Task 016,after Update_015,2025-12-25,2025-12-24,2025-12-26,52.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-038,Task 038,after Update_015,2025-12-18,2025-12-17,2025-12-19,49.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-011,Task 011,after Update_015,2025-12-03,2025-12-02,2025-12-04,47.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-074,Task 074,after Update_015,2025-11-16,2025-11-15,2025-11-17,46.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-009,Task 009,after Update_015,2025-01-24,2025-01-23,2025-01-25,45.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-044,Task 044,after Update_015,2025-09-26,2025-09-25,2025-09-27,43.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-034,Task 034,after Update_015,2025-06-22,2025-06-20,2025-06-23,42.0,0.892,Last reported position,False,1.2,1.2,5,5 rolling tests; typical error 1.2 days; next update is stable,10.0
+Alpha,tsk-031,Task 031,after Update_015,2025-10-20,2025-10-19,2025-10-21,41.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-068,Task 068,after Update_015,2025-08-24,2025-08-23,2025-08-25,40.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-014,Task 014,after Update_015,2025-04-11,2025-04-10,2025-04-12,38.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-018,Task 018,after Update_015,2025-09-08,2025-09-07,2025-09-09,38.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-012,Task 012,after Update_015,2025-01-31,2025-01-30,2025-02-01,37.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-024,Task 024,after Update_015,2025-05-30,2025-05-29,2025-05-31,37.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-049,Task 049,after Update_015,2025-04-05,2025-04-04,2025-04-06,37.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-072,Task 072,after Update_015,2025-05-15,2025-05-14,2025-05-16,36.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-035,Task 035,after Update_015,2025-12-24,2025-12-22,2025-12-25,33.0,0.866,Last reported position,False,1.8,1.8,5,5 rolling tests; typical error 1.8 days; next update is stable,10.0
+Alpha,tsk-052,Task 052,after Update_015,2025-06-01,2025-05-30,2025-06-02,33.0,0.883,Last reported position,False,1.4,1.4,5,5 rolling tests; typical error 1.4 days; next update is stable,10.0
+Alpha,tsk-048,Task 048,after Update_015,2025-07-07,2025-07-06,2025-07-08,32.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-066,Task 066,after Update_015,2025-09-22,2025-09-21,2025-09-23,32.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-037,Task 037,after Update_015,2025-08-07,2025-08-06,2025-08-08,31.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-019,Task 019,after Update_015,2025-07-17,2025-07-16,2025-07-18,29.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-033,Task 033,after Update_015,2025-09-08,2025-09-07,2025-09-09,28.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-064,Task 064,after Update_015,2025-11-03,2025-11-02,2025-11-04,25.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-001,Task 001,after Update_015,2025-10-02,2025-10-01,2025-10-03,24.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-054,Task 054,after Update_015,2025-10-25,2025-10-24,2025-10-26,24.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-017,Task 017,after Update_015,2025-05-17,2025-05-16,2025-05-18,23.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-053,Task 053,after Update_015,2025-08-07,2025-08-06,2025-08-08,23.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-050,Task 050,after Update_015,2025-05-10,2025-05-09,2025-05-11,21.0,0.94,Last reported position,False,0.2,1.0,5,5 rolling tests; typical error 0.2 days; next update is stable,10.0
+Alpha,tsk-071,Task 071,after Update_015,2025-02-23,2025-02-22,2025-02-24,21.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-008,Task 008,after Update_015,2025-09-07,2025-09-06,2025-09-08,18.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-027,Task 027,after Update_015,2025-10-08,2025-10-07,2025-10-09,14.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-042,Task 042,after Update_015,2025-01-25,2025-01-24,2025-01-26,13.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-010,Task 010,after Update_015,2025-09-12,2025-09-11,2025-09-13,10.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,10.0
+Alpha,tsk-043,Task 043,after Update_015,2025-05-31,2025-05-30,2025-06-01,8.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,8.0
+Alpha,tsk-003,Task 003,after Update_015,2025-03-23,2025-03-22,2025-03-24,7.0,0.94,Last reported position,False,0.2,1.0,5,5 rolling tests; typical error 0.2 days; next update is stable,7.0
+Alpha,tsk-058,Task 058,after Update_015,2025-06-05,2025-06-04,2025-06-06,5.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,5.0
+Alpha,tsk-067,Task 067,after Update_015,2025-02-21,2025-02-19,2025-02-22,5.0,0.902,Last reported position,False,1.0,1.6,5,5 rolling tests; typical error 1.0 days; next update is stable,5.0
+Alpha,tsk-002,Task 002,after Update_015,2025-07-26,2025-07-25,2025-07-27,2.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,2.0
+Alpha,tsk-055,Task 055,after Update_015,2025-01-17,2025-01-16,2025-01-18,2.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,2.0
+Alpha,tsk-073,Task 073,after Update_015,2025-10-25,2025-10-24,2025-10-26,2.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,2.0
+Alpha,tsk-045,Task 045,after Update_015,2025-06-01,2025-05-31,2025-06-02,1.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,1.0
+Alpha,tsk-065,Task 065,after Update_015,2025-05-20,2025-05-19,2025-05-21,0.0,0.911,Last reported position,False,0.8,1.0,5,5 rolling tests; typical error 0.8 days; next update is stable,0.0
+Alpha,tsk-025,Task 025,after Update_015,2025-07-04,2025-07-03,2025-07-05,-2.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,0.0
+Alpha,tsk-046,Task 046,after Update_015,2025-11-05,2025-11-04,2025-11-06,-2.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,0.0
+Alpha,tsk-039,Task 039,after Update_015,2025-10-31,2025-10-30,2025-11-01,-3.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,0.0
+Alpha,tsk-004,Task 004,after Update_015,2025-07-26,2025-07-25,2025-07-27,-4.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,1.0
+Alpha,tsk-040,Task 040,after Update_015,2025-10-30,2025-10-29,2025-10-31,-4.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,1.0
+Alpha,tsk-020,Task 020,after Update_015,2025-09-13,2025-09-12,2025-09-14,-5.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,0.0
+Alpha,tsk-069,Task 069,after Update_015,2025-03-01,2025-02-28,2025-03-02,-10.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,0.0
+Alpha,tsk-060,Task 060,after Update_015,2025-06-25,2025-06-24,2025-06-26,-44.0,0.95,Last reported position,False,0.0,1.0,5,5 rolling tests; typical error 0.0 days; next update is stable,0.0

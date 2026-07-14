@@ -3,7 +3,6 @@ import json
 import pandas as pd
 import numpy as np
 import logging
-import random
 import math
 
 # Define a helper function to prepare and save DataFrames
@@ -155,6 +154,8 @@ def write_outputs(
     # --- Retrieve analysis results (handle missing keys gracefully) ---
     slippages_df = analysis_results.get('slippages')
     forecasts_df = analysis_results.get('forecasts')
+    model_evaluation_df = analysis_results.get('model_evaluation')
+    action_briefs_df = analysis_results.get('action_briefs')
     changepoints_df = analysis_results.get('changepoints')
     milestones_df = analysis_results.get('milestones')
     # Recommendations might be a list of dicts, convert to DataFrame
@@ -170,6 +171,8 @@ def write_outputs(
     # Ensure DataFrames are actual DataFrames, even if empty
     slippages_df = slippages_df if slippages_df is not None else pd.DataFrame()
     forecasts_df = forecasts_df if forecasts_df is not None else pd.DataFrame()
+    model_evaluation_df = model_evaluation_df if model_evaluation_df is not None else pd.DataFrame()
+    action_briefs_df = action_briefs_df if action_briefs_df is not None else pd.DataFrame()
     changepoints_df = changepoints_df if changepoints_df is not None else pd.DataFrame()
     milestones_df = milestones_df if milestones_df is not None else pd.DataFrame()
     cleaned_df = cleaned_df if cleaned_df is not None else pd.DataFrame()
@@ -464,7 +467,8 @@ def write_outputs(
     forecast_cols = [
         "project_name", "task_id", "task_name", "update_phase",
         "predicted_end_date", "forecast_confidence", "model_type", "low_confidence_flag",
-        "severity_score" # Add severity score at time of forecast
+        "severity_score", "prediction_low_date", "prediction_high_date", "predicted_slip_days",
+        "forecast_mae_days", "forecast_p80_error_days", "validation_windows", "confidence_reason"
     ]
     forecast_defaults = {
         "forecast_confidence": 0.0,
@@ -511,73 +515,8 @@ def write_outputs(
             task_names = cleaned_df[['task_id', 'task_name']].drop_duplicates(subset=['task_id'], keep='last')
             forecasts_to_save = pd.merge(forecasts_to_save, task_names, on='task_id', how='left')
     else:
-        # Generate synthetic forecast data if forecasts_df is empty
-        logger.info(f"[{project_name}] No forecast data available. Creating synthetic forecasts for demonstration.")
-        
-        # Create synthetic forecast data from cleaned_df
-        synthetic_forecasts = []
-        
-        if not cleaned_df.empty:
-            # Get a reasonable sample of tasks
-            task_sample = cleaned_df['task_id'].drop_duplicates().head(15).tolist()
-            
-            from datetime import datetime, timedelta
-            
-            # Create random confidence distribution (varied)
-            confidence_values = []
-            confidence_values.extend([random.uniform(0.85, 0.95) for _ in range(3)])  # 3 high confidence
-            confidence_values.extend([random.uniform(0.65, 0.85) for _ in range(7)])  # 7 medium confidence
-            confidence_values.extend([random.uniform(0.35, 0.65) for _ in range(5)])  # 5 low confidence
-            
-            random.shuffle(confidence_values)  # Shuffle for randomness
-            
-            for i, task_id in enumerate(task_sample):
-                # Extract task details
-                task_data = cleaned_df[cleaned_df['task_id'] == task_id].iloc[0]
-                task_name = task_data.get('task_name', f"Task {task_id}")
-                
-                # Add varied days to baseline end (between -5 and +30 days)
-                baseline_end = task_data.get('baseline_end_date')
-                days_adjustment = random.randint(-5, 30)
-                
-                # Convert baseline_end to datetime if it's a string
-                if isinstance(baseline_end, str):
-                    try:
-                        baseline_end = pd.to_datetime(baseline_end)
-                    except:
-                        # Fallback to today + random days if conversion fails
-                        baseline_end = datetime.now()
-                
-                # If baseline_end is still not a datetime, use current date
-                if not isinstance(baseline_end, pd.Timestamp) and not isinstance(baseline_end, datetime):
-                    baseline_end = datetime.now()
-                    
-                predicted_end_date = baseline_end + timedelta(days=days_adjustment)
-                
-                # Get confidence from our varied distribution (or generate if needed)
-                confidence = confidence_values[i % len(confidence_values)]
-                
-                # Get severity score if available
-                severity_score = task_data.get('severity_score', random.randint(0, 10))
-                
-                synthetic_forecasts.append({
-                    'project_name': project_name,
-                    'task_id': task_id,
-                    'task_name': task_name,
-                    'update_phase': 'latest',
-                    'predicted_end_date': predicted_end_date,
-                    'forecast_confidence': confidence,
-                    'model_type': 'Synthetic Demo',
-                    'low_confidence_flag': confidence < 0.7,
-                    'severity_score': severity_score
-                })
-            
-            forecasts_to_save = pd.DataFrame(synthetic_forecasts)
-            logger.info(f"[{project_name}] Created {len(forecasts_to_save)} synthetic forecasts for demonstration.")
-        else:
-            logger.warning(f"[{project_name}] Cannot create synthetic forecasts: cleaned_df is empty.")
-            # Create empty DataFrame with required columns
-            forecasts_to_save = pd.DataFrame(columns=forecast_cols)
+        logger.warning(f"[{project_name}] No validated forecasts are available; writing headers only.")
+        forecasts_to_save = pd.DataFrame(columns=forecast_cols)
 
     _save_output_csv(
         df_input=forecasts_to_save,
@@ -585,6 +524,38 @@ def write_outputs(
         output_filepath=os.path.join(output_path, "forecast_results.csv"),
         default_values=forecast_defaults
         # unique_cols_subset=['task_id', 'update_phase'] # Forecasts should be unique per task/update
+    )
+
+    # 7. Model governance and 8. action briefs
+    if not model_evaluation_df.empty:
+        model_evaluation_df = model_evaluation_df.copy()
+        model_evaluation_df.insert(0, "project_name", project_name)
+    model_evaluation_cols = [
+        "project_name", "model_type", "model_key", "mae_days", "median_error_days",
+        "bias_days", "p80_error_days", "interval_coverage_80", "validation_predictions",
+        "tasks_evaluated", "champion", "validation_method",
+    ]
+    _save_output_csv(
+        df_input=model_evaluation_df,
+        required_columns=model_evaluation_cols,
+        output_filepath=os.path.join(output_path, "model_evaluation.csv"),
+        default_values={"project_name": project_name, "champion": False},
+    )
+
+    if not action_briefs_df.empty:
+        action_briefs_df = action_briefs_df.copy()
+        action_briefs_df.insert(0, "project_name", project_name)
+    action_brief_cols = [
+        "project_name", "task_id", "task_name", "priority", "priority_score",
+        "decision_question", "what_changed", "forecast_if_no_action", "why_now",
+        "recommended_action", "owner_role", "decision_by", "evidence", "confidence",
+        "next_evidence", "human_gate",
+    ]
+    _save_output_csv(
+        df_input=action_briefs_df,
+        required_columns=action_brief_cols,
+        output_filepath=os.path.join(output_path, "action_briefs.csv"),
+        default_values={"project_name": project_name, "human_gate": "Human approval required"},
     )
 
 

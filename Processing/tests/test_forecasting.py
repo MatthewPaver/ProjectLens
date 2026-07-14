@@ -1,73 +1,50 @@
 import pandas as pd
-from datetime import datetime, timedelta
-import unittest
-import logging
 
-# IMPORTANT: DO NOT IMPORT ANY TENSORFLOW OR FORECASTING MODULES HERE
-# The test needs to be completely isolated
+from Processing.analysis.forecast_engine import run_forecasting
 
-class TestForecasting(unittest.TestCase):
-    """Test forecasting functionality with full isolation"""
-    
-    def test_forecasting_stub(self):
-        """Conceptually checks expected forecasting output structure (stub).
-        
-        NOTE: This test is intentionally isolated and does NOT import or run the 
-        actual forecasting modules to avoid dependency issues (e.g., TensorFlow).
-        It verifies the *expected format* of the output DataFrame if forecasting
-        were to run successfully.
-        """
-        # Create test data (what would be input to the forecasting module)
-        today = datetime.today()
-        input_df = pd.DataFrame({
-            "task_id": ["a"] * 6,
-            "end_date": [(today + timedelta(days=i * 5)).strftime('%Y-%m-%d') for i in range(6)],
-            "update_phase": [f"update_{i}" for i in range(6)]
-        })
-        
-        # Create simulated output (what we expect the forecasting module would return)
-        forecast_date = today + timedelta(days=30)
-        output_df = pd.DataFrame({
-            "task_id": ["a"],
-            "forecast_date_arima": [forecast_date],
-            "forecast_date_gann": [forecast_date + timedelta(days=5)],
-            "confidence_score": [0.85],
-            "forecast_model": ["ARIMA + GANN"]
-        })
-        
-        # Test assertions on the simulated output
-        self.assertFalse(output_df.empty)
-        self.assertIn("forecast_date_gann", output_df.columns)
-        self.assertIn("forecast_date_arima", output_df.columns)
-        self.assertEqual(len(output_df), 1)
-        self.assertEqual(output_df['task_id'].iloc[0], "a")
-        
-    def test_linear_extrapolation(self):
-        """Tests the simple linear extrapolation fallback logic.
-        
-        Provides a sequence of dates with a consistent interval and verifies that
-        the calculated average delta correctly predicts the next date in the sequence.
-        This tests the fallback mechanism used in `forecast_engine.forecast_gann`
-        when complex forecasting (like GANN) is unavailable or fails.
-        """
-        # Sample dates representing task completion over time
-        dates = [
-            datetime(2023, 1, 1),
-            datetime(2023, 1, 15),
-            datetime(2023, 2, 1),
-            datetime(2023, 2, 15)
-        ]
-        
-        # Calculate average delta (what our fallback does)
-        deltas = [(dates[i] - dates[i-1]).days for i in range(1, len(dates))]
-        avg_delta = sum(deltas) / len(deltas)
-        
-        # Predicted next date using simple linear extrapolation
-        predicted_date = dates[-1] + timedelta(days=avg_delta)
-        
-        # Verify the prediction is correct (15 days after Feb 15 = March 2)
-        expected_date = datetime(2023, 3, 2)  # Based on the 15-day pattern
-        # Check components for robustness against potential time differences
-        self.assertEqual(predicted_date.day, expected_date.day)
-        self.assertEqual(predicted_date.month, expected_date.month)
-        self.assertEqual(predicted_date.year, expected_date.year)
+
+def _history(task_count=3, updates=15):
+    rows = []
+    patterns = {
+        0: [update // 2 for update in range(updates)],
+        1: [5] * updates,
+        2: [max(8, 14 - update // 2) for update in range(updates)],
+    }
+    for task_index in range(task_count):
+        for update in range(updates):
+            rows.append(
+                {
+                    "task_id": f"T-{task_index + 1}",
+                    "task_name": f"Task {task_index + 1}",
+                    "update_phase": f"Update_{update + 1:03d}",
+                    "baseline_end": "2026-09-30",
+                    "slip_days": patterns[task_index][update],
+                    "is_critical": task_index == 0,
+                }
+            )
+    return pd.DataFrame(rows)
+
+
+def test_real_forecast_is_validated_and_deterministic():
+    forecasts, failed = run_forecasting(_history(), "Test")
+
+    assert failed == []
+    assert len(forecasts) == 3
+    assert forecasts.predicted_end_date.notna().all()
+    assert forecasts.forecast_confidence.between(0, 1).all()
+    assert not forecasts.model_type.str.contains("synthetic|demo", case=False).any()
+    assert (forecasts.validation_windows == 5).all()
+    assert (forecasts.forecast_p80_error_days >= 1).all()
+
+    scorecard = forecasts.attrs["model_evaluation"]
+    assert len(scorecard) == 4
+    assert scorecard.champion.sum() == 1
+    assert scorecard.validation_predictions.min() == 15
+    assert scorecard.iloc[0].mae_days <= scorecard.iloc[-1].mae_days
+
+
+def test_sparse_history_fails_closed_without_fake_forecasts():
+    forecasts, failed = run_forecasting(_history(task_count=1, updates=4), "Sparse")
+
+    assert forecasts.empty
+    assert failed == ["T-1"]

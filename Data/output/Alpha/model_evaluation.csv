@@ -1,0 +1,5 @@
+project_name,model_type,model_key,mae_days,median_error_days,bias_days,p80_error_days,interval_coverage_80,validation_predictions,tasks_evaluated,champion,validation_method
+Alpha,Last reported position,Naive,1.63,0.0,-1.63,0.0,97.1,375,75,True,"Rolling origin, one update ahead"
+Alpha,Random walk with drift,RWD,4.58,3.17,1.56,5.46,97.6,375,75,False,"Rolling origin, one update ahead"
+Alpha,Automatic ARIMA,AutoARIMA,5.27,1.0,-5.1,8.08,96.3,375,75,False,"Rolling origin, one update ahead"
+Alpha,Automatic exponential smoothing,AutoETS,5.9,1.97,-5.72,7.44,96.0,375,75,False,"Rolling origin, one update ahead"

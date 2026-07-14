@@ -149,7 +149,7 @@
 
       <section class="proactive-section reveal delay-4" aria-labelledby="watchTitle">
         <div class="proactive-head">
-          <div><span>Proactive watchlist</span><h2 id="watchTitle">What needs attention before the next control gate</h2></div>
+          <div><span>Next control meeting</span><h2 id="watchTitle">Three decisions to make, in priority order</h2></div>
           <button class="text-button" data-view-jump="data" type="button">Open evidence room →</button>
         </div>
         <div class="watch-preview" id="watchPreview"></div>
@@ -178,15 +178,11 @@
           <div class="panel-head"><div><span>Sensitivity</span><h2>Expected delay contribution</h2></div><small>Days · weighted</small></div>
           <div id="tornadoChart" class="tornado-chart"></div>
         </article>
-        <article class="panel health-panel">
-          <div class="panel-head"><div><span>Input integrity</span><h2>Schedule health</h2></div><strong>72 / 100</strong></div>
-          <div class="health-grid">
-            <div><i style="--score: 84%"></i><span>Logic coverage</span><b>84%</b></div>
-            <div><i style="--score: 63%"></i><span>Update stability</span><b>63%</b></div>
-            <div><i style="--score: 91%"></i><span>Baseline coverage</span><b>91%</b></div>
-            <div><i style="--score: 51%"></i><span>Forecast confidence</span><b>51%</b></div>
-          </div>
-          <p>Forecast confidence is constrained by two sparse activity histories. They are excluded from the recommendation ranking.</p>
+        <article class="panel health-panel model-panel">
+          <div class="panel-head"><div><span>Model governance</span><h2>Why trust this forecast?</h2></div><strong id="modelMae">1.63 days MAE</strong></div>
+          <div class="model-summary"><span>Current champion</span><b id="modelChampion">Last reported position</b><small id="modelValidation">375 past predictions tested</small></div>
+          <div class="model-scorecard" id="modelScorecard"></div>
+          <p>The most accurate validated model wins, even when it is the simplest. Models are retested on rolling historical windows before use.</p>
         </article>
       </div>
 
@@ -235,7 +231,7 @@
           <h1 id="dataTitle">Bring the evidence.<br><em>Keep control of it.</em></h1>
         </div>
         <div class="data-actions">
-          <button class="outline-button" id="loadDemoData" type="button">Load 2,600+ demo rows</button>
+          <button class="outline-button" id="loadDemoData" type="button">Reload 2,700+ demo rows</button>
           <button class="scenario-launch small" id="openImport" type="button"><span>Private by design</span><strong>Use your CSV files</strong><i>+</i></button>
         </div>
       </div>
@@ -317,6 +313,7 @@
       <span>Transparent by design</span>
       <h2>How the model works</h2>
       <ol>
+        <li><b>Backtest schedule forecasts.</b> Four models compete on rolling historical windows. The lowest-error model wins for each task.</li>
         <li><b>Describe risk drivers.</b> Each driver has a probability, triangular impact range and critical-path exposure.</li>
         <li><b>Run 10,000 futures.</b> The seeded simulation produces P10, P50, P80 and on-time confidence.</li>
         <li><b>Apply an intervention.</b> A scenario reduces named driver impacts. Baseline and scenario use identical random draws.</li>
@@ -335,12 +332,12 @@
       <p>Select one or more CSV files produced by the ProjectLens pipeline. Files are parsed locally and are never sent anywhere.</p>
       <label class="drop-zone" for="dataFiles">
         <strong>Choose CSV files</strong>
-        <span>task_cleaned · slippage_summary · forecasts · milestones · change points · recommendations</span>
+        <span>task history · slippage · forecasts · milestones · change points · recommendations · model scorecard · action briefs</span>
         <input id="dataFiles" type="file" accept=".csv,text/csv" multiple>
       </label>
       <div class="expected-files">
         <span>Minimum useful set</span><b>task_cleaned.csv + slippage_summary.csv</b>
-        <span>Full decision support</span><b>All six recognised output files</b>
+        <span>Full decision support</span><b>All eight recognised output files</b>
       </div>
       <button id="loadDemoFromDialog" class="commit-button" value="cancel" type="button">Or load the complete public demo <span>→</span></button>
     </form>

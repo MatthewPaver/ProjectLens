@@ -38,6 +38,7 @@ from Processing.analysis.forecast_engine import run_forecasting
 from Processing.analysis.changepoint_detector import detect_change_points
 from Processing.analysis.milestone_analysis import analyse_milestones
 from Processing.analysis.recommendation_engine import generate_recommendations
+from Processing.analysis.action_briefs import build_action_briefs
 
 # Output module import
 from Processing.output.output_writer import write_outputs
@@ -230,6 +231,10 @@ def process_project(project_folder_path: str, schema_manager: SchemaManager) -> 
             logger.debug(f"[{project_name}] Running forecasting analysis...")
             forecasts, failed_forecast_tasks = run_forecasting(cleaned_df.copy(), project_name=project_name)
             analysis_results['forecasts'] = forecasts if forecasts is not None else pd.DataFrame()
+            analysis_results['model_evaluation'] = (
+                forecasts.attrs.get('model_evaluation', pd.DataFrame())
+                if isinstance(forecasts, pd.DataFrame) else pd.DataFrame()
+            )
             analysis_results['failed_forecast_tasks'] = failed_forecast_tasks if failed_forecast_tasks else []
             logger.info(f"[{project_name}] Forecasting complete. Rows: {len(analysis_results['forecasts'])}, Failed tasks: {len(analysis_results['failed_forecast_tasks'])}")
         except Exception as e_forecast:
@@ -315,6 +320,10 @@ def process_project(project_folder_path: str, schema_manager: SchemaManager) -> 
             
             # Create analysis_results dict with recommendations included
             analysis_results['recommendations'] = recommendations_list
+            analysis_results['action_briefs'] = build_action_briefs(
+                original_cleaned_df_for_output,
+                analysis_results.get('forecasts', pd.DataFrame()),
+            )
             
             # Call with updated signature matching output_writer.py
             write_outputs(

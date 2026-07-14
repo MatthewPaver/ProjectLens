@@ -43,11 +43,25 @@ ProjectLens combines:
 - a portable executive and analyst command centre in [`docs/`](docs)
 - structured input/output folders under [`Data/`](Data)
 
+## What changed in v4
+
+ProjectLens now tests its forecasting claims and puts the decision queue before the dashboard:
+
+- benchmarks last-position, drift, AutoETS and AutoARIMA forecasts on rolling historical windows
+- selects the lowest-error model per task instead of assuming the most complex model is best
+- derives confidence from observed validation error and history length, never random demo scores
+- writes prediction ranges, MAE, validation windows and a plain-language confidence reason for every forecast
+- produces ranked action briefs answering what changed, what happens without action, what to do, who owns it and what evidence is still needed
+- exposes a portfolio model scorecard with error, bias, interval coverage and the current champion
+- keeps P1 deliberately scarce and requires human approval for every recommendation
+
+On the public synthetic Alpha portfolio, the last reported position currently wins with a 1.63-day one-update-ahead MAE across 375 backtest predictions. AutoARIMA and AutoETS remain challengers and will take over whenever new data shows that they perform better.
+
 ## What changed in v3
 
 The public command centre is now a self-serve evidence room rather than a fixed portfolio screen:
 
-- load the complete 2,618-row Alpha demonstration in one click
+- load the complete 2,757-row Alpha demonstration in one click
 - import standard ProjectLens output CSV files without sending them to a server
 - validate required datasets, columns and field completeness
 - inspect, search and paginate every available row
@@ -55,7 +69,7 @@ The public command centre is now a self-serve evidence room rather than a fixed 
 - generate and export a rules-based, evidence-linked proactive watchlist
 - follow a guided path through executive, analyst, scenario and data views
 
-Recognised files are `task_cleaned.csv`, `slippage_summary.csv`, `milestone_analysis.csv`, `forecast_results.csv`, `changepoints.csv` and `recommendations.csv`. Imported files exist only in the current browser session.
+Recognised files also include `model_evaluation.csv` and `action_briefs.csv`. Imported files exist only in the current browser session.
 
 ## What changed in v2
 
@@ -78,6 +92,12 @@ The schedule-risk market already contains deep diagnostics, Monte Carlo tools, A
 The dated quick scan and source notes are available in [`competitor-profiles/`](competitor-profiles).
 
 ## Decision model
+
+### Schedule forecast selection
+
+ProjectLens forecasts the next reported slippage, then translates it back into a completion date. Four candidate models compete using one-step-ahead rolling-origin validation. The winner is selected separately for each task by mean absolute error. Confidence reflects observed backtest error and history length, and sparse histories fail closed without fake forecasts.
+
+### Recovery scenario simulation
 
 Each risk driver has a probability, triangular day-impact range and critical-path exposure. A seeded simulation produces completion ranges. Interventions reduce specific driver impacts, and every scenario uses the same random draws as the baseline so differences are attributable to the intervention rather than sampling noise.
 
@@ -110,7 +130,7 @@ The useful check is the full path:
 
 1. Upload or place schedule data in the expected folder.
 2. Clean and standardise the file.
-3. Run slippage, milestone, changepoint, and forecast checks.
+3. Run slippage, milestone, changepoint, and time-aware forecast checks.
 4. Compare interventions against identical simulation draws.
 5. Commit a decision with an owner, expected recovery and review point.
 6. Compare promised recovery with the next observed schedule update.
@@ -175,7 +195,7 @@ Results are written to `Data/output/<project_name>/`.
 
 - validates project input structure
 - loads CSV and Excel source files
-- runs slippage, milestone, changepoint, and forecasting analysis
+- runs slippage, milestone, changepoint, validated forecasting and action-brief analysis
 - writes output files suitable for downstream review and Power BI use
 - archives processed inputs
 

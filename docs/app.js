@@ -66,7 +66,9 @@ const DATASET_DEFINITIONS = [
   { id: "milestone_analysis", file: "milestone_analysis.csv", label: "Milestones", required: ["task_id", "task_name", "slip_days", "severity_score"] },
   { id: "forecast_results", file: "forecast_results.csv", label: "Forecasts", required: ["task_id", "task_name", "forecast_confidence", "predicted_end_date"] },
   { id: "changepoints", file: "changepoints.csv", label: "Change points", required: ["task_id", "task_name", "change_type", "severity_score"] },
-  { id: "recommendations", file: "recommendations.csv", label: "Recommendations", required: ["task_id", "task_name", "recommendation", "severity", "confidence"] }
+  { id: "recommendations", file: "recommendations.csv", label: "Recommendations", required: ["task_id", "task_name", "recommendation", "severity", "confidence"] },
+  { id: "model_evaluation", file: "model_evaluation.csv", label: "Model scorecard", required: ["model_type", "mae_days", "bias_days", "validation_predictions", "champion"] },
+  { id: "action_briefs", file: "action_briefs.csv", label: "Action briefs", required: ["task_id", "priority", "decision_question", "recommended_action", "owner_role", "evidence"] }
 ];
 const DEMO_DATA_BASE = window.location.pathname.includes("/docs/") ? "../Data/output/Alpha/" : "./demo-data/alpha/";
 const PAGE_SIZE = 50;
@@ -352,7 +354,7 @@ function validateDataset(definition, rows) {
   return missing.length ? { ready: false, message: `Missing: ${missing.join(", ")}` } : { ready: true, message: `${columns.length} columns recognised` };
 }
 
-function setDatasets(nextDatasets, source) {
+function setDatasets(nextDatasets, source, navigate = true) {
   datasets = nextDatasets;
   activeDataset = DATASET_DEFINITIONS.find(item => datasets[item.id]?.length)?.id || "task_cleaned";
   explorerPage = 1;
@@ -360,10 +362,10 @@ function setDatasets(nextDatasets, source) {
   document.getElementById("dataSearch").value = "";
   document.getElementById("dataSourceLabel").textContent = source;
   renderDataRoom();
-  switchView("data");
+  if (navigate) switchView("data");
 }
 
-async function loadDemoDatasets() {
+async function loadDemoDatasets(navigate = true) {
   try {
     const entries = await Promise.all(DATASET_DEFINITIONS.map(async definition => {
       const response = await fetch(`${DEMO_DATA_BASE}${definition.file}`);
@@ -372,9 +374,9 @@ async function loadDemoDatasets() {
     }));
     const nextDatasets = Object.fromEntries(entries);
     const total = Object.values(nextDatasets).reduce((sum, rows) => sum + rows.length, 0);
-    setDatasets(nextDatasets, `Public Alpha demo · ${total.toLocaleString("en-GB")} rows`);
+    setDatasets(nextDatasets, `Public Alpha demo · ${total.toLocaleString("en-GB")} rows`, navigate);
     if (document.getElementById("importDialog").open) document.getElementById("importDialog").close();
-    showToast("Complete Alpha evidence set loaded locally in your browser.");
+    if (navigate) showToast("Complete Alpha evidence set loaded locally in your browser.");
   } catch (error) {
     showToast(`Demo data unavailable: ${error.message}`);
   }
@@ -430,6 +432,7 @@ function renderQuality() {
 function buildWatchlist() {
   const signals = [];
   const add = (severity, title, detail, source, taskId = "") => signals.push({ severity, title, detail, source, taskId });
+  (datasets.action_briefs || []).filter(row => row.priority === "P1").forEach(row => add("High", row.decision_question, `${row.what_changed} ${row.recommended_action}`, "action_briefs.csv", row.task_id));
   (datasets.recommendations || []).filter(row => String(row.severity).toLowerCase() === "high").forEach(row => add("High", row.task_name, row.recommendation, "recommendations.csv", row.task_id));
   (datasets.forecast_results || []).filter(row => numeric(row.forecast_confidence) < .7 || String(row.low_confidence_flag).toLowerCase() === "true").forEach(row => add("High", row.task_name, `Forecast confidence ${Math.round(numeric(row.forecast_confidence) * 100)}%. Predicted end ${row.predicted_end_date || "not supplied"}.`, "forecast_results.csv", row.task_id));
   (datasets.changepoints || []).forEach(row => add(numeric(row.severity_score) >= 8 ? "High" : "Medium", row.task_name, `${row.change_type || "Schedule change"} detected in ${row.update_phase || "the latest update"}.`, "changepoints.csv", row.task_id));
@@ -455,12 +458,22 @@ function renderWatchlist() {
 
 function renderWatchPreview() {
   const fallback = [
-    { severity: "High", title: "Civil handover keeps moving", detail: "Six critical activities moved in three consecutive updates." },
-    { severity: "High", title: "Design approval cycle is widening", detail: "Median approval time increased from 8 to 13 days." },
-    { severity: "Medium", title: "One recovery review is overdue", detail: "Supplier dispatch evidence has not been confirmed." }
+    { priority: "P1", decision_question: "Which owned intervention protects civil handover?", what_changed: "Six critical activities moved across three updates.", recommended_action: "Bring one costed recovery option to the Friday control gate.", owner_role: "Construction lead", decision_by: "Before Friday" },
+    { priority: "P1", decision_question: "Do we recover the design release or reforecast it?", what_changed: "Approval cycle time widened from 8 to 13 days.", recommended_action: "Run a five-day approval sprint with named approvers.", owner_role: "Design authority", decision_by: "Before Friday" },
+    { priority: "P2", decision_question: "Is supplier dispatch evidence strong enough?", what_changed: "The promised evidence is overdue.", recommended_action: "Confirm dispatch proof before protecting the downstream date.", owner_role: "Commercial lead", decision_by: "Today" }
   ];
-  const signals = currentWatchlist.length ? currentWatchlist.slice(0, 3) : fallback;
-  document.getElementById("watchPreview").innerHTML = signals.map(signal => `<article class="preview-signal ${signal.severity.toLowerCase()}"><small>${escapeHtml(signal.severity)} signal</small><strong>${escapeHtml(signal.title)}</strong><p>${escapeHtml(signal.detail)}</p></article>`).join("");
+  const briefs = datasets.action_briefs?.length ? [...datasets.action_briefs].sort((a, b) => numeric(b.priority_score) - numeric(a.priority_score)).slice(0, 3) : fallback;
+  document.getElementById("watchPreview").innerHTML = briefs.map(brief => `<article class="preview-signal ${brief.priority === "P1" ? "high" : "medium"}"><small>${escapeHtml(brief.priority)} · decision required</small><strong>${escapeHtml(brief.decision_question)}</strong><p><b>Changed:</b> ${escapeHtml(brief.what_changed)}</p><p><b>Do:</b> ${escapeHtml(brief.recommended_action)}</p><footer>${escapeHtml(brief.owner_role)} · ${escapeHtml(brief.decision_by)}</footer></article>`).join("");
+}
+
+function renderModelGovernance() {
+  const rows = datasets.model_evaluation || [];
+  const champion = rows.find(row => String(row.champion).toLowerCase() === "true") || rows[0];
+  if (!champion) return;
+  document.getElementById("modelChampion").textContent = champion.model_type;
+  document.getElementById("modelMae").textContent = `${numeric(champion.mae_days).toFixed(2)} days MAE`;
+  document.getElementById("modelValidation").textContent = `${numeric(champion.validation_predictions).toLocaleString("en-GB")} past predictions tested`;
+  document.getElementById("modelScorecard").innerHTML = rows.map(row => `<div class="model-row ${String(row.champion).toLowerCase() === "true" ? "winner" : ""}"><span>${escapeHtml(row.model_type)}</span><b>${numeric(row.mae_days).toFixed(2)}d MAE</b><small>${numeric(row.interval_coverage_80).toFixed(1)}% interval coverage</small></div>`).join("");
 }
 
 function phaseNumber(value) {
@@ -525,6 +538,7 @@ function renderDataRoom() {
   renderDatasetCards();
   renderQuality();
   renderWatchlist();
+  renderModelGovernance();
   preparePhaseControls();
   renderExplorer();
 }
@@ -543,7 +557,7 @@ const GUIDE_STEPS = [
   { view: "executive", title: "Start with the director briefing", copy: "ProjectLens translates the current schedule position into a short, evidence-linked decision brief.", next: "Next: inspect the evidence →" },
   { view: "analyst", title: "Challenge every conclusion", copy: "The analyst view exposes ranked drivers, confidence boundaries and the task-level evidence behind each signal.", next: "Next: test an intervention →" },
   { view: "executive", title: "Model a recovery case", copy: "The scenario lab compares the same 10,000 futures, then preserves the expected recovery and owner in the decision ledger.", next: "Next: open the data room →" },
-  { view: "data", title: "Bring your own evidence", copy: "Inspect all 2,600+ demo rows or select your own ProjectLens CSV outputs. Your files stay in the browser.", next: "Load the complete demo →" }
+  { view: "data", title: "Bring your own evidence", copy: "Inspect all 2,700+ demo rows or select your own ProjectLens CSV outputs. Your files stay in the browser.", next: "Load the complete demo →" }
 ];
 
 function renderGuide() {
@@ -574,7 +588,7 @@ document.getElementById("commitScenario").addEventListener("click", commitLabSce
 ["handoverRange", "approvalRange", "testingRange", "supplierRange"].forEach(id => document.getElementById(id).addEventListener("input", updateLab));
 document.getElementById("guideButton").addEventListener("click", openGuide);
 ["openImportTop", "openImport"].forEach(id => document.getElementById(id).addEventListener("click", () => openDialog(document.getElementById("importDialog"))));
-["loadDemoData", "loadDemoFromDialog"].forEach(id => document.getElementById(id).addEventListener("click", loadDemoDatasets));
+["loadDemoData", "loadDemoFromDialog"].forEach(id => document.getElementById(id).addEventListener("click", () => loadDemoDatasets(true)));
 document.getElementById("dataFiles").addEventListener("change", event => importFiles(event.target.files));
 document.getElementById("dataSearch").addEventListener("input", event => { dataSearch = event.target.value.trim().toLowerCase(); explorerPage = 1; renderExplorer(); });
 document.getElementById("prevPage").addEventListener("click", () => { explorerPage -= 1; renderExplorer(); });
@@ -597,3 +611,4 @@ renderExecutive();
 renderEvidence();
 renderDecisions();
 renderDataRoom();
+loadDemoDatasets(false);
