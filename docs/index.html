@@ -36,6 +36,8 @@
       <span class="status"><i></i> Update 14 accepted</span>
     </div>
     <div class="topbar-actions">
+      <button class="tour-button" id="guideButton" type="button">Guided demo</button>
+      <button class="data-button" id="openImportTop" type="button">Use your data</button>
       <button class="icon-button" id="methodButton" type="button" aria-label="Open model methodology">?</button>
       <a class="portfolio-credit" href="https://matthewpaver.github.io/MatthewPaver/store/" target="_blank" rel="noreferrer">Built by Matthew Paver ↗</a>
     </div>
@@ -46,6 +48,7 @@
       <button class="rail-item active" data-view-target="executive" type="button"><span>01</span><b>Executive</b></button>
       <button class="rail-item" data-view-target="analyst" type="button"><span>02</span><b>Analyst</b></button>
       <button class="rail-item" data-view-target="decisions" type="button"><span>03</span><b>Decisions</b><em id="decisionCount">2</em></button>
+      <button class="rail-item" data-view-target="data" type="button"><span>04</span><b>Data room</b><em class="data-count" id="dataCount">0</em></button>
     </nav>
     <div class="rail-foot">
       <span>MODEL</span>
@@ -144,6 +147,14 @@
         </article>
       </div>
 
+      <section class="proactive-section reveal delay-4" aria-labelledby="watchTitle">
+        <div class="proactive-head">
+          <div><span>Proactive watchlist</span><h2 id="watchTitle">What needs attention before the next control gate</h2></div>
+          <button class="text-button" data-view-jump="data" type="button">Open evidence room →</button>
+        </div>
+        <div class="watch-preview" id="watchPreview"></div>
+      </section>
+
       <section class="recommendations reveal delay-4" aria-labelledby="recommendationTitle">
         <div class="section-head">
           <div><span>Recommended interventions</span><h2 id="recommendationTitle">Choose the move, preserve the reasoning</h2></div>
@@ -216,6 +227,63 @@
 
       <div class="decision-ledger" id="decisionLedger"></div>
     </section>
+
+    <section class="view data-view" data-view="data" aria-labelledby="dataTitle" hidden>
+      <div class="page-heading compact">
+        <div>
+          <p class="eyebrow"><span>Evidence room</span> Every row remains inspectable</p>
+          <h1 id="dataTitle">Bring the evidence.<br><em>Keep control of it.</em></h1>
+        </div>
+        <div class="data-actions">
+          <button class="outline-button" id="loadDemoData" type="button">Load 2,600+ demo rows</button>
+          <button class="scenario-launch small" id="openImport" type="button"><span>Private by design</span><strong>Use your CSV files</strong><i>+</i></button>
+        </div>
+      </div>
+
+      <div class="privacy-band">
+        <strong>Your files stay in this browser.</strong>
+        <span>No account, upload or server processing. Refresh the page to clear imported data.</span>
+        <i id="dataSourceLabel">No dataset loaded</i>
+      </div>
+
+      <section class="dataset-overview" aria-labelledby="datasetTitle">
+        <div class="section-head">
+          <div><span>Dataset inventory</span><h2 id="datasetTitle">What ProjectLens can see</h2></div>
+          <p>Recognised outputs are validated independently. Missing files reduce the available analysis but never prevent inspection of the data you supplied.</p>
+        </div>
+        <div class="dataset-cards" id="datasetCards"></div>
+      </section>
+
+      <div class="data-workbench">
+        <article class="panel quality-panel">
+          <div class="panel-head"><div><span>Input assurance</span><h2>Data readiness</h2></div><strong id="qualityScore">0 / 100</strong></div>
+          <div id="qualityChecks" class="quality-checks"></div>
+        </article>
+        <article class="panel proactive-panel">
+          <div class="panel-head"><div><span>Rules, not guesswork</span><h2>Proactive signals</h2></div><button class="text-button" id="exportWatchlist" type="button">Export CSV ↓</button></div>
+          <div id="watchlist" class="watchlist empty-state">Load data to generate an evidence-linked watchlist.</div>
+        </article>
+      </div>
+
+      <article class="panel update-panel">
+        <div class="panel-head">
+          <div><span>Update comparison</span><h2>What changed between reporting periods</h2></div>
+          <div class="phase-controls"><label>From<select id="phaseFrom" disabled></select></label><span>→</span><label>To<select id="phaseTo" disabled></select></label></div>
+        </div>
+        <div id="updateComparison" class="update-comparison empty-state">Load slippage history to compare reporting periods.</div>
+      </article>
+
+      <article class="panel explorer-panel">
+        <div class="panel-head explorer-head">
+          <div><span>Complete data explorer</span><h2>Inspect every available row</h2></div>
+          <label class="search-label">Search<input id="dataSearch" type="search" placeholder="Search this dataset" disabled></label>
+        </div>
+        <div class="dataset-tabs" id="datasetTabs"></div>
+        <div class="explorer-meta"><span id="explorerMeta">No data loaded</span><span id="explorerPage">Page 0 of 0</span></div>
+        <div class="table-wrap data-table-wrap"><table id="dataTable"><tbody><tr><td class="empty-state">Choose the full demo or import ProjectLens output CSV files.</td></tr></tbody></table></div>
+        <div class="pagination"><button id="prevPage" type="button" disabled>← Previous</button><button id="nextPage" type="button" disabled>Next →</button></div>
+      </article>
+    </section>
   </main>
 
   <dialog id="scenarioDialog" class="scenario-dialog">
@@ -256,6 +324,36 @@
         <li><b>Record the outcome.</b> Selected interventions enter the decision ledger for review against the next update.</li>
       </ol>
       <p>This is an explainable decision-support demonstrator using synthetic data, not a certified schedule-risk model.</p>
+    </form>
+  </dialog>
+
+  <dialog id="importDialog" class="import-dialog">
+    <form method="dialog">
+      <button class="close-button" value="cancel" aria-label="Close data import">×</button>
+      <span>Self-serve analysis</span>
+      <h2>Use ProjectLens outputs</h2>
+      <p>Select one or more CSV files produced by the ProjectLens pipeline. Files are parsed locally and are never sent anywhere.</p>
+      <label class="drop-zone" for="dataFiles">
+        <strong>Choose CSV files</strong>
+        <span>task_cleaned · slippage_summary · forecasts · milestones · change points · recommendations</span>
+        <input id="dataFiles" type="file" accept=".csv,text/csv" multiple>
+      </label>
+      <div class="expected-files">
+        <span>Minimum useful set</span><b>task_cleaned.csv + slippage_summary.csv</b>
+        <span>Full decision support</span><b>All six recognised output files</b>
+      </div>
+      <button id="loadDemoFromDialog" class="commit-button" value="cancel" type="button">Or load the complete public demo <span>→</span></button>
+    </form>
+  </dialog>
+
+  <dialog id="guideDialog" class="guide-dialog">
+    <form method="dialog">
+      <button class="close-button" value="cancel" aria-label="Close guided demo">×</button>
+      <span>90-second guided demo</span>
+      <h2 id="guideTitle">Start with the director briefing</h2>
+      <p id="guideCopy">ProjectLens translates the current schedule position into a short, evidence-linked decision brief.</p>
+      <div class="guide-progress" id="guideProgress"><i class="active"></i><i></i><i></i><i></i></div>
+      <div class="guide-actions"><button id="guideBack" type="button" disabled>← Back</button><button id="guideNext" type="button">Next: inspect the evidence →</button></div>
     </form>
   </dialog>
 

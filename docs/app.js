@@ -60,6 +60,22 @@ const EVIDENCE = [
 
 let activeProjectKey = "northstar";
 let activeScenario = "resequence";
+const DATASET_DEFINITIONS = [
+  { id: "task_cleaned", file: "task_cleaned.csv", label: "Task history", required: ["task_id", "task_name", "update_phase", "slip_days"] },
+  { id: "slippage_summary", file: "slippage_summary.csv", label: "Slippage history", required: ["task_id", "task_name", "update_phase", "slip_days", "severity_score"] },
+  { id: "milestone_analysis", file: "milestone_analysis.csv", label: "Milestones", required: ["task_id", "task_name", "slip_days", "severity_score"] },
+  { id: "forecast_results", file: "forecast_results.csv", label: "Forecasts", required: ["task_id", "task_name", "forecast_confidence", "predicted_end_date"] },
+  { id: "changepoints", file: "changepoints.csv", label: "Change points", required: ["task_id", "task_name", "change_type", "severity_score"] },
+  { id: "recommendations", file: "recommendations.csv", label: "Recommendations", required: ["task_id", "task_name", "recommendation", "severity", "confidence"] }
+];
+const DEMO_DATA_BASE = window.location.pathname.includes("/docs/") ? "../Data/output/Alpha/" : "./demo-data/alpha/";
+const PAGE_SIZE = 50;
+let datasets = {};
+let activeDataset = "task_cleaned";
+let explorerPage = 1;
+let dataSearch = "";
+let currentWatchlist = [];
+let guideStep = 0;
 let decisions = [
   { id: "D-014", name: "Protect test window", owner: "Test manager", promised: 6, observed: 5, review: "Reviewed 08 Jul", status: "68% realised", note: "Second shift protected the defect closure rate." },
   { id: "D-015", name: "Escalate design release", owner: "Design authority", promised: 4, observed: 3, review: "Reviewed 11 Jul", status: "75% realised", note: "Two decisions cleared; one interface remains open." },
@@ -295,6 +311,257 @@ function exportBrief() {
   showToast("Decision brief exported with model boundaries and scenario assumptions.");
 }
 
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>'"]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[character]));
+}
+
+function parseCsv(text) {
+  const rows = [];
+  let row = [], field = "", quoted = false;
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+    if (quoted) {
+      if (character === '"' && text[index + 1] === '"') { field += '"'; index += 1; }
+      else if (character === '"') quoted = false;
+      else field += character;
+    } else if (character === '"') quoted = true;
+    else if (character === ",") { row.push(field); field = ""; }
+    else if (character === "\n") { row.push(field); if (row.some(cell => cell.trim() !== "")) rows.push(row); row = []; field = ""; }
+    else if (character !== "\r") field += character;
+  }
+  row.push(field);
+  if (row.some(cell => cell.trim() !== "")) rows.push(row);
+  if (rows.length < 2) return [];
+  const headers = rows.shift().map(header => header.trim().replace(/^\uFEFF/, ""));
+  return rows.map(values => Object.fromEntries(headers.map((header, index) => [header, values[index] ?? ""])));
+}
+
+function numeric(value) {
+  const result = Number(value);
+  return Number.isFinite(result) ? result : 0;
+}
+
+function datasetDefinition(id) {
+  return DATASET_DEFINITIONS.find(item => item.id === id);
+}
+
+function validateDataset(definition, rows) {
+  if (!rows?.length) return { ready: false, message: "Not loaded" };
+  const columns = Object.keys(rows[0]);
+  const missing = definition.required.filter(column => !columns.includes(column));
+  return missing.length ? { ready: false, message: `Missing: ${missing.join(", ")}` } : { ready: true, message: `${columns.length} columns recognised` };
+}
+
+function setDatasets(nextDatasets, source) {
+  datasets = nextDatasets;
+  activeDataset = DATASET_DEFINITIONS.find(item => datasets[item.id]?.length)?.id || "task_cleaned";
+  explorerPage = 1;
+  dataSearch = "";
+  document.getElementById("dataSearch").value = "";
+  document.getElementById("dataSourceLabel").textContent = source;
+  renderDataRoom();
+  switchView("data");
+}
+
+async function loadDemoDatasets() {
+  try {
+    const entries = await Promise.all(DATASET_DEFINITIONS.map(async definition => {
+      const response = await fetch(`${DEMO_DATA_BASE}${definition.file}`);
+      if (!response.ok) throw new Error(`${definition.file} could not be loaded`);
+      return [definition.id, parseCsv(await response.text())];
+    }));
+    const nextDatasets = Object.fromEntries(entries);
+    const total = Object.values(nextDatasets).reduce((sum, rows) => sum + rows.length, 0);
+    setDatasets(nextDatasets, `Public Alpha demo · ${total.toLocaleString("en-GB")} rows`);
+    if (document.getElementById("importDialog").open) document.getElementById("importDialog").close();
+    showToast("Complete Alpha evidence set loaded locally in your browser.");
+  } catch (error) {
+    showToast(`Demo data unavailable: ${error.message}`);
+  }
+}
+
+async function importFiles(fileList) {
+  const nextDatasets = {};
+  const ignored = [];
+  for (const file of Array.from(fileList)) {
+    const id = file.name.toLowerCase().replace(/\.csv$/, "");
+    if (!datasetDefinition(id)) { ignored.push(file.name); continue; }
+    nextDatasets[id] = parseCsv(await file.text());
+  }
+  if (!Object.keys(nextDatasets).length) {
+    showToast("No recognised ProjectLens output files were selected.");
+    return;
+  }
+  const total = Object.values(nextDatasets).reduce((sum, rows) => sum + rows.length, 0);
+  setDatasets(nextDatasets, `Your local files · ${total.toLocaleString("en-GB")} rows`);
+  document.getElementById("importDialog").close();
+  showToast(ignored.length ? `${total.toLocaleString("en-GB")} rows loaded. ${ignored.length} unrecognised file(s) ignored.` : `${total.toLocaleString("en-GB")} rows loaded. Nothing left your browser.`);
+}
+
+function renderDatasetCards() {
+  document.getElementById("datasetCards").innerHTML = DATASET_DEFINITIONS.map(definition => {
+    const rows = datasets[definition.id] || [];
+    const validation = validateDataset(definition, rows);
+    return `<article class="dataset-card ${validation.ready ? "ready" : rows.length ? "issue" : ""}"><span>${escapeHtml(definition.file)}</span><strong>${escapeHtml(definition.label)}</strong><small>${escapeHtml(validation.message)}</small><b>${rows.length.toLocaleString("en-GB")} rows</b></article>`;
+  }).join("");
+}
+
+function renderQuality() {
+  const loaded = DATASET_DEFINITIONS.filter(item => datasets[item.id]?.length);
+  const valid = loaded.filter(item => validateDataset(item, datasets[item.id]).ready);
+  const completeFields = loaded.reduce((sum, definition) => {
+    const rows = datasets[definition.id];
+    const checks = rows.length * definition.required.length;
+    const present = rows.reduce((rowSum, row) => rowSum + definition.required.filter(column => String(row[column] ?? "").trim() !== "").length, 0);
+    return sum + (checks ? present / checks : 0);
+  }, 0);
+  const completeness = loaded.length ? completeFields / loaded.length : 0;
+  const score = Math.round((valid.length / DATASET_DEFINITIONS.length * .65 + completeness * .35) * 100);
+  document.getElementById("qualityScore").textContent = `${score} / 100`;
+  const checks = [
+    ["Recognised datasets", `${loaded.length} of ${DATASET_DEFINITIONS.length}`, loaded.length >= 2],
+    ["Required columns", `${valid.length} valid`, valid.length === loaded.length && loaded.length > 0],
+    ["Required-field completeness", `${Math.round(completeness * 100)}%`, completeness >= .95],
+    ["Period comparison available", datasets.slippage_summary?.length ? "Ready" : "Unavailable", Boolean(datasets.slippage_summary?.length)]
+  ];
+  document.getElementById("qualityChecks").innerHTML = checks.map(([label, value, pass]) => `<div class="quality-check"><span>${label}</span><b class="${pass ? "" : "fail"}">${value}</b></div>`).join("");
+}
+
+function buildWatchlist() {
+  const signals = [];
+  const add = (severity, title, detail, source, taskId = "") => signals.push({ severity, title, detail, source, taskId });
+  (datasets.recommendations || []).filter(row => String(row.severity).toLowerCase() === "high").forEach(row => add("High", row.task_name, row.recommendation, "recommendations.csv", row.task_id));
+  (datasets.forecast_results || []).filter(row => numeric(row.forecast_confidence) < .7 || String(row.low_confidence_flag).toLowerCase() === "true").forEach(row => add("High", row.task_name, `Forecast confidence ${Math.round(numeric(row.forecast_confidence) * 100)}%. Predicted end ${row.predicted_end_date || "not supplied"}.`, "forecast_results.csv", row.task_id));
+  (datasets.changepoints || []).forEach(row => add(numeric(row.severity_score) >= 8 ? "High" : "Medium", row.task_name, `${row.change_type || "Schedule change"} detected in ${row.update_phase || "the latest update"}.`, "changepoints.csv", row.task_id));
+  (datasets.milestone_analysis || []).filter(row => numeric(row.slip_days) > 0 && numeric(row.severity_score) >= 7).forEach(row => add("High", row.task_name, `Milestone is ${numeric(row.slip_days).toFixed(0)} days late with severity ${numeric(row.severity_score).toFixed(1)}.`, "milestone_analysis.csv", row.task_id));
+  const latestCritical = new Map();
+  (datasets.task_cleaned || []).filter(row => String(row.is_critical).toLowerCase() === "true" && numeric(row.severity_score) >= 8).forEach(row => latestCritical.set(row.task_id, row));
+  latestCritical.forEach(row => add("High", row.task_name, `Critical task is ${numeric(row.slip_days).toFixed(0)} days late in ${row.update_phase}.`, "task_cleaned.csv", row.task_id));
+  const unique = new Map();
+  signals.forEach(signal => unique.set(`${signal.source}:${signal.taskId}:${signal.detail}`, signal));
+  return [...unique.values()].sort((a, b) => (a.severity === "High" ? -1 : 1) - (b.severity === "High" ? -1 : 1));
+}
+
+function renderWatchlist() {
+  currentWatchlist = buildWatchlist();
+  const container = document.getElementById("watchlist");
+  if (!currentWatchlist.length) { container.className = "watchlist empty-state"; container.textContent = Object.keys(datasets).length ? "No configured thresholds were triggered by this data." : "Load data to generate an evidence-linked watchlist."; }
+  else {
+    container.className = "watchlist";
+    container.innerHTML = currentWatchlist.slice(0, 40).map(signal => `<div class="signal-item"><span class="signal-severity ${signal.severity.toLowerCase()}">${signal.severity}</span><div><strong>${escapeHtml(signal.title)}</strong><p>${escapeHtml(signal.detail)}</p><small>${escapeHtml(signal.taskId)}</small></div><code>${escapeHtml(signal.source)}</code></div>`).join("");
+  }
+  renderWatchPreview();
+}
+
+function renderWatchPreview() {
+  const fallback = [
+    { severity: "High", title: "Civil handover keeps moving", detail: "Six critical activities moved in three consecutive updates." },
+    { severity: "High", title: "Design approval cycle is widening", detail: "Median approval time increased from 8 to 13 days." },
+    { severity: "Medium", title: "One recovery review is overdue", detail: "Supplier dispatch evidence has not been confirmed." }
+  ];
+  const signals = currentWatchlist.length ? currentWatchlist.slice(0, 3) : fallback;
+  document.getElementById("watchPreview").innerHTML = signals.map(signal => `<article class="preview-signal ${signal.severity.toLowerCase()}"><small>${escapeHtml(signal.severity)} signal</small><strong>${escapeHtml(signal.title)}</strong><p>${escapeHtml(signal.detail)}</p></article>`).join("");
+}
+
+function phaseNumber(value) {
+  const match = String(value).match(/(\d+)/);
+  return match ? Number(match[1]) : 0;
+}
+
+function preparePhaseControls() {
+  const rows = datasets.slippage_summary || [];
+  const phases = [...new Set(rows.map(row => row.update_phase).filter(Boolean))].sort((a, b) => phaseNumber(a) - phaseNumber(b));
+  ["phaseFrom", "phaseTo"].forEach(id => {
+    const select = document.getElementById(id);
+    select.innerHTML = phases.map(phase => `<option value="${escapeHtml(phase)}">${escapeHtml(phase)}</option>`).join("");
+    select.disabled = phases.length < 2;
+  });
+  if (phases.length >= 2) {
+    document.getElementById("phaseFrom").value = phases[Math.max(0, phases.length - 2)];
+    document.getElementById("phaseTo").value = phases[phases.length - 1];
+  }
+  renderUpdateComparison();
+}
+
+function renderUpdateComparison() {
+  const rows = datasets.slippage_summary || [];
+  const from = document.getElementById("phaseFrom").value;
+  const to = document.getElementById("phaseTo").value;
+  const container = document.getElementById("updateComparison");
+  if (!rows.length || !from || !to || from === to) { container.className = "update-comparison empty-state"; container.textContent = "Load slippage history and choose two different reporting periods."; return; }
+  const before = new Map(rows.filter(row => row.update_phase === from).map(row => [row.task_id, numeric(row.slip_days)]));
+  const after = new Map(rows.filter(row => row.update_phase === to).map(row => [row.task_id, numeric(row.slip_days)]));
+  const deltas = [...after].filter(([id]) => before.has(id)).map(([id, value]) => ({ id, delta: value - before.get(id) }));
+  const worsened = deltas.filter(item => item.delta > .5).length;
+  const improved = deltas.filter(item => item.delta < -.5).length;
+  const unchanged = deltas.length - worsened - improved;
+  const mean = deltas.length ? deltas.reduce((sum, item) => sum + item.delta, 0) / deltas.length : 0;
+  container.className = "update-comparison";
+  container.innerHTML = `<div class="comparison-stat negative"><span>Worsened</span><strong>${worsened}</strong><small>tasks gained slippage</small></div><div class="comparison-stat positive"><span>Improved</span><strong>${improved}</strong><small>tasks recovered time</small></div><div class="comparison-stat"><span>Unchanged</span><strong>${unchanged}</strong><small>within half a day</small></div><div class="comparison-stat ${mean > 0 ? "negative" : "positive"}"><span>Mean movement</span><strong>${mean > 0 ? "+" : ""}${mean.toFixed(1)}d</strong><small>${from} to ${to}</small></div>`;
+}
+
+function renderExplorer() {
+  document.getElementById("datasetTabs").innerHTML = DATASET_DEFINITIONS.map(definition => `<button type="button" data-dataset="${definition.id}" class="${definition.id === activeDataset ? "active" : ""}" ${datasets[definition.id]?.length ? "" : "disabled"}>${escapeHtml(definition.label)} · ${(datasets[definition.id] || []).length.toLocaleString("en-GB")}</button>`).join("");
+  document.querySelectorAll("[data-dataset]").forEach(button => button.addEventListener("click", () => { activeDataset = button.dataset.dataset; explorerPage = 1; renderExplorer(); }));
+  const allRows = datasets[activeDataset] || [];
+  const filtered = dataSearch ? allRows.filter(row => Object.values(row).some(value => String(value).toLowerCase().includes(dataSearch))) : allRows;
+  const pageCount = Math.ceil(filtered.length / PAGE_SIZE);
+  explorerPage = Math.min(Math.max(explorerPage, 1), Math.max(pageCount, 1));
+  const rows = filtered.slice((explorerPage - 1) * PAGE_SIZE, explorerPage * PAGE_SIZE);
+  document.getElementById("explorerMeta").textContent = `${datasetDefinition(activeDataset)?.label || "Dataset"} · ${filtered.length.toLocaleString("en-GB")} of ${allRows.length.toLocaleString("en-GB")} rows`;
+  document.getElementById("explorerPage").textContent = `Page ${pageCount ? explorerPage : 0} of ${pageCount}`;
+  document.getElementById("dataSearch").disabled = !allRows.length;
+  document.getElementById("prevPage").disabled = explorerPage <= 1 || !pageCount;
+  document.getElementById("nextPage").disabled = explorerPage >= pageCount || !pageCount;
+  const table = document.getElementById("dataTable");
+  if (!rows.length) { table.innerHTML = `<tbody><tr><td class="empty-state">${allRows.length ? "No rows match this search." : "Choose the full demo or import ProjectLens output CSV files."}</td></tr></tbody>`; return; }
+  const columns = Object.keys(rows[0]);
+  table.innerHTML = `<thead><tr>${columns.map(column => `<th>${escapeHtml(column.replaceAll("_", " "))}</th>`).join("")}</tr></thead><tbody>${rows.map(row => `<tr>${columns.map(column => `<td title="${escapeHtml(row[column])}">${escapeHtml(row[column])}</td>`).join("")}</tr>`).join("")}</tbody>`;
+}
+
+function renderDataRoom() {
+  const total = Object.values(datasets).reduce((sum, rows) => sum + rows.length, 0);
+  document.getElementById("dataCount").textContent = total > 999 ? `${(total / 1000).toFixed(1)}k` : total;
+  renderDatasetCards();
+  renderQuality();
+  renderWatchlist();
+  preparePhaseControls();
+  renderExplorer();
+}
+
+function exportWatchlist() {
+  if (!currentWatchlist.length) { showToast("Load data before exporting the watchlist."); return; }
+  const quote = value => `"${String(value ?? "").replaceAll('"', '""')}"`;
+  const csv = ["severity,task_id,title,detail,source", ...currentWatchlist.map(item => [item.severity, item.taskId, item.title, item.detail, item.source].map(quote).join(","))].join("\n");
+  const url = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+  Object.assign(document.createElement("a"), { href: url, download: "projectlens-proactive-watchlist.csv" }).click();
+  URL.revokeObjectURL(url);
+  showToast("Evidence-linked watchlist exported.");
+}
+
+const GUIDE_STEPS = [
+  { view: "executive", title: "Start with the director briefing", copy: "ProjectLens translates the current schedule position into a short, evidence-linked decision brief.", next: "Next: inspect the evidence →" },
+  { view: "analyst", title: "Challenge every conclusion", copy: "The analyst view exposes ranked drivers, confidence boundaries and the task-level evidence behind each signal.", next: "Next: test an intervention →" },
+  { view: "executive", title: "Model a recovery case", copy: "The scenario lab compares the same 10,000 futures, then preserves the expected recovery and owner in the decision ledger.", next: "Next: open the data room →" },
+  { view: "data", title: "Bring your own evidence", copy: "Inspect all 2,600+ demo rows or select your own ProjectLens CSV outputs. Your files stay in the browser.", next: "Load the complete demo →" }
+];
+
+function renderGuide() {
+  const step = GUIDE_STEPS[guideStep];
+  document.getElementById("guideTitle").textContent = step.title;
+  document.getElementById("guideCopy").textContent = step.copy;
+  document.getElementById("guideBack").disabled = guideStep === 0;
+  document.getElementById("guideNext").textContent = step.next;
+  document.querySelectorAll("#guideProgress i").forEach((item, index) => item.classList.toggle("active", index <= guideStep));
+  switchView(step.view);
+}
+
+function openGuide() {
+  guideStep = 0;
+  renderGuide();
+  openDialog(document.getElementById("guideDialog"));
+}
+
 document.querySelectorAll(".rail-item").forEach(item => item.addEventListener("click", () => switchView(item.dataset.viewTarget)));
 document.querySelectorAll("[data-view-jump]").forEach(item => item.addEventListener("click", () => switchView(item.dataset.viewJump)));
 document.getElementById("projectSelect").addEventListener("change", event => { activeProjectKey = event.target.value; renderExecutive(); showToast(`${PROJECTS[activeProjectKey].name} loaded with its own risk assumptions.`); });
@@ -305,7 +572,28 @@ document.getElementById("exportBrief").addEventListener("click", exportBrief);
 document.getElementById("evidenceFilter").addEventListener("input", renderEvidence);
 document.getElementById("commitScenario").addEventListener("click", commitLabScenario);
 ["handoverRange", "approvalRange", "testingRange", "supplierRange"].forEach(id => document.getElementById(id).addEventListener("input", updateLab));
+document.getElementById("guideButton").addEventListener("click", openGuide);
+["openImportTop", "openImport"].forEach(id => document.getElementById(id).addEventListener("click", () => openDialog(document.getElementById("importDialog"))));
+["loadDemoData", "loadDemoFromDialog"].forEach(id => document.getElementById(id).addEventListener("click", loadDemoDatasets));
+document.getElementById("dataFiles").addEventListener("change", event => importFiles(event.target.files));
+document.getElementById("dataSearch").addEventListener("input", event => { dataSearch = event.target.value.trim().toLowerCase(); explorerPage = 1; renderExplorer(); });
+document.getElementById("prevPage").addEventListener("click", () => { explorerPage -= 1; renderExplorer(); });
+document.getElementById("nextPage").addEventListener("click", () => { explorerPage += 1; renderExplorer(); });
+["phaseFrom", "phaseTo"].forEach(id => document.getElementById(id).addEventListener("change", renderUpdateComparison));
+document.getElementById("exportWatchlist").addEventListener("click", exportWatchlist);
+document.getElementById("guideBack").addEventListener("click", event => { event.preventDefault(); guideStep = Math.max(0, guideStep - 1); renderGuide(); });
+document.getElementById("guideNext").addEventListener("click", async event => {
+  event.preventDefault();
+  if (guideStep === GUIDE_STEPS.length - 1) {
+    document.getElementById("guideDialog").close();
+    await loadDemoDatasets();
+    return;
+  }
+  guideStep += 1;
+  renderGuide();
+});
 
 renderExecutive();
 renderEvidence();
 renderDecisions();
+renderDataRoom();

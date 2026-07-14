@@ -32,10 +32,15 @@ jobs:
         run: python -m pytest Processing/tests -q
       - name: Configure Pages
         uses: actions/configure-pages@v6
+      - name: Assemble public demo
+        run: |
+          mkdir -p _site/demo-data/alpha
+          cp -R docs/. _site/
+          cp Data/output/Alpha/*.csv _site/demo-data/alpha/
       - name: Upload static command centre
         uses: actions/upload-pages-artifact@v5
         with:
-          path: docs
+          path: _site
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4

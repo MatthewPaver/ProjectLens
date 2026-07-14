@@ -43,6 +43,20 @@ ProjectLens combines:
 - a portable executive and analyst command centre in [`docs/`](docs)
 - structured input/output folders under [`Data/`](Data)
 
+## What changed in v3
+
+The public command centre is now a self-serve evidence room rather than a fixed portfolio screen:
+
+- load the complete 2,618-row Alpha demonstration in one click
+- import standard ProjectLens output CSV files without sending them to a server
+- validate required datasets, columns and field completeness
+- inspect, search and paginate every available row
+- compare task slippage between any two reporting updates
+- generate and export a rules-based, evidence-linked proactive watchlist
+- follow a guided path through executive, analyst, scenario and data views
+
+Recognised files are `task_cleaned.csv`, `slippage_summary.csv`, `milestone_analysis.csv`, `forecast_results.csv`, `changepoints.csv` and `recommendations.csv`. Imported files exist only in the current browser session.
+
 ## What changed in v2
 
 The original application surfaced schedule analysis outputs. The command centre adds the decision layer required in a project-controls meeting:
