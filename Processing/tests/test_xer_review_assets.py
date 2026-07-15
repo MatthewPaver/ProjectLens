@@ -79,3 +79,21 @@ def test_review_page_states_privacy_and_model_boundary():
     assert "Intervention follow-through" in page
     assert "decisionReconciliation" in script
     assert "baselineMovements" in script
+
+
+def test_change_assurance_exposes_one_simple_decision_workflow():
+    page = (DOCS / "change-assurance.html").read_text(encoding="utf-8")
+    script = (DOCS / "change-assurance.js").read_text(encoding="utf-8")
+    stylesheet = (DOCS / "change-assurance.css").read_text(encoding="utf-8")
+
+    assert "Is this change" in page
+    assert "Add the pack" in page
+    assert "Review blockers" in page
+    assert "Record decision" in page
+    assert "Track conditions" in page
+    assert page.count('data-view-link=') == 3
+    assert "window.ProjectLensChangeAssurance" in script
+    assert "localStorage" in script
+    assert "fetch(\"demo/" in script
+    assert "prefers-reduced-motion" in stylesheet
+    assert "Files stay here" in page

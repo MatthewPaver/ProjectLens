@@ -53,7 +53,7 @@ def run_desktop(browser):
     assert page.locator("#limitationsList li").count() == 5
     assert page.locator("#sourceList a").count() == 7
     assert page.locator("#externalSourceList a").count() == 6
-    assert page.locator('a[href="schedule-review.html"]').count() >= 1
+    assert page.locator('a[href="change-assurance.html"]').count() >= 1
 
     page.get_by_role("button", name="Briefing", exact=True).click()
     page.locator(".hero h1").wait_for(state="visible")
