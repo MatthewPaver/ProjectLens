@@ -42,7 +42,7 @@ def run_desktop(browser):
     page.locator("#reviewResults").wait_for(state="visible")
     assert page.locator("#reviewProjectName").inner_text() == "NORTHSTAR GRID CONNECTION"
     assert page.locator("#finishMovement").inner_text() == "+73d"
-    assert int(page.locator("#materialChangeCount").inner_text()) >= 5
+    assert page.locator("#materialChangeCount").inner_text() == "9"
     assert int(page.locator("#contradictionCount").inner_text()) >= 2
     assert page.locator("#questionList .question-card").count() >= 3
     assert page.locator("#evidenceCoverage").inner_text() == "9/11"
@@ -53,9 +53,10 @@ def run_desktop(browser):
     assert page.locator("#decisionReconciliation article.unlinked").count() >= 1
     assert "NS-900" in page.locator("#baselineMovementList").inner_text()
     assert "REPEATED OR WORSENED" in page.locator("#followThroughList").inner_text().upper()
-    assert "raw changes" in page.locator("#materialFunnelCopy").inner_text().lower()
+    funnel = page.locator("#materialFunnelCopy").inner_text()
+    assert "22 raw changes → 9 material → 8 executive priorities" in funnel
     executive_change_count = page.locator("#changeList .change-row").count()
-    assert 5 <= executive_change_count <= 10
+    assert executive_change_count == 8
 
     page.get_by_role("button", name="Analyst", exact=True).click()
     assert page.locator("#fitnessGrid .fitness-item").count() == 7
@@ -73,8 +74,9 @@ def run_desktop(browser):
     assert download_info.value.suggested_filename.endswith("-schedule-review.json")
     pack = json.loads(Path(download_info.value.path()).read_text())
     assert pack["completeness"]["presentCount"] == 9
-    assert pack["rawChangeCount"] > len(pack["materialChanges"])
-    assert len(pack["executivePriorities"]) <= 10
+    assert pack["rawChangeCount"] == 22
+    assert len(pack["materialChanges"]) == 9
+    assert len(pack["executivePriorities"]) == 8
     assert pack["executivePriorities"]
     assert pack["pathCandidates"]
     assert pack["decisionReconciliation"]
