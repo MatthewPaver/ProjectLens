@@ -98,7 +98,7 @@ Evidence coverage is reported separately from schedule quality. A missing baseli
 Open [the live schedule evidence review](https://matthewpaver.github.io/ProjectLens/schedule-review.html) and select **Run the Northstar demo**. The synthetic pair is safe to share and intentionally contains:
 
 - a 73-day project finish movement
-- 21 raw changes reduced to 9 material executive priorities
+- 22 raw changes reduced to 9 material changes and 8 executive priorities
 - a separate baseline, risk register, schedule basis and decision log
 - changed logic, constraints, float erosion and integrity findings
 - an approved change, an unlinked change and a deferred decision
