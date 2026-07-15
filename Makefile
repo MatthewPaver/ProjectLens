@@ -3,7 +3,7 @@ VENV ?= .venv
 PYTHON_BIN := $(VENV)/bin/python
 PIP_BIN := $(PYTHON_BIN) -m pip
 
-.PHONY: venv install serve web pipeline test
+.PHONY: venv install serve web pipeline public-data test
 
 venv:
 	$(PYTHON) -m venv $(VENV)
@@ -20,6 +20,9 @@ web:
 
 pipeline: install
 	$(PYTHON_BIN) Processing/main.py
+
+public-data: install
+	$(PYTHON_BIN) Processing/gmpp_pipeline.py
 
 test: install
 	$(PYTHON_BIN) -m pytest Processing/tests -q

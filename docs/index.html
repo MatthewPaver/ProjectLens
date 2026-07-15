@@ -3,358 +3,217 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="ProjectLens turns schedule analysis into accountable recovery decisions, then checks whether those decisions worked.">
-  <meta name="theme-color" content="#0b1620">
-  <meta property="og:title" content="ProjectLens Risk Command Centre">
-  <meta property="og:description" content="Compare recovery moves, explain the schedule evidence and check whether project decisions worked.">
+  <meta name="description" content="ProjectLens tracks how delivery confidence, dates and published risks changed across the UK Government Major Projects Portfolio.">
+  <meta name="theme-color" content="#071a1b">
+  <meta property="og:title" content="ProjectLens | Open Major Project Evidence">
+  <meta property="og:description" content="189 current projects. Seven annual releases. Every signal linked to published evidence.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://matthewpaver.github.io/ProjectLens/assets/command-centre-preview.png">
+  <meta property="og:image" content="https://matthewpaver.github.io/ProjectLens/assets/projectlens-overview.png">
   <meta name="twitter:card" content="summary_large_image">
-  <title>ProjectLens | Risk Command Centre</title>
+  <title>ProjectLens | Open Major Project Evidence</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <a class="skip-link" href="#workspace">Skip to command centre</a>
-  <div class="grain" aria-hidden="true"></div>
+  <a class="skip-link" href="#main">Skip to analysis</a>
+  <div class="ambient" aria-hidden="true"><i></i><i></i><i></i></div>
 
-  <header class="topbar" id="top">
+  <header class="masthead">
     <a class="brand" href="#top" aria-label="ProjectLens home">
-      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span><b>PROJECT</b>LENS</span>
-      <em>COMMAND CENTRE</em>
+      <span class="brand-eye" aria-hidden="true"></span>
+      <span><b>PROJECT</b>LENS<small>PUBLIC DELIVERY INTELLIGENCE</small></span>
     </a>
-    <div class="project-switcher">
-      <label for="projectSelect">Live portfolio</label>
-      <select id="projectSelect">
-        <option value="northstar">Northstar Rail Upgrade</option>
-        <option value="thames">Thames Energy Transition</option>
-        <option value="meridian">Meridian Systems Integration</option>
-      </select>
-      <span class="status"><i></i> Update 14 accepted</span>
-    </div>
-    <div class="topbar-actions">
-      <button class="tour-button" id="guideButton" type="button">Guided demo</button>
-      <button class="data-button" id="openImportTop" type="button">Use your data</button>
-      <button class="icon-button" id="methodButton" type="button" aria-label="Open model methodology">?</button>
-      <a class="portfolio-credit" href="https://matthewpaver.github.io/MatthewPaver/store/" target="_blank" rel="noreferrer">Built by Matthew Paver ↗</a>
+    <nav aria-label="Primary navigation">
+      <button class="nav-button active" data-view="briefing" type="button">Briefing</button>
+      <button class="nav-button" data-view="explorer" type="button">Explorer</button>
+      <button class="nav-button" data-view="cases" type="button">Case match</button>
+      <button class="nav-button" data-view="method" type="button">Method</button>
+    </nav>
+    <div class="mast-actions">
+      <button class="demo-button" id="demoButton" type="button"><span></span> Run 60-sec demo</button>
+      <a class="schedule-review-link" href="schedule-review.html">Review an XER ↗</a>
     </div>
   </header>
 
-  <aside class="rail" aria-label="Primary navigation">
-    <nav>
-      <button class="rail-item active" data-view-target="executive" type="button"><span>01</span><b>Executive</b></button>
-      <button class="rail-item" data-view-target="analyst" type="button"><span>02</span><b>Analyst</b></button>
-      <button class="rail-item" data-view-target="decisions" type="button"><span>03</span><b>Decisions</b><em id="decisionCount">2</em></button>
-      <button class="rail-item" data-view-target="data" type="button"><span>04</span><b>Data room</b><em class="data-count" id="dataCount">0</em></button>
-    </nav>
-    <div class="rail-foot">
-      <span>MODEL</span>
-      <b>10,000</b>
-      <small>simulations</small>
-    </div>
-  </aside>
-
-  <main id="workspace" class="workspace">
-    <section class="view active" data-view="executive" aria-labelledby="executiveTitle">
-      <div class="page-heading reveal">
-        <div>
-          <p class="eyebrow"><span>Portfolio / Northstar</span> Reporting period 14 · 14 July 2026</p>
-          <h1 id="executiveTitle">Recovery decisions,<br><em>not another dashboard.</em></h1>
+  <main id="main">
+    <section class="view active" data-view-panel="briefing">
+      <div class="hero" id="top">
+        <div class="hero-copy reveal">
+          <p class="eyebrow"><span>31 March 2026 snapshot</span> Published by NISTA · analysed 15 July 2026</p>
+          <h1>Which major projects<br><em>changed direction?</em></h1>
+          <p class="hero-intro">ProjectLens turns disconnected public major-project disclosures into an inspectable history. See what changed, where signals conflict and which evidence deserves scrutiny.</p>
+          <div class="hero-actions">
+            <button id="openPriority" class="primary-button" type="button">Inspect the highest-priority change <span>↗</span></button>
+            <a class="plain-button" href="schedule-review.html">Compare private XER evidence</a>
+          </div>
         </div>
-        <div class="confidence-stamp">
-          <span>Decision confidence</span>
-          <strong id="decisionConfidence">MEDIUM</strong>
-          <small>3 evidence sources · 1 assumption to verify</small>
+        <div class="radar-card reveal delay-1" aria-label="Latest portfolio pulse">
+          <div class="radar-head"><span>Portfolio pulse</span><i>LIVE DATA</i></div>
+          <div class="radar-visual" aria-hidden="true">
+            <div class="rings"><i></i><i></i><i></i><b></b></div>
+            <div class="radar-number"><strong id="heroCount">189</strong><span>major projects</span></div>
+          </div>
+          <div class="radar-foot"><span><b id="matchedCount">170</b> matched to last year</span><span><b id="fourYearCount">35</b> across all 7 releases</span></div>
         </div>
       </div>
 
-      <div class="briefing-grid reveal delay-1">
-        <article class="briefing-card">
-          <div class="card-kicker"><span>Director briefing</span><time>09:42 today</time></div>
-          <p id="briefingText">Northstar remains outside the September commitment. Civil handover is the dominant driver, but resequencing commissioning can recover more time per unit of effort than adding another shift.</p>
-          <div class="evidence-row">
-            <span>Schedule updates ×14</span><span>Critical activities ×18</span><span>Change points ×3</span>
-          </div>
-        </article>
-        <button class="scenario-launch" id="openLab" type="button">
-          <span>Open scenario lab</span>
-          <strong>Test a recovery move</strong>
-          <i>↗</i>
-        </button>
-      </div>
-
-      <div class="metric-strip reveal delay-2" aria-label="Headline project metrics">
-        <article>
-          <span>On-time confidence</span>
-          <strong id="onTimeMetric">31<small>%</small></strong>
-          <em class="negative">▼ 8 pts since update 13</em>
-        </article>
-        <article>
-          <span>P80 completion</span>
-          <strong id="p80DateMetric">18<small> OCT</small></strong>
-          <em class="negative" id="p80Caption">35 days beyond commitment</em>
-        </article>
-        <article>
-          <span>Recoverable exposure</span>
-          <strong id="recoveryMetric">11<small> DAYS</small></strong>
-          <em class="positive">Across 3 viable interventions</em>
-        </article>
-        <article>
-          <span>Decisions due</span>
-          <strong id="dueMetric">03</strong>
-          <em>Before Friday control gate</em>
-        </article>
-      </div>
-
-      <div class="executive-grid reveal delay-3">
-        <article class="panel confidence-panel">
-          <div class="panel-head">
-            <div><span>Completion confidence</span><h2>Where the date can land</h2></div>
-            <div class="legend"><i class="base"></i> Current plan <i class="target"></i> Selected move</div>
-          </div>
-          <div class="distribution" aria-label="Completion date uncertainty distribution">
-            <svg viewBox="0 0 720 230" role="img" aria-labelledby="distributionTitle">
-              <title id="distributionTitle">Current and selected scenario completion distributions</title>
-              <defs>
-                <linearGradient id="baseFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f05a3c" stop-opacity=".45"/><stop offset="1" stop-color="#f05a3c" stop-opacity="0"/></linearGradient>
-                <linearGradient id="scenarioFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c6f35b" stop-opacity=".5"/><stop offset="1" stop-color="#c6f35b" stop-opacity="0"/></linearGradient>
-              </defs>
-              <line x1="60" y1="190" x2="685" y2="190" class="axis"/>
-              <line x1="385" y1="24" x2="385" y2="196" class="commit-line"/>
-              <text x="385" y="16" class="commit-label" text-anchor="middle">30 SEP COMMITMENT</text>
-              <path id="baseCurve" class="base-curve" d="M60 190 C150 190 185 170 240 120 C300 65 365 55 425 92 C505 142 545 180 685 190 L685 190 L60 190 Z"/>
-              <path id="scenarioCurve" class="scenario-curve" d="M60 190 C135 188 165 150 218 90 C270 38 330 52 378 105 C430 165 505 188 685 190 L685 190 L60 190 Z"/>
-              <g class="axis-labels"><text x="60" y="216">08 SEP</text><text x="218" y="216">22 SEP</text><text x="385" y="216">30 SEP</text><text x="535" y="216">10 OCT</text><text x="685" y="216">24 OCT</text></g>
-            </svg>
-          </div>
-          <div class="range-stats">
-            <div><span>P50</span><b id="p50Days">+12 days</b><small>Most likely</small></div>
-            <div><span>P80</span><b id="p80Days">+18 days</b><small>Planning confidence</small></div>
-            <div><span>Target</span><b id="targetChance">31%</b><small>On or before commitment</small></div>
-          </div>
-        </article>
-
-        <article class="panel driver-panel">
-          <div class="panel-head">
-            <div><span>Root-cause evidence</span><h2>What is moving the date</h2></div>
-            <button class="text-button" data-view-jump="analyst" type="button">Inspect evidence →</button>
-          </div>
-          <div class="driver-list" id="driverList"></div>
-          <p class="model-note"><b>How this is ranked:</b> probability × most-likely impact × critical-path exposure. Correlation is not yet modelled.</p>
-        </article>
-      </div>
-
-      <section class="proactive-section reveal delay-4" aria-labelledby="watchTitle">
-        <div class="proactive-head">
-          <div><span>Next control meeting</span><h2 id="watchTitle">Three decisions to make, in priority order</h2></div>
-          <button class="text-button" data-view-jump="data" type="button">Open evidence room →</button>
-        </div>
-        <div class="watch-preview" id="watchPreview"></div>
+      <section class="pulse-strip reveal delay-2" aria-label="Year-on-year portfolio movements">
+        <article class="pulse-alert"><span>Rating worsened</span><strong id="worsenedCount">18</strong><small>Comparable published assessments</small></article>
+        <article class="pulse-good"><span>Rating improved</span><strong id="improvedCount">30</strong><small>Often with important caveats</small></article>
+        <article><span>Current Red</span><strong id="redCount">34</strong><small>Official published assessment</small></article>
+        <article><span>Evidence records</span><strong id="recordCount">1,417</strong><small>Across seven annual releases</small></article>
       </section>
 
-      <section class="recommendations reveal delay-4" aria-labelledby="recommendationTitle">
-        <div class="section-head">
-          <div><span>Recommended interventions</span><h2 id="recommendationTitle">Choose the move, preserve the reasoning</h2></div>
-          <p>Each option is compared against identical simulation draws so the difference comes from the intervention, not random noise.</p>
+      <section class="priority-section reveal delay-3" aria-labelledby="priorityTitle">
+        <div class="section-heading">
+          <div><span>Executive attention queue</span><h2 id="priorityTitle">Start with material change</h2></div>
+          <p>Ranking combines published delivery confidence, year-on-year movement, end-date movement and in-year variance. It is a review queue, not a prediction.</p>
         </div>
-        <div class="scenario-cards" id="scenarioCards"></div>
+        <div class="priority-grid" id="priorityGrid" aria-live="polite"></div>
+      </section>
+
+      <section class="movement-section reveal delay-4" aria-labelledby="movementTitle">
+        <div class="section-heading inverse">
+          <div><span>Portfolio movement</span><h2 id="movementTitle">The story is not just Red or Green</h2></div>
+          <p>A better rating can coincide with a later published end date. ProjectLens keeps both facts visible.</p>
+        </div>
+        <div class="movement-layout">
+          <div class="transition-chart" id="transitionChart"></div>
+          <div class="contradictions">
+            <span>Signals worth challenging</span>
+            <h3>Improved confidence,<br>later finish.</h3>
+            <div id="contradictionList"></div>
+            <button class="inverse-button" data-go="explorer" data-preset="Improved" type="button">Explore all improved projects →</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="themes-section reveal" aria-labelledby="themesTitle">
+        <div class="section-heading">
+          <div><span>Published narrative signals</span><h2 id="themesTitle">What departments are talking about</h2></div>
+          <p>Transparent keyword signals help organise the evidence. They do not prove root cause.</p>
+        </div>
+        <div class="theme-cloud" id="themeCloud"></div>
+      </section>
+
+      <section class="leaver-section reveal" aria-labelledby="leaverTitle">
+        <div class="section-heading inverse">
+          <div><span>Outcome follow-up register</span><h2 id="leaverTitle"><b id="leaverCount">43</b> records left.<br>NISTA reports <i id="reportedLeaverCount">42</i>.</h2></div>
+          <p>Stable-ID comparison finds one more absent record than the annual report's leaver total. That may reflect an identifier or classification difference. Absence is not evidence of delivery success or failure.</p>
+        </div>
+        <div class="leaver-grid" id="leaverGrid"></div>
+        <a class="leaver-source" href="https://www.gov.uk/government/publications/nista-major-projects-annual-report-2025-26/nista-major-projects-annual-report-2025-26" target="_blank" rel="noreferrer">Read NISTA's published portfolio-leaver categories ↗</a>
       </section>
     </section>
 
-    <section class="view" data-view="analyst" aria-labelledby="analystTitle" hidden>
-      <div class="page-heading compact">
-        <div>
-          <p class="eyebrow"><span>Analyst workspace</span> Evidence before narrative</p>
-          <h1 id="analystTitle">Trace every claim<br><em>back to the schedule.</em></h1>
-        </div>
-        <button class="outline-button" id="exportBrief" type="button">Export decision brief</button>
+    <section class="view" data-view-panel="explorer" hidden>
+      <div class="view-hero">
+        <p class="eyebrow"><span>Portfolio explorer</span> 189 current projects · source-linked</p>
+        <h1>Find the change.<br><em>Read the evidence.</em></h1>
       </div>
-
-      <div class="analyst-layout">
-        <article class="panel tornado-panel">
-          <div class="panel-head"><div><span>Sensitivity</span><h2>Expected delay contribution</h2></div><small>Days · weighted</small></div>
-          <div id="tornadoChart" class="tornado-chart"></div>
-        </article>
-        <article class="panel health-panel model-panel">
-          <div class="panel-head"><div><span>Model governance</span><h2>Why trust this forecast?</h2></div><strong id="modelMae">1.63 days MAE</strong></div>
-          <div class="model-summary"><span>Current champion</span><b id="modelChampion">Last reported position</b><small id="modelValidation">375 past predictions tested</small></div>
-          <div class="model-scorecard" id="modelScorecard"></div>
-          <p>The most accurate validated model wins, even when it is the simplest. Models are retested on rolling historical windows before use.</p>
-        </article>
-      </div>
-
-      <article class="panel evidence-table-panel">
-        <div class="panel-head">
-          <div><span>Evidence register</span><h2>Activities requiring review</h2></div>
-          <label class="search-label">Filter <input id="evidenceFilter" type="search" placeholder="Task, owner or signal"></label>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Activity</th><th>Owner</th><th>Signal</th><th>Movement</th><th>Confidence</th><th>Next check</th></tr></thead>
-            <tbody id="evidenceTable"></tbody>
-          </table>
-        </div>
-      </article>
-
-      <article class="assumption-band">
-        <div><span>Model boundary 01</span><p>Activity effects are treated as independent. Shared causes and resource correlation require programme-specific calibration.</p></div>
-        <div><span>Model boundary 02</span><p>Recommendations are reviewable decision prompts. They do not alter the source schedule or replace professional judgement.</p></div>
-        <div><span>Data status</span><p>Public demonstration uses synthetic project data. The Python engine accepts organisation-defined drivers and interventions.</p></div>
-      </article>
-    </section>
-
-    <section class="view" data-view="decisions" aria-labelledby="decisionsTitle" hidden>
-      <div class="page-heading compact">
-        <div>
-          <p class="eyebrow"><span>Decision ledger</span> Promise versus observed recovery</p>
-          <h1 id="decisionsTitle">Did the intervention<br><em>actually work?</em></h1>
-        </div>
-        <button class="scenario-launch small" id="openLabFromLedger" type="button"><span>New scenario</span><strong>Compare a move</strong><i>+</i></button>
-      </div>
-
-      <div class="ledger-summary">
-        <article><span>Recovery promised</span><strong>19 days</strong><small>Across 4 decisions</small></article>
-        <article><span>Recovery observed</span><strong>13 days</strong><small>68% realised</small></article>
-        <article><span>Open commitments</span><strong id="openCommitments">02</strong><small>1 review overdue</small></article>
-      </div>
-
-      <div class="decision-ledger" id="decisionLedger"></div>
-    </section>
-
-    <section class="view data-view" data-view="data" aria-labelledby="dataTitle" hidden>
-      <div class="page-heading compact">
-        <div>
-          <p class="eyebrow"><span>Evidence room</span> Every row remains inspectable</p>
-          <h1 id="dataTitle">Bring the evidence.<br><em>Keep control of it.</em></h1>
-        </div>
-        <div class="data-actions">
-          <button class="outline-button" id="loadDemoData" type="button">Reload 2,700+ demo rows</button>
-          <button class="scenario-launch small" id="openImport" type="button"><span>Private by design</span><strong>Use your CSV files</strong><i>+</i></button>
-        </div>
-      </div>
-
-      <div class="privacy-band">
-        <strong>Your files stay in this browser.</strong>
-        <span>No account, upload or server processing. Refresh the page to clear imported data.</span>
-        <i id="dataSourceLabel">No dataset loaded</i>
-      </div>
-
-      <section class="dataset-overview" aria-labelledby="datasetTitle">
-        <div class="section-head">
-          <div><span>Dataset inventory</span><h2 id="datasetTitle">What ProjectLens can see</h2></div>
-          <p>Recognised outputs are validated independently. Missing files reduce the available analysis but never prevent inspection of the data you supplied.</p>
-        </div>
-        <div class="dataset-cards" id="datasetCards"></div>
+      <section class="filter-bar" aria-label="Portfolio filters">
+        <label class="search-field"><span>Search</span><input id="searchInput" type="search" placeholder="Project, department or narrative"></label>
+        <label><span>Movement</span><select id="movementFilter"><option value="">All movements</option></select></label>
+        <label><span>Rating</span><select id="ratingFilter"><option value="">All ratings</option></select></label>
+        <label><span>Department</span><select id="departmentFilter"><option value="">All departments</option></select></label>
+        <label><span>Theme</span><select id="themeFilter"><option value="">All themes</option></select></label>
+        <button id="clearFilters" type="button">Clear</button>
       </section>
-
-      <div class="data-workbench">
-        <article class="panel quality-panel">
-          <div class="panel-head"><div><span>Input assurance</span><h2>Data readiness</h2></div><strong id="qualityScore">0 / 100</strong></div>
-          <div id="qualityChecks" class="quality-checks"></div>
-        </article>
-        <article class="panel proactive-panel">
-          <div class="panel-head"><div><span>Rules, not guesswork</span><h2>Proactive signals</h2></div><button class="text-button" id="exportWatchlist" type="button">Export CSV ↓</button></div>
-          <div id="watchlist" class="watchlist empty-state">Load data to generate an evidence-linked watchlist.</div>
-        </article>
+      <div class="explorer-status"><span id="resultCount">189 projects</span><span>Click a row for up to seven years of evidence</span><button id="watchlistFilter" type="button">☆ Watchlist <b id="watchCount">0</b></button></div>
+      <div class="project-table-wrap">
+        <table class="project-table">
+          <thead><tr><th>Priority</th><th>Project</th><th>Published DCA</th><th>Movement</th><th>End-date change</th><th>Published themes</th><th>Watch</th></tr></thead>
+          <tbody id="projectTable"></tbody>
+        </table>
       </div>
+      <div class="pagination"><button id="prevPage" type="button">← Previous</button><span id="pageStatus"></span><button id="nextPage" type="button">Next →</button></div>
+    </section>
 
-      <article class="panel update-panel">
-        <div class="panel-head">
-          <div><span>Update comparison</span><h2>What changed between reporting periods</h2></div>
-          <div class="phase-controls"><label>From<select id="phaseFrom" disabled></select></label><span>→</span><label>To<select id="phaseTo" disabled></select></label></div>
-        </div>
-        <div id="updateComparison" class="update-comparison empty-state">Load slippage history to compare reporting periods.</div>
-      </article>
+    <section class="view" data-view-panel="cases" hidden>
+      <div class="view-hero cases-hero">
+        <p class="eyebrow"><span>Comparable case finder</span> Evidence before analogy</p>
+        <h1>What happened<br><em>to similar projects?</em></h1>
+        <p>Select a current project. ProjectLens searches projects that improved in a later annual release and explains the overlap.</p>
+      </div>
+      <section class="case-picker">
+        <label for="caseProjectSelect">Current project</label>
+        <select id="caseProjectSelect"></select>
+        <button id="findCases" class="primary-button" type="button">Find comparable improvements <span>→</span></button>
+      </section>
+      <div class="case-context" id="caseContext"></div>
+      <div class="case-grid" id="caseGrid"></div>
+      <div class="case-boundary"><strong>Human approval required.</strong> Similarity is based on shared themes, category and department. It is a prompt to inspect evidence, not proof that the same intervention will work.</div>
+    </section>
 
-      <article class="panel explorer-panel">
-        <div class="panel-head explorer-head">
-          <div><span>Complete data explorer</span><h2>Inspect every available row</h2></div>
-          <label class="search-label">Search<input id="dataSearch" type="search" placeholder="Search this dataset" disabled></label>
+    <section class="view" data-view-panel="method" hidden>
+      <div class="view-hero method-hero">
+        <p class="eyebrow"><span>Open methodology</span> Exact maths, bounded language</p>
+        <h1>No mystery score.<br><em>No invented forecast.</em></h1>
+        <p>ProjectLens uses deterministic comparisons for dates, ratings and variances. Text classification is deliberately simple and inspectable.</p>
+      </div>
+      <section class="method-grid">
+        <article><span>01</span><h2>Acquire</h2><p>Seven official GMPP CSV releases are retained unchanged with links to the source publication.</p></article>
+        <article><span>02</span><h2>Match</h2><p>Stable GMPP identifiers create longitudinal histories. Missing identifiers are kept but marked unmatchable.</p></article>
+        <article><span>03</span><h2>Compare</h2><p>Rating transitions, published end-date movements and annual forecast variances are calculated exactly.</p></article>
+        <article><span>04</span><h2>Organise</h2><p>A visible keyword taxonomy groups narrative signals into eight review themes.</p></article>
+      </section>
+      <section class="score-explainer">
+        <div>
+          <span>Attention score</span><h2>A queue for scrutiny,<br>not probability of failure.</h2>
+          <p>The score deliberately prioritises obvious published signals. It does not claim to predict project outcomes.</p>
         </div>
-        <div class="dataset-tabs" id="datasetTabs"></div>
-        <div class="explorer-meta"><span id="explorerMeta">No data loaded</span><span id="explorerPage">Page 0 of 0</span></div>
-        <div class="table-wrap data-table-wrap"><table id="dataTable"><tbody><tr><td class="empty-state">Choose the full demo or import ProjectLens output CSV files.</td></tr></tbody></table></div>
-        <div class="pagination"><button id="prevPage" type="button" disabled>← Previous</button><button id="nextPage" type="button" disabled>Next →</button></div>
-      </article>
+        <div class="score-formula">
+          <div><b>+35</b><span>Current Red published DCA</span></div>
+          <div><b>+25</b><span>Rating worsened</span></div>
+          <div><b>up to +20</b><span>Later end date</span></div>
+          <div><b>up to +15</b><span>Material in-year variance</span></div>
+          <div><b>−8</b><span>No published evidence excerpt</span></div>
+        </div>
+      </section>
+      <section class="limitations">
+        <div><span>Model boundaries</span><h2>What this cannot tell you</h2></div>
+        <ul id="limitationsList"></ul>
+      </section>
+      <section class="source-register">
+        <div class="section-heading"><div><span>Source register</span><h2>Inspect the original releases</h2></div></div>
+        <div id="sourceList"></div>
+      </section>
+      <section class="source-register external-register">
+        <div class="section-heading"><div><span>Evidence expansion</span><h2>Connect delivery to scrutiny, procurement and outcomes</h2></div><p>These authoritative routes define the next evidence layer. They remain separate so ProjectLens never presents a generic source as project-specific proof.</p></div>
+        <div id="externalSourceList"></div>
+      </section>
     </section>
   </main>
 
-  <dialog id="scenarioDialog" class="scenario-dialog">
-    <form method="dialog" class="dialog-shell">
-      <div class="dialog-head">
-        <div><span>Scenario lab</span><h2>Build a recovery case</h2><p>Adjust operational levers. ProjectLens reruns the same 10,000 futures for a fair comparison.</p></div>
-        <button class="close-button" value="cancel" aria-label="Close scenario lab">×</button>
-      </div>
-      <div class="lab-layout">
-        <div class="lab-controls">
-          <label><span>Handover impact reduction <output id="handoverOutput">45%</output></span><input id="handoverRange" type="range" min="0" max="75" value="45"></label>
-          <label><span>Approval cycle reduction <output id="approvalOutput">20%</output></span><input id="approvalRange" type="range" min="0" max="75" value="20"></label>
-          <label><span>Testing capacity uplift <output id="testingOutput">20%</output></span><input id="testingRange" type="range" min="0" max="75" value="20"></label>
-          <label><span>Supplier recovery <output id="supplierOutput">10%</output></span><input id="supplierRange" type="range" min="0" max="75" value="10"></label>
-          <div class="lab-meta"><label>Scenario name<input id="scenarioName" type="text" value="Resequence commissioning"></label><label>Decision owner<input id="scenarioOwner" type="text" value="Planning lead"></label></div>
-        </div>
-        <div class="lab-result">
-          <span>Modelled result</span>
-          <div class="lab-score"><strong id="labProbability">52%</strong><small>on-time confidence</small></div>
-          <div class="lab-comparison"><div><span>Current P80</span><b id="labBaseP80">+18 days</b></div><div><span>Scenario P80</span><b id="labScenarioP80">+10 days</b></div><div><span>Expected recovery</span><b id="labRecovery">8 days</b></div></div>
-          <p id="labNarrative">This move primarily reduces exposure to late civil handover while allowing testing preparation to begin earlier.</p>
-          <button id="commitScenario" class="commit-button" value="cancel" type="button">Commit to decision ledger <span>→</span></button>
-        </div>
-      </div>
-    </form>
+  <dialog id="projectDialog" class="project-dialog">
+    <article>
+      <button class="dialog-close" type="button" aria-label="Close project detail">×</button>
+      <div class="dialog-kicker"><span id="detailDepartment"></span><span id="detailCategory"></span></div>
+      <h2 id="detailName"></h2>
+      <div class="detail-summary" id="detailSummary"></div>
+      <section class="detail-panel"><span>Why it is in the queue</span><ul id="detailReasons"></ul></section>
+      <section class="detail-panel"><span>Published evidence</span><blockquote id="detailEvidence"></blockquote><a id="detailSource" target="_blank" rel="noreferrer">Open the official source ↗</a></section>
+      <section class="detail-panel"><span>Longitudinal evidence trail</span><div class="timeline" id="detailTimeline"></div></section>
+      <section class="detail-panel"><span>Narrative signals</span><div class="detail-themes" id="detailThemes"></div></section>
+      <button class="case-button" id="detailFindCases" type="button">Find comparable improved cases <span>→</span></button>
+    </article>
   </dialog>
 
-  <dialog id="methodDialog" class="method-dialog">
-    <form method="dialog">
-      <button class="close-button" value="cancel" aria-label="Close methodology">×</button>
-      <span>Transparent by design</span>
-      <h2>How the model works</h2>
-      <ol>
-        <li><b>Backtest schedule forecasts.</b> Four models compete on rolling historical windows. The lowest-error model wins for each task.</li>
-        <li><b>Describe risk drivers.</b> Each driver has a probability, triangular impact range and critical-path exposure.</li>
-        <li><b>Run 10,000 futures.</b> The seeded simulation produces P10, P50, P80 and on-time confidence.</li>
-        <li><b>Apply an intervention.</b> A scenario reduces named driver impacts. Baseline and scenario use identical random draws.</li>
-        <li><b>Rank the evidence.</b> Root causes use probability × most-likely impact × criticality.</li>
-        <li><b>Record the outcome.</b> Selected interventions enter the decision ledger for review against the next update.</li>
-      </ol>
-      <p>This is an explainable decision-support demonstrator using synthetic data, not a certified schedule-risk model.</p>
-    </form>
+  <dialog id="demoDialog" class="demo-dialog">
+    <article>
+      <button class="dialog-close" type="button" aria-label="Close guided demo">×</button>
+      <span>GUIDED DEMO · <b id="demoStep">1 / 4</b></span>
+      <h2 id="demoTitle">Start with the portfolio pulse</h2>
+      <p id="demoCopy">ProjectLens begins with the 18 comparable projects whose published delivery-confidence rating worsened this year.</p>
+      <div class="demo-progress"><i class="active"></i><i></i><i></i><i></i></div>
+      <footer><button id="demoBack" type="button">← Back</button><button id="demoNext" type="button">Show me →</button></footer>
+    </article>
   </dialog>
 
-  <dialog id="importDialog" class="import-dialog">
-    <form method="dialog">
-      <button class="close-button" value="cancel" aria-label="Close data import">×</button>
-      <span>Self-serve analysis</span>
-      <h2>Use ProjectLens outputs</h2>
-      <p>Select one or more CSV files produced by the ProjectLens pipeline. Files are parsed locally and are never sent anywhere.</p>
-      <label class="drop-zone" for="dataFiles">
-        <strong>Choose CSV files</strong>
-        <span>task history · slippage · forecasts · milestones · change points · recommendations · model scorecard · action briefs</span>
-        <input id="dataFiles" type="file" accept=".csv,text/csv" multiple>
-      </label>
-      <div class="expected-files">
-        <span>Minimum useful set</span><b>task_cleaned.csv + slippage_summary.csv</b>
-        <span>Full decision support</span><b>All eight recognised output files</b>
-      </div>
-      <button id="loadDemoFromDialog" class="commit-button" value="cancel" type="button">Or load the complete public demo <span>→</span></button>
-    </form>
-  </dialog>
-
-  <dialog id="guideDialog" class="guide-dialog">
-    <form method="dialog">
-      <button class="close-button" value="cancel" aria-label="Close guided demo">×</button>
-      <span>90-second guided demo</span>
-      <h2 id="guideTitle">Start with the director briefing</h2>
-      <p id="guideCopy">ProjectLens translates the current schedule position into a short, evidence-linked decision brief.</p>
-      <div class="guide-progress" id="guideProgress"><i class="active"></i><i></i><i></i><i></i></div>
-      <div class="guide-actions"><button id="guideBack" type="button" disabled>← Back</button><button id="guideNext" type="button">Next: inspect the evidence →</button></div>
-    </form>
-  </dialog>
-
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div id="loading" class="loading" role="status"><span></span><b>Reading seven years of public project evidence…</b></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="app.js"></script>
 </body>
 </html>

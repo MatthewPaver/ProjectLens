@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Compare Primavera P6 XER submissions locally, find material changes and create an evidence-linked assurance review.">
+  <meta name="theme-color" content="#071a1b">
+  <meta property="og:title" content="ProjectLens | Schedule Evidence Review">
+  <meta property="og:description" content="Private, browser-local XER comparison for project assurance.">
+  <title>ProjectLens | Schedule Evidence Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="schedule-review.css">
+</head>
+<body class="schedule-body" data-mode="executive">
+  <a class="skip-link" href="#reviewWorkspace">Skip to review workspace</a>
+  <div class="schedule-grid" aria-hidden="true"></div>
+
+  <header class="masthead schedule-masthead">
+    <a class="brand" href="index.html" aria-label="ProjectLens public intelligence">
+      <span class="brand-eye" aria-hidden="true"></span>
+      <span><b>PROJECT</b>LENS<small>SCHEDULE EVIDENCE REVIEW</small></span>
+    </a>
+    <nav aria-label="Product areas">
+      <a class="product-link" href="index.html">Public intelligence</a>
+      <a class="product-link active" href="schedule-review.html" aria-current="page">Schedule review</a>
+    </nav>
+    <div class="mast-actions">
+      <span class="local-badge"><i></i> Browser-local</span>
+      <a href="https://matthewpaver.github.io/MatthewPaver/store/" target="_blank" rel="noreferrer">Portfolio ↗</a>
+    </div>
+  </header>
+
+  <main id="reviewWorkspace">
+    <section class="schedule-hero">
+      <div class="schedule-hero-copy reveal">
+        <p class="eyebrow"><span>Primavera P6 assurance</span> XER files stay on this device</p>
+        <h1>Find the change<br><em>they did not explain.</em></h1>
+        <p>Compare two schedule submissions, separate material movement from noise and turn the evidence into questions, owners and a review trail.</p>
+        <div class="hero-actions">
+          <button class="primary-button" id="loadDemo" type="button">Run the Northstar demo <span>→</span></button>
+          <button class="plain-button" id="jumpToFiles" type="button">Use my own XER files</button>
+        </div>
+      </div>
+      <div class="evidence-machine reveal delay-1" aria-label="Schedule review workflow">
+        <div class="machine-top"><span>Evidence chain</span><b>LOCAL / 01</b></div>
+        <div class="machine-flow">
+          <div><i>01</i><strong>Previous XER</strong><small>Accepted comparison point</small></div>
+          <span>+</span>
+          <div><i>02</i><strong>Current XER</strong><small>Latest submission</small></div>
+          <span>+</span>
+          <div><i>03</i><strong>Narrative</strong><small>What the update claims</small></div>
+        </div>
+        <div class="machine-output"><span></span><b>Material changes</b><b>Contradictions</b><b>Review actions</b></div>
+      </div>
+    </section>
+
+    <section class="privacy-strip" aria-label="Privacy and method boundaries">
+      <div><strong>Nothing uploaded</strong><span>Parsing and comparison run in your browser.</span></div>
+      <div><strong>Deterministic checks</strong><span>No invented probability of project failure.</span></div>
+      <div><strong>Human decision</strong><span>Findings become questions, not automatic conclusions.</span></div>
+    </section>
+
+    <section class="intake-section" id="intakeSection">
+      <div class="section-heading">
+        <div><span>01 · Evidence intake</span><h2>Build the submission pair</h2></div>
+        <p>XER does not guarantee a complete baseline, risk record or schedule narrative. ProjectLens shows what it received before drawing conclusions.</p>
+      </div>
+
+      <div class="intake-grid">
+        <label class="file-drop" id="previousDrop" for="previousFile">
+          <input id="previousFile" type="file" accept=".xer,text/plain">
+          <span>Previous submission</span>
+          <strong id="previousFileName">Drop previous XER</strong>
+          <small id="previousFileMeta">Required · comparison point</small>
+          <i>01</i>
+        </label>
+        <label class="file-drop current" id="currentDrop" for="currentFile">
+          <input id="currentFile" type="file" accept=".xer,text/plain">
+          <span>Current submission</span>
+          <strong id="currentFileName">Drop current XER</strong>
+          <small id="currentFileMeta">Required · latest update</small>
+          <i>02</i>
+        </label>
+        <div class="narrative-input">
+          <label for="narrativeText"><span>Submission narrative</span><small>Optional, but required for contradiction checks</small></label>
+          <textarea id="narrativeText" rows="8" placeholder="Paste the planner or contractor's explanation of progress, delay and material schedule changes..."></textarea>
+          <label class="compact-upload" for="narrativeFile"><input id="narrativeFile" type="file" accept=".txt,.md,.csv,text/plain,text/csv">Load TXT, MD or CSV narrative</label>
+        </div>
+      </div>
+
+      <details class="rule-panel">
+        <summary><span>Contract-specific review rules</span><small>Adjust the acceptance thresholds before running the review</small></summary>
+        <div class="rule-grid">
+          <label><span>Long activity threshold</span><input id="maxDurationDays" type="number" min="1" max="180" value="20"><small>8-hour equivalent days</small></label>
+          <label><span>Material finish movement</span><input id="materialSlipDays" type="number" min="1" max="365" value="10"><small>Calendar days</small></label>
+          <label><span>Float warning threshold</span><input id="floatThresholdHours" type="number" min="-1000" max="1000" value="0"><small>Hours</small></label>
+          <label class="check-rule"><input id="allowPositiveLag" type="checkbox"><span>Allow positive relationship lag</span><small>Off by default</small></label>
+        </div>
+      </details>
+
+      <div class="run-bar">
+        <div><span id="intakeStatus">Waiting for two XER files</span><small>Use the synthetic demo if you do not have safe test data.</small></div>
+        <button class="run-review" id="runReview" type="button" disabled><i></i> Run evidence review</button>
+      </div>
+    </section>
+
+    <section class="review-results" id="reviewResults" hidden aria-live="polite">
+      <div class="review-toolbar">
+        <div>
+          <span>Review <b id="reviewTimestamp"></b></span>
+          <strong id="reviewProjectName">Schedule evidence review</strong>
+          <small id="reviewFilePair"></small>
+        </div>
+        <div class="mode-switch" role="group" aria-label="Review detail level">
+          <button type="button" class="active" data-mode-switch="executive">Executive</button>
+          <button type="button" data-mode-switch="analyst">Analyst</button>
+        </div>
+        <div class="export-actions">
+          <button id="copyBrief" type="button">Copy brief</button>
+          <button id="downloadPack" type="button">Download review pack ↓</button>
+        </div>
+      </div>
+
+      <section class="review-pulse" aria-label="Review summary">
+        <article class="signal"><span>Material changes</span><strong id="materialChangeCount">0</strong><small>Ranked for review</small></article>
+        <article><span>Finish movement</span><strong id="finishMovement">0d</strong><small id="finishMilestone">Latest milestone</small></article>
+        <article class="warning"><span>Narrative conflicts</span><strong id="contradictionCount">0</strong><small>Evidence versus claim</small></article>
+        <article><span>Integrity findings</span><strong id="integrityCount">0</strong><small>Against selected rules</small></article>
+      </section>
+
+      <section class="executive-grid">
+        <article class="executive-brief">
+          <div class="panel-label"><span>02 · Executive readout</span><i>DECISION SUPPORT</i></div>
+          <h2 id="executiveHeadline">Review ready</h2>
+          <p id="executiveSummary"></p>
+          <div class="headline-evidence" id="headlineEvidence"></div>
+        </article>
+        <article class="contradiction-panel">
+          <div class="panel-label"><span>03 · Claims to challenge</span><i>NARRATIVE TEST</i></div>
+          <div id="contradictionListXer"></div>
+        </article>
+      </section>
+
+      <section class="material-section">
+        <div class="section-heading compact">
+          <div><span>04 · Material change funnel</span><h2>What deserves attention</h2></div>
+          <p>Changes are ranked by milestone movement, float erosion, logic, constraint and duration evidence. The score prioritises review; it is not a forecast.</p>
+        </div>
+        <div class="change-filters" role="group" aria-label="Filter material changes">
+          <button class="active" type="button" data-change-filter="all">All</button>
+          <button type="button" data-change-filter="high">High</button>
+          <button type="button" data-change-filter="milestone">Milestones</button>
+          <button type="button" data-change-filter="logic">Logic</button>
+          <button type="button" data-change-filter="constraint">Constraints</button>
+        </div>
+        <div class="change-list" id="changeList"></div>
+      </section>
+
+      <section class="analyst-only analyst-grid">
+        <article>
+          <div class="panel-label"><span>05 · Submission fitness</span><i>INPUT GATE</i></div>
+          <div id="fitnessGrid" class="fitness-grid"></div>
+        </article>
+        <article>
+          <div class="panel-label"><span>06 · Integrity findings</span><i>RULES AS CODE</i></div>
+          <div id="integrityList" class="integrity-list"></div>
+        </article>
+      </section>
+
+      <section class="question-section">
+        <div class="section-heading compact inverse">
+          <div><span>07 · Assurance questions</span><h2>Move from insight to action</h2></div>
+          <p>Each question retains the evidence that produced it. Add the useful ones to the local review log and assign an owner.</p>
+        </div>
+        <div id="questionList" class="question-list"></div>
+      </section>
+
+      <section class="action-section">
+        <div class="section-heading compact">
+          <div><span>08 · Decision memory</span><h2>Close the loop next month</h2></div>
+          <p>Actions are stored in this browser only. When the next XER arrives, the team can see whether the questioned signal was resolved or repeated.</p>
+        </div>
+        <form id="actionForm" class="action-form">
+          <label><span>Action or decision</span><input id="actionTitle" required placeholder="What needs to be answered or approved?"></label>
+          <label><span>Owner</span><input id="actionOwner" placeholder="Role or person"></label>
+          <label><span>Due</span><input id="actionDue" type="date"></label>
+          <button type="submit">Add to review log +</button>
+        </form>
+        <div id="actionList" class="action-list"></div>
+      </section>
+
+      <section class="boundary-panel">
+        <strong>Evidence boundary</strong>
+        <p id="boundaryCopy">This review compares exported schedule evidence. It does not establish contractual entitlement, causation or a probability of failure.</p>
+      </section>
+    </section>
+  </main>
+
+  <dialog id="changeDialog" class="change-dialog">
+    <article>
+      <button class="dialog-close" type="button" aria-label="Close change detail">×</button>
+      <div class="panel-label"><span id="changeDialogSeverity">Material change</span><i id="changeDialogCode"></i></div>
+      <h2 id="changeDialogTitle"></h2>
+      <p id="changeDialogSummary"></p>
+      <div id="changeDialogEvidence" class="change-evidence"></div>
+      <button id="changeDialogAction" class="case-button" type="button">Add assurance action <span>→</span></button>
+    </article>
+  </dialog>
+
+  <div class="review-loader" id="reviewLoader" hidden role="status">
+    <div class="loader-network"><i></i><i></i><i></i><span></span></div>
+    <strong id="loaderTitle">Parsing schedule network</strong>
+    <small id="loaderStep">Reading activities, logic and calendars</small>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="xer-review.js"></script>
+</body>
+</html>

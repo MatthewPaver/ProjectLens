@@ -44,3 +44,6 @@ logs/
 
 # Cache
 *.cache
+
+# Local generated working files
+work/
