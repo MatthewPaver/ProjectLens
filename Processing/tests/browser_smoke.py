@@ -24,7 +24,10 @@ def run_desktop(browser):
     page.wait_for_load_state("networkidle")
     page.locator("#loading").wait_for(state="hidden")
     assert page.locator("#heroCount").inner_text() == "189"
-    assert page.locator("#worsenedCount").inner_text() == "6"
+    assert page.locator("#fourYearCount").inner_text() == "35"
+    assert page.locator("#recordCount").inner_text() == "1,417"
+    assert page.locator("#worsenedCount").inner_text() == "18"
+    assert page.locator("#redCount").inner_text() == "34"
     page.locator(".hero h1").wait_for(state="visible")
     page.wait_for_timeout(900)
     page.screenshot(path=str(ROOT / "docs" / "assets" / "projectlens-overview.png"))
@@ -32,7 +35,12 @@ def run_desktop(browser):
     page.get_by_role("button", name="Explorer", exact=True).click()
     page.locator("#movementFilter").select_option("Worsened")
     result_count = page.locator("#resultCount").inner_text()
-    assert result_count.upper() == "6 PROJECTS", result_count
+    assert result_count.upper() == "18 PROJECTS", result_count
+    page.locator("#projectTable .watch-button").first.click()
+    assert page.locator("#watchCount").inner_text() == "1"
+    page.locator("#watchlistFilter").click()
+    assert page.locator("#resultCount").inner_text().upper() == "1 PROJECT"
+    page.locator("#watchlistFilter").click()
     page.locator("#projectTable tr").first.click()
     page.locator("#projectDialog[open]").wait_for()
     assert page.locator("#detailTimeline article").count() >= 2
@@ -42,8 +50,10 @@ def run_desktop(browser):
     assert page.locator("#caseGrid .case-card").count() >= 1
 
     page.get_by_role("button", name="Method", exact=True).click()
-    assert page.locator("#limitationsList li").count() == 4
-    assert page.locator("#sourceList a").count() == 4
+    assert page.locator("#limitationsList li").count() == 5
+    assert page.locator("#sourceList a").count() == 7
+    assert page.locator("#externalSourceList a").count() == 6
+    assert page.locator('a[href="schedule-review.html"]').count() >= 1
 
     page.get_by_role("button", name="Briefing", exact=True).click()
     page.locator(".hero h1").wait_for(state="visible")

@@ -1,4 +1,4 @@
-"""Record a deliberately paced, silent ProjectLens product walkthrough."""
+"""Record a deliberately paced, silent ProjectLens evidence walkthrough."""
 
 from pathlib import Path
 
@@ -27,45 +27,45 @@ with sync_playwright() as playwright:
     page.goto(BASE_URL)
     page.wait_for_load_state("networkidle")
     page.locator("#loading").wait_for(state="hidden")
-    pause(page, 2400)
+    pause(page, 3000)
 
     page.locator("#openPriority").click()
     page.locator("#projectDialog[open]").wait_for()
-    pause(page, 3200)
+    pause(page, 3500)
     page.locator("#detailEvidence").scroll_into_view_if_needed()
-    pause(page, 2600)
+    pause(page, 3200)
     page.locator("#detailTimeline").scroll_into_view_if_needed()
-    pause(page, 3000)
+    pause(page, 3500)
     page.locator("#projectDialog .dialog-close").click()
-    pause(page, 900)
+    pause(page, 1200)
 
     page.get_by_role("button", name="Explorer", exact=True).click()
-    pause(page, 1700)
+    pause(page, 2200)
     page.locator("#movementFilter").select_option("Worsened")
-    pause(page, 2300)
-    page.locator("#searchInput").fill("Unity Programme")
-    pause(page, 1700)
-    page.locator("#projectTable tr").first.click()
-    page.locator("#projectDialog[open]").wait_for()
-    pause(page, 2600)
+    pause(page, 3500)
 
-    page.locator("#detailFindCases").click()
-    page.locator('[data-view-panel="cases"]:not([hidden])').wait_for()
+    page.goto(f"{BASE_URL}/schedule-review.html")
+    page.wait_for_load_state("networkidle")
     pause(page, 3200)
-    page.locator("#caseGrid .case-card").first.scroll_into_view_if_needed()
+    page.get_by_role("button", name="Run the Northstar demo").click()
+    page.locator("#reviewResults").wait_for(state="visible")
+    pause(page, 4200)
+    page.locator("#contradictionListXer").scroll_into_view_if_needed()
+    pause(page, 4000)
+    page.locator("#changeList").scroll_into_view_if_needed()
+    pause(page, 3500)
+    page.locator("#changeList .change-row").first.click()
+    page.locator("#changeDialog[open]").wait_for()
+    pause(page, 3500)
+    page.get_by_role("button", name="Add assurance action").click()
     pause(page, 2500)
-
-    page.get_by_role("button", name="Method", exact=True).click()
-    pause(page, 2600)
-    page.locator(".score-explainer").scroll_into_view_if_needed()
-    pause(page, 2700)
-    page.locator(".limitations").scroll_into_view_if_needed()
-    pause(page, 2600)
+    page.locator("#actionList").scroll_into_view_if_needed()
+    pause(page, 3500)
 
     video = page.video
     page.close()
+    output = ROOT / "docs" / "assets" / "projectlens-evidence-demo.webm"
+    video.save_as(str(output))
     context.close()
     browser.close()
-    output = VIDEO_DIR / "projectlens-linkedin-demo.webm"
-    video.save_as(str(output))
     print(output)

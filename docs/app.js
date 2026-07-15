@@ -1,9 +1,20 @@
+function savedWatchlist() {
+  try {
+    const saved = JSON.parse(localStorage.getItem("projectlens:watchlist:v1") || "[]");
+    return Array.isArray(saved) ? saved : [];
+  } catch {
+    return [];
+  }
+}
+
 const state = {
   data: null,
   view: "briefing",
   page: 1,
   pageSize: 18,
   filters: { query: "", movement: "", rating: "", department: "", theme: "" },
+  watchlist: new Set(savedWatchlist()),
+  onlyWatched: false,
   detailId: null,
   demoStep: 0
 };
@@ -70,11 +81,11 @@ function renderSummary() {
   const summary = state.data.summary;
   setText("heroCount", summary.latestProjects);
   setText("matchedCount", summary.matchedLatest);
-  setText("fourYearCount", summary.allFourYears);
+  setText("fourYearCount", summary.allReleaseYears);
   setText("worsenedCount", summary.transitions.Worsened || 0);
   setText("improvedCount", summary.transitions.Improved || 0);
   setText("redCount", summary.ratingCounts.Red || 0);
-  setText("recordCount", summary.historyRecords);
+  setText("recordCount", formatNumber(summary.historyRecords));
 }
 
 function priorityProjects() {
@@ -86,7 +97,7 @@ function priorityProjects() {
 function renderPriority() {
   $("#priorityGrid").innerHTML = priorityProjects().map((project, index) => `
     <button class="priority-card ${index === 0 ? "lead" : ""}" data-project-id="${escapeHtml(project.id)}" type="button">
-      <div class="priority-top"><span>0${index + 1}</span><b class="rating ${ratingClass(project.ipaDca)}">${escapeHtml(project.ipaDca || "Not published")}</b></div>
+      <div class="priority-top"><span>0${index + 1}</span><b class="rating ${ratingClass(project.deliveryConfidence)}">${escapeHtml(project.deliveryConfidence || "Not published")}</b></div>
       <div class="score-ring" style="--score:${project.attentionScore}"><strong>${project.attentionScore}</strong><small>attention</small></div>
       <h3>${escapeHtml(project.name)}</h3>
       <p>${escapeHtml(project.attentionReasons[1] || project.attentionReasons[0] || "Published evidence available for review")}</p>
@@ -105,11 +116,11 @@ function renderMovement() {
   ];
   const max = Math.max(...items.map(([, count]) => count));
   $("#transitionChart").innerHTML = `
-    <div class="chart-head"><span>2024-25 → 2025-26</span><b>Published IPA rating movement</b></div>
+    <div class="chart-head"><span>2024-25 → 2025-26</span><b>Official published DCA movement</b></div>
     ${items.map(([label, count]) => `<button type="button" data-transition-preset="${label}" class="transition-row ${transitionClass(label)}">
       <span>${label}</span><div><i style="--width:${Math.max(3, count / max * 100)}%"></i></div><strong>${count}</strong>
     </button>`).join("")}
-    <p>Only exact Green, Amber and Red assessments are compared. Missing and exempt ratings remain visible as not comparable.</p>`;
+    <p>The displayed DCA uses independent assurance when published, otherwise the SRO Q4 assessment. Missing and exempt ratings remain not comparable.</p>`;
   $$('[data-transition-preset]').forEach(button => button.addEventListener("click", () => {
     state.filters.movement = button.dataset.transitionPreset;
     state.page = 1;
@@ -123,7 +134,7 @@ function renderMovement() {
     .sort((a, b) => b.endDateDeltaDays - a.endDateDeltaDays)
     .slice(0, 3);
   $("#contradictionList").innerHTML = contradictions.map(project => `
-    <button data-project-id="${escapeHtml(project.id)}" type="button"><span>${escapeHtml(project.previous?.ipaDca)} → ${escapeHtml(project.ipaDca)}</span><strong>${escapeHtml(project.name)}</strong><small>${formatDays(project.endDateDeltaDays)}</small></button>`).join("");
+    <button data-project-id="${escapeHtml(project.id)}" type="button"><span>${escapeHtml(project.previous?.deliveryConfidence)} → ${escapeHtml(project.deliveryConfidence)}</span><strong>${escapeHtml(project.name)}</strong><small>${formatDays(project.endDateDeltaDays)}</small></button>`).join("");
   $$("#contradictionList [data-project-id]").forEach(button => button.addEventListener("click", () => openProject(button.dataset.projectId)));
 }
 
@@ -143,6 +154,21 @@ function renderThemes() {
   }));
 }
 
+function renderLeavers() {
+  setText("leaverCount", state.data.summary.latestLeavers || state.data.leavers?.length || 0);
+  setText("reportedLeaverCount", state.data.summary.reportedLatestLeavers || "Not stated");
+  const leavers = [...(state.data.leavers || [])]
+    .sort((a, b) => (b.deliveryConfidence === "Red") - (a.deliveryConfidence === "Red") || a.name.localeCompare(b.name))
+    .slice(0, 6);
+  $("#leaverGrid").innerHTML = leavers.map((project, index) => `
+    <article>
+      <div><span>0${index + 1}</span><b class="rating ${ratingClass(project.deliveryConfidence)}">${escapeHtml(project.deliveryConfidence || "Not published")}</b></div>
+      <h3>${escapeHtml(project.name)}</h3>
+      <p>${escapeHtml(project.outcomeEvidence)}</p>
+      <footer><span>${escapeHtml(project.department)} · last record 2024-25</span><a href="${escapeHtml(project.sourceUrl)}" target="_blank" rel="noreferrer">Final evidence ↗</a></footer>
+    </article>`).join("");
+}
+
 function optionList(values, label) {
   return `<option value="">${label}</option>${[...new Set(values.filter(Boolean))].sort().map(value => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join("")}`;
 }
@@ -150,7 +176,7 @@ function optionList(values, label) {
 function initialiseFilters() {
   const projects = state.data.projects;
   $("#movementFilter").innerHTML = optionList(projects.map(project => project.transition), "All movements");
-  $("#ratingFilter").innerHTML = optionList(projects.map(project => project.ipaDca || "Not published"), "All ratings");
+  $("#ratingFilter").innerHTML = optionList(projects.map(project => project.deliveryConfidence || "Not published"), "All ratings");
   $("#departmentFilter").innerHTML = optionList(projects.map(project => project.department), "All departments");
   $("#themeFilter").innerHTML = optionList(Object.keys(state.data.taxonomy), "All themes");
   $("#caseProjectSelect").innerHTML = projects
@@ -165,9 +191,10 @@ function filteredProjects() {
     const searchable = [project.name, project.department, project.category, project.description, project.evidenceExcerpt, ...project.themes].join(" ").toLowerCase();
     return (!needle || searchable.includes(needle))
       && (!movement || project.transition === movement)
-      && (!rating || (project.ipaDca || "Not published") === rating)
+      && (!rating || (project.deliveryConfidence || "Not published") === rating)
       && (!department || project.department === department)
-      && (!theme || project.themes.includes(theme));
+      && (!theme || project.themes.includes(theme))
+      && (!state.onlyWatched || state.watchlist.has(project.id));
   });
 }
 
@@ -185,17 +212,37 @@ function renderExplorer() {
     <tr data-project-id="${escapeHtml(project.id)}" tabindex="0">
       <td><span class="table-score">${project.attentionScore}</span></td>
       <td><strong>${escapeHtml(project.name)}</strong><small>${escapeHtml(project.department)} · ${escapeHtml(project.category || "Uncategorised")}</small></td>
-      <td><b class="rating ${ratingClass(project.ipaDca)}">${escapeHtml(project.ipaDca || "Not published")}</b></td>
+      <td><b class="rating ${ratingClass(project.deliveryConfidence)}">${escapeHtml(project.deliveryConfidence || "Not published")}</b></td>
       <td><span class="movement ${transitionClass(project.transition)}">${escapeHtml(project.transition)}</span></td>
       <td>${escapeHtml(formatDays(project.endDateDeltaDays))}</td>
       <td><div class="mini-themes">${project.themes.slice(0, 2).map(theme => `<span>${escapeHtml(theme)}</span>`).join("") || "No signal"}</div></td>
-      <td><button type="button" aria-label="Open ${escapeHtml(project.name)}">↗</button></td>
+      <td><button class="watch-button ${state.watchlist.has(project.id) ? "saved" : ""}" data-watch-id="${escapeHtml(project.id)}" type="button" aria-label="${state.watchlist.has(project.id) ? "Remove" : "Add"} ${escapeHtml(project.name)} ${state.watchlist.has(project.id) ? "from" : "to"} watchlist">${state.watchlist.has(project.id) ? "★" : "☆"}</button></td>
     </tr>`).join("") : `<tr><td colspan="7" class="empty-result">No projects match those filters.</td></tr>`;
   $$("#projectTable tr[data-project-id]").forEach(row => {
     const open = () => openProject(row.dataset.projectId);
     row.addEventListener("click", open);
     row.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") open(); });
   });
+  $$('[data-watch-id]').forEach(button => button.addEventListener("click", event => {
+    event.stopPropagation();
+    toggleWatch(button.dataset.watchId);
+  }));
+  renderWatchlistControl();
+}
+
+function toggleWatch(projectId) {
+  if (state.watchlist.has(projectId)) state.watchlist.delete(projectId);
+  else state.watchlist.add(projectId);
+  localStorage.setItem("projectlens:watchlist:v1", JSON.stringify([...state.watchlist]));
+  renderExplorer();
+  showToast(state.watchlist.has(projectId) ? "Project saved to this browser's watchlist." : "Project removed from watchlist.");
+}
+
+function renderWatchlistControl() {
+  setText("watchCount", state.watchlist.size);
+  const button = $("#watchlistFilter");
+  button.classList.toggle("active", state.onlyWatched);
+  button.firstChild.textContent = state.onlyWatched ? "★ Watching " : "☆ Watchlist ";
 }
 
 function syncFilterInputs() {
@@ -215,7 +262,7 @@ function openProject(projectId) {
   setText("detailName", project.name);
   $("#detailSummary").innerHTML = `
     <div><span>Attention</span><strong>${project.attentionScore}</strong></div>
-    <div><span>IPA DCA</span><strong class="${ratingClass(project.ipaDca)}">${escapeHtml(project.ipaDca || "N/P")}</strong></div>
+    <div><span>Published DCA</span><strong class="${ratingClass(project.deliveryConfidence)}">${escapeHtml(project.deliveryConfidence || "N/P")}</strong><small>${escapeHtml(project.deliveryConfidenceSource || "Not published")}</small></div>
     <div><span>Movement</span><strong>${escapeHtml(project.transition)}</strong></div>
     <div><span>End date</span><strong>${escapeHtml(formatDate(project.endDate))}</strong></div>`;
   $("#detailReasons").innerHTML = project.attentionReasons.length
@@ -226,8 +273,8 @@ function openProject(projectId) {
   $("#detailTimeline").innerHTML = project.history.map(record => `
     <article>
       <time>${record.year - 1}–${String(record.year).slice(-2)}</time>
-      <i class="${ratingClass(record.ipaDca)}"></i>
-      <div><strong>${escapeHtml(record.ipaDca || "Not published")}</strong><span>${escapeHtml(formatDate(record.endDate))}</span><p>${escapeHtml(record.evidenceExcerpt || "No narrative published.")}</p><a href="${escapeHtml(record.sourceUrl)}" target="_blank" rel="noreferrer">Source ↗</a></div>
+      <i class="${ratingClass(record.deliveryConfidence)}"></i>
+      <div><strong>${escapeHtml(record.deliveryConfidence || "Not published")}</strong><span>${escapeHtml(record.deliveryConfidenceSource || "No rating source")} · ${escapeHtml(formatDate(record.endDate))}</span><p>${escapeHtml(record.evidenceExcerpt || "No narrative published.")}</p><a href="${escapeHtml(record.sourceUrl)}" target="_blank" rel="noreferrer">Source ↗</a></div>
     </article>`).join("");
   $("#detailThemes").innerHTML = project.themes.map(theme => `<span>${escapeHtml(theme)}</span>`).join("") || "<span>No theme signal</span>";
   const dialog = $("#projectDialog");
@@ -242,7 +289,7 @@ function historicalImprovements() {
       const previous = history[index - 1];
       const current = history[index];
       const score = { Green: 0, Amber: 1, Red: 2 };
-      if (score[current.ipaDca] !== undefined && score[previous.ipaDca] !== undefined && score[current.ipaDca] < score[previous.ipaDca]) {
+      if (score[current.deliveryConfidence] !== undefined && score[previous.deliveryConfidence] !== undefined && score[current.deliveryConfidence] < score[previous.deliveryConfidence]) {
         cases.push({ project, previous, current });
       }
     }
@@ -274,7 +321,7 @@ function renderCases() {
     <article class="case-card">
       <div class="case-rank"><span>0${index + 1}</span><b>${item.similarity}% signal overlap</b></div>
       <h2>${escapeHtml(item.project.name)}</h2>
-      <div class="case-shift"><span class="rating ${ratingClass(item.previous.ipaDca)}">${escapeHtml(item.previous.ipaDca)}</span><i>→</i><span class="rating ${ratingClass(item.current.ipaDca)}">${escapeHtml(item.current.ipaDca)}</span><small>${item.previous.year - 1}–${String(item.current.year).slice(-2)}</small></div>
+      <div class="case-shift"><span class="rating ${ratingClass(item.previous.deliveryConfidence)}">${escapeHtml(item.previous.deliveryConfidence)}</span><i>→</i><span class="rating ${ratingClass(item.current.deliveryConfidence)}">${escapeHtml(item.current.deliveryConfidence)}</span><small>${item.previous.year - 1}–${String(item.current.year).slice(-2)}</small></div>
       <p>${escapeHtml(item.current.evidenceExcerpt || "No improvement narrative published.")}</p>
       <div class="shared-themes">${item.sharedThemes.map(theme => `<span>${escapeHtml(theme)}</span>`).join("")}</div>
       <footer><button type="button" data-project-id="${escapeHtml(item.project.id)}">Inspect case evidence ↗</button></footer>
@@ -285,10 +332,11 @@ function renderCases() {
 function renderMethod() {
   $("#limitationsList").innerHTML = state.data.meta.limitations.map(item => `<li>${escapeHtml(item)}</li>`).join("");
   $("#sourceList").innerHTML = state.data.sources.map(source => `<a href="${escapeHtml(source.url)}" target="_blank" rel="noreferrer"><span>${source.year - 1}–${String(source.year).slice(-2)}</span><strong>${escapeHtml(source.label)}</strong><i>Official CSV ↗</i></a>`).join("");
+  $("#externalSourceList").innerHTML = (state.data.externalSources || []).map(source => `<a href="${escapeHtml(source.url)}" target="_blank" rel="noreferrer"><span>${escapeHtml(source.type)}</span><strong>${escapeHtml(source.label)}<small>${escapeHtml(source.use)}</small></strong><i>Open source ↗</i></a>`).join("");
 }
 
 const demoSteps = [
-  { title: "Start with the portfolio pulse", copy: "ProjectLens begins with the six comparable projects whose published IPA rating worsened this year.", action() { setView("briefing"); $(".pulse-strip").scrollIntoView({ behavior: "smooth", block: "center" }); } },
+  { title: "Start with the portfolio pulse", copy: "ProjectLens begins with the 18 comparable projects whose official published DCA worsened this year.", action() { setView("briefing"); $(".pulse-strip").scrollIntoView({ behavior: "smooth", block: "center" }); } },
   { title: "Open the evidence, not a black box", copy: "The Unity Programme moved from Amber to Red. The detail view shows the exact scoring reasons and the published narrative.", action() { const project = state.data.projects.find(item => item.name.includes("UNITY PROGRAMME")) || state.data.projects.find(item => item.transition === "Worsened"); openProject(project.id); } },
   { title: "Ask what happened elsewhere", copy: "Case match retrieves projects that improved in a later release and explains the theme, category and department overlap.", action() { $("#projectDialog").close(); setView("cases"); renderCases(); } },
   { title: "End with the boundary", copy: "The score is a transparent attention queue. It is not a probability of failure, and every recommendation remains a human decision.", action() { setView("method"); } }
@@ -316,6 +364,7 @@ function bindEvents() {
     $(`#${id}`).addEventListener("change", event => { state.filters[key] = event.target.value; state.page = 1; renderExplorer(); });
   });
   $("#clearFilters").addEventListener("click", () => { state.filters = { query: "", movement: "", rating: "", department: "", theme: "" }; state.page = 1; syncFilterInputs(); renderExplorer(); });
+  $("#watchlistFilter").addEventListener("click", () => { state.onlyWatched = !state.onlyWatched; state.page = 1; renderExplorer(); });
   $("#prevPage").addEventListener("click", () => { state.page -= 1; renderExplorer(); $(".filter-bar").scrollIntoView({ behavior: "smooth" }); });
   $("#nextPage").addEventListener("click", () => { state.page += 1; renderExplorer(); $(".filter-bar").scrollIntoView({ behavior: "smooth" }); });
   $("#findCases").addEventListener("click", () => { state.detailId = $("#caseProjectSelect").value; renderCases(); showToast("Comparable improvements ranked using visible similarity rules."); });
@@ -347,6 +396,7 @@ async function init() {
     renderPriority();
     renderMovement();
     renderThemes();
+    renderLeavers();
     initialiseFilters();
     renderExplorer();
     renderMethod();

@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="ProjectLens tracks how delivery confidence, dates and published risks changed across the UK Government Major Projects Portfolio.">
   <meta name="theme-color" content="#071a1b">
-  <meta property="og:title" content="ProjectLens | UK Major Projects Early Warning">
-  <meta property="og:description" content="189 projects. Four annual releases. Every signal linked to published evidence.">
+  <meta property="og:title" content="ProjectLens | Open Major Project Evidence">
+  <meta property="og:description" content="189 current projects. Seven annual releases. Every signal linked to published evidence.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://matthewpaver.github.io/ProjectLens/assets/projectlens-overview.png">
   <meta name="twitter:card" content="summary_large_image">
-  <title>ProjectLens | UK Major Projects Early Warning</title>
+  <title>ProjectLens | Open Major Project Evidence</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -33,7 +33,7 @@
     </nav>
     <div class="mast-actions">
       <button class="demo-button" id="demoButton" type="button"><span></span> Run 60-sec demo</button>
-      <a href="https://matthewpaver.github.io/MatthewPaver/store/" target="_blank" rel="noreferrer">Matthew Paver ↗</a>
+      <a class="schedule-review-link" href="schedule-review.html">Review an XER ↗</a>
     </div>
   </header>
 
@@ -43,10 +43,10 @@
         <div class="hero-copy reveal">
           <p class="eyebrow"><span>31 March 2026 snapshot</span> Published by NISTA · analysed 15 July 2026</p>
           <h1>Which major projects<br><em>changed direction?</em></h1>
-          <p class="hero-intro">ProjectLens compares four years of UK major-project disclosures to show what moved, why it matters and which historical cases deserve a second look.</p>
+          <p class="hero-intro">ProjectLens turns disconnected public major-project disclosures into an inspectable history. See what changed, where signals conflict and which evidence deserves scrutiny.</p>
           <div class="hero-actions">
             <button id="openPriority" class="primary-button" type="button">Inspect the highest-priority change <span>↗</span></button>
-            <button class="plain-button" data-go="method" type="button">See how signals are scored</button>
+            <a class="plain-button" href="schedule-review.html">Compare private XER evidence</a>
           </div>
         </div>
         <div class="radar-card reveal delay-1" aria-label="Latest portfolio pulse">
@@ -55,15 +55,15 @@
             <div class="rings"><i></i><i></i><i></i><b></b></div>
             <div class="radar-number"><strong id="heroCount">189</strong><span>major projects</span></div>
           </div>
-          <div class="radar-foot"><span><b id="matchedCount">170</b> matched to last year</span><span><b id="fourYearCount">129</b> across all 4 releases</span></div>
+          <div class="radar-foot"><span><b id="matchedCount">170</b> matched to last year</span><span><b id="fourYearCount">35</b> across all 7 releases</span></div>
         </div>
       </div>
 
       <section class="pulse-strip reveal delay-2" aria-label="Year-on-year portfolio movements">
-        <article class="pulse-alert"><span>Rating worsened</span><strong id="worsenedCount">6</strong><small>Comparable IPA assessments</small></article>
-        <article class="pulse-good"><span>Rating improved</span><strong id="improvedCount">12</strong><small>Often with important caveats</small></article>
-        <article><span>Current Red</span><strong id="redCount">24</strong><small>Published IPA assessment</small></article>
-        <article><span>Evidence records</span><strong id="recordCount">873</strong><small>Across four annual releases</small></article>
+        <article class="pulse-alert"><span>Rating worsened</span><strong id="worsenedCount">18</strong><small>Comparable published assessments</small></article>
+        <article class="pulse-good"><span>Rating improved</span><strong id="improvedCount">30</strong><small>Often with important caveats</small></article>
+        <article><span>Current Red</span><strong id="redCount">34</strong><small>Official published assessment</small></article>
+        <article><span>Evidence records</span><strong id="recordCount">1,417</strong><small>Across seven annual releases</small></article>
       </section>
 
       <section class="priority-section reveal delay-3" aria-labelledby="priorityTitle">
@@ -97,6 +97,15 @@
         </div>
         <div class="theme-cloud" id="themeCloud"></div>
       </section>
+
+      <section class="leaver-section reveal" aria-labelledby="leaverTitle">
+        <div class="section-heading inverse">
+          <div><span>Outcome follow-up register</span><h2 id="leaverTitle"><b id="leaverCount">43</b> records left.<br>NISTA reports <i id="reportedLeaverCount">42</i>.</h2></div>
+          <p>Stable-ID comparison finds one more absent record than the annual report's leaver total. That may reflect an identifier or classification difference. Absence is not evidence of delivery success or failure.</p>
+        </div>
+        <div class="leaver-grid" id="leaverGrid"></div>
+        <a class="leaver-source" href="https://www.gov.uk/government/publications/nista-major-projects-annual-report-2025-26/nista-major-projects-annual-report-2025-26" target="_blank" rel="noreferrer">Read NISTA's published portfolio-leaver categories ↗</a>
+      </section>
     </section>
 
     <section class="view" data-view-panel="explorer" hidden>
@@ -112,10 +121,10 @@
         <label><span>Theme</span><select id="themeFilter"><option value="">All themes</option></select></label>
         <button id="clearFilters" type="button">Clear</button>
       </section>
-      <div class="explorer-status"><span id="resultCount">189 projects</span><span>Click a row for the full four-year evidence trail</span></div>
+      <div class="explorer-status"><span id="resultCount">189 projects</span><span>Click a row for up to seven years of evidence</span><button id="watchlistFilter" type="button">☆ Watchlist <b id="watchCount">0</b></button></div>
       <div class="project-table-wrap">
         <table class="project-table">
-          <thead><tr><th>Priority</th><th>Project</th><th>IPA DCA</th><th>Movement</th><th>End-date change</th><th>Published themes</th><th></th></tr></thead>
+          <thead><tr><th>Priority</th><th>Project</th><th>Published DCA</th><th>Movement</th><th>End-date change</th><th>Published themes</th><th>Watch</th></tr></thead>
           <tbody id="projectTable"></tbody>
         </table>
       </div>
@@ -145,7 +154,7 @@
         <p>ProjectLens uses deterministic comparisons for dates, ratings and variances. Text classification is deliberately simple and inspectable.</p>
       </div>
       <section class="method-grid">
-        <article><span>01</span><h2>Acquire</h2><p>Four official GMPP CSV releases are retained unchanged with links to the source publication.</p></article>
+        <article><span>01</span><h2>Acquire</h2><p>Seven official GMPP CSV releases are retained unchanged with links to the source publication.</p></article>
         <article><span>02</span><h2>Match</h2><p>Stable GMPP identifiers create longitudinal histories. Missing identifiers are kept but marked unmatchable.</p></article>
         <article><span>03</span><h2>Compare</h2><p>Rating transitions, published end-date movements and annual forecast variances are calculated exactly.</p></article>
         <article><span>04</span><h2>Organise</h2><p>A visible keyword taxonomy groups narrative signals into eight review themes.</p></article>
@@ -156,7 +165,7 @@
           <p>The score deliberately prioritises obvious published signals. It does not claim to predict project outcomes.</p>
         </div>
         <div class="score-formula">
-          <div><b>+35</b><span>Current Red IPA rating</span></div>
+          <div><b>+35</b><span>Current Red published DCA</span></div>
           <div><b>+25</b><span>Rating worsened</span></div>
           <div><b>up to +20</b><span>Later end date</span></div>
           <div><b>up to +15</b><span>Material in-year variance</span></div>
@@ -171,6 +180,10 @@
         <div class="section-heading"><div><span>Source register</span><h2>Inspect the original releases</h2></div></div>
         <div id="sourceList"></div>
       </section>
+      <section class="source-register external-register">
+        <div class="section-heading"><div><span>Evidence expansion</span><h2>Connect delivery to scrutiny, procurement and outcomes</h2></div><p>These authoritative routes define the next evidence layer. They remain separate so ProjectLens never presents a generic source as project-specific proof.</p></div>
+        <div id="externalSourceList"></div>
+      </section>
     </section>
   </main>
 
@@ -182,7 +195,7 @@
       <div class="detail-summary" id="detailSummary"></div>
       <section class="detail-panel"><span>Why it is in the queue</span><ul id="detailReasons"></ul></section>
       <section class="detail-panel"><span>Published evidence</span><blockquote id="detailEvidence"></blockquote><a id="detailSource" target="_blank" rel="noreferrer">Open the official source ↗</a></section>
-      <section class="detail-panel"><span>Four-year evidence trail</span><div class="timeline" id="detailTimeline"></div></section>
+      <section class="detail-panel"><span>Longitudinal evidence trail</span><div class="timeline" id="detailTimeline"></div></section>
       <section class="detail-panel"><span>Narrative signals</span><div class="detail-themes" id="detailThemes"></div></section>
       <button class="case-button" id="detailFindCases" type="button">Find comparable improved cases <span>→</span></button>
     </article>
@@ -193,13 +206,13 @@
       <button class="dialog-close" type="button" aria-label="Close guided demo">×</button>
       <span>GUIDED DEMO · <b id="demoStep">1 / 4</b></span>
       <h2 id="demoTitle">Start with the portfolio pulse</h2>
-      <p id="demoCopy">ProjectLens begins with the six comparable projects whose published IPA rating worsened this year.</p>
+      <p id="demoCopy">ProjectLens begins with the 18 comparable projects whose published delivery-confidence rating worsened this year.</p>
       <div class="demo-progress"><i class="active"></i><i></i><i></i><i></i></div>
       <footer><button id="demoBack" type="button">← Back</button><button id="demoNext" type="button">Show me →</button></footer>
     </article>
   </dialog>
 
-  <div id="loading" class="loading" role="status"><span></span><b>Reading four years of public project evidence…</b></div>
+  <div id="loading" class="loading" role="status"><span></span><b>Reading seven years of public project evidence…</b></div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="app.js"></script>
 </body>

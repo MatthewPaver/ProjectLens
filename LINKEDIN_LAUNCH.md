@@ -10,22 +10,24 @@ I originally built ProjectLens as a polished schedule-risk demonstration. When I
 
 So I rebuilt it around real evidence.
 
-ProjectLens now compares four annual UK Government Major Projects Portfolio releases:
+ProjectLens now compares seven annual UK Government Major Projects Portfolio releases:
 
-• 189 current major projects  
-• 873 project-year records  
-• 170 projects matched to last year  
-• 129 projects tracked across all four releases
+- 189 current major projects
+- 1,417 project-year records
+- 170 projects matched to last year
+- 35 current projects tracked across all seven releases
 
-It highlights rating and end-date changes, keeps contradictory signals visible, links every insight to the published source and retrieves comparable projects that later improved.
+It highlights 18 worsened and 30 improved published delivery-confidence assessments, keeps contradictory signals visible, links every insight to the published source and retrieves comparable projects that later improved.
+
+I also added a browser-local Primavera P6 review. Drop in two XER submissions and ProjectLens identifies material date, float, logic and constraint changes, challenges the status narrative and turns the evidence into assurance questions and an action log. The files never leave the browser.
 
 The score is deliberately transparent. It is an attention queue for human review, not an invented probability of failure.
 
 AI helped me research, build and test the product. The dates, transitions and variances are deterministic, and the limitations are visible inside the app.
 
-This is the kind of AI use I find most interesting: not replacing project judgement, but making scattered evidence easier to challenge and use.
+This is the kind of AI use I find most interesting: making scattered evidence easier to challenge and use while keeping the maths, sources and human approval boundary visible.
 
-What would you want to ask across several years of major-project reporting?
+The Northstar schedule pair in the demo is synthetic and safe to explore. What would you want an evidence review like this to challenge before the next governance meeting?
 
 #ProjectDelivery #ProjectControls #DataAnalytics
 
@@ -38,19 +40,21 @@ The source code, methodology and official data links are available from the proj
 
 ## Video structure
 
-The included walkthrough is intentionally silent and approximately 40 seconds:
+The ready-to-post [silent product walkthrough](docs/assets/projectlens-evidence-demo.webm) follows this sequence:
 
 1. Portfolio pulse and real-data scale
-2. Highest-priority project and source evidence
-3. Six worsened IPA assessments in the explorer
-4. Unity Programme evidence trail
-5. Comparable improved cases
-6. Transparent score and model boundaries
+2. The 18 worsened published assessments and source-linked trail
+3. The outcome follow-up register and honest 43 versus 42 reconciliation
+4. Open the XER evidence review
+5. Run the synthetic Northstar pair and reveal the 73-day finish movement
+6. Show the narrative contradictions and material-change evidence
+7. Add an assurance action and download the review pack
+8. End on the privacy and model boundaries
 
 Use the opening line of the post as the video caption. Avoid adding music unless it is licensed for LinkedIn use.
 
 ## Suggested thumbnail text
 
-**Which major projects changed direction?**
+**Would your status report survive the schedule evidence?**
 
-Small line: **189 projects · 4 annual releases · evidence linked**
+Small line: **Public evidence + private, browser-local XER review**

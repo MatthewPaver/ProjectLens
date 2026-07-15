@@ -28,6 +28,21 @@ RAW_DIR = ROOT / "Data" / "public" / "raw"
 OUTPUT_PATH = ROOT / "docs" / "data" / "gmpp.json"
 
 SOURCES = {
+    2020: {
+        "file": "gmpp_2019_20.csv",
+        "label": "IPA Annual Report 2019-20",
+        "url": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2020",
+    },
+    2021: {
+        "file": "gmpp_2020_21.csv",
+        "label": "IPA Annual Report 2020-21",
+        "url": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2021",
+    },
+    2022: {
+        "file": "gmpp_2021_22.csv",
+        "label": "IPA Annual Report 2021-22",
+        "url": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2022",
+    },
     2023: {
         "file": "gmpp_2022_23.csv",
         "label": "IPA Annual Report 2022-23",
@@ -49,6 +64,45 @@ SOURCES = {
         "url": "https://www.gov.uk/government/publications/nista-major-projects-annual-report-2025-26",
     },
 }
+
+EXTERNAL_SOURCES = [
+    {
+        "label": "Major projects data archive",
+        "type": "Historic disclosure",
+        "url": "https://www.gov.uk/government/collections/major-projects-data",
+        "use": "Earlier annual and departmental releases back to 2013",
+    },
+    {
+        "label": "UK Infrastructure Pipeline",
+        "type": "Forward look",
+        "url": "https://www.gov.uk/government/publications/uk-infrastructure-pipeline",
+        "use": "Status, expected completion and anticipated investment",
+    },
+    {
+        "label": "NAO major-project value review",
+        "type": "Independent scrutiny",
+        "url": "https://www.nao.org.uk/insights/delivering-value-from-government-investment-in-major-projects/",
+        "use": "Benefits, outcomes and recurring delivery lessons",
+    },
+    {
+        "label": "Public Accounts Committee value inquiry",
+        "type": "Parliamentary scrutiny",
+        "url": "https://publications.parliament.uk/pa/cm5804/cmselect/cmpubacc/456/report.html",
+        "use": "Evidence on whether outputs translated into public value",
+    },
+    {
+        "label": "Contracts Finder",
+        "type": "Commercial evidence",
+        "url": "https://www.contractsfinder.service.gov.uk/Search",
+        "use": "Procurement notices, awards and supplier opportunities",
+    },
+    {
+        "label": "Evaluation Registry",
+        "type": "Outcome evidence",
+        "url": "https://evaluation-registry.cabinetoffice.gov.uk/",
+        "use": "Registered government evaluations and published findings",
+    },
+]
 
 THEMES = {
     "Approvals & decisions": [
@@ -218,6 +272,15 @@ def compact_excerpt(*parts: str, limit: int = 360) -> str:
 
 def load_year(year: int, path: Path) -> list[dict[str, Any]]:
     frame = pd.read_csv(path, encoding_errors="replace")
+    # The 2019-20 consolidated CSV is published transposed, with one project per
+    # column. Restore the same row-oriented contract used by later releases.
+    if not find_column(frame, "project name") and find_column(frame, "gmpp id"):
+        identifier_column = frame.columns[0]
+        frame = (
+            frame.set_index(identifier_column)
+            .transpose()
+            .reset_index(names=identifier_column)
+        )
     cols = columns_for(frame)
     required = [cols.project_id, cols.project_name, cols.department]
     if not all(required):
@@ -236,6 +299,12 @@ def load_year(year: int, path: Path) -> list[dict[str, Any]]:
         variance = text_value(row, cols.variance_narrative)
         cost = text_value(row, cols.cost_narrative)
         description = text_value(row, cols.description)
+        ipa_dca = rating_value(text_value(row, cols.ipa_dca))
+        sro_dca = rating_value(text_value(row, cols.sro_dca))
+        delivery_confidence = ipa_dca or sro_dca
+        delivery_confidence_source = (
+            "Independent assurance" if ipa_dca else "SRO Q4 assessment" if sro_dca else None
+        )
         records.append(
             {
                 "id": project_id,
@@ -244,8 +313,10 @@ def load_year(year: int, path: Path) -> list[dict[str, Any]]:
                 "department": text_value(row, cols.department),
                 "category": text_value(row, cols.category),
                 "description": description,
-                "ipaDca": rating_value(text_value(row, cols.ipa_dca)),
-                "sroDca": rating_value(text_value(row, cols.sro_dca)),
+                "ipaDca": ipa_dca,
+                "sroDca": sro_dca,
+                "deliveryConfidence": delivery_confidence,
+                "deliveryConfidenceSource": delivery_confidence_source,
                 "commentary": commentary,
                 "startDate": date_value(row, cols.start_date),
                 "endDate": date_value(row, cols.end_date),
@@ -294,17 +365,20 @@ def transition_label(delta: int | None) -> str:
 def attention_score(current: dict[str, Any], previous: dict[str, Any] | None) -> tuple[int, list[str]]:
     score = 0
     reasons = []
-    if current["ipaDca"] == "Red":
+    if current["deliveryConfidence"] == "Red":
         score += 35
-        reasons.append("Current IPA delivery confidence is Red")
-    elif current["ipaDca"] == "Amber":
+        reasons.append("Current published delivery confidence is Red")
+    elif current["deliveryConfidence"] == "Amber":
         score += 18
-        reasons.append("Current IPA delivery confidence is Amber")
+        reasons.append("Current published delivery confidence is Amber")
     if previous:
-        movement = rating_delta(current["ipaDca"], previous["ipaDca"])
+        movement = rating_delta(current["deliveryConfidence"], previous["deliveryConfidence"])
         if movement and movement > 0:
             score += 25
-            reasons.append(f"IPA rating worsened from {previous['ipaDca']} to {current['ipaDca']}")
+            reasons.append(
+                "Published rating worsened from "
+                f"{previous['deliveryConfidence']} to {current['deliveryConfidence']}"
+            )
         finish_delta = day_delta(current["endDate"], previous["endDate"])
         if finish_delta and finish_delta > 0:
             score += min(20, round(finish_delta / 18))
@@ -333,7 +407,10 @@ def build_payload(records: list[dict[str, Any]]) -> dict[str, Any]:
         if current["year"] != 2026:
             continue
         previous = next((item for item in reversed(history[:-1]) if item["year"] == 2025), None)
-        delta = rating_delta(current["ipaDca"], previous["ipaDca"] if previous else None)
+        delta = rating_delta(
+            current["deliveryConfidence"],
+            previous["deliveryConfidence"] if previous else None,
+        )
         status = transition_label(delta)
         transitions[status] += 1
         theme_counts.update(current["themes"])
@@ -359,8 +436,29 @@ def build_payload(records: list[dict[str, Any]]) -> dict[str, Any]:
         year: {record["id"] for record in records if record["year"] == year}
         for year in SOURCES
     }
-    for previous, current in ((2023, 2024), (2024, 2025), (2025, 2026)):
+    ordered_years = sorted(SOURCES)
+    for previous, current in zip(ordered_years, ordered_years[1:]):
         comparable_counts[f"{previous}-{current}"] = len(year_sets[previous] & year_sets[current])
+
+    latest_leavers = []
+    for project_id in sorted(year_sets[2025] - year_sets[2026]):
+        final_record = next(
+            (record for record in reversed(by_id[project_id]) if record["year"] == 2025),
+            None,
+        )
+        if not final_record:
+            continue
+        latest_leavers.append(
+            {
+                **final_record,
+                "outcomeStatus": "Outcome not established in annual CSV",
+                "outcomeEvidence": (
+                    "The project has no record in the 2025-26 release. The annual CSV does not "
+                    "identify whether it delivered, closed early, was replaced or ceased to meet "
+                    "the portfolio criteria."
+                ),
+            }
+        )
 
     return {
         "meta": {
@@ -372,23 +470,35 @@ def build_payload(records: list[dict[str, Any]]) -> dict[str, Any]:
                 "Narrative themes are keyword signals and do not establish causation.",
                 "Whole-life cost values are not compared across years because reporting price bases can differ.",
                 "Missing and exempt values are excluded from like-for-like transitions.",
+                "Absence from the latest release does not establish delivery success or failure.",
             ],
         },
         "summary": {
             "latestProjects": len(projects),
             "historyRecords": len(records),
             "matchedLatest": comparable_counts["2025-2026"],
-            "allFourYears": len(set.intersection(*year_sets.values())),
+            "allFourYears": len(set.intersection(*(year_sets[year] for year in (2023, 2024, 2025, 2026)))),
+            "allReleaseYears": len(set.intersection(*year_sets.values())),
             "transitions": dict(transitions),
-            "ratingCounts": dict(Counter(project["ipaDca"] or "Not published" for project in projects)),
+            "ratingCounts": dict(
+                Counter(project["deliveryConfidence"] or "Not published" for project in projects)
+            ),
+            "ratingSourceCounts": dict(
+                Counter(project["deliveryConfidenceSource"] or "Not published" for project in projects)
+            ),
             "topThemes": [
                 {"theme": theme, "count": count} for theme, count in theme_counts.most_common()
             ],
             "comparability": comparable_counts,
+            "latestLeavers": len(latest_leavers),
+            "reportedLatestLeavers": 42,
+            "leaverCountDifference": len(latest_leavers) - 42,
         },
         "taxonomy": THEMES,
         "sources": [{"year": year, **source} for year, source in SOURCES.items()],
+        "externalSources": EXTERNAL_SOURCES,
         "projects": projects,
+        "leavers": latest_leavers,
     }
 
 
