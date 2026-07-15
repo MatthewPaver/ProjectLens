@@ -68,6 +68,7 @@ def test_demo_includes_bounded_assurance_evidence():
 def test_review_page_states_privacy_and_model_boundary():
     page = (DOCS / "schedule-review.html").read_text(encoding="utf-8")
     script = (DOCS / "xer-review.js").read_text(encoding="utf-8")
+    assert "Upload the schedule, narrative and previous commitments" in page
 
     assert "Nothing uploaded" in page
     assert "run in your browser" in page
