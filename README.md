@@ -3,217 +3,135 @@
 <div align="center">
 
 ![Python](https://img.shields.io/badge/Python-3.11-3670A0?style=flat-square&logo=python&logoColor=ffdd54)
-![Flask](https://img.shields.io/badge/Flask-3.x-000000?style=flat-square&logo=flask&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
+![Public data](https://img.shields.io/badge/Data-UK_GMPP-d7ff4f?style=flat-square)
+![License](https://img.shields.io/badge/Code-MIT-blue?style=flat-square)
 [![Validate](https://github.com/MatthewPaver/ProjectLens/actions/workflows/validate.yml/badge.svg)](https://github.com/MatthewPaver/ProjectLens/actions/workflows/validate.yml)
 
-**Explainable schedule-risk analysis and recovery decision support**
+**UK major-project early warning, built from published evidence**
 
-ProjectLens turns schedule analysis into accountable recovery decisions, then checks whether those decisions worked.
+ProjectLens shows what changed across the UK’s largest public projects, why it deserves scrutiny and what happened to comparable projects next.
+
+[Open the live product](https://matthewpaver.github.io/ProjectLens/) · [Portfolio](https://matthewpaver.github.io/MatthewPaver/store/) · [Market scan](competitor-profiles/_summary.md)
 
 </div>
 
-![ProjectLens overview](docs/assets/projectlens-overview.png)
+## Why it exists
 
-![ProjectLens Risk Command Centre](docs/assets/command-centre-preview.png)
+Major-project reports contain delivery-confidence assessments, dates, costs and narrative explanations. The information is public, but the releases are usually read as separate annual snapshots.
 
----
+ProjectLens joins four annual Government Major Projects Portfolio releases into an inspectable history. It helps a reviewer answer:
 
-## Portfolio Quick Read
+- Which published delivery-confidence ratings worsened?
+- Which end dates changed, and by how much?
+- What explanations are departments publishing?
+- Where do apparently positive and negative signals conflict?
+- Which comparable projects later improved?
+- What source evidence should a decision-maker read next?
 
-| Section | Where to look |
-|:---|:---|
-| What it solves | Turns schedule-risk evidence into accountable recovery decisions |
-| Live command centre | [Open the interactive decision-support demo](https://matthewpaver.github.io/ProjectLens/) |
-| Quick start | [`make serve`](#canonical-setup) or [`make pipeline`](#running-the-pipeline-directly) |
-| Screenshot | [Portfolio Store](https://matthewpaver.github.io/MatthewPaver/store/) |
-| Architecture | [What The Pipeline Does](#what-the-pipeline-does) |
-| Tests | `make test` |
-| Tech stack | `Python` `Flask` `pandas` `statsforecast` `Power BI` |
+## Current evidence base
 
-## Status
+| Measure | Current result |
+| --- | ---: |
+| Current projects | 189 |
+| Records across four releases | 873 |
+| Projects matched from 2024-25 to 2025-26 | 170 |
+| Projects present in all four releases | 129 |
+| Comparable IPA ratings that worsened | 6 |
+| Comparable IPA ratings that improved | 12 |
 
-`Runnable application`
+The latest snapshot was reported by departments at 31 March 2026. Source links and licensing notes are in [`Data/public/README.md`](Data/public/README.md).
 
-ProjectLens combines:
+## Product workflow
 
-- a Flask web interface in [`Website/`](Website)
-- a data processing pipeline in [`Processing/`](Processing)
-- a transparent Monte Carlo decision engine in [`Processing/analysis/decision_support.py`](Processing/analysis/decision_support.py)
-- a portable executive and analyst command centre in [`docs/`](docs)
-- structured input/output folders under [`Data/`](Data)
+1. **Briefing** presents a small, transparent attention queue.
+2. **Explorer** searches and filters all 189 current projects.
+3. **Project detail** shows the scoring reasons, source narrative and four-year trail.
+4. **Case match** retrieves historical improvements and explains the similarity basis.
+5. **Method** publishes the exact score, data boundaries and original sources.
 
-## What changed in v4
+The public interface is a static GitHub Pages application in [`docs/`](docs). No server or account is required.
 
-ProjectLens now tests its forecasting claims and puts the decision queue before the dashboard:
+## Method
 
-- benchmarks last-position, drift, AutoETS and AutoARIMA forecasts on rolling historical windows
-- selects the lowest-error model per task instead of assuming the most complex model is best
-- derives confidence from observed validation error and history length, never random demo scores
-- writes prediction ranges, MAE, validation windows and a plain-language confidence reason for every forecast
-- produces ranked action briefs answering what changed, what happens without action, what to do, who owns it and what evidence is still needed
-- exposes a portfolio model scorecard with error, bias, interval coverage and the current champion
-- keeps P1 deliberately scarce and requires human approval for every recommendation
+Exact calculations are deterministic:
 
-On the public synthetic Alpha portfolio, the last reported position currently wins with a 1.63-day one-update-ahead MAE across 375 backtest predictions. AutoARIMA and AutoETS remain challengers and will take over whenever new data shows that they perform better.
+- stable GMPP identifiers join annual records
+- exact Green, Amber and Red assessments produce year-on-year movement
+- published end dates produce day differences
+- annual forecast variance is taken from the source release
+- missing and exempt values remain not comparable
 
-## What changed in v3
-
-The public command centre is now a self-serve evidence room rather than a fixed portfolio screen:
-
-- load the complete 2,757-row Alpha demonstration in one click
-- import standard ProjectLens output CSV files without sending them to a server
-- validate required datasets, columns and field completeness
-- inspect, search and paginate every available row
-- compare task slippage between any two reporting updates
-- generate and export a rules-based, evidence-linked proactive watchlist
-- follow a guided path through executive, analyst, scenario and data views
-
-Recognised files also include `model_evaluation.csv` and `action_briefs.csv`. Imported files exist only in the current browser session.
-
-## What changed in v2
-
-The original application surfaced schedule analysis outputs. The command centre adds the decision layer required in a project-controls meeting:
-
-- executive and analyst views with different information density
-- P10, P50, P80 and on-time confidence ranges
-- evidence-linked root-cause ranking
-- intervention comparison using common random numbers
-- recommended recovery moves with effort, ownership and expected impact
-- a decision ledger that records promised and observed recovery
-- exportable decision briefs with explicit model boundaries
-
-The public demonstration uses synthetic data. Recommendations are explainable prompts for professional review, not autonomous schedule changes.
-
-## Market gap
-
-The schedule-risk market already contains deep diagnostics, Monte Carlo tools, AI summaries and scenario modelling. ProjectLens therefore focuses on a narrower operational gap: preserving the path from evidence, to selected intervention, to named owner, to measured outcome at the next reporting cycle.
-
-The dated quick scan and source notes are available in [`competitor-profiles/`](competitor-profiles).
-
-## Decision model
-
-### Schedule forecast selection
-
-ProjectLens forecasts the next reported slippage, then translates it back into a completion date. Four candidate models compete using one-step-ahead rolling-origin validation. The winner is selected separately for each task by mean absolute error. Confidence reflects observed backtest error and history length, and sparse histories fail closed without fake forecasts.
-
-### Recovery scenario simulation
-
-Each risk driver has a probability, triangular day-impact range and critical-path exposure. A seeded simulation produces completion ranges. Interventions reduce specific driver impacts, and every scenario uses the same random draws as the baseline so differences are attributable to the intervention rather than sampling noise.
-
-Root causes are ranked using an inspectable expected-contribution score:
+The attention score is a review queue, not a probability of failure:
 
 ```text
-expected delay = probability × most-likely impact × critical-path exposure
++35 current Red IPA rating
++25 rating worsened
++0 to +20 later published end date
++0 to +15 material in-year variance
+-8 no public evidence excerpt
 ```
 
-This deliberately simple model is suitable for scenario comparison and demonstration. Production use would require dependency correlation, calibrated distributions, access controls, secure storage and organisational validation.
+Narrative themes use the visible keyword taxonomy in [`Processing/gmpp_pipeline.py`](Processing/gmpp_pipeline.py). They organise evidence but do not establish causation.
 
-## Reviewer Pack
+Whole-life cost values are not compared across years because published price bases can differ.
 
-| Area | Details |
-|:---|:---|
-| What it solves | Project schedule files become evidence-linked risks, comparable interventions and reviewable decisions. |
-| Screenshot | [Portfolio Store preview](https://matthewpaver.github.io/MatthewPaver/store/preview.html?app=projectlens) |
-| Run locally | `make install && make serve`, then open `http://127.0.0.1:5000` |
-| Pipeline only | `make pipeline` |
-| Tests | `make test` |
-| Demo data | Sample project folders and output examples are included under `Data/`. |
-| Architecture | Flask upload UI -> cleaning and forecasting -> decision model -> executive/analyst command centre -> decision ledger |
-| Limitations | Designed as a local portfolio application; production use would need auth, storage hardening, and deployment packaging. |
-
-## Practical Test
-
-Can a project schedule update become a useful, reviewable recovery decision?
-
-The useful check is the full path:
-
-1. Upload or place schedule data in the expected folder.
-2. Clean and standardise the file.
-3. Run slippage, milestone, changepoint, and time-aware forecast checks.
-4. Compare interventions against identical simulation draws.
-5. Commit a decision with an owner, expected recovery and review point.
-6. Compare promised recovery with the next observed schedule update.
-
-That is the point of the app: close the gap between seeing schedule risk and acting on it accountably.
-
-## Reviewer Notes
-
-- **Reproducible path:** root `requirements.txt` and `make` targets are the supported setup route.
-- **Product signal:** the Flask UI wraps the analysis pipeline so a reviewer can use the workflow, not just read code.
-- **Analytics signal:** slippage, milestone pressure, changepoint detection, and forecasting are separated into pipeline outputs.
-- **Verification path:** run `make test`, then `make serve` or `make pipeline` depending on whether you want the UI or batch flow.
-
-## Canonical Setup
-
-The canonical dependency entry point for this repo is the root [`requirements.txt`](requirements.txt).
-
-### Option 1: Standard local setup
+## Rebuild the public dataset
 
 ```bash
 python3.11 -m venv .venv
 source .venv/bin/activate
-python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
-python Website/server.py
+python Processing/gmpp_pipeline.py
 ```
 
-Open `http://127.0.0.1:5000`.
+This reads the unmodified annual CSV files under `Data/public/raw/`, validates the longitudinal output and writes `docs/data/gmpp.json`.
 
-### Option 2: Convenience targets
+Serve the static product locally:
 
 ```bash
-make install
-make serve
+python -m http.server 8000 --directory docs
 ```
 
-### Option 3: Bootstrap script
+Then open `http://localhost:8000`.
 
-If you want the repo to create and manage `.venv` for you:
+## Tests
 
 ```bash
-python3.11 Website/run_website.py
+make test
 ```
 
-## Running The Pipeline Directly
+Tests cover the original schedule-processing modules plus public-data counts, matching, rating transitions, theme classification and score boundaries.
 
-```bash
-python3.11 Processing/main.py
-```
+## Competitive position
 
-Or with the Makefile:
+nPlan, SmartPM, Nodes & Links and InEight already provide strong private schedule analytics, forecasting, quantitative risk and enterprise controls. ProjectLens deliberately does not imitate them.
 
-```bash
-make pipeline
-```
+Its narrower gap is **open, source-linked, longitudinal public delivery intelligence**. The dated market scan and source notes are in [`competitor-profiles/`](competitor-profiles).
 
-Results are written to `Data/output/<project_name>/`.
+## Boundaries
 
-## What The Pipeline Does
+- Delivery Confidence Assessments are point-in-time judgements, not outcomes.
+- Annual portfolio data cannot support activity-level critical-path forecasting.
+- Theme matching does not prove root cause.
+- Comparable cases prompt investigation and do not prescribe an intervention.
+- A production internal version would require secure schedule connectors, permissions, audit logs and organisation-specific validation.
 
-![ProjectLens architecture](docs/assets/architecture.svg)
+## Legacy schedule engine
 
-- validates project input structure
-- loads CSV and Excel source files
-- runs slippage, milestone, changepoint, validated forecasting and action-brief analysis
-- writes output files suitable for downstream review and Power BI use
-- archives processed inputs
+The repository still contains the earlier schedule-processing demonstrator under [`Processing/analysis/`](Processing/analysis) and the local Flask interface under [`Website/`](Website). Its bundled Alpha, Beta and other project records are synthetic test fixtures. They are retained for engineering tests, not used as evidence in the public ProjectLens product.
 
-## Repository Layout
+## Repository layout
 
 ```text
-Data/         input, output, archive, and schema assets
-Processing/   pipeline logic and tests
-Website/      Flask server, templates, and static assets
-Output/       Power BI dashboard artefacts
+Data/public/             official annual GMPP source files
+Processing/gmpp_pipeline.py
+                         longitudinal preparation and validation
+docs/                    GitHub Pages product and generated JSON
+competitor-profiles/     dated market scan and source notes
+Processing/analysis/     legacy schedule-analysis modules
+Processing/tests/        deterministic and integration tests
 ```
-
-## Notes
-
-- Python `3.11` is the supported runtime for the packaged flows in this repo.
-- Root `requirements.txt` is canonical.
-- `Processing/requirements.txt` is kept only as a compatibility shim for older workflows.
 
 ## License
 
-MIT. See [`LICENSE`](LICENSE).
+ProjectLens code is MIT licensed. Government source data is used under the Open Government Licence. See each official publication for source terms.

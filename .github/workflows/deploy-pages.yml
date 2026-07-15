@@ -30,13 +30,14 @@ jobs:
         run: python -m pip install -r requirements.txt
       - name: Run decision and pipeline tests
         run: python -m pytest Processing/tests -q
+      - name: Build validated public portfolio dataset
+        run: python Processing/gmpp_pipeline.py
       - name: Configure Pages
         uses: actions/configure-pages@v6
       - name: Assemble public demo
         run: |
-          mkdir -p _site/demo-data/alpha
+          mkdir -p _site
           cp -R docs/. _site/
-          cp Data/output/Alpha/*.csv _site/demo-data/alpha/
       - name: Upload static command centre
         uses: actions/upload-pages-artifact@v5
         with:
