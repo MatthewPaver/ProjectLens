@@ -12,19 +12,32 @@ ERMHDR	8.4	2026-02-28	ProjectLens synthetic evidence	Primavera PM	Project Manage
 %R	120	1000	100	PROC	Long Lead Procurement
 %R	130	1000	100	BUILD	Construction
 %R	140	1000	100	COMM	Testing and Commissioning
+%R	150	1000	100	ENAB	Enabling Works
 %T	TASK
 %F	task_id	proj_id	wbs_id	clndr_id	task_code	task_name	task_type	status_code	target_drtn_hr_cnt	remain_drtn_hr_cnt	total_float_hr_cnt	early_start_date	early_end_date	act_start_date	act_end_date	constraint_type	cstr_date
-%R	1100	1000	100	10	NS-000	Notice to proceed	TT_StartMile	TK_Complete	0	0	0	2026-01-05 00:00	2026-01-05 00:00	2026-01-05 00:00	2026-01-05 00:00		
-%R	1101	1000	110	10	NS-100	Detailed design mobilisation	TT_Task	TK_Complete	160	0	128	2026-01-06 00:00	2026-02-09 00:00	2026-01-06 00:00	2026-02-09 00:00		
-%R	1102	1000	110	10	NS-110	Primary substation detailed design	TT_Task	TK_Active	480	360	40	2026-02-10 00:00	2026-05-04 00:00	2026-02-10 00:00			
+%R	1100	1000	100	10	NS-000	Notice to proceed	TT_StartMile	TK_Complete	0	0	0	2026-01-05 00:00	2026-01-05 00:00	2026-01-05 00:00	2026-01-05 00:00
+%R	1101	1000	110	10	NS-100	Detailed design mobilisation	TT_Task	TK_Complete	160	0	128	2026-01-06 00:00	2026-02-09 00:00	2026-01-06 00:00	2026-02-09 00:00
+%R	1102	1000	110	10	NS-110	Primary substation detailed design	TT_Task	TK_Active	480	360	40	2026-02-10 00:00	2026-05-04 00:00	2026-02-10 00:00
 %R	1103	1000	110	10	NS-120	Planning consent determination	TT_Task	TK_NotStart	480	480	16	2026-05-05 00:00	2026-07-27 00:00			CS_MEO	2026-10-30 00:00
-%R	1200	1000	120	10	NS-200	Long lead procurement release	TT_Task	TK_NotStart	240	240	8	2026-07-28 00:00	2026-09-07 00:00				
-%R	1105	1000	120	10	NS-210	Switchgear manufacture and FAT	TT_Task	TK_NotStart	1280	1280	-32	2026-09-08 00:00	2027-04-19 00:00				
-%R	1106	1000	130	10	NS-300	Substation civils and foundations	TT_Task	TK_NotStart	1040	1040	-40	2026-09-15 00:00	2027-03-15 00:00				
-%R	1107	1000	130	10	NS-400	Primary plant installation	TT_Task	TK_NotStart	960	960	-48	2027-04-20 00:00	2027-10-05 00:00				
-%R	1108	1000	140	10	NS-500	Protection testing	TT_Task	TK_NotStart	520	520	-56	2027-10-06 00:00	2028-01-04 00:00				
+%R	1200	1000	120	10	NS-200	Long lead procurement release	TT_Task	TK_NotStart	240	240	8	2026-07-28 00:00	2026-09-07 00:00
+%R	1105	1000	120	10	NS-210	Switchgear manufacture and FAT	TT_Task	TK_NotStart	1280	1280	-32	2026-09-08 00:00	2027-04-19 00:00
+%R	1106	1000	130	10	NS-300	Substation civils and foundations	TT_Task	TK_NotStart	1040	1040	-40	2026-09-15 00:00	2027-03-15 00:00
+%R	1107	1000	130	10	NS-400	Primary plant installation	TT_Task	TK_NotStart	960	960	-48	2027-04-20 00:00	2027-10-05 00:00
+%R	1108	1000	140	10	NS-500	Protection testing	TT_Task	TK_NotStart	520	520	-56	2027-10-06 00:00	2028-01-04 00:00
 %R	1109	1000	140	10	NS-600	System commissioning	TT_Task	TK_NotStart	400	400	-72	2028-01-05 00:00	2028-03-14 00:00			CS_MEO	2028-02-26 00:00
 %R	1110	1000	140	10	NS-900	Ready for service	TT_FinMile	TK_NotStart	0	0	-72	2028-02-26 00:00	2028-02-26 00:00			CS_MEO	2028-02-26 00:00
+%R	1300	1000	150	10	NS-701	Temporary access design	TT_Task	TK_NotStart	80	80	320	2026-02-04 00:00	2026-02-15 00:00
+%R	1301	1000	150	10	NS-702	Temporary access permits	TT_Task	TK_NotStart	80	80	312	2026-02-18 00:00	2026-03-01 00:00
+%R	1302	1000	150	10	NS-703	Site compound layout	TT_Task	TK_NotStart	80	80	304	2026-03-04 00:00	2026-03-15 00:00
+%R	1303	1000	150	10	NS-704	Welfare procurement	TT_Task	TK_NotStart	80	80	296	2026-03-18 00:00	2026-03-29 00:00
+%R	1304	1000	150	10	NS-705	Fencing design	TT_Task	TK_NotStart	80	80	288	2026-04-01 00:00	2026-04-12 00:00
+%R	1305	1000	150	10	NS-706	Security review	TT_Task	TK_NotStart	80	80	280	2026-04-15 00:00	2026-04-26 00:00
+%R	1306	1000	150	10	NS-707	Survey control setup	TT_Task	TK_NotStart	80	80	272	2026-04-29 00:00	2026-05-10 00:00
+%R	1307	1000	150	10	NS-708	Temporary power design	TT_Task	TK_NotStart	80	80	264	2026-05-13 00:00	2026-05-24 00:00
+%R	1308	1000	150	10	NS-709	Temporary water design	TT_Task	TK_NotStart	80	80	256	2026-05-27 00:00	2026-06-07 00:00
+%R	1309	1000	150	10	NS-710	Compound installation	TT_Task	TK_NotStart	80	80	248	2026-06-10 00:00	2026-06-21 00:00
+%R	1310	1000	150	10	NS-711	Access route installation	TT_Task	TK_NotStart	80	80	240	2026-06-24 00:00	2026-07-05 00:00
+%R	1311	1000	150	10	NS-712	Enabling works inspection	TT_Task	TK_NotStart	80	80	232	2026-07-08 00:00	2026-07-19 00:00
 %T	TASKPRED
 %F	task_pred_id	task_id	pred_task_id	pred_type	lag_hr_cnt
 %R	1	1101	1100	PR_FS	0
@@ -38,4 +51,16 @@ ERMHDR	8.4	2026-02-28	ProjectLens synthetic evidence	Primavera PM	Project Manage
 %R	8	1108	1107	PR_FS	0
 %R	9	1109	1108	PR_FS	0
 %R	10	1110	1109	PR_FS	0
+%R	20	1300	1100	PR_FS	0
+%R	21	1301	1300	PR_FS	0
+%R	22	1302	1301	PR_FS	0
+%R	23	1303	1302	PR_FS	0
+%R	24	1304	1303	PR_FS	0
+%R	25	1305	1304	PR_FS	0
+%R	26	1306	1305	PR_FS	0
+%R	27	1307	1306	PR_FS	0
+%R	28	1308	1307	PR_FS	0
+%R	29	1309	1308	PR_FS	0
+%R	30	1310	1309	PR_FS	0
+%R	31	1311	1310	PR_FS	0
 %E

@@ -9,7 +9,7 @@
 
 **The open evidence layer for UK major-project delivery**
 
-ProjectLens shows what changed across the UK’s largest public projects, where published signals conflict and which evidence deserves investigation. It also provides a private, browser-local workflow for comparing Primavera P6 XER submissions.
+ProjectLens shows what changed across the UK’s largest public projects, where published signals conflict and which evidence deserves investigation. It also provides a private, browser-local assurance workflow for Primavera P6 XER submissions.
 
 [Open the live product](https://matthewpaver.github.io/ProjectLens/) · [Portfolio](https://matthewpaver.github.io/MatthewPaver/store/) · [Market scan](competitor-profiles/_summary.md)
 
@@ -31,10 +31,11 @@ ProjectLens joins seven annual Government Major Projects Portfolio releases into
 
 The XER evidence review adds a second, deliberately separate workflow for private schedule submissions:
 
-- What changed between two P6 exports?
-- Which milestones, dates, logic, constraints and float movements are material?
-- Does the status narrative agree with the schedule evidence?
-- Which assurance questions and actions should be recorded before approval?
+- Is the submission complete enough to support the claimed conclusion?
+- Which five to ten changes matter after thousands of raw movements are reduced by materiality?
+- Which contractual milestones and exported critical or near-critical activities moved?
+- Do the schedule, baseline, risk register, decision log and status narrative agree?
+- Did the intervention recorded last month work in the latest submission?
 
 ## Current evidence base
 
@@ -58,7 +59,7 @@ The latest snapshot was reported by departments at 31 March 2026. Source links a
 2. **Explorer** searches, filters and saves a browser-local watchlist across all 189 current projects.
 3. **Project detail** shows the scoring reasons, source narrative and up to seven years of history.
 4. **Case match** retrieves historical improvements and explains the similarity basis.
-5. **XER review** compares two schedule submissions, tests narrative claims and creates an evidence-linked action log.
+5. **XER assurance** checks evidence completeness, compares submissions and a separate baseline, reduces raw changes to an executive queue, reconciles decisions and risks, and follows interventions into later updates.
 6. **Method** publishes the exact score, data boundaries, original releases and authoritative expansion routes.
 
 The interface is a static GitHub Pages application in [`docs/`](docs). No server or account is required. XER files are parsed locally in the browser and are not uploaded.
@@ -88,18 +89,23 @@ Narrative themes use the visible keyword taxonomy in [`Processing/gmpp_pipeline.
 
 Whole-life cost values are not compared across years because published price bases can differ.
 
-The XER materiality score is also deterministic. It ranks milestone movement, date movement, float erosion, relationship logic, constraints and duration changes. It is a review priority, not a forecast or a substitute for a validated critical-path or quantitative risk analysis.
+The XER materiality score is also deterministic. It ranks milestone movement, date movement, float erosion, relationship logic, constraints, duration changes and business-critical milestone language. It first separates raw differences from material changes, then limits the executive queue to the highest-priority items while retaining the full analyst view.
+
+Evidence coverage is reported separately from schedule quality. A missing baseline, risk register, schedule basis or decision log is visible rather than silently treated as evidence. The critical and near-critical view uses total float exported by P6. It does not recalculate a CPM network. The score is a review priority, not a forecast or a substitute for validated schedule logic or quantitative risk analysis.
 
 ## Try the XER workflow
 
 Open [the live schedule evidence review](https://matthewpaver.github.io/ProjectLens/schedule-review.html) and select **Run the Northstar demo**. The synthetic pair is safe to share and intentionally contains:
 
 - a 73-day project finish movement
-- changed logic and constraints
-- float erosion and integrity findings
+- 21 raw changes reduced to 9 material executive priorities
+- a separate baseline, risk register, schedule basis and decision log
+- changed logic, constraints, float erosion and integrity findings
+- an approved change, an unlinked change and a deferred decision
 - a status narrative that understates the schedule movement
+- a previous intervention that can be assessed against the later submission
 
-You can then switch between executive and analyst views, inspect each material change, save assurance actions in the browser and download the complete review pack as JSON.
+You can switch between executive and analyst views, inspect why each change was prioritised, save assurance actions in the browser and download the complete evidence-linked review pack as JSON.
 
 The repository also includes a [paced, silent MP4 product walkthrough](docs/assets/projectlens-evidence-demo.mp4) for the LinkedIn launch.
 
@@ -128,13 +134,13 @@ Then open `http://localhost:8000`.
 make test
 ```
 
-Tests cover the original schedule-processing modules, public-data counts, DCA precedence, matching, transitions, theme classification, score boundaries and the synthetic XER evidence contract. Playwright browser checks cover the public workflow and the XER demo on desktop and mobile.
+Tests cover the original schedule-processing modules, public-data counts, DCA precedence, matching, transitions, theme classification, score boundaries and the synthetic XER evidence contract. Playwright checks exercise both the one-click demo and real browser file inputs, validate the exported assurance pack, and cover desktop and mobile layouts.
 
 ## Competitive position
 
 nPlan, SmartPM, Nodes & Links and InEight already provide strong private schedule analytics, forecasting, quantitative risk and enterprise controls. ProjectLens deliberately does not imitate them.
 
-Its narrower gap is **open, source-linked, longitudinal public delivery intelligence**, plus an evidence-linked assurance workflow that can complement existing planning tools. The dated market scan and source notes are in [`competitor-profiles/`](competitor-profiles).
+Its narrower gap is **open, source-linked, longitudinal public delivery intelligence**, plus an evidence-linked assurance workflow that asks what an XER does not contain, reconciles the submission with other project evidence and tracks whether responses worked. It is designed to complement existing planning tools. The dated market scan and source notes are in [`competitor-profiles/`](competitor-profiles).
 
 ## Boundaries
 
@@ -144,7 +150,11 @@ Its narrower gap is **open, source-linked, longitudinal public delivery intellig
 - Comparable cases prompt investigation and do not prescribe an intervention.
 - Absence from a later annual release does not establish whether a project delivered, closed, changed identifier or left the portfolio for another reason.
 - XER comparison identifies observable changes and integrity questions. It does not reproduce Primavera scheduling calculations or prove delay attribution.
+- Baseline assurance requires a separately supplied baseline because XER does not reliably carry baseline project data. Risk and decision links use explicit activity-code matching and remain prompts for human verification.
+- If an XER contains multiple projects, the browser demonstrator analyses the first project and reports that scope limitation.
 - A production internal version would require secure schedule connectors, permissions, audit logs and organisation-specific validation.
+
+Oracle describes XER as a proprietary exchange format, notes that baseline project data is not supported in XER export, and documents differences in risk and financial-period transfer. Those format constraints are why the workflow begins with an evidence-completeness report. See Oracle's [supported file formats](https://docs.oracle.com/cd/F51303_01/English/admin/p6_pro_importing_exporting/import_export_file_formats.htm), [XER export notes](https://docs.oracle.com/cd/E75426_01/English/User_Guides/p6_pro_user/export_projects_to_an_xer_file.htm) and [risk import guidance](https://docs.oracle.com/cd/G48897_01/p6help/en/101760.htm).
 
 ## Legacy schedule engine
 
@@ -158,7 +168,7 @@ Processing/gmpp_pipeline.py
                          longitudinal preparation and validation
 docs/                    GitHub Pages product and generated JSON
 docs/schedule-review.*   browser-local XER evidence review
-docs/demo/               synthetic, share-safe XER comparison pair
+docs/demo/               synthetic, share-safe XER and evidence kit
 competitor-profiles/     dated market scan and source notes
 Processing/analysis/     legacy schedule-analysis modules
 Processing/tests/        deterministic and integration tests

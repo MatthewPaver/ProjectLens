@@ -1,0 +1,40 @@
+ERMHDR	8.4	2025-12-15	ProjectLens synthetic baseline evidence	Primavera PM	Project Management	USD
+%T	PROJECT
+%F	proj_id	proj_short_name	plan_start_date	scd_end_date	last_recalc_date
+%R	1000	NORTHSTAR GRID CONNECTION	2026-01-05 00:00	2027-10-01 00:00	2025-12-15 00:00
+%T	CALENDAR
+%F	clndr_id	clndr_name	clndr_type
+%R	10	Northstar 5 Day Week	CA_Project
+%R	20	Northstar Commissioning 6 Day Week	CA_Project
+%T	PROJWBS
+%F	wbs_id	proj_id	parent_wbs_id	wbs_short_name	wbs_name
+%R	100	1000		NS	Northstar Grid Connection
+%R	110	1000	100	DES	Design and Consents
+%R	120	1000	100	PROC	Long Lead Procurement
+%R	130	1000	100	BUILD	Construction
+%R	140	1000	100	COMM	Testing and Commissioning
+%T	TASK
+%F	task_id	proj_id	wbs_id	clndr_id	task_code	task_name	task_type	status_code	target_drtn_hr_cnt	remain_drtn_hr_cnt	total_float_hr_cnt	early_start_date	early_end_date	act_start_date	act_end_date	constraint_type	cstr_date
+%R	1100	1000	100	10	NS-000	Notice to proceed	TT_StartMile	TK_NotStart	0	0	80	2026-01-05 00:00	2026-01-05 00:00				
+%R	1101	1000	110	10	NS-100	Detailed design mobilisation	TT_Task	TK_NotStart	160	160	80	2026-01-06 00:00	2026-02-02 00:00				
+%R	1102	1000	110	10	NS-110	Primary substation detailed design	TT_Task	TK_NotStart	320	320	64	2026-02-03 00:00	2026-03-30 00:00				
+%R	1103	1000	110	10	NS-120	Planning consent determination	TT_Task	TK_NotStart	400	400	56	2026-03-31 00:00	2026-06-08 00:00				
+%R	1105	1000	120	10	NS-210	Switchgear manufacture and FAT	TT_Task	TK_NotStart	1040	1040	40	2026-06-09 00:00	2026-12-07 00:00				
+%R	1106	1000	130	10	NS-300	Substation civils and foundations	TT_Task	TK_NotStart	880	880	40	2026-06-09 00:00	2026-11-09 00:00				
+%R	1107	1000	130	10	NS-400	Primary plant installation	TT_Task	TK_NotStart	880	880	32	2026-12-08 00:00	2027-05-10 00:00				
+%R	1108	1000	140	20	NS-500	Protection testing	TT_Task	TK_NotStart	400	400	24	2027-05-11 00:00	2027-07-19 00:00				
+%R	1109	1000	140	20	NS-600	System commissioning	TT_Task	TK_NotStart	320	320	16	2027-07-20 00:00	2027-09-13 00:00				
+%R	1110	1000	140	20	NS-900	Ready for service	TT_FinMile	TK_NotStart	0	0	16	2027-10-01 00:00	2027-10-01 00:00			CS_MEO	2027-10-01 00:00
+%T	TASKPRED
+%F	task_pred_id	task_id	pred_task_id	pred_type	lag_hr_cnt
+%R	1	1101	1100	PR_FS	0
+%R	2	1102	1101	PR_FS	0
+%R	3	1103	1102	PR_FS	0
+%R	4	1105	1103	PR_FS	0
+%R	5	1106	1103	PR_FS	0
+%R	6	1107	1105	PR_FS	0
+%R	7	1107	1106	PR_FS	0
+%R	8	1108	1107	PR_FS	0
+%R	9	1109	1108	PR_FS	0
+%R	10	1110	1109	PR_FS	0
+%E

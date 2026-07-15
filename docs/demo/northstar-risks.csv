@@ -1,0 +1,5 @@
+risk_id,title,owner,status,linked_activity,mitigation
+R-014,Design approval takes longer than planned,Design Manager,Open,NS-110,Weekly technical authority review
+R-021,Planning consent determination delay,Consents Lead,Open,NS-120,Early regulator evidence workshop
+R-033,Switchgear production capacity,Procurement Director,Open,NS-210,Factory surveillance and alternative slot
+R-041,Commissioning resource availability,Commissioning Manager,Open,NS-600,Secure specialist test team by gate 4
