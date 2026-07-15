@@ -51,6 +51,20 @@ def test_demo_narrative_exercises_contradiction_review():
     assert "constraint" not in narrative
 
 
+def test_demo_includes_bounded_assurance_evidence():
+    baseline = read_xer_tables(DOCS / "demo" / "northstar-baseline.xer")
+    risks = (DOCS / "demo" / "northstar-risks.csv").read_text(encoding="utf-8")
+    basis = (DOCS / "demo" / "northstar-schedule-basis.md").read_text(encoding="utf-8")
+    decisions = (DOCS / "demo" / "northstar-decisions.csv").read_text(encoding="utf-8")
+
+    assert len(baseline["TASK"]) >= 8
+    assert len(baseline["CALENDAR"]) == 2
+    assert risks.count("\n") >= 4
+    assert "NS-900" not in decisions
+    assert "Approved" in decisions and "Deferred" in decisions
+    assert "contractual milestone" in basis
+
+
 def test_review_page_states_privacy_and_model_boundary():
     page = (DOCS / "schedule-review.html").read_text(encoding="utf-8")
     script = (DOCS / "xer-review.js").read_text(encoding="utf-8")
@@ -60,3 +74,7 @@ def test_review_page_states_privacy_and_model_boundary():
     assert "not a forecast" in page
     assert "window.ProjectLensXer" in script
     assert "localStorage" in script
+    assert "Evidence completeness" in page
+    assert "Intervention follow-through" in page
+    assert "decisionReconciliation" in script
+    assert "baselineMovements" in script

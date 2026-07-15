@@ -51,9 +51,9 @@
           <span>+</span>
           <div><i>02</i><strong>Current XER</strong><small>Latest submission</small></div>
           <span>+</span>
-          <div><i>03</i><strong>Narrative</strong><small>What the update claims</small></div>
+          <div><i>03</i><strong>Decision evidence</strong><small>What was claimed and approved</small></div>
         </div>
-        <div class="machine-output"><span></span><b>Material changes</b><b>Contradictions</b><b>Review actions</b></div>
+        <div class="machine-output"><span></span><b>Evidence gaps</b><b>Material changes</b><b>Intervention outcomes</b></div>
       </div>
     </section>
 
@@ -91,12 +91,39 @@
         </div>
       </div>
 
+      <section class="evidence-kit" aria-labelledby="evidenceKitTitle">
+        <div class="evidence-kit-heading">
+          <div><span>Optional assurance evidence</span><h3 id="evidenceKitTitle">Show what the XER cannot prove alone</h3></div>
+          <p>Attach what is available. Missing items remain visible in the completeness report and limit the conclusions.</p>
+        </div>
+        <div class="evidence-kit-grid">
+          <label class="evidence-file" id="baselineDrop" for="baselineFile">
+            <input id="baselineFile" type="file" accept=".xer,text/plain">
+            <span>Baseline schedule</span><strong id="baselineFileName">Not supplied</strong><small id="baselineFileMeta" data-default="XER or separately exported baseline">XER or separately exported baseline</small>
+          </label>
+          <label class="evidence-file" id="riskDrop" for="riskFile">
+            <input id="riskFile" type="file" accept=".csv,.txt,text/plain,text/csv">
+            <span>Risk register</span><strong id="riskFileName">Not supplied</strong><small id="riskFileMeta" data-default="CSV or TXT with risk and activity references">CSV or TXT with risk and activity references</small>
+          </label>
+          <label class="evidence-file" id="basisDrop" for="basisFile">
+            <input id="basisFile" type="file" accept=".txt,.md,text/plain,text/markdown">
+            <span>Schedule basis</span><strong id="basisFileName">Not supplied</strong><small id="basisFileMeta" data-default="TXT or MD assumptions and calendar basis">TXT or MD assumptions and calendar basis</small>
+          </label>
+          <label class="evidence-file" id="decisionDrop" for="decisionFile">
+            <input id="decisionFile" type="file" accept=".csv,.txt,.md,.json,text/plain,text/csv,application/json">
+            <span>Change and decision log</span><strong id="decisionFileName">Not supplied</strong><small id="decisionFileMeta" data-default="Approved, rejected or deferred decisions">Approved, rejected or deferred decisions</small>
+          </label>
+        </div>
+      </section>
+
       <details class="rule-panel">
         <summary><span>Contract-specific review rules</span><small>Adjust the acceptance thresholds before running the review</small></summary>
         <div class="rule-grid">
           <label><span>Long activity threshold</span><input id="maxDurationDays" type="number" min="1" max="180" value="20"><small>8-hour equivalent days</small></label>
           <label><span>Material finish movement</span><input id="materialSlipDays" type="number" min="1" max="365" value="10"><small>Calendar days</small></label>
           <label><span>Float warning threshold</span><input id="floatThresholdHours" type="number" min="-1000" max="1000" value="0"><small>Hours</small></label>
+          <label><span>Near-critical threshold</span><input id="nearCriticalDays" type="number" min="0" max="60" value="10"><small>8-hour equivalent days</small></label>
+          <label><span>Executive change limit</span><input id="executiveChangeLimit" type="number" min="5" max="20" value="10"><small>Top changes before analyst view</small></label>
           <label class="check-rule"><input id="allowPositiveLag" type="checkbox"><span>Allow positive relationship lag</span><small>Off by default</small></label>
         </div>
       </details>
@@ -129,30 +156,62 @@
         <article><span>Finish movement</span><strong id="finishMovement">0d</strong><small id="finishMilestone">Latest milestone</small></article>
         <article class="warning"><span>Narrative conflicts</span><strong id="contradictionCount">0</strong><small>Evidence versus claim</small></article>
         <article><span>Integrity findings</span><strong id="integrityCount">0</strong><small>Against selected rules</small></article>
+        <article class="coverage"><span>Evidence coverage</span><strong id="evidenceCoverage">0/11</strong><small id="coverageLabel">Not assessed</small></article>
+      </section>
+
+      <section class="completeness-section">
+        <div class="section-heading compact">
+          <div><span>02 · Evidence completeness</span><h2>What is missing matters</h2></div>
+          <p id="completenessSummary">ProjectLens reports what the submission can and cannot support before presenting findings.</p>
+        </div>
+        <div id="completenessGrid" class="completeness-grid"></div>
+        <div id="completenessBoundary" class="completeness-boundary"></div>
       </section>
 
       <section class="executive-grid">
         <article class="executive-brief">
-          <div class="panel-label"><span>02 · Executive readout</span><i>DECISION SUPPORT</i></div>
+          <div class="panel-label"><span>03 · Executive readout</span><i>DECISION SUPPORT</i></div>
           <h2 id="executiveHeadline">Review ready</h2>
           <p id="executiveSummary"></p>
           <div class="headline-evidence" id="headlineEvidence"></div>
         </article>
         <article class="contradiction-panel">
-          <div class="panel-label"><span>03 · Claims to challenge</span><i>NARRATIVE TEST</i></div>
+          <div class="panel-label"><span>04 · Claims to challenge</span><i>NARRATIVE TEST</i></div>
           <div id="contradictionListXer"></div>
+        </article>
+      </section>
+
+      <section class="evidence-focus-grid">
+        <article>
+          <div class="panel-label"><span>05 · Path sensitivity</span><i>EXPORTED FLOAT</i></div>
+          <h2>Critical and near-critical evidence</h2>
+          <p>Uses exported total float and relationships. ProjectLens does not recalculate the P6 critical path.</p>
+          <div id="pathCandidateList" class="focus-list"></div>
+        </article>
+        <article>
+          <div class="panel-label"><span>06 · Decision reconciliation</span><i>APPROVAL TRACE</i></div>
+          <h2>Was the material change approved?</h2>
+          <p>Matches activity codes and decision language. Unlinked changes become questions, not accusations.</p>
+          <div id="decisionReconciliation" class="focus-list"></div>
+        </article>
+        <article>
+          <div class="panel-label"><span>07 · Baseline movement</span><i>COMMITMENT TRACE</i></div>
+          <h2>Current dates against baseline</h2>
+          <p>A baseline comparison appears only when a separate baseline schedule is supplied.</p>
+          <div id="baselineMovementList" class="focus-list"></div>
         </article>
       </section>
 
       <section class="material-section">
         <div class="section-heading compact">
-          <div><span>04 · Material change funnel</span><h2>What deserves attention</h2></div>
-          <p>Changes are ranked by milestone movement, float erosion, logic, constraint and duration evidence. The score prioritises review; it is not a forecast.</p>
+          <div><span>08 · Material change funnel</span><h2>What deserves attention</h2></div>
+          <p id="materialFunnelCopy">Executive view shows the smallest useful queue. Analyst view retains the wider material set.</p>
         </div>
         <div class="change-filters" role="group" aria-label="Filter material changes">
           <button class="active" type="button" data-change-filter="all">All</button>
           <button type="button" data-change-filter="high">High</button>
           <button type="button" data-change-filter="milestone">Milestones</button>
+          <button type="button" data-change-filter="path">Critical / near-critical</button>
           <button type="button" data-change-filter="logic">Logic</button>
           <button type="button" data-change-filter="constraint">Constraints</button>
         </div>
@@ -161,26 +220,34 @@
 
       <section class="analyst-only analyst-grid">
         <article>
-          <div class="panel-label"><span>05 · Submission fitness</span><i>INPUT GATE</i></div>
+          <div class="panel-label"><span>09 · Submission fitness</span><i>INPUT GATE</i></div>
           <div id="fitnessGrid" class="fitness-grid"></div>
         </article>
         <article>
-          <div class="panel-label"><span>06 · Integrity findings</span><i>RULES AS CODE</i></div>
+          <div class="panel-label"><span>10 · Integrity findings</span><i>RULES AS CODE</i></div>
           <div id="integrityList" class="integrity-list"></div>
         </article>
       </section>
 
       <section class="question-section">
         <div class="section-heading compact inverse">
-          <div><span>07 · Assurance questions</span><h2>Move from insight to action</h2></div>
+          <div><span>11 · Assurance questions</span><h2>Move from insight to action</h2></div>
           <p>Each question retains the evidence that produced it. Add the useful ones to the local review log and assign an owner.</p>
         </div>
         <div id="questionList" class="question-list"></div>
       </section>
 
+      <section class="follow-through-section">
+        <div class="section-heading compact inverse">
+          <div><span>12 · Intervention follow-through</span><h2>Did the response work?</h2></div>
+          <p>When a later submission is reviewed for the same project, ProjectLens checks whether linked signals resolved, repeated or cannot yet be assessed.</p>
+        </div>
+        <div id="followThroughList" class="follow-through-list"></div>
+      </section>
+
       <section class="action-section">
         <div class="section-heading compact">
-          <div><span>08 · Decision memory</span><h2>Close the loop next month</h2></div>
+          <div><span>13 · Decision memory</span><h2>Close the loop next month</h2></div>
           <p>Actions are stored in this browser only. When the next XER arrives, the team can see whether the questioned signal was resolved or repeated.</p>
         </div>
         <form id="actionForm" class="action-form">
@@ -194,7 +261,12 @@
 
       <section class="boundary-panel">
         <strong>Evidence boundary</strong>
-        <p id="boundaryCopy">This review compares exported schedule evidence. It does not establish contractual entitlement, causation or a probability of failure.</p>
+        <p id="boundaryCopy">This review compares exported schedule evidence. It is not a forecast and does not establish contractual entitlement, causation or a probability of failure.</p>
+      </section>
+      <section class="format-note">
+        <strong>Why completeness is explicit</strong>
+        <p>Oracle documents XER as a proprietary exchange format, notes that baseline export is not supported in the standard XER comparison, and states that P6 EPPM XER exports omit risk data. Financial-period exports also contain only periods with values for the project.</p>
+        <div><a href="https://docs.oracle.com/cd/F51303_01/English/admin/p6_pro_importing_exporting/import_export_file_formats.htm" target="_blank" rel="noreferrer">Oracle format comparison ↗</a><a href="https://docs.oracle.com/cd/E75426_01/English/User_Guides/p6_pro_user/export_projects_to_an_xer_file.htm" target="_blank" rel="noreferrer">Oracle XER export notes ↗</a></div>
       </section>
     </section>
   </main>
