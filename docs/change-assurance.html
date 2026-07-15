@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Review a project change pack, identify decision blockers and preserve the human decision and its conditions.">
+  <meta name="theme-color" content="#071a1b">
+  <meta property="og:title" content="ProjectLens | Project Change Assurance">
+  <meta property="og:description" content="Add the pack. Review the blockers. Record the human decision. Track the conditions.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://matthewpaver.github.io/ProjectLens/assets/change-assurance-overview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>ProjectLens | Project Change Assurance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="change-assurance.css">
+</head>
+<body class="assurance-body">
+  <a class="skip-link" href="#workspace">Skip to review workspace</a>
+  <div class="assurance-grid" aria-hidden="true"></div>
+
+  <header class="assurance-header">
+    <a class="brand assurance-brand" href="#reviews" aria-label="ProjectLens change assurance home">
+      <span class="brand-eye" aria-hidden="true"></span>
+      <span><b>PROJECT</b>LENS<small>CHANGE ASSURANCE</small></span>
+    </a>
+    <nav aria-label="Change assurance">
+      <a href="#reviews" data-view-link="reviews" class="active">Reviews</a>
+      <a href="#decisions" data-view-link="decisions">Decisions</a>
+      <a href="#follow-up" data-view-link="follow-up">Follow-up <b id="conditionNavCount">0</b></a>
+    </nav>
+    <div class="header-meta">
+      <span><i aria-hidden="true"></i> Browser-local</span>
+      <a href="index.html">Public evidence ↗</a>
+    </div>
+  </header>
+
+  <main id="workspace">
+    <section class="assurance-view active" data-view="reviews">
+      <section class="assurance-hero" id="top">
+        <div class="hero-copy assurance-reveal">
+          <p class="eyebrow"><span>Before the decision meeting</span> Evidence, authority & follow-through</p>
+          <h1>Is this change<br><em>ready to decide?</em></h1>
+          <p class="hero-intro">Add the change pack. ProjectLens checks the schedule narrative, surfaces the 3 most important blockers and preserves what a person decides.</p>
+          <div class="assurance-actions">
+            <button class="assurance-primary" id="loadAssuranceDemo" type="button">Try the Northstar example <span>→</span></button>
+            <button class="assurance-secondary" id="showOwnPack" type="button">Review my change pack</button>
+          </div>
+          <div class="trust-line" aria-label="Product boundaries">
+            <span>Files stay here</span>
+            <span>Code checks dates</span>
+            <span>People decide</span>
+          </div>
+        </div>
+        <aside class="decision-preview assurance-reveal delay-1" aria-label="Example readiness result">
+          <div class="preview-top"><span>Example result</span><b>Needs evidence</b></div>
+          <p>The finish moved <strong>73 days</strong>, but the narrative says it is unchanged.</p>
+          <ol>
+            <li><span>01</span> Finish movement not acknowledged</li>
+            <li><span>02</span> Constraint changes unexplained</li>
+            <li><span>03</span> Mitigation ownership missing</li>
+          </ol>
+          <small>One decision brief. Supporting analysis stays behind it.</small>
+        </aside>
+      </section>
+
+      <section class="simple-flow" aria-label="Four-step review workflow">
+        <div><b>1</b><span>Add the pack</span></div>
+        <i aria-hidden="true">→</i>
+        <div><b>2</b><span>Review blockers</span></div>
+        <i aria-hidden="true">→</i>
+        <div><b>3</b><span>Record decision</span></div>
+        <i aria-hidden="true">→</i>
+        <div><b>4</b><span>Track conditions</span></div>
+      </section>
+
+      <section class="pack-intake" id="packIntake" hidden aria-labelledby="intakeTitle">
+        <div class="compact-heading">
+          <div><span>New review</span><h2 id="intakeTitle">Add the decision evidence</h2></div>
+          <p>Only the 2 XER files are required for a schedule comparison. Add the narrative to test what the update claims.</p>
+        </div>
+        <div class="pack-grid">
+          <label class="assurance-file" for="assurancePrevious">
+            <input id="assurancePrevious" type="file" accept=".xer,text/plain">
+            <span>Previous XER</span>
+            <strong id="assurancePreviousName">Choose comparison point</strong>
+            <small>Required</small>
+          </label>
+          <label class="assurance-file" for="assuranceCurrent">
+            <input id="assuranceCurrent" type="file" accept=".xer,text/plain">
+            <span>Current XER</span>
+            <strong id="assuranceCurrentName">Choose latest submission</strong>
+            <small>Required</small>
+          </label>
+          <label class="assurance-narrative" for="assuranceNarrative">
+            <span>What the update claims</span>
+            <textarea id="assuranceNarrative" rows="7" placeholder="Paste the progress or change narrative…"></textarea>
+            <small>Optional; needed for contradiction checks</small>
+          </label>
+        </div>
+        <div class="intake-run">
+          <p id="intakeMessage" role="status">Choose 2 XER files to begin.</p>
+          <button class="assurance-primary" id="runAssuranceReview" type="button" disabled>Check decision readiness <span>→</span></button>
+        </div>
+      </section>
+
+      <section class="readiness-workspace" id="readinessWorkspace" hidden aria-live="polite">
+        <div class="review-context">
+          <div><span>Active review</span><strong id="reviewName">Northstar Grid Connection</strong><small id="reviewEvidenceVersion"></small></div>
+          <button type="button" id="startAnotherReview">Start another review</button>
+        </div>
+
+        <article class="readiness-card" id="readinessCard">
+          <div class="readiness-status"><i aria-hidden="true"></i><span id="readinessStatus">Needs evidence before decision</span></div>
+          <h2 id="readinessHeadline">The proposed finish is not supported by the current narrative.</h2>
+          <p id="readinessExplanation">Resolve the blockers below or record why the decision authority accepts them.</p>
+          <div class="blocker-list" id="blockerList"></div>
+          <div class="readiness-actions">
+            <button class="assurance-primary" id="requestAnswers" type="button">Request answers <span>→</span></button>
+            <button class="assurance-secondary light" id="showDecisionForm" type="button">Record human decision</button>
+          </div>
+        </article>
+
+        <section class="request-panel" id="requestPanel" hidden aria-labelledby="requestTitle">
+          <div class="compact-heading inverse">
+            <div><span>Evidence request</span><h2 id="requestTitle">Send the questions that unblock the decision</h2></div>
+            <p>Each question keeps the finding that produced it. Assign an owner and due date before copying the request.</p>
+          </div>
+          <div id="requestList" class="request-list"></div>
+          <div class="request-controls">
+            <label for="requestOwner"><span>Owner</span><input id="requestOwner" type="text" autocomplete="off" placeholder="Role or person…"></label>
+            <label for="requestDue"><span>Due date</span><input id="requestDue" type="date" autocomplete="off"></label>
+            <button type="button" id="saveEvidenceRequest">Save evidence request</button>
+          </div>
+        </section>
+
+        <section class="decision-panel" id="decisionPanel" hidden aria-labelledby="decisionTitle">
+          <div class="compact-heading">
+            <div><span>Human authority</span><h2 id="decisionTitle">Record what was decided</h2></div>
+            <p>The system preserves the evidence version and unresolved warnings. It does not make this decision.</p>
+          </div>
+          <form id="decisionForm">
+            <fieldset>
+              <legend>Decision</legend>
+              <label><input type="radio" name="decision" value="Approve" required><span>Approve</span></label>
+              <label><input type="radio" name="decision" value="Approve with conditions"><span>Approve with conditions</span></label>
+              <label><input type="radio" name="decision" value="Return for revision"><span>Return for revision</span></label>
+              <label><input type="radio" name="decision" value="Reject"><span>Reject</span></label>
+            </fieldset>
+            <div class="decision-fields">
+              <label for="decisionOwner"><span>Decision owner</span><input id="decisionOwner" name="owner" type="text" autocomplete="off" required placeholder="Role or person…"></label>
+              <label for="decisionRationale"><span>Rationale</span><textarea id="decisionRationale" name="rationale" rows="5" required placeholder="Why was this decision made?…"></textarea></label>
+              <label for="decisionCondition"><span>Condition, if required</span><input id="decisionCondition" name="condition" type="text" autocomplete="off" placeholder="What must happen next?…"></label>
+              <label for="conditionOwner"><span>Condition owner</span><input id="conditionOwner" name="conditionOwner" type="text" autocomplete="off" placeholder="Role or person…"></label>
+              <label for="conditionDue"><span>Condition due date</span><input id="conditionDue" name="conditionDue" type="date" autocomplete="off"></label>
+            </div>
+            <div class="decision-submit">
+              <p id="decisionWarning">This review still has unresolved evidence blockers. The decision record will preserve them.</p>
+              <button class="assurance-primary" type="submit">Save decision record <span>→</span></button>
+            </div>
+          </form>
+        </section>
+
+        <details class="supporting-evidence">
+          <summary><span>View supporting evidence</span><small>Schedule movements, narrative checks & comparable cases</small></summary>
+          <div class="evidence-summary" id="evidenceSummary"></div>
+          <div class="comparable-section">
+            <div><span>Comparable decision memory</span><h3>Has a similar change caused this problem before?</h3></div>
+            <div id="comparableCases" class="comparable-cases"></div>
+            <a href="schedule-review.html">Open the full schedule evidence review ↗</a>
+            <a href="https://matthewpaver.github.io/DecisionGraph/" target="_blank" rel="noreferrer">Explore the full synthetic case demonstrator ↗</a>
+          </div>
+          <p class="evidence-boundary">Evidence review only. It does not establish contractual entitlement, causation or a probability of failure.</p>
+        </details>
+      </section>
+    </section>
+
+    <section class="assurance-view register-view" data-view="decisions" hidden>
+      <div class="register-heading"><span>Decision register</span><h1>What did we decide?</h1><p>Decision records are stored in this browser for the demonstrator.</p></div>
+      <div id="decisionRegister" class="register-list"></div>
+    </section>
+
+    <section class="assurance-view register-view" data-view="follow-up" hidden>
+      <div class="register-heading"><span>Condition register</span><h1>What remains open?</h1><p>Approval is not the end of the workflow. Close or formally waive every condition.</p></div>
+      <div id="conditionRegister" class="register-list"></div>
+    </section>
+  </main>
+
+  <div class="assurance-toast" id="assuranceToast" role="status" aria-live="polite"></div>
+  <script src="change-assurance.js"></script>
+</body>
+</html>

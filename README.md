@@ -7,15 +7,28 @@
 ![License](https://img.shields.io/badge/Code-MIT-blue?style=flat-square)
 [![Validate](https://github.com/MatthewPaver/ProjectLens/actions/workflows/validate.yml/badge.svg)](https://github.com/MatthewPaver/ProjectLens/actions/workflows/validate.yml)
 
-**The open evidence layer for UK major-project delivery**
+**Evidence-bound project change assurance**
 
-ProjectLens shows what changed across the UK’s largest public projects, where published signals conflict and which evidence deserves investigation. It also provides a private, browser-local assurance workflow for Primavera P6 XER submissions.
+ProjectLens helps a reviewer decide whether a project change pack is ready for a human decision. It checks schedule evidence against the narrative, surfaces the three most important blockers, preserves the exact decision record and keeps approval conditions open until they are closed. Its supporting products provide longitudinal UK major-project evidence and a detailed browser-local Primavera P6 XER assurance workflow.
 
-[Open the live product](https://matthewpaver.github.io/ProjectLens/) · [Portfolio](https://matthewpaver.github.io/MatthewPaver/store/) · [Market scan](competitor-profiles/_summary.md)
+[Review a change pack](https://matthewpaver.github.io/ProjectLens/change-assurance.html) · [Explore public evidence](https://matthewpaver.github.io/ProjectLens/) · [Open the detailed XER review](https://matthewpaver.github.io/ProjectLens/schedule-review.html) · [Portfolio](https://matthewpaver.github.io/MatthewPaver/store/)
 
 </div>
 
 ## Why it exists
+
+A change board often receives a polished narrative alongside schedules, risks, actions and assumptions that do not fully agree. The primary workflow reduces that job to four steps:
+
+1. add the change pack;
+2. review the top decision blockers;
+3. request evidence or record the human decision;
+4. track approval conditions.
+
+The public Northstar example contains a narrative that says the finish is unchanged while the current XER moves it by 73 days. Users can also compare their own XER pair locally in the browser. ProjectLens does not upload those files.
+
+ProjectLens and DecisionGraph remain inspectable supporting tools. Users do not have to choose between them to complete a review.
+
+## Supporting evidence products
 
 Major-project reports contain delivery-confidence assessments, dates, costs and narrative explanations. The information is public, but the releases are usually read as separate annual snapshots.
 
@@ -55,14 +68,15 @@ The latest snapshot was reported by departments at 31 March 2026. Source links a
 
 ## Product workflow
 
-1. **Briefing** presents a small, transparent attention queue and outcome follow-up register.
-2. **Explorer** searches, filters and saves a browser-local watchlist across all 189 current projects.
-3. **Project detail** shows the scoring reasons, source narrative and up to seven years of history.
-4. **Case match** retrieves historical improvements and explains the similarity basis.
-5. **XER assurance** checks evidence completeness, compares submissions and a separate baseline, reduces raw changes to an executive queue, reconciles decisions and risks, and follows interventions into later updates.
-6. **Method** publishes the exact score, data boundaries, original releases and authoritative expansion routes.
+1. **Change assurance** presents one readiness decision, no more than three blockers and the next human action.
+2. **Evidence request** assigns the questions needed to unblock the decision.
+3. **Decision register** preserves the evidence version, authority, rationale and unresolved warnings.
+4. **Follow-up register** keeps approval conditions open until they are closed or formally waived.
+5. **Detailed XER assurance** checks evidence completeness, compares submissions and a separate baseline, reconciles decisions and risks, and follows interventions into later updates.
+6. **Public evidence** provides the longitudinal GMPP briefing, explorer, case match and outcome follow-up register.
+7. **Method** publishes the exact score, data boundaries, original releases and authoritative expansion routes.
 
-The interface is a static GitHub Pages application in [`docs/`](docs). No server or account is required. XER files are parsed locally in the browser and are not uploaded.
+The interfaces are static GitHub Pages applications in [`docs/`](docs). No server or account is required. XER files, decisions and conditions remain in the browser for the public demonstrator.
 
 ## Method
 
