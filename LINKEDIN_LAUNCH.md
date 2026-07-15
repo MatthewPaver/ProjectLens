@@ -40,7 +40,7 @@ The source code, methodology and official data links are available from the proj
 
 ## Video structure
 
-The ready-to-post [silent product walkthrough](docs/assets/projectlens-evidence-demo.webm) follows this sequence:
+The ready-to-post [silent MP4 product walkthrough](docs/assets/projectlens-evidence-demo.mp4) follows this sequence:
 
 1. Portfolio pulse and real-data scale
 2. The 18 worsened published assessments and source-linked trail

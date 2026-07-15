@@ -101,7 +101,7 @@ Open [the live schedule evidence review](https://matthewpaver.github.io/ProjectL
 
 You can then switch between executive and analyst views, inspect each material change, save assurance actions in the browser and download the complete review pack as JSON.
 
-The repository also includes a [paced, silent product walkthrough](docs/assets/projectlens-evidence-demo.webm) for the LinkedIn launch.
+The repository also includes a [paced, silent MP4 product walkthrough](docs/assets/projectlens-evidence-demo.mp4) for the LinkedIn launch.
 
 ## Rebuild the public dataset
 
