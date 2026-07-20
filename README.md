@@ -7,24 +7,24 @@
 ![License](https://img.shields.io/badge/Code-MIT-blue?style=flat-square)
 [![Validate](https://github.com/MatthewPaver/ProjectLens/actions/workflows/validate.yml/badge.svg)](https://github.com/MatthewPaver/ProjectLens/actions/workflows/validate.yml)
 
-**Evidence-bound project change assurance**
+**Project Evidence Desk for board readiness**
 
-ProjectLens helps a reviewer decide whether a project change pack is ready for a human decision. It checks schedule evidence against the narrative, surfaces the three most important blockers, preserves the exact decision record and keeps approval conditions open until they are closed. Its supporting products provide longitudinal UK major-project evidence and a detailed browser-local Primavera P6 XER assurance workflow.
+ProjectLens helps a reviewer decide what a project board pack can prove. It brings the current and previous pack, RAID log, actions, decisions and schedule evidence into one review, surfaces source-linked conflicts and gaps, prepares the questions the board must answer and keeps approval conditions open until they are closed. Its supporting products provide meeting follow-up, decision memory, longitudinal UK major-project evidence and a detailed browser-local Primavera P6 XER assurance workflow.
 
-[Review a change pack](https://matthewpaver.github.io/ProjectLens/change-assurance.html) · [Explore public evidence](https://matthewpaver.github.io/ProjectLens/) · [Open the detailed XER review](https://matthewpaver.github.io/ProjectLens/schedule-review.html) · [Portfolio](https://matthewpaver.github.io/MatthewPaver/store/)
+[Prepare a board review](https://matthewpaver.github.io/ProjectLens/board-readiness.html) · [Review a change pack](https://matthewpaver.github.io/ProjectLens/change-assurance.html) · [Explore public evidence](https://matthewpaver.github.io/ProjectLens/) · [Open the detailed XER review](https://matthewpaver.github.io/ProjectLens/schedule-review.html) · [Portfolio](https://matthewpaver.github.io/MatthewPaver/store/)
 
 </div>
 
 ## Why it exists
 
-A change board often receives a polished narrative alongside schedules, risks, actions and assumptions that do not fully agree. The primary workflow reduces that job to four steps:
+A project board often receives a polished narrative alongside schedules, risks, actions and prior conditions that do not fully agree. The primary workflow reduces that job to four steps:
 
-1. add the change pack;
-2. review the top decision blockers;
-3. request evidence or record the human decision;
-4. track approval conditions.
+1. set the board date and review owner;
+2. register the current pack, previous pack, RAID, commitments and schedule;
+3. check each conflict or gap against its named source;
+4. prepare the board questions, record the human decision and track conditions.
 
-The public Northstar example contains a narrative that says the finish is unchanged while the current XER moves it by 73 days. Users can also compare their own XER pair locally in the browser. ProjectLens does not upload those files.
+The public Northstar example contains a green narrative that says the finish is unchanged while the current XER moves it by 73 days, a high risk has no accountable owner, an action is overdue and a prior approval condition remains open. The fixture is explicitly synthetic and safe to share. Users can also register their own evidence locally in the browser; the detailed schedule module parses XER and CSV evidence without uploading it.
 
 ProjectLens and DecisionGraph remain inspectable supporting tools. Users do not have to choose between them to complete a review.
 
@@ -68,13 +68,14 @@ The latest snapshot was reported by departments at 31 March 2026. Source links a
 
 ## Product workflow
 
-1. **Change assurance** presents one readiness decision, no more than three blockers and the next human action.
-2. **Evidence request** assigns the questions needed to unblock the decision.
-3. **Decision register** preserves the evidence version, authority, rationale and unresolved warnings.
-4. **Follow-up register** keeps approval conditions open until they are closed or formally waived.
-5. **Detailed XER assurance** checks evidence completeness, compares submissions and a separate baseline, reconciles decisions and risks, and follows interventions into later updates.
-6. **Public evidence** provides the longitudinal GMPP briefing, explorer, case match and outcome follow-up register.
-7. **Method** publishes the exact score, data boundaries, original releases and authoritative expansion routes.
+1. **Board readiness** checks five familiar evidence groups and presents source-linked findings and decisions required.
+2. **MeetingProof** captures commitments before they become untraceable project drift.
+3. **DecisionGraph** retrieves comparable decisions and measured outcomes without claiming they prescribe the answer.
+4. **Change assurance** presents one readiness decision, no more than three blockers and the next human action.
+5. **Decision and follow-up registers** preserve authority, rationale, unresolved warnings and approval conditions.
+6. **Detailed XER assurance** checks evidence completeness, compares submissions and a separate baseline, reconciles decisions and risks, and follows interventions into later updates.
+7. **Public evidence** provides the longitudinal GMPP briefing, explorer, case match and outcome follow-up register.
+8. **Method** publishes the exact score, data boundaries, original releases and authoritative expansion routes.
 
 The interfaces are static GitHub Pages applications in [`docs/`](docs). No server or account is required. XER files, decisions and conditions remain in the browser for the public demonstrator.
 
@@ -148,7 +149,7 @@ Then open `http://localhost:8000`.
 make test
 ```
 
-Tests cover the original schedule-processing modules, public-data counts, DCA precedence, matching, transitions, theme classification, score boundaries and the synthetic XER evidence contract. Playwright checks exercise both the one-click demo and real browser file inputs, validate the exported assurance pack, and cover desktop and mobile layouts.
+Tests cover the board-readiness human gate, original schedule-processing modules, public-data counts, DCA precedence, matching, transitions, theme classification, score boundaries and the synthetic XER evidence contract. Playwright checks exercise the board review, one-click change and XER demos, real browser file inputs, exported assurance packs, and desktop and mobile layouts.
 
 ## Competitive position
 

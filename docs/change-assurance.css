@@ -2,9 +2,9 @@
   --assurance-ink: #071a1b;
   --assurance-paper: #f1ecdf;
   --assurance-white: #fffdf6;
-  --assurance-acid: #d7ff4f;
-  --assurance-cyan: #53d7d2;
-  --assurance-orange: #ff6542;
+  --assurance-acid: #e7c6a2;
+  --assurance-cyan: #8eb0bd;
+  --assurance-orange: #a94d35;
   --assurance-line: rgba(7, 26, 27, .2);
   --assurance-muted: #556562;
 }
@@ -13,9 +13,9 @@ html { scroll-behavior: smooth; }
 body.assurance-body { min-height: 100vh; color: var(--assurance-ink); background: var(--assurance-paper); }
 button, a, input, textarea { touch-action: manipulation; }
 button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 3px solid var(--assurance-cyan); outline-offset: 3px; }
-.assurance-grid { position: fixed; inset: 74px 0 0; z-index: -1; pointer-events: none; background-image: linear-gradient(rgba(7,26,27,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(7,26,27,.035) 1px,transparent 1px); background-size: 34px 34px; mask-image: linear-gradient(to bottom,black,transparent 80%); }
+.assurance-grid { display: none; }
 
-.assurance-header { position: sticky; top: 0; z-index: 50; height: 74px; display: grid; grid-template-columns: minmax(250px,1fr) auto minmax(250px,1fr); align-items: stretch; padding: 0 2rem; color: white; background: rgba(7,26,27,.98); border-bottom: 1px solid rgba(255,255,255,.14); backdrop-filter: blur(18px); }
+.assurance-header { position: sticky; top: 0; z-index: 50; height: 74px; display: grid; grid-template-columns: minmax(250px,1fr) auto minmax(250px,1fr); align-items: stretch; padding: 0 2rem; color: white; background: var(--assurance-ink); border-bottom: 1px solid rgba(255,255,255,.14); }
 .assurance-brand { align-self: center; justify-self: start; }
 .assurance-header nav { display: flex; align-items: stretch; }
 .assurance-header nav a { position: relative; min-width: 112px; display: grid; place-items: center; padding: 0 1rem; color: rgba(255,255,255,.55); font: 500 .58rem/1 "IBM Plex Mono",monospace; text-decoration: none; text-transform: uppercase; letter-spacing: .05em; }
@@ -26,14 +26,14 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .header-meta { align-self: center; justify-self: end; display: flex; align-items: center; gap: .75rem; }
 .header-meta span,.header-meta a { padding: .55rem .7rem; font: 500 .48rem/1 "IBM Plex Mono",monospace; text-transform: uppercase; }
 .header-meta span { color: var(--assurance-acid); border: 1px solid rgba(215,255,79,.32); }
-.header-meta span i { width: 7px; height: 7px; display: inline-block; margin-right: .35rem; background: var(--assurance-acid); border-radius: 50%; box-shadow: 0 0 11px var(--assurance-acid); }
+.header-meta span i { width: 7px; height: 7px; display: inline-block; margin-right: .35rem; background: var(--assurance-acid); }
 .header-meta a { color: white; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.32); }
 
 .assurance-view[hidden] { display: none !important; }
 .assurance-hero { min-height: calc(100vh - 74px); display: grid; grid-template-columns: 1.08fr .92fr; align-items: center; gap: 5vw; padding: 5.5rem max(5vw,2rem); overflow: hidden; }
 .assurance-hero h1 { margin: 0; max-width: 960px; font: 400 clamp(3.7rem,7vw,8rem)/.85 "Archivo Black",sans-serif; letter-spacing: -.075em; text-transform: uppercase; text-wrap: balance; }
 .assurance-hero .eyebrow { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem; line-height: 1.45; }
-.assurance-hero h1 em { color: var(--assurance-orange); font-style: normal; -webkit-text-stroke: 1px var(--assurance-ink); text-shadow: 6px 6px 0 var(--assurance-ink); }
+.assurance-hero h1 em { color: var(--assurance-orange); font-style: normal; }
 .assurance-hero .hero-intro { max-width: 780px; margin: 2rem 0 0; color: #40514e; font-size: clamp(1rem,1.45vw,1.28rem); line-height: 1.62; text-wrap: pretty; }
 .assurance-actions { display: flex; align-items: center; gap: .8rem; margin-top: 2rem; }
 .assurance-primary,.assurance-secondary { min-height: 50px; padding: .95rem 1.1rem; font: 600 .56rem/1 "IBM Plex Mono",monospace; text-transform: uppercase; }
@@ -49,7 +49,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .trust-line { display: flex; flex-wrap: wrap; gap: .45rem 1.2rem; margin-top: 1.7rem; color: var(--assurance-muted); font: 500 .48rem/1 "IBM Plex Mono",monospace; text-transform: uppercase; }
 .trust-line span::before { content: "✓"; margin-right: .4rem; color: #12675d; font-weight: 600; }
 
-.decision-preview { min-height: 500px; padding: 1.4rem; display: flex; flex-direction: column; color: white; background: var(--assurance-ink); border: 1px solid rgba(255,255,255,.15); box-shadow: 18px 18px 0 var(--assurance-cyan); transform: rotate(1.2deg); }
+.decision-preview { min-height: 500px; padding: 1.4rem; display: flex; flex-direction: column; color: white; background: var(--assurance-ink); border-top: 7px solid var(--assurance-orange); }
 .preview-top { display: flex; justify-content: space-between; gap: 1rem; color: rgba(255,255,255,.48); font: 500 .5rem/1 "IBM Plex Mono",monospace; text-transform: uppercase; }
 .preview-top b { padding: .45rem .6rem; color: var(--assurance-ink); background: var(--assurance-acid); }
 .decision-preview > p { margin: 5.2rem 0 2rem; font: 400 clamp(2rem,3vw,3.8rem)/.95 "Archivo Black",sans-serif; letter-spacing: -.05em; text-transform: uppercase; }
@@ -80,7 +80,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .pack-grid { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: .8rem; }
 .assurance-file,.assurance-narrative { position: relative; min-height: 250px; padding: 1.1rem; display: flex; flex-direction: column; background: rgba(255,255,255,.48); border: 1px solid var(--assurance-line); }
 .assurance-file { cursor: pointer; }
-.assurance-file:hover { background: var(--assurance-white); box-shadow: 8px 8px 0 var(--assurance-cyan); transform: translateY(-3px); }
+.assurance-file:hover { background: var(--assurance-white); border-color: var(--assurance-ink); }
 .assurance-file input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 .assurance-file > span,.assurance-narrative > span { color: var(--assurance-orange); font: 600 .5rem/1 "IBM Plex Mono",monospace; text-transform: uppercase; }
 .assurance-file strong { max-width: 280px; margin: auto 0 .65rem; font: 400 1.65rem/.95 "Archivo Black",sans-serif; text-transform: uppercase; overflow-wrap: anywhere; }
@@ -99,7 +99,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .review-context strong { margin-top: .3rem; font-size: .72rem; }
 .review-context small { margin-top: .2rem; color: rgba(255,255,255,.4); font-size: .5rem; }
 .review-context button { padding: .65rem .75rem; color: white; background: transparent; border: 1px solid rgba(255,255,255,.32); font: 600 .48rem/1 "IBM Plex Mono",monospace; text-transform: uppercase; }
-.readiness-card { margin: 4.5rem max(8vw,2rem); padding: clamp(1.4rem,3vw,2.4rem); color: white; background: var(--assurance-ink); border-left: 12px solid var(--assurance-orange); box-shadow: 16px 16px 0 var(--assurance-acid); }
+.readiness-card { margin: 4.5rem max(8vw,2rem); padding: clamp(1.4rem,3vw,2.4rem); color: white; background: var(--assurance-ink); border-left: 12px solid var(--assurance-orange); }
 .readiness-card.ready { border-left-color: var(--assurance-cyan); }
 .readiness-status { display: inline-flex; align-items: center; gap: .55rem; padding: .55rem .7rem; color: var(--assurance-ink); background: var(--assurance-acid); font: 600 .5rem/1 "IBM Plex Mono",monospace; text-transform: uppercase; }
 .readiness-status i { width: 8px; height: 8px; background: var(--assurance-orange); border-radius: 50%; }
@@ -205,10 +205,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .assurance-view { padding-bottom: 58px; }
   .assurance-hero { min-height: 0; grid-template-columns: 1fr; gap: 3rem; padding: 4rem 1rem 3.5rem; }
   .assurance-hero h1 { font-size: 3.35rem; }
-  .assurance-hero h1 em { text-shadow: 4px 4px 0 var(--assurance-ink); }
   .assurance-actions { align-items: stretch; flex-direction: column; }
   .assurance-primary,.assurance-secondary { width: 100%; }
-  .decision-preview { min-height: 420px; box-shadow: 9px 9px 0 var(--assurance-cyan); transform: none; }
+  .decision-preview { min-height: 420px; }
   .decision-preview > p { margin-top: 3.5rem; font-size: 2rem; }
   .simple-flow { grid-template-columns: 1fr 1fr; }
   .simple-flow i { display: none; }
@@ -221,7 +220,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .intake-run,.decision-submit { align-items: stretch; flex-direction: column; }
   .review-context { top: 64px; padding: .75rem 1rem; }
   .review-context button { max-width: 120px; }
-  .readiness-card { margin: 3.5rem 1rem; padding: 1.2rem; box-shadow: 8px 8px 0 var(--assurance-acid); }
+  .readiness-card { margin: 3.5rem 1rem; padding: 1.2rem; }
   .readiness-workspace { scroll-margin-top: 64px; }
   .readiness-card h2 { font-size: 2.35rem; }
   .blocker { grid-template-columns: 34px 1fr; }
