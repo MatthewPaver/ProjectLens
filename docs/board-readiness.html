@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17202a">
+  <meta name="description" content="Check whether a project board pack is complete, internally consistent and ready for a human decision.">
+  <meta property="og:title" content="Project Evidence Desk | Board readiness">
+  <meta property="og:description" content="See what changed, what conflicts, what is missing and what the board can decide.">
+  <meta property="og:type" content="website">
+  <title>Project Evidence Desk | Board readiness</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Libre+Franklin:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,650&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="board-readiness.css">
+</head>
+<body>
+  <a class="skip-link" href="#review">Skip to board review</a>
+
+  <header class="site-header">
+    <a class="suite-brand" href="board-readiness.html" aria-label="Project Evidence Desk board readiness">
+      <span class="suite-mark" aria-hidden="true">PE</span>
+      <span><strong>Project Evidence Desk</strong><small>Board readiness</small></span>
+    </a>
+    <nav aria-label="Evidence Desk">
+      <a class="active" href="board-readiness.html">Board review</a>
+      <a href="https://matthewpaver.github.io/MeetingProof/">Meeting record</a>
+      <a href="change-assurance.html">Change review</a>
+      <a href="https://matthewpaver.github.io/DecisionGraph/">Decision memory</a>
+    </nav>
+    <span class="privacy-note">Runs in this browser</span>
+  </header>
+
+  <main id="review">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="kicker">Before the project board</p>
+        <h1>Know what the pack can prove.</h1>
+        <p class="lede">Bring the current update, previous commitments, RAID log, actions and schedule together. See material changes, contradictions and missing evidence before people spend the meeting finding them.</p>
+        <div class="hero-actions">
+          <button class="button primary" id="loadExample" type="button">Review the Northstar example</button>
+          <a class="button secondary" href="#intake">Use my own files</a>
+        </div>
+        <dl class="boundary-list" aria-label="Product boundaries">
+          <div><dt>Files</dt><dd>Stay in this tab</dd></div>
+          <div><dt>Checks</dt><dd>Deterministic and inspectable</dd></div>
+          <div><dt>Decision</dt><dd>Remains with the board</dd></div>
+        </dl>
+      </div>
+      <aside class="example-brief" aria-label="Example board brief">
+        <div class="brief-header"><span>Northstar / July board</span><b>Not ready</b></div>
+        <p class="brief-question">Can the board retain a green delivery status?</p>
+        <dl>
+          <div><dt>5</dt><dd>findings need review</dd></div>
+          <div><dt>3</dt><dd>decisions required</dd></div>
+          <div><dt>2</dt><dd>owners missing</dd></div>
+        </dl>
+        <p class="brief-answer">The finish moved 73 days and an approval condition remains open. The current narrative does not acknowledge either point.</p>
+      </aside>
+    </section>
+
+    <ol class="workflow" aria-label="Board readiness workflow">
+      <li class="current"><span>1</span><div><b>Set the review</b><small>Board date and evidence period</small></div></li>
+      <li><span>2</span><div><b>Add evidence</b><small>Pack, logs and schedule</small></div></li>
+      <li><span>3</span><div><b>Check findings</b><small>Changes, gaps and conflicts</small></div></li>
+      <li><span>4</span><div><b>Prepare the board</b><small>Questions and decision record</small></div></li>
+    </ol>
+
+    <section class="intake" id="intake" aria-labelledby="intake-title">
+      <div class="section-heading">
+        <div><p class="kicker">1–2 / Evidence intake</p><h2 id="intake-title">Start with the records people already use.</h2></div>
+        <p>No new project platform is required for this demonstrator. Add familiar exports, or load the safe example to see the full review.</p>
+      </div>
+
+      <div class="review-fields">
+        <label for="projectName"><span>Project</span><input id="projectName" type="text" autocomplete="organization" placeholder="Project name"></label>
+        <label for="boardDate"><span>Board date</span><input id="boardDate" type="date"></label>
+        <label for="reviewOwner"><span>Review owner</span><input id="reviewOwner" type="text" autocomplete="name" placeholder="Name or role"></label>
+      </div>
+
+      <div class="evidence-register" aria-labelledby="evidence-title">
+        <div class="register-head">
+          <div><span>Evidence register</span><h3 id="evidence-title">Documents in this review</h3></div>
+          <small id="evidenceStatus" role="status">0 of 5 evidence groups present</small>
+        </div>
+        <div class="evidence-table" role="table" aria-label="Board evidence files">
+          <div class="table-row table-labels" role="row">
+            <span role="columnheader">Evidence</span><span role="columnheader">Why it matters</span><span role="columnheader">Status</span><span role="columnheader">File</span>
+          </div>
+          <label class="table-row" for="currentPack">
+            <span role="cell"><b>Current board pack</b><small>Required</small></span><span role="cell">What the board is being told now</span><span class="file-state" data-file-state="current" role="cell">Missing</span><span role="cell"><input id="currentPack" data-file-kind="current" type="file" accept=".txt,.md,.pdf,.doc,.docx"><i data-file-name="current">Choose file</i></span>
+          </label>
+          <label class="table-row" for="previousPack">
+            <span role="cell"><b>Previous board pack</b><small>Required</small></span><span role="cell">What changed since the last meeting</span><span class="file-state" data-file-state="previous" role="cell">Missing</span><span role="cell"><input id="previousPack" data-file-kind="previous" type="file" accept=".txt,.md,.pdf,.doc,.docx"><i data-file-name="previous">Choose file</i></span>
+          </label>
+          <label class="table-row" for="raidLog">
+            <span role="cell"><b>RAID log</b><small>Recommended</small></span><span role="cell">Exposure, ownership and review dates</span><span class="file-state" data-file-state="raid" role="cell">Missing</span><span role="cell"><input id="raidLog" data-file-kind="raid" type="file" accept=".csv,.xlsx,.xls"><i data-file-name="raid">Choose file</i></span>
+          </label>
+          <label class="table-row" for="actionLog">
+            <span role="cell"><b>Actions and decisions</b><small>Recommended</small></span><span role="cell">Commitments and approval conditions</span><span class="file-state" data-file-state="actions" role="cell">Missing</span><span role="cell"><input id="actionLog" data-file-kind="actions" type="file" accept=".csv,.xlsx,.xls"><i data-file-name="actions">Choose file</i></span>
+          </label>
+          <label class="table-row" for="scheduleFile">
+            <span role="cell"><b>Schedule updates</b><small>Recommended</small></span><span role="cell">Movement, logic and milestones</span><span class="file-state" data-file-state="schedule" role="cell">Missing</span><span role="cell"><input id="scheduleFile" data-file-kind="schedule" type="file" accept=".xer,.csv,.xlsx,.xls"><i data-file-name="schedule">Choose file</i></span>
+          </label>
+        </div>
+        <div class="register-actions">
+          <p>PDF and Office files are registered by name in this public prototype. The existing schedule review parses XER and CSV evidence in-browser.</p>
+          <div><button class="text-button" id="clearEvidence" type="button">Clear files</button><button class="button primary" id="runReview" type="button" disabled>Check board readiness</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="results" id="results" hidden aria-live="polite">
+      <div class="results-strip">
+        <div><span>Active review</span><strong id="resultProject">Northstar Grid Connection</strong></div>
+        <div><span>Board date</span><strong id="resultDate">24 July 2026</strong></div>
+        <div><span>Evidence version</span><strong id="resultVersion">July pack / review 01</strong></div>
+        <button id="startAgain" type="button">Start another review</button>
+      </div>
+
+      <section class="readiness-summary" aria-labelledby="readiness-title">
+        <div class="readiness-copy">
+          <p class="status-label"><span aria-hidden="true"></span> Not ready for decision</p>
+          <h2 id="readiness-title">The evidence does not support the green status.</h2>
+          <p>The board can discuss recovery options, but it should not confirm the current delivery status until the schedule movement, open condition and risk ownership are resolved.</p>
+        </div>
+        <dl class="readiness-counts">
+          <div><dt>5</dt><dd>Findings</dd></div>
+          <div><dt>2</dt><dd>Direct conflicts</dd></div>
+          <div><dt>3</dt><dd>Board decisions</dd></div>
+        </dl>
+      </section>
+
+      <section class="findings" aria-labelledby="findings-title">
+        <div class="section-heading compact">
+          <div><p class="kicker">3 / Check findings</p><h2 id="findings-title">What needs attention before the meeting</h2></div>
+          <p>Select a finding only after checking it against the named source.</p>
+        </div>
+        <div class="finding-table" role="table" aria-label="Board readiness findings">
+          <div class="finding-row finding-labels" role="row">
+            <span role="columnheader">Review</span><span role="columnheader">Finding</span><span role="columnheader">Source</span><span role="columnheader">Board action</span>
+          </div>
+          <div id="findingRows"></div>
+        </div>
+      </section>
+
+      <section class="board-output" aria-labelledby="board-output-title">
+        <div class="section-heading compact">
+          <div><p class="kicker">4 / Prepare the board</p><h2 id="board-output-title">A shorter meeting with clearer decisions</h2></div>
+          <p>This is a decision brief, not an automatic recommendation. The source table remains attached to every statement.</p>
+        </div>
+        <div class="output-grid">
+          <article class="decision-brief">
+            <div class="card-heading"><span>Decision brief</span><b>Draft</b></div>
+            <ol id="decisionList"></ol>
+            <div class="human-gate">
+              <label for="finalReviewer">Reviewed by</label>
+              <input id="finalReviewer" type="text" autocomplete="name" placeholder="Name or role">
+              <label class="check-label"><input id="finalCheck" type="checkbox"><span>I checked the selected findings against their sources.</span></label>
+              <button class="button primary" id="approveBrief" type="button" disabled>Mark brief reviewed</button>
+            </div>
+          </article>
+          <aside class="audit-card">
+            <div class="card-heading"><span>Evidence trail</span><b>Browser-local</b></div>
+            <ol class="audit-timeline">
+              <li><time>09:12</time><div><strong>Evidence set registered</strong><p>Five source groups attached to review 01.</p></div></li>
+              <li><time>09:13</time><div><strong>Deterministic checks completed</strong><p>Date, ownership, status and cross-record rules applied.</p></div></li>
+              <li><time>Now</time><div><strong>Human review required</strong><p id="auditReviewText">0 of 5 findings checked against source.</p></div></li>
+              <li class="pending"><time>Next</time><div><strong>Board decision</strong><p>Record the outcome and any approval conditions.</p></div></li>
+            </ol>
+          </aside>
+        </div>
+        <div class="export-bar">
+          <p id="exportStatus" role="status">Review all five findings and name the reviewer before export.</p>
+          <div><button class="button secondary" id="downloadJson" type="button" disabled>Download evidence JSON</button><button class="button primary" id="downloadBrief" type="button" disabled>Download board brief</button></div>
+        </div>
+      </section>
+    </section>
+
+    <section class="suite-map" aria-labelledby="suite-title">
+      <div><p class="kicker">One delivery story</p><h2 id="suite-title">Each tool closes a different evidence gap.</h2></div>
+      <ol>
+        <li><span>Before</span><strong>MeetingProof</strong><p>Capture commitments and keep the supporting line.</p><a href="https://matthewpaver.github.io/MeetingProof/">Open meeting record</a></li>
+        <li class="current"><span>Now</span><strong>Board readiness</strong><p>Reconcile what changed, conflicts and remains unowned.</p><a href="#review">Use this review</a></li>
+        <li><span>During</span><strong>DecisionGraph</strong><p>Find comparable decisions and their measured outcomes.</p><a href="https://matthewpaver.github.io/DecisionGraph/">Open decision memory</a></li>
+        <li><span>After</span><strong>Condition register</strong><p>Preserve the decision, owner, due date and open conditions.</p><a href="change-assurance.html#follow-up">Open follow-up</a></li>
+      </ol>
+    </section>
+
+    <section class="source-note">
+      <strong>About the example</strong>
+      <p>Northstar is a clearly labelled synthetic governance pack designed to exercise known control failures. ProjectLens’s separate public-evidence view uses official UK Government Major Projects Portfolio releases and preserves the published source trail.</p>
+      <a href="index.html">Inspect the official public evidence →</a>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="board-readiness.js"></script>
+</body>
+</html>
