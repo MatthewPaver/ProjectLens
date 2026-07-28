@@ -7,9 +7,13 @@
 ![License](https://img.shields.io/badge/Code-MIT-blue?style=flat-square)
 [![Validate](https://github.com/MatthewPaver/ProjectLens/actions/workflows/validate.yml/badge.svg)](https://github.com/MatthewPaver/ProjectLens/actions/workflows/validate.yml)
 
+![ProjectLens change assurance workspace comparing a change pack narrative against its schedule evidence](docs/assets/change-assurance-overview.png)
+
+[**2-minute walkthrough**](docs/assets/projectlens-evidence-demo.mp4) — a paced, silent MP4 product tour.
+
 **Project Evidence Desk for board readiness**
 
-ProjectLens helps a reviewer decide what a project board pack can prove. It brings the current and previous pack, RAID log, actions, decisions and schedule evidence into one review, surfaces source-linked conflicts and gaps, prepares the questions the board must answer and keeps approval conditions open until they are closed. Its supporting products provide meeting follow-up, decision memory, longitudinal UK major-project evidence and a detailed browser-local Primavera P6 XER assurance workflow.
+ProjectLens does one job: it compares what a change pack's narrative claims against what its schedule evidence shows, so a board can make its decision on evidence rather than on the polish of the pack. It surfaces source-linked conflicts and gaps, prepares the questions the board must answer, records the human decision and keeps approval conditions open until they are closed.
 
 [Prepare a board review](https://matthewpaver.github.io/ProjectLens/board-readiness.html) · [Review a change pack](https://matthewpaver.github.io/ProjectLens/change-assurance.html) · [Explore public evidence](https://matthewpaver.github.io/ProjectLens/) · [Open the detailed XER review](https://matthewpaver.github.io/ProjectLens/schedule-review.html) · [Portfolio](https://matthewpaver.github.io/MatthewPaver/store/)
 
@@ -122,8 +126,6 @@ Open [the live schedule evidence review](https://matthewpaver.github.io/ProjectL
 
 You can switch between executive and analyst views, inspect why each change was prioritised, save assurance actions in the browser and download the complete evidence-linked review pack as JSON.
 
-The repository also includes a [paced, silent MP4 product walkthrough](docs/assets/projectlens-evidence-demo.mp4) for the LinkedIn launch.
-
 ## Rebuild the public dataset
 
 ```bash
@@ -193,6 +195,22 @@ competitor-profiles/     dated market scan and source notes
 Processing/analysis/     legacy schedule-analysis modules
 Processing/tests/        deterministic and integration tests
 ```
+
+## Related work
+
+Supporting products in this repository and alongside it provide meeting follow-up (MeetingProof), decision memory ([DecisionGraph](https://github.com/MatthewPaver/DecisionGraph)), longitudinal UK major-project evidence (the GMPP explorer in [`docs/`](docs)) and a detailed browser-local Primavera P6 XER assurance workflow ([schedule review](https://matthewpaver.github.io/ProjectLens/schedule-review.html)). None of them is required to complete a change review.
+
+## History
+
+The arc, from the repository's own log:
+
+- **2025-04 to 2025-05** — repository created; initial schedule-processing pipeline and data uploads.
+- **2025-11 to 2026-03** — housekeeping: README restructure, MIT licence, `.gitignore`, `requirements.txt`, standardised setup.
+- **2026-05** — validation workflow, CI badge, reviewer notes and packaging; portfolio quick read.
+- **2026-07-14 to 2026-07-15** — rebuilt as an evidence-linked assurance product: risk command centre, self-serve evidence room, XER comparison turned into evidence assurance, change assurance workflow.
+- **2026-07-20** — project evidence desk built.
+- **2026-07-27** — [v1.0.0 release](https://github.com/MatthewPaver/ProjectLens/releases/tag/v1.0.0).
+- **2026-07-28** — browser workflows verified end-to-end and generated data removed from the tree.
 
 ## License
 
