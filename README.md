@@ -147,9 +147,14 @@ Then open `http://localhost:8000`.
 
 ```bash
 make test
+make browser-test
 ```
 
 Tests cover the board-readiness human gate, original schedule-processing modules, public-data counts, DCA precedence, matching, transitions, theme classification, score boundaries and the synthetic XER evidence contract. Playwright checks exercise the board review, one-click change and XER demos, real browser file inputs, exported assurance packs, and desktop and mobile layouts.
+
+The legacy Python pipeline reads optional local settings from `config.json`.
+Copy [`config.example.json`](config.example.json) when exercising that path; the
+public browser products require no configuration or credentials.
 
 ## Competitive position
 

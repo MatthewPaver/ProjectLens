@@ -16,3 +16,7 @@ jobs:
         run: make install
       - name: Run tests
         run: make test
+      - name: Install Chromium
+        run: .venv/bin/python -m playwright install --with-deps chromium
+      - name: Run browser workflows
+        run: .venv/bin/python scripts/run_browser_tests.py

@@ -1,0 +1,7 @@
+{
+  "logging_level": "INFO",
+  "analysis_parameters": {
+    "slippage_threshold_major": 14,
+    "forecast_confidence_threshold": 0.7
+  }
+}
