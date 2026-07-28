@@ -3,7 +3,7 @@ VENV ?= .venv
 PYTHON_BIN := $(VENV)/bin/python
 PIP_BIN := $(PYTHON_BIN) -m pip
 
-.PHONY: venv install serve web pipeline public-data test
+.PHONY: venv install serve web pipeline public-data test browser-test
 
 venv:
 	$(PYTHON) -m venv $(VENV)
@@ -26,3 +26,7 @@ public-data: install
 
 test: install
 	$(PYTHON_BIN) -m pytest Processing/tests -q
+
+browser-test: install
+	$(PYTHON_BIN) -m playwright install chromium
+	$(PYTHON_BIN) scripts/run_browser_tests.py
