@@ -1,23 +1,43 @@
 # ProjectLens
 
+ProjectLens is built for the reviewer who has to tell a project board whether a change pack can be trusted — before the meeting, using only the pack's own evidence.
+
+## The problem
+
+A project board usually decides on the polish of the pack, because nobody has time to reconcile the narrative against the schedules, risks, actions and prior conditions submitted alongside it. That is how a green status narrative claiming "no change to the finish date" gets approved while the current schedule has actually moved it by 73 days — exactly the failure the bundled Northstar example reproduces, alongside a high risk with no accountable owner, an overdue action and a prior approval condition still open. When the evidence disagrees with the story and no one checks, the board approves the story.
+
+**Who it's for:** the project controls reviewer or PMO lead preparing a board decision on a change pack.
+
+**What you get:**
+
+- **Source-linked conflicts and gaps** — each finding names the evidence item that produced it (current pack, previous pack, RAID, commitments, schedule), so the board question writes itself.
+- **A prepared decision, not a dashboard** — one readiness verdict, at most three blockers, and the specific questions to send for answers before the meeting.
+- **A durable record** — the human decision, its owner, rationale and approval conditions are preserved, and each condition stays open until it is closed or formally waived.
+
 <div align="center">
+
+![ProjectLens change assurance workspace comparing a change pack narrative against its schedule evidence](docs/assets/change-assurance-overview.png)
+
+[**2-minute walkthrough**](docs/assets/projectlens-evidence-demo.mp4) — a paced, silent MP4 product tour.
 
 ![Python](https://img.shields.io/badge/Python-3.11-3670A0?style=flat-square&logo=python&logoColor=ffdd54)
 ![Public data](https://img.shields.io/badge/Data-UK_GMPP-d7ff4f?style=flat-square)
 ![License](https://img.shields.io/badge/Code-MIT-blue?style=flat-square)
 [![Validate](https://github.com/MatthewPaver/ProjectLens/actions/workflows/validate.yml/badge.svg)](https://github.com/MatthewPaver/ProjectLens/actions/workflows/validate.yml)
 
-![ProjectLens change assurance workspace comparing a change pack narrative against its schedule evidence](docs/assets/change-assurance-overview.png)
-
-[**2-minute walkthrough**](docs/assets/projectlens-evidence-demo.mp4) — a paced, silent MP4 product tour.
-
-**Project Evidence Desk for board readiness**
-
-ProjectLens does one job: it compares what a change pack's narrative claims against what its schedule evidence shows, so a board can make its decision on evidence rather than on the polish of the pack. It surfaces source-linked conflicts and gaps, prepares the questions the board must answer, records the human decision and keeps approval conditions open until they are closed.
-
 [Prepare a board review](https://matthewpaver.github.io/ProjectLens/board-readiness.html) · [Review a change pack](https://matthewpaver.github.io/ProjectLens/change-assurance.html) · [Explore public evidence](https://matthewpaver.github.io/ProjectLens/) · [Open the detailed XER review](https://matthewpaver.github.io/ProjectLens/schedule-review.html) · [Portfolio](https://matthewpaver.github.io/MatthewPaver/store/)
 
 </div>
+
+## Non-goals
+
+- It does not establish contractual entitlement, delay causation or a probability of failure — findings are prompts for human verification, not claims.
+- It does not replace the board. The workflow ends by recording a human decision with its rationale and conditions; the system never makes the decision.
+- It does not read Microsoft Project (MSP) or PDF schedules. The browser workflows parse Primavera P6 XER exports and CSV evidence only.
+
+## Why this design
+
+The central trade-off is browser-local XER comparison instead of a hosted platform. Schedule submissions are commercially sensitive, so the comparison runs entirely in the browser: XER files, decisions and conditions never leave the machine, which also means a reviewer can evaluate the product against a real pack with no install, no account and no data-sharing approval. The cost is deliberate: records persist only in one browser's local storage, there is no multi-user collaboration, and there are no server-side schedule connectors, permissions or organisational audit logs — a production internal version would need all of those (see Boundaries). That trade is acceptable because the target user is a single reviewer preparing one board meeting, and the fastest route to trust is letting them test it on private data without asking anyone's permission.
 
 ## Why it exists
 

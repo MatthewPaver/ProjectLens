@@ -384,6 +384,49 @@ function formatTimestamp(value) {
   return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }).format(new Date(value));
 }
 
+function decisionExportText() {
+  const decisions = storage(storageKeys.decisions);
+  const conditions = storage(storageKeys.conditions);
+  const lines = ["# ProjectLens decision record", ""];
+  decisions.forEach(item => {
+    lines.push(`## ${item.project} — ${item.decision}`);
+    lines.push(`- Date: ${formatTimestamp(item.createdAt)}`);
+    lines.push(`- Verdict: ${item.decision}`);
+    lines.push(`- Decision owner: ${item.owner}`);
+    lines.push(`- Rationale: ${item.rationale}`);
+    lines.push(`- Evidence version: ${item.evidenceVersion}`);
+    if (item.unresolved) lines.push(`- Unresolved blockers preserved: ${item.unresolved}`);
+    const linked = conditions.filter(condition => condition.decisionId === item.id);
+    if (linked.length) {
+      lines.push("- Conditions:");
+      linked.forEach(condition => lines.push(`  - ${condition.condition} (owner: ${condition.owner || "Unassigned"} · due: ${condition.due || "not set"} · ${condition.closed ? "closed" : "open"})`));
+    }
+    lines.push("");
+  });
+  return `${lines.join("\n").trim()}\n`;
+}
+
+async function exportDecisions() {
+  if (!storage(storageKeys.decisions).length) {
+    showToast("No decision has been recorded in this browser yet.");
+    return;
+  }
+  const text = decisionExportText();
+  try {
+    await navigator.clipboard.writeText(text);
+    $("#exportFallback").hidden = true;
+    showToast("Copied — the decision record is on your clipboard.");
+  } catch {
+    const fallback = $("#exportFallback");
+    const area = $("#exportFallbackText");
+    fallback.hidden = false;
+    area.value = text;
+    area.focus();
+    area.select();
+    showToast("Clipboard unavailable — select and copy the record below.");
+  }
+}
+
 function saveEvidenceRequest() {
   const review = assuranceState.review;
   if (!review) return;
@@ -488,6 +531,7 @@ function bindEvents() {
   });
   $("#saveEvidenceRequest").addEventListener("click", saveEvidenceRequest);
   $("#decisionForm").addEventListener("submit", saveDecision);
+  $("#exportDecisions").addEventListener("click", exportDecisions);
   window.addEventListener("hashchange", () => showView(window.location.hash.slice(1)));
 }
 

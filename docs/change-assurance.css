@@ -168,7 +168,14 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .register-heading { max-width: 1050px; }
 .register-heading h1 { margin: 1rem 0; font: 400 clamp(3.5rem,7vw,7rem)/.85 "Archivo Black",sans-serif; letter-spacing: -.07em; text-transform: uppercase; }
 .register-heading p { max-width: 700px; color: var(--assurance-muted); font-size: .9rem; line-height: 1.6; }
+.register-actions { display: flex; align-items: center; gap: 1rem; margin-top: 2.2rem; }
+.register-actions .assurance-secondary { min-height: 44px; padding: .8rem 1rem; }
+.register-actions small { max-width: 460px; color: var(--assurance-muted); font-size: .6rem; line-height: 1.5; }
+.export-fallback { margin-top: 1rem; }
+.export-fallback span { display: block; margin-bottom: .5rem; color: var(--assurance-orange); font: 600 .5rem/1 "IBM Plex Mono",monospace; text-transform: uppercase; }
+.export-fallback textarea { width: 100%; box-sizing: border-box; padding: .9rem; color: var(--assurance-ink); background: var(--assurance-white); border: 1px solid var(--assurance-ink); font: 400 .68rem/1.55 "IBM Plex Mono",monospace; resize: vertical; }
 .register-list { display: grid; gap: .7rem; margin-top: 3rem; }
+.register-actions ~ .register-list { margin-top: 1.6rem; }
 .register-empty { padding: 2rem; color: var(--assurance-muted); border: 1px dashed var(--assurance-line); }
 .register-row { display: grid; grid-template-columns: 1fr auto; gap: 1rem; padding: 1.1rem; background: rgba(255,255,255,.48); border: 1px solid var(--assurance-line); }
 .register-row span,.register-row strong,.register-row small { display: block; }

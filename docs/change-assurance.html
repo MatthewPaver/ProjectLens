@@ -180,6 +180,14 @@
 
     <section class="assurance-view register-view" data-view="decisions" hidden>
       <div class="register-heading"><span>Decision register</span><h1>What did we decide?</h1><p>Decision records are stored in this browser for the demonstrator.</p></div>
+      <div class="register-actions">
+        <button class="assurance-secondary" id="exportDecisions" type="button">Export record</button>
+        <small>Copies the recorded decisions — date, verdict, owner, rationale and conditions — as plain text for your own register.</small>
+      </div>
+      <div class="export-fallback" id="exportFallback" hidden>
+        <label for="exportFallbackText"><span>Clipboard unavailable — select and copy the record below</span>
+        <textarea id="exportFallbackText" rows="12" readonly spellcheck="false"></textarea></label>
+      </div>
       <div id="decisionRegister" class="register-list"></div>
     </section>
 
@@ -189,7 +197,7 @@
     </section>
   </main>
 
-  <footer class="site-footer">Built by Matthew Paver — <a href="https://matthewpaver.github.io/store/apps/projectlens/">product notes</a> · <a href="https://github.com/MatthewPaver/ProjectLens">source</a> · <a href="https://www.linkedin.com/in/matthew-paver-534262166/">LinkedIn</a></footer>
+  <footer class="site-footer">Built by Matthew Paver — <a href="https://matthewpaver.github.io/store/apps/projectlens/">product notes</a> · <a href="https://github.com/MatthewPaver/ProjectLens">source</a> · <a href="https://www.linkedin.com/in/matthew-paver-534262166/">LinkedIn</a> · <a href="https://matthewpaver.github.io/">matthewpaver.github.io</a></footer>
 
   <div class="assurance-toast" id="assuranceToast" role="status" aria-live="polite"></div>
   <script src="change-assurance.js"></script>

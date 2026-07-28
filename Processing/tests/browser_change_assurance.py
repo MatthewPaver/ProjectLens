@@ -53,6 +53,31 @@ def run_desktop(browser):
     page.locator("#decisionRegister .register-row").wait_for(state="visible")
     assert page.locator("#decisionRegister .register-row").count() == 1
 
+    page.evaluate(
+        """() => {
+            window.__copied = null;
+            Object.defineProperty(navigator, "clipboard", {
+                configurable: true,
+                value: { writeText: text => { window.__copied = text; return Promise.resolve(); } },
+            });
+        }"""
+    )
+    page.get_by_role("button", name="Export record").click()
+    page.wait_for_function("() => window.__copied !== null")
+    copied = page.evaluate("() => window.__copied")
+    assert "Verdict: Approve with conditions" in copied, copied
+    assert "Decision owner: Change Authority Chair" in copied, copied
+    assert "Protect the regression-test window" in copied, copied
+    assert page.locator("#exportFallback").is_hidden()
+
+    page.evaluate(
+        'Object.defineProperty(navigator, "clipboard", { configurable: true, value: undefined })'
+    )
+    page.get_by_role("button", name="Export record").click()
+    page.locator("#exportFallback").wait_for(state="visible")
+    fallback_text = page.locator("#exportFallbackText").input_value()
+    assert "Rationale: Proceed only after the named controls are confirmed and owned." in fallback_text
+
     page.locator('a[href="#follow-up"]').click()
     assert page.locator("#conditionRegister .register-row").count() == 1
     assert page.locator("#conditionNavCount").inner_text() == "1"

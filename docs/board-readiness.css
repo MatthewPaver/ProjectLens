@@ -229,6 +229,9 @@ label.table-row:hover { background: #f6f1e7; }
   .toast { left: 1rem; right: 1rem; bottom: 70px; }
 }
 
+.site-footer { padding: 1.1rem max(4vw,2rem); border-top: 1px solid var(--line); color: var(--muted); font: 500 .6rem/1.5 var(--mono); text-transform: uppercase; letter-spacing: .04em; }
+.site-footer a { color: inherit; text-underline-offset: .25em; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .toast { transition: none; }
