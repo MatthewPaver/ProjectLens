@@ -3,7 +3,7 @@ VENV ?= .venv
 PYTHON_BIN := $(VENV)/bin/python
 PIP_BIN := $(PYTHON_BIN) -m pip
 
-.PHONY: venv install serve web pipeline public-data test browser-test
+.PHONY: venv install pipeline public-data test browser-test
 
 venv:
 	$(PYTHON) -m venv $(VENV)
@@ -11,12 +11,6 @@ venv:
 install: venv
 	$(PIP_BIN) install --upgrade pip
 	$(PIP_BIN) install -r requirements.txt
-
-serve: install
-	$(PYTHON_BIN) Website/server.py
-
-web:
-	$(PYTHON) Website/run_website.py
 
 pipeline: install
 	$(PYTHON_BIN) Processing/main.py
