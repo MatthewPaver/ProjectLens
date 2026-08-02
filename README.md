@@ -68,6 +68,19 @@ You can switch between executive and analyst views, inspect why each change was 
 
 Users can also register their own evidence locally in the browser; the detailed schedule module parses XER and CSV evidence without uploading it.
 
+## Bring your own XER
+
+The [change assurance review](https://matthewpaver.github.io/ProjectLens/change-assurance.html) works on your own schedules, not just the demo:
+
+1. Export two Primavera P6 schedules as XER files (**File → Export → Primavera XER (.xer)**): the comparison point (previous update or baseline) and the latest submission.
+2. Open the review, select **Review my change pack**, and choose the two files. They are parsed in your browser and never uploaded.
+3. Paste the progress narrative that accompanied the update (optional, but required for contradiction checks).
+4. Run the check, resolve or accept the blockers, and record the decision.
+
+No XER to hand? Use the safe synthetic pair from the demo: [northstar-previous.xer](https://matthewpaver.github.io/ProjectLens/demo/northstar-previous.xer) and [northstar-current.xer](https://matthewpaver.github.io/ProjectLens/demo/northstar-current.xer).
+
+The parser is exercised against the bundled Northstar fixtures; real-world XER exports vary, and the [Boundaries](#boundaries) section describes what ProjectLens deliberately does not attempt.
+
 ## Public evidence
 
 Beyond the private change-pack workflow, ProjectLens joins seven annual Government Major Projects Portfolio releases into an inspectable history: which published delivery-confidence ratings worsened, which end dates changed and by how much, what explanations departments are publishing, and which projects have left the portfolio without a confirmed outcome. The full method, the score definition and the current evidence-base counts are in [`docs/method.md`](docs/method.md). Source links and licensing notes are in [`Data/public/README.md`](Data/public/README.md).
