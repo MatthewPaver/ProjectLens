@@ -77,7 +77,10 @@ The [change assurance review](https://matthewpaver.github.io/ProjectLens/change-
 3. Paste the progress narrative that accompanied the update (optional, but required for contradiction checks).
 4. Run the check, resolve or accept the blockers, and record the decision.
 
-No XER to hand? Use the safe synthetic pair from the demo: [northstar-previous.xer](https://matthewpaver.github.io/ProjectLens/demo/northstar-previous.xer) and [northstar-current.xer](https://matthewpaver.github.io/ProjectLens/demo/northstar-current.xer).
+No XER to hand? Two safe synthetic projects are published so the parser is exercised beyond a single pack:
+
+- Northstar: [previous](https://matthewpaver.github.io/ProjectLens/demo/northstar-previous.xer) · [current](https://matthewpaver.github.io/ProjectLens/demo/northstar-current.xer)
+- Riverside: [previous](https://matthewpaver.github.io/ProjectLens/demo/riverside-previous.xer) · [current](https://matthewpaver.github.io/ProjectLens/demo/riverside-current.xer) · [narrative](https://matthewpaver.github.io/ProjectLens/demo/riverside-narrative.txt)
 
 The parser is exercised against the bundled Northstar fixtures; real-world XER exports vary, and the [Boundaries](#boundaries) section describes what ProjectLens deliberately does not attempt.
 
