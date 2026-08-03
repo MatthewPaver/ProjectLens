@@ -97,3 +97,21 @@ def test_change_assurance_exposes_one_simple_decision_workflow():
     assert "fetch(\"demo/" in script
     assert "prefers-reduced-motion" in stylesheet
     assert "Files stay here" in page
+
+
+def test_riverside_pair_is_a_second_comparable_project():
+    # second synthetic pack so stranger demos are not Northstar-only
+    previous = read_xer_tables(DOCS / "demo" / "riverside-previous.xer")
+    current = read_xer_tables(DOCS / "demo" / "riverside-current.xer")
+    narrative = (DOCS / "demo" / "riverside-narrative.txt").read_text(encoding="utf-8").lower()
+
+    assert previous["PROJECT"][0]["proj_short_name"] == "RIVERSIDE SUBSTATION UPGRADE"
+    assert current["PROJECT"][0]["proj_short_name"] == "RIVERSIDE SUBSTATION UPGRADE"
+    assert previous["PROJECT"][0]["proj_short_name"] != "NORTHSTAR GRID CONNECTION"
+
+    previous_finish = datetime.fromisoformat(previous["PROJECT"][0]["scd_end_date"])
+    current_finish = datetime.fromisoformat(current["PROJECT"][0]["scd_end_date"])
+    assert (current_finish - previous_finish).days > 30
+
+    assert "unchanged" in narrative or "on track" in narrative
+    assert any(code.startswith("RS-") for code in {row["task_code"] for row in current["TASK"]})
