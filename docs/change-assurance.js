@@ -291,6 +291,9 @@ function renderReview(review) {
   renderPrecedentPanel({ loading: true });
   void loadPrecedents(review);
 
+  // keep the differentiator visible — open precedents panel by default after readiness
+  openPrecedentSection({ scroll: false });
+
   $("#packIntake").hidden = true;
   $("#readinessWorkspace").hidden = false;
   $("#requestPanel").hidden = true;
@@ -344,16 +347,34 @@ function buildPrecedentQuery(review) {
   ].filter(Boolean).join("\n\n");
 }
 
+function openPrecedentSection({ scroll = true } = {}) {
+  const evidence = $("#supportingEvidence") || document.querySelector(".supporting-evidence");
+  if (evidence) evidence.open = true;
+  if (scroll) {
+    const target = $("#precedentSection") || evidence;
+    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
 function renderPrecedentPanel({ loading = false, offline = false } = {}) {
   const host = $("#comparableCases");
   const summaryHost = $("#precedentSummary");
   const statusHost = $("#precedentStatus");
+  const sectionGate = $("#precedentSectionGate");
   if (!host) return;
 
   if (loading) {
-    host.innerHTML = `<article class="comparable-case"><span>Retrieving</span><strong>Cited precedent search</strong><p>Asking the local RAG sidecar for similar past decisions…</p><small>XER files stay in this browser</small></article>`;
+    // three skeletons so a 3–8s retrieve doesn't look like a broken one-card grid
+    host.innerHTML = [1, 2, 3].map(n => `
+      <article class="comparable-case is-skeleton" aria-hidden="true">
+        <span>Retrieving ${String(n).padStart(2, "0")}</span>
+        <strong>Loading cited precedent</strong>
+        <p>Asking the RAG sidecar for similar past decisions…</p>
+        <small>XER files stay in this browser</small>
+      </article>`).join("");
     if (summaryHost) summaryHost.hidden = true;
-    if (statusHost) statusHost.textContent = "Hybrid retrieve in progress";
+    if (sectionGate) sectionGate.hidden = true;
+    if (statusHost) statusHost.textContent = "Hybrid retrieve in progress — XER stays in this browser.";
     return;
   }
 
@@ -378,9 +399,10 @@ function renderPrecedentPanel({ loading = false, offline = false } = {}) {
     const semanticLabel = Number.isFinite(semantic)
       ? ` · semantic ${semantic.toFixed(2)}${weak ? " · weak" : ""}`
       : "";
+    const gateLabel = gate === "used" ? "Marked use" : gate === "ignored" ? "Marked ignore" : "Pending";
     return `
     <article class="comparable-case gate-${gate}${weak ? " weak-match" : ""}" data-precedent-id="${escapeHtml(item.id)}">
-      <span>${escapeHtml(item.id)} · ${offline ? "Offline fallback" : "Cited precedent"} · ${scoreLabel}${semanticLabel}</span>
+      <span>${escapeHtml(item.id)} · ${offline ? "Offline fallback" : "Cited precedent"} · ${scoreLabel}${semanticLabel}${weak ? " · WEAK" : ""}</span>
       <strong>${escapeHtml(item.title)}</strong>
       <p>${escapeHtml(item.decision)}</p>
       <small>${escapeHtml(item.outcome || "")}</small>
@@ -390,7 +412,7 @@ function renderPrecedentPanel({ loading = false, offline = false } = {}) {
       <div class="precedent-gate">
         <button type="button" data-gate="use" data-id="${escapeHtml(item.id)}">Use</button>
         <button type="button" data-gate="ignore" data-id="${escapeHtml(item.id)}">Ignore</button>
-        <i>${gate === "used" ? "Marked use" : gate === "ignored" ? "Marked ignore" : "Awaiting human gate"}</i>
+        <i>${gateLabel}</i>
       </div>
     </article>`;
   }).join("");
@@ -430,6 +452,7 @@ function updateDecisionGateState() {
   const pending = pendingPrecedentIds();
   const panel = $("#decisionPanel");
   const banner = $("#precedentGateBanner");
+  const sectionGate = $("#precedentSectionGate");
   const submit = $("#decisionForm")?.querySelector('button[type="submit"]');
   const locked = pending.length > 0;
   if (panel) panel.classList.toggle("is-gated-locked", locked);
@@ -437,6 +460,13 @@ function updateDecisionGateState() {
     banner.hidden = !locked;
     if (locked) {
       banner.textContent = `${pending.length} precedent card${pending.length === 1 ? "" : "s"} still need Use or Ignore. Use attaches the case to the decision record; Ignore records that you considered and dismissed it.`;
+    }
+  }
+  if (sectionGate) {
+    // one section-level gate label — not repeated on every card
+    sectionGate.hidden = !locked;
+    if (locked) {
+      sectionGate.textContent = `Awaiting human gate · ${pending.length} card${pending.length === 1 ? "" : "s"} still need Use or Ignore before save.`;
     }
   }
   if (submit) {
@@ -549,6 +579,16 @@ async function loadDemo() {
     assuranceState.files.previous = { name: "northstar-previous.xer", text: previousText };
     assuranceState.files.current = { name: "northstar-current.xer", text: currentText };
     $("#assuranceNarrative").value = narrative;
+    $("#assurancePreviousName").textContent = "northstar-previous.xer";
+    $("#assuranceCurrentName").textContent = "northstar-current.xer";
+    $$(".assurance-file").forEach(card => card.classList.add("loaded"));
+    $("#runAssuranceReview").disabled = false;
+    $("#intakeMessage").textContent = "Northstar demo pack loaded. Checking readiness…";
+    // show step 1 (intake) so the demo path matches the flow diagram, then auto-run
+    $("#packIntake").hidden = false;
+    $("#readinessWorkspace").hidden = true;
+    $("#packIntake").scrollIntoView({ behavior: "smooth", block: "start" });
+    await new Promise(resolve => setTimeout(resolve, 700));
     const previous = parseXer(previousText, assuranceState.files.previous.name);
     const current = parseXer(currentText, assuranceState.files.current.name);
     renderReview(analyseReview(previous, current, narrative));
@@ -691,9 +731,7 @@ function saveDecision(event) {
   if (pending.length) {
     showToast(`Mark Use or Ignore on ${pending.length} precedent card${pending.length === 1 ? "" : "s"} before saving.`);
     updateDecisionGateState();
-    $("#comparableCases")?.scrollIntoView({ behavior: "smooth", block: "center" });
-    const evidence = document.querySelector(".supporting-evidence");
-    if (evidence) evidence.open = true;
+    openPrecedentSection({ scroll: true });
     return;
   }
   const record = {
@@ -759,6 +797,7 @@ function bindEvents() {
   $("#assuranceCurrent").addEventListener("change", event => loadFile("current", event.target.files[0]));
   $("#runAssuranceReview").addEventListener("click", runReview);
   $("#startAnotherReview").addEventListener("click", resetReview);
+  $("#reviewPrecedents")?.addEventListener("click", () => openPrecedentSection({ scroll: true }));
   $("#requestAnswers").addEventListener("click", () => {
     $("#requestPanel").hidden = false;
     $("#requestPanel").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -768,8 +807,7 @@ function bindEvents() {
     updateDecisionGateState();
     const pending = pendingPrecedentIds();
     if (pending.length) {
-      const evidence = document.querySelector(".supporting-evidence");
-      if (evidence) evidence.open = true;
+      openPrecedentSection({ scroll: true });
       showToast(`Mark Use or Ignore on ${pending.length} precedent card${pending.length === 1 ? "" : "s"} before the decision can be saved.`);
     }
     $("#decisionPanel").scrollIntoView({ behavior: "smooth", block: "start" });
