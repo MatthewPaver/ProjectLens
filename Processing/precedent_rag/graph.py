@@ -8,8 +8,6 @@ from __future__ import annotations
 import os
 from typing import Any, TypedDict
 
-from langsmith import traceable
-
 from .retrieve import Embedder, hybrid_retrieve
 from .summarize import summarise_precedents
 
@@ -114,10 +112,6 @@ def _run_precedent_query_impl(
     }
 
 
-# only wrap with LangSmith when a key exists — avoids 401 spam from empty placeholders
-_traced_run = traceable(name="projectlens_precedent_query", run_type="chain")(_run_precedent_query_impl)
-
-
 def run_precedent_query(
     query: dict[str, Any],
     *,
@@ -127,5 +121,15 @@ def run_precedent_query(
 ) -> dict[str, Any]:
     """Public entry used by the FastAPI sidecar and the eval CLI."""
     _configure_langsmith()
-    runner = _traced_run if _langsmith_key() else _run_precedent_query_impl
+    runner = _run_precedent_query_impl
+    # LangSmith is optional — CI and offline hashing tests must not require it at import
+    if _langsmith_key():
+        try:
+            from langsmith import traceable
+
+            runner = traceable(name="projectlens_precedent_query", run_type="chain")(
+                _run_precedent_query_impl
+            )
+        except ImportError:
+            runner = _run_precedent_query_impl
     return runner(query, limit=limit, summarise=summarise, embedder=embedder)
