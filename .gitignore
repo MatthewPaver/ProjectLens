@@ -47,3 +47,7 @@ logs/
 
 # Local generated working files
 work/
+
+# Precedent RAG local secrets + embed cache
+.env
+Processing/precedent_rag/.cache/

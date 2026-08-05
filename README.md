@@ -61,8 +61,10 @@ Open [the live schedule evidence review](https://matthewpaver.github.io/ProjectL
 - a separate baseline, risk register, schedule basis and decision log
 - changed logic, constraints, float erosion and integrity findings
 - an approved change, an unlinked change and a deferred decision
-- a status narrative that understates the schedule movement
+- a **realistic period progress report** that still claims the key date is unchanged and asks the board only to “note progress”
 - a previous intervention that can be assessed against the later submission
+
+On [change assurance](https://matthewpaver.github.io/ProjectLens/change-assurance.html), **Try the Northstar example** runs the same pack: deterministic XER blockers first, then cited precedent retrieval against that board-style covering note.
 
 You can switch between executive and analyst views, inspect why each change was prioritised, save assurance actions in the browser and download the complete evidence-linked review pack as JSON.
 
@@ -119,20 +121,40 @@ Oracle describes XER as a proprietary exchange format, notes that baseline proje
 
 ```text
 docs/                    GitHub Pages product and generated JSON
+docs/change-assurance.*  browser-local change pack review + human decision gate
+docs/precedent-rag.md    cited precedent RAG method (Gemini + LangSmith)
 docs/schedule-review.*   browser-local XER evidence review
 docs/demo/               synthetic, share-safe XER and evidence kit
 docs/method.md           method detail, evidence-base counts, market position
 Data/public/             official annual GMPP source files
 Processing/gmpp_pipeline.py
                          longitudinal preparation and validation
+Processing/precedent_rag/  optional local sidecar: hybrid retrieve → cite → summarise
 Processing/analysis/     legacy schedule-analysis modules, retained for tests
 Processing/tests/        deterministic and integration tests
 competitor-profiles/     dated market scan and source notes
 ```
 
+## Cited precedent RAG (optional local sidecar)
+
+XER comparison stays **deterministic in the browser**. The optional sidecar answers only “what happened last time?” with inspectable sources — not a chatbot bolted onto the schedule maths.
+
+```bash
+cp .env.example .env   # set GEMINI_API_KEY + LANGSMITH_API_KEY
+make install-rag
+make precedent-rag     # http://127.0.0.1:8787
+make precedent-eval    # gold queries vs hybrid retrieve (needs Gemini)
+```
+
+Flow: hybrid retrieve (metadata filters + Gemini embeddings) → cite evidence refs → optional Gemini brief that may only cite retrieved case ids → human **Use / Ignore** on each card before the decision register. Traces land in LangSmith project `projectlens-precedent-rag` when `LANGSMITH_API_KEY` is set.
+
+Corpus: 24 synthetic cases in `Processing/precedent_rag/data/cases.json` (BYO JSON later). Eval queries: `Processing/precedent_rag/data/eval_queries.json`. Method notes: [`docs/precedent-rag.md`](docs/precedent-rag.md).
+
+If the sidecar is not running, change assurance falls back to three static cards and still requires the human gate.
+
 ## Related projects
 
-Supporting surfaces in this repository provide longitudinal UK major-project evidence (the GMPP explorer in [`docs/`](docs)) and a detailed browser-local Primavera P6 XER assurance workflow ([schedule review](https://matthewpaver.github.io/ProjectLens/schedule-review.html)). A separate DecisionGraph demo exists for precedent retrieval experiments; it is not required to complete a change review, and MeetingProof has been retired from the suite.
+Supporting surfaces in this repository provide longitudinal UK major-project evidence (the GMPP explorer in [`docs/`](docs)) and a detailed browser-local Primavera P6 XER assurance workflow ([schedule review](https://matthewpaver.github.io/ProjectLens/schedule-review.html)). DecisionGraph remains a lightweight token-overlap demonstrator; ProjectLens change assurance now has the Gemini + LangSmith hybrid path above. MeetingProof has been retired from the suite.
 
 ## History
 

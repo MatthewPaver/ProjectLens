@@ -1,31 +1,43 @@
 const assuranceState = {
   files: { previous: null, current: null },
   review: null,
+  // human gate before the decision register — use / ignore only, never auto-apply
+  precedents: { items: [], used: {}, ignored: {}, summary: null, mode: null },
 };
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
 
-const comparableCases = [
+// offline fallback if the local Gemini/LangSmith sidecar is not running
+const comparableCasesFallback = [
   {
     id: "DG-024",
     title: "Late signalling interface change",
     decision: "Conditional approval with a 10-day design freeze, named interface owner and protected regression-test window.",
     outcome: "+8 days; no repeated safety retest",
+    reasons: ["Offline fallback · start `make precedent-rag` for Gemini hybrid retrieve"],
+    evidence: ["CR-184 approved 12 Feb 2025", "Integrated plan rev 17"],
   },
   {
     id: "DG-021",
     title: "Passenger information requirement added",
     decision: "Minimum compliant scope approved behind a feature flag; non-regulatory functions deferred.",
     outcome: "+3 days; deferred functions followed later",
+    reasons: ["Offline fallback"],
+    evidence: ["Decision DL-077", "Release note 4.8"],
   },
   {
     id: "DG-012",
     title: "Additional security screening route",
     decision: "Full change approved while integrated testing was compressed to protect cutover.",
     outcome: "+17 days after integration defects escaped",
+    reasons: ["Offline fallback"],
+    evidence: ["Security change SC-09", "Test waiver TW-14"],
   },
 ];
+
+// local sidecar only — never point the live Pages site at a public LLM proxy by default
+const PRECEDENT_RAG_URL = window.PROJECTLENS_PRECEDENT_RAG_URL || "http://127.0.0.1:8787";
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>'"]/g, character => ({
@@ -262,14 +274,169 @@ function renderReview(review) {
   ];
   $("#evidenceSummary").innerHTML = facts.map(([label, value, detail]) => `
     <article class="evidence-fact"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong><small>${escapeHtml(detail)}</small></article>`).join("");
-  $("#comparableCases").innerHTML = comparableCases.map(item => `
-    <article class="comparable-case"><span>${escapeHtml(item.id)} · Synthetic precedent</span><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.decision)}</p><small>${escapeHtml(item.outcome)}</small></article>`).join("");
+
+  // kick off cited precedent retrieval — XER never leaves the browser; only narrative + blockers
+  assuranceState.precedents = { items: [], used: {}, ignored: {}, summary: null, mode: null };
+  renderPrecedentPanel({ loading: true });
+  void loadPrecedents(review);
 
   $("#packIntake").hidden = true;
   $("#readinessWorkspace").hidden = false;
   $("#requestPanel").hidden = true;
   $("#decisionPanel").hidden = true;
   $("#readinessWorkspace").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function inferFilters(review) {
+  // soft defaults from project name + narrative — sidecar still does semantic ranking
+  const blob = `${review?.current?.project?.name || ""} ${$("#assuranceNarrative")?.value || ""}`.toLowerCase();
+  const sector = /\brail\b|signall|metro|tram/.test(blob) ? "Rail"
+    : /\bairport\b|aviation|baggage/.test(blob) ? "Aviation"
+    : /\bhospital\b|building|civic/.test(blob) ? "Buildings"
+    : /\bwater\b|pump|hydraulic/.test(blob) ? "Water"
+    : /\benergy\b|power|substation|\bgrid\b|switchgear|protection testing/.test(blob) ? "Energy"
+    : "Energy";
+  const phase = /integrat|interface|systems|commission/.test(blob) ? "Integration"
+    : /test|assurance|dynamic test/.test(blob) ? "Testing"
+    : /construct|piling|civil|mobilisation/.test(blob) ? "Construction"
+    : /procur|long-lead|factory/.test(blob) ? "Procurement"
+    : "Integration";
+  const type = /accelerat|second shift|night work|recover delay/.test(blob) ? "Acceleration"
+    : /firmware|software|plc|technical|protection standard/.test(blob) ? "Technical change"
+    : /design|foundation|redesign|layout/.test(blob) ? "Design change"
+    : "Scope change";
+  return { sector, phase, type };
+}
+
+function buildPrecedentQuery(review) {
+  // shape the ask like a real change-authority brief, not a raw narrative paste
+  const narrative = ($("#assuranceNarrative")?.value || "").trim();
+  const project = review?.current?.project?.name || "the live programme";
+  const finish = review?.finishMovement;
+  const finishLine = finish == null
+    ? "Finish movement could not be compared from the supplied pair."
+    : `Control schedule finish moved ${finish > 0 ? "+" : ""}${finish} days versus the comparison file `
+      + `(${formatDate(review.previous.project.scheduledFinish)} → ${formatDate(review.current.project.scheduledFinish)}).`;
+  const blockerLines = (review.blockers || []).map(
+    blocker => `${blocker.type}: ${blocker.title}. ${blocker.detail || ""}`
+  );
+  const material = (review.changes?.changes || []).slice(0, 5).map(
+    change => `${change.code} — ${change.name}: ${change.summary}`
+  );
+  return [
+    `Change-assurance review for ${project}.`,
+    finishLine,
+    narrative ? `Period narrative / covering note (claim under review): ${narrative}` : "No period narrative was supplied.",
+    blockerLines.length ? `Deterministic blockers raised by the evidence check: ${blockerLines.join(" | ")}` : "",
+    material.length ? `Material schedule movements in the pack: ${material.join("; ")}.` : "",
+    "Need comparable past board/change-authority decisions where status narrative understated finish movement, or late interface and procurement changes during integration created similar assurance risk.",
+  ].filter(Boolean).join("\n\n");
+}
+
+function renderPrecedentPanel({ loading = false, offline = false } = {}) {
+  const host = $("#comparableCases");
+  const summaryHost = $("#precedentSummary");
+  const statusHost = $("#precedentStatus");
+  if (!host) return;
+
+  if (loading) {
+    host.innerHTML = `<article class="comparable-case"><span>Retrieving</span><strong>Cited precedent search</strong><p>Asking the local RAG sidecar for similar past decisions…</p><small>XER files stay in this browser</small></article>`;
+    if (summaryHost) summaryHost.hidden = true;
+    if (statusHost) statusHost.textContent = "Hybrid retrieve in progress";
+    return;
+  }
+
+  const items = assuranceState.precedents.items.length
+    ? assuranceState.precedents.items
+    : comparableCasesFallback;
+
+  host.innerHTML = items.map(item => {
+    const gate = assuranceState.precedents.used[item.id]
+      ? "used"
+      : assuranceState.precedents.ignored[item.id]
+        ? "ignored"
+        : "pending";
+    const reasons = (item.reasons || []).slice(0, 3).map(escapeHtml).join(" · ");
+    const evidence = (item.evidence || []).slice(0, 3).map(escapeHtml).join(" · ");
+    return `
+    <article class="comparable-case gate-${gate}" data-precedent-id="${escapeHtml(item.id)}">
+      <span>${escapeHtml(item.id)} · ${offline ? "Offline fallback" : "Cited precedent"} · ${item.score != null ? `${escapeHtml(String(item.score))}%` : "n/a"}</span>
+      <strong>${escapeHtml(item.title)}</strong>
+      <p>${escapeHtml(item.decision)}</p>
+      <small>${escapeHtml(item.outcome || "")}</small>
+      <p class="precedent-reasons">${reasons || "No match reasons supplied"}</p>
+      <p class="precedent-evidence">Sources: ${evidence || "None listed"}</p>
+      <div class="precedent-gate">
+        <button type="button" data-gate="use" data-id="${escapeHtml(item.id)}">Use</button>
+        <button type="button" data-gate="ignore" data-id="${escapeHtml(item.id)}">Ignore</button>
+        <i>${gate === "used" ? "Marked use" : gate === "ignored" ? "Marked ignore" : "Awaiting human gate"}</i>
+      </div>
+    </article>`;
+  }).join("");
+
+  const brief = assuranceState.precedents.summary;
+  if (summaryHost) {
+    if (brief?.text) {
+      summaryHost.hidden = false;
+      summaryHost.innerHTML = `<span>Gemini brief · citations only</span><p>${escapeHtml(brief.text)}</p><small>Not advice — mark Use / Ignore on each card before the decision register.</small>`;
+    } else {
+      summaryHost.hidden = true;
+      summaryHost.innerHTML = "";
+    }
+  }
+  if (statusHost) {
+    const mode = assuranceState.precedents.mode || (offline ? "offline-fallback" : "unknown");
+    statusHost.textContent = offline
+      ? "Sidecar offline — showing static fallback. Run `make precedent-rag` for Gemini + LangSmith."
+      : `Mode ${mode} · human gate required before save`;
+  }
+}
+
+async function loadPrecedents(review) {
+  const filters = inferFilters(review);
+  const problem = buildPrecedentQuery(review);
+
+  try {
+    const response = await fetch(`${PRECEDENT_RAG_URL}/precedents/query`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        problem,
+        narrative: ($("#assuranceNarrative")?.value || "").trim(),
+        sector: filters.sector,
+        phase: filters.phase,
+        type: filters.type,
+        blockers: (review.blockers || []).map(blocker => `${blocker.type}: ${blocker.title}`),
+        limit: 5,
+        summarise: true,
+      }),
+    });
+    if (!response.ok) throw new Error(`Precedent API ${response.status}`);
+    const payload = await response.json();
+    assuranceState.precedents.items = payload.cases || [];
+    assuranceState.precedents.summary = payload.summary || null;
+    assuranceState.precedents.mode = payload.mode || "gemini-hybrid";
+    renderPrecedentPanel({ offline: false });
+  } catch (error) {
+    console.warn("Precedent RAG sidecar unavailable", error);
+    assuranceState.precedents.items = comparableCasesFallback;
+    assuranceState.precedents.summary = null;
+    assuranceState.precedents.mode = "offline-fallback";
+    renderPrecedentPanel({ offline: true });
+  }
+}
+
+function setPrecedentGate(id, gate) {
+  if (gate === "use") {
+    assuranceState.precedents.used[id] = true;
+    delete assuranceState.precedents.ignored[id];
+  } else {
+    assuranceState.precedents.ignored[id] = true;
+    delete assuranceState.precedents.used[id];
+  }
+  renderPrecedentPanel({
+    offline: assuranceState.precedents.mode === "offline-fallback",
+  });
 }
 
 function questionFor(blocker) {
@@ -462,6 +629,19 @@ function saveDecision(event) {
     $("#decisionCondition").focus();
     return;
   }
+  const items = assuranceState.precedents.items;
+  const usedIds = Object.keys(assuranceState.precedents.used);
+  const ignoredIds = Object.keys(assuranceState.precedents.ignored);
+  const gated = new Set([...usedIds, ...ignoredIds]);
+  // every retrieved card must be gated — otherwise "advice" leaks into the register unsigned
+  const pending = items.filter(item => !gated.has(item.id));
+  if (items.length && pending.length) {
+    showToast(`Mark Use or Ignore on ${pending.length} precedent card${pending.length === 1 ? "" : "s"} before saving.`);
+    $("#comparableCases")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    const evidence = document.querySelector(".supporting-evidence");
+    if (evidence) evidence.open = true;
+    return;
+  }
   const record = {
     id: `DR-${Date.now()}`,
     project: review.current.project.name,
@@ -471,6 +651,10 @@ function saveDecision(event) {
     rationale: String(form.get("rationale") || "").trim(),
     unresolved: review.blockers.length,
     createdAt: new Date().toISOString(),
+    precedentsUsed: usedIds,
+    precedentsIgnored: ignoredIds,
+    precedentSummary: usedIds.length ? (assuranceState.precedents.summary?.text || null) : null,
+    precedentMode: assuranceState.precedents.mode,
   };
   const decisions = storage(storageKeys.decisions);
   decisions.unshift(record);
@@ -532,6 +716,11 @@ function bindEvents() {
   $("#saveEvidenceRequest").addEventListener("click", saveEvidenceRequest);
   $("#decisionForm").addEventListener("submit", saveDecision);
   $("#exportDecisions").addEventListener("click", exportDecisions);
+  $("#comparableCases")?.addEventListener("click", event => {
+    const button = event.target.closest("button[data-gate]");
+    if (!button) return;
+    setPrecedentGate(button.dataset.id, button.dataset.gate);
+  });
   window.addEventListener("hashchange", () => showView(window.location.hash.slice(1)));
 }
 

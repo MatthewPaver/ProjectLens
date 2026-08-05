@@ -15,7 +15,8 @@ def run_desktop(browser):
     failures = []
     page.on("console", lambda message: errors.append(message.text) if message.type == "error" else None)
     page.on("pageerror", lambda error: errors.append(str(error)))
-    page.on("requestfailed", lambda request: failures.append(f"{request.method} {request.url}"))
+    page.on("requestfailed", lambda request: failures.append(f"{request.method} {request.url}")
+            if "127.0.0.1:8787" not in request.url and "localhost:8787" not in request.url else None)
     page.goto(BASE_URL)
     page.wait_for_load_state("networkidle")
 
@@ -31,7 +32,9 @@ def run_desktop(browser):
 
     page.locator(".supporting-evidence summary").click()
     assert page.locator("#evidenceSummary .evidence-fact").count() == 6
-    assert page.locator("#comparableCases .comparable-case").count() == 3
+    # wait for offline fallback or live RAG cards (either is fine in CI)
+    page.wait_for_function("() => document.querySelectorAll('#comparableCases .comparable-case').length >= 3")
+    assert page.locator("#comparableCases .comparable-case").count() >= 3
 
     page.get_by_role("button", name="Request answers").click()
     page.locator("#requestPanel").wait_for(state="visible")
@@ -48,10 +51,15 @@ def run_desktop(browser):
     page.locator("#decisionCondition").fill("Protect the regression-test window")
     page.locator("#conditionOwner").fill("Test Lead")
     page.locator("#conditionDue").fill("2026-07-29")
+    # human gate: use / ignore every cited precedent before the register
+    for button in page.locator("#comparableCases button[data-gate='use']").all():
+        button.click()
     page.get_by_role("button", name="Save decision record").click()
     page.wait_for_url("**#decisions")
     page.locator("#decisionRegister .register-row").wait_for(state="visible")
     assert page.locator("#decisionRegister .register-row").count() == 1
+    stored = page.evaluate("JSON.parse(localStorage.getItem('projectlens:change-decisions:v1'))[0]")
+    assert stored.get("precedentsUsed"), stored
 
     page.evaluate(
         """() => {
