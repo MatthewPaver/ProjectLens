@@ -36,8 +36,19 @@ const comparableCasesFallback = [
   },
 ];
 
-// local sidecar only — never point the live Pages site at a public LLM proxy by default
+// local sidecar by default — Pages is static; override only via PROJECTLENS_PRECEDENT_RAG_URL
 const PRECEDENT_RAG_URL = window.PROJECTLENS_PRECEDENT_RAG_URL || "http://127.0.0.1:8787";
+const IS_PUBLIC_PAGES = /github\.io$/i.test(window.location.hostname);
+
+function precedentSidecarHint() {
+  if (window.PROJECTLENS_PRECEDENT_RAG_URL) {
+    return `Using configured RAG API · ${PRECEDENT_RAG_URL}`;
+  }
+  if (IS_PUBLIC_PAGES) {
+    return "GitHub Pages is static — XER checks run here; live Gemini retrieve needs `make precedent-rag` locally (or set PROJECTLENS_PRECEDENT_RAG_URL). Showing static fallback cards.";
+  }
+  return "Local sidecar expected at http://127.0.0.1:8787 — run `make precedent-rag` for Gemini + LangSmith.";
+}
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>'"]/g, character => ({
@@ -397,7 +408,9 @@ function renderPrecedentPanel({ loading = false, offline = false } = {}) {
   if (statusHost) {
     const mode = assuranceState.precedents.mode || (offline ? "offline-fallback" : "unknown");
     statusHost.textContent = offline
-      ? "Sidecar offline — showing static fallback. Run `make precedent-rag` for Gemini + LangSmith."
+      ? (IS_PUBLIC_PAGES
+        ? "Public Pages demo · static cited-precedent cards (no Gemini key on this host). Clone the repo and run `make precedent-rag` for live hybrid retrieve + LangSmith traces."
+        : "Sidecar offline — showing static fallback. Run `make precedent-rag` for Gemini + LangSmith.")
       : `Mode ${mode} · human gate required before save`;
   }
   updateDecisionGateState();
@@ -775,4 +788,6 @@ function bindEvents() {
 bindEvents();
 renderConditionRegister();
 showView(window.location.hash.slice(1) || "reviews");
+const bootStatus = $("#precedentStatus");
+if (bootStatus) bootStatus.textContent = `Run a review to retrieve precedents. ${precedentSidecarHint()}`;
 window.ProjectLensChangeAssurance = { parseXer, analyseReview };

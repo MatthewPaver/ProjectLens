@@ -23,6 +23,8 @@ Processing/precedent_rag (local FastAPI)
 Human Use / Ignore on each card → then decision register
 ```
 
+**GitHub Pages** hosts the static demo only (`docs/` → Pages). There is no Gemini key on that host — the UI falls back to static precedent cards and says so. Live hybrid retrieve needs `make precedent-rag` locally, or set `window.PROJECTLENS_PRECEDENT_RAG_URL` to a CORS-enabled API you control (never bake secrets into the static site).
+
 ## Why Gemini + LangSmith (not keyword-only)
 
 Token overlap (DecisionGraph) is fine for a static demo. It does not solve semantic “same failure mode, different words.” Embeddings do. LangSmith is the proof trail for retrieve → summarise runs so you can see whether citations stayed inside the shortlist.
