@@ -99,6 +99,7 @@ def _run_precedent_query_impl(
                 "decision": case.get("decision"),
                 "outcome": case.get("outcome"),
                 "score": case.get("score"),
+                "semantic": case.get("semantic"),
                 "reasons": case.get("reasons"),
                 "evidence": case.get("evidence"),
                 "citation": case.get("citation"),

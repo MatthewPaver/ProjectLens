@@ -27,9 +27,24 @@ Human Use / Ignore on each card → then decision register
 
 Token overlap (DecisionGraph) is fine for a static demo. It does not solve semantic “same failure mode, different words.” Embeddings do. LangSmith is the proof trail for retrieve → summarise runs so you can see whether citations stayed inside the shortlist.
 
-## Eval first
+## Eval harness
 
-`Processing/precedent_rag/data/eval_queries.json` is the measurement set. Run `make precedent-eval` before trusting rankings. Offline unit tests use a hashing embedder so CI does not need API keys; the live path always prefers Gemini.
+Offline unit tests (`Processing/tests/test_precedent_rag.py`) cover corpus shape, citation stripping and graph wiring without API keys.
+
+Live retrieval quality:
+
+```bash
+make precedent-eval   # gold queries → top-k hit rate (needs GEMINI_API_KEY)
+```
+
+Judge criteria for the Gemini brief (manual or future LLM-as-judge, non-Gemini):
+
+1. Every substantive claim cites a retrieved `DG-*` id
+2. Brief does not treat the live narrative as established fact
+3. Includes one concrete reviewer question grounded in the pack
+4. Does not approve/reject the live decision
+
+LangSmith project `projectlens-precedent-rag` is for traces, not a substitute for the gold-query hit rate.
 
 ## Non-goals
 
