@@ -132,7 +132,19 @@ competitor-profiles/     dated market scan and source notes
 
 ## Related projects
 
-MeetingProof (meeting follow-up) and [DecisionGraph](https://github.com/MatthewPaver/DecisionGraph) (decision memory) are separate supporting tools; neither is required to complete a change review.
+Supporting surfaces in this repository provide longitudinal UK major-project evidence (the GMPP explorer in [`docs/`](docs)) and a detailed browser-local Primavera P6 XER assurance workflow ([schedule review](https://matthewpaver.github.io/ProjectLens/schedule-review.html)). A separate DecisionGraph demo exists for precedent retrieval experiments; it is not required to complete a change review, and MeetingProof has been retired from the suite.
+
+## History
+
+The arc, from the repository's own log:
+
+- **2025-04 to 2025-05** — repository created; initial schedule-processing pipeline and data uploads.
+- **2025-11 to 2026-03** — housekeeping: README restructure, MIT licence, `.gitignore`, `requirements.txt`, standardised setup.
+- **2026-05** — validation workflow, CI badge, reviewer notes and packaging; portfolio quick read.
+- **2026-07-14 to 2026-07-15** — rebuilt as an evidence-linked assurance product: risk command centre, self-serve evidence room, XER comparison turned into evidence assurance, change assurance workflow.
+- **2026-07-20** — project evidence desk built.
+- **2026-07-27** — [v1.0.0 release](https://github.com/MatthewPaver/ProjectLens/releases/tag/v1.0.0).
+- **2026-07-28** — browser workflows verified end-to-end and generated data removed from the tree.
 
 ## License
 
