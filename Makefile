@@ -18,7 +18,7 @@ pipeline: install
 public-data: install
 	$(PYTHON_BIN) Processing/gmpp_pipeline.py
 
-test: install
+test: install-rag
 	$(PYTHON_BIN) -m pytest Processing/tests -q
 
 browser-test: install
