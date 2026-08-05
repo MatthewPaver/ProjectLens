@@ -11,9 +11,9 @@
   --ochre: #b86f22;
   --red: #a23b2b;
   --green: #27634d;
-  --mono: "DM Mono", monospace;
+  --mono: "JetBrains Mono", monospace;
   --sans: "Libre Franklin", sans-serif;
-  --serif: "Newsreader", serif;
+  --serif: "Literata", serif;
 }
 
 * { box-sizing: border-box; }
@@ -53,7 +53,7 @@ h1, h2, h3, p { text-wrap: pretty; }
 .button.secondary:hover { background: var(--white); }
 .button:disabled { cursor: not-allowed; opacity: .42; }
 .boundary-list { display: flex; flex-wrap: wrap; gap: .9rem 1.6rem; margin: 2rem 0 0; }
-.boundary-list div { padding-left: .75rem; border-left: 2px solid var(--line); }
+.boundary-list div { padding: .5rem .75rem; border: 1px solid var(--line); }
 .boundary-list dt { color: var(--muted); font: 500 .65rem/1 var(--mono); text-transform: uppercase; }
 .boundary-list dd { margin: .35rem 0 0; font-size: .76rem; font-weight: 600; }
 .example-brief { align-self: center; padding: 1.4rem; color: var(--white); background: var(--ink); border-top: 7px solid var(--ochre); }
@@ -180,7 +180,7 @@ label.table-row:hover { background: #f6f1e7; }
 .source-note strong { color: var(--ink); }
 .source-note p { margin: 0; }
 .source-note a { color: var(--navy); font-weight: 650; }
-.toast { position: fixed; right: 1rem; bottom: 1rem; z-index: 80; max-width: 390px; padding: 1rem; color: var(--white); background: var(--ink); border-left: 5px solid var(--ochre); transform: translateY(150%); transition: transform .2s ease; }
+.toast { position: fixed; right: 1rem; bottom: 1rem; z-index: 80; max-width: 390px; padding: 1rem; color: var(--white); background: var(--ink); border-top: 3px solid var(--ochre); transform: translateY(150%); transition: transform .2s ease; }
 .toast.show { transform: none; }
 
 @media (max-width: 1050px) {
