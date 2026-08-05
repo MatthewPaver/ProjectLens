@@ -34,7 +34,7 @@ Also skim: `docs/precedent-rag.md`, prior critique at `/tmp/pl-review/CLAUDE-CRI
 
 ### B — Local full RAG path (required for LLM critique)
 
-**Precondition — check this first.** `grep GEMINI_API_KEY .env` must show a non-empty value. As of this writing it is blank. If it is still blank: **STOP section B, say so in the critique, and do not review the offline fallback as if it were live retrieval.** The fallback path is a hardcoded card set (`docs/change-assurance.js:18`) — judging it as Gemini output is the single easiest way to produce a wrong review.
+**Precondition — check this first.** `grep GEMINI_API_KEY .env` must show a non-empty value. If it is blank: **STOP section B, say so in the critique, and do not review the offline fallback as if it were live retrieval.** The fallback path is a hardcoded card set (`docs/change-assurance.js:18`) — judging it as Gemini output is the single easiest way to produce a wrong review. Confirm which path you are on from the status line, which reports `Mode gemini-hybrid` on the live path.
 
 From `/Users/mattpaver/Desktop/Repos/ProjectLens`:
 ```bash

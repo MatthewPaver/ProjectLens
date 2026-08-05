@@ -6,7 +6,7 @@
   <meta name="description" content="Review a project change pack, identify decision blockers and preserve the human decision and its conditions.">
   <meta name="theme-color" content="#071a1b">
   <meta property="og:title" content="ProjectLens | Project Change Assurance">
-  <meta property="og:description" content="Add the pack. Review the blockers. Record the human decision. Track the conditions.">
+  <meta property="og:description" content="Add the pack. Review blockers. Cite precedents. Record the human decision. Track the conditions.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://matthewpaver.github.io/ProjectLens/assets/change-assurance-overview.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -67,14 +67,16 @@
         </aside>
       </section>
 
-      <section class="simple-flow" aria-label="Four-step review workflow">
+      <section class="simple-flow" aria-label="Five-step review workflow">
         <div><b>1</b><span>Add the pack</span></div>
         <i aria-hidden="true">→</i>
         <div><b>2</b><span>Review blockers</span></div>
         <i aria-hidden="true">→</i>
-        <div><b>3</b><span>Record decision</span></div>
+        <div><b>3</b><span>Cite precedents</span></div>
         <i aria-hidden="true">→</i>
-        <div><b>4</b><span>Track conditions</span></div>
+        <div><b>4</b><span>Record decision</span></div>
+        <i aria-hidden="true">→</i>
+        <div><b>5</b><span>Track conditions</span></div>
       </section>
 
       <section class="pack-intake" id="packIntake" hidden aria-labelledby="intakeTitle">
@@ -120,7 +122,8 @@
           <p id="readinessExplanation">Resolve the blockers below or record why the decision authority accepts them.</p>
           <div class="blocker-list" id="blockerList"></div>
           <div class="readiness-actions">
-            <button class="assurance-primary" id="requestAnswers" type="button">Draft questions for the team <span>→</span></button>
+            <button class="assurance-primary" id="reviewPrecedents" type="button">Review cited precedents <span>→</span></button>
+            <button class="assurance-secondary light" id="requestAnswers" type="button">Draft questions for the team</button>
             <button class="assurance-secondary light" id="showDecisionForm" type="button">Record human decision</button>
           </div>
         </article>
@@ -166,13 +169,14 @@
           </form>
         </section>
 
-        <details class="supporting-evidence">
-          <summary><span>View supporting evidence</span><small>Schedule movements, narrative checks & comparable cases</small></summary>
+        <details class="supporting-evidence" id="supportingEvidence" open>
+          <summary><span>Cited precedents & supporting evidence</span><small>Use / Ignore gate · schedule movements · narrative checks</small></summary>
           <div class="evidence-summary" id="evidenceSummary"></div>
-          <div class="comparable-section">
+          <div class="comparable-section" id="precedentSection">
             <div>
               <span>Cited precedent retrieval</span>
               <h3>Has a similar change caused this problem before?</h3>
+              <p id="precedentSectionGate" class="precedent-section-gate" hidden>Awaiting human gate — mark Use or Ignore on every card before the decision can be saved.</p>
               <p id="precedentStatus" class="precedent-status">Run a review to retrieve precedents.</p>
             </div>
             <div id="precedentSummary" class="precedent-summary" hidden></div>

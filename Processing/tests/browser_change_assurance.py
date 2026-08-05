@@ -28,13 +28,17 @@ def run_desktop(browser):
     assert readiness_status.casefold() == "needs evidence before decision", readiness_status
     assert page.locator("#blockerList .blocker").count() == 3
     assert "73 days" in page.locator("#readinessHeadline").inner_text().casefold()
-    assert page.locator(".supporting-evidence").get_attribute("open") is None
+    # precedents surface by default — the RAG differentiator must not hide in a closed disclosure
+    assert page.locator("#supportingEvidence").get_attribute("open") is not None
+    assert page.get_by_role("button", name="Review cited precedents").is_visible()
 
-    page.locator(".supporting-evidence summary").click()
     assert page.locator("#evidenceSummary .evidence-fact").count() == 6
     # wait for offline fallback or live RAG cards (either is fine in CI)
-    page.wait_for_function("() => document.querySelectorAll('#comparableCases .comparable-case').length >= 3")
+    page.wait_for_function("() => document.querySelectorAll('#comparableCases .comparable-case:not(.is-skeleton)').length >= 3")
     assert page.locator("#comparableCases .comparable-case").count() >= 3
+    # gate label is section-level, not repeated on every card
+    assert page.locator("#precedentSectionGate").is_visible()
+    assert page.locator("#comparableCases .precedent-gate i").first.inner_text().casefold() != "awaiting human gate"
 
     page.get_by_role("button", name="Draft questions for the team").click()
     page.locator("#requestPanel").wait_for(state="visible")
