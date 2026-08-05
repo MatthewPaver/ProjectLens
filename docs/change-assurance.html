@@ -169,10 +169,16 @@
           <summary><span>View supporting evidence</span><small>Schedule movements, narrative checks & comparable cases</small></summary>
           <div class="evidence-summary" id="evidenceSummary"></div>
           <div class="comparable-section">
-            <div><span>Comparable decision memory</span><h3>Has a similar change caused this problem before?</h3></div>
+            <div>
+              <span>Cited precedent retrieval</span>
+              <h3>Has a similar change caused this problem before?</h3>
+              <p id="precedentStatus" class="precedent-status">Run a review to retrieve precedents.</p>
+            </div>
+            <div id="precedentSummary" class="precedent-summary" hidden></div>
             <div id="comparableCases" class="comparable-cases"></div>
+            <p class="precedent-gate-note">Mark each card <strong>Use</strong> or <strong>Ignore</strong> before saving a decision. XER comparison stays deterministic in this browser; the optional local RAG sidecar only sees narrative text and filters.</p>
             <a href="schedule-review.html">Open the full schedule evidence review ↗</a>
-            <a href="https://matthewpaver.github.io/DecisionGraph/" target="_blank" rel="noreferrer">Explore the full synthetic case demonstrator ↗</a>
+            <a href="https://matthewpaver.github.io/DecisionGraph/" target="_blank" rel="noreferrer">Explore the synthetic case corpus ↗</a>
           </div>
           <p class="evidence-boundary">Evidence review only. It does not establish contractual entitlement, causation or a probability of failure.</p>
         </details>

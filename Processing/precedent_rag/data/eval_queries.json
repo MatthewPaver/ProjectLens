@@ -1,0 +1,76 @@
+[
+  {
+    "id": "EQ-01",
+    "problem": "Approve a late signalling interface change before system integration after a standards clarification.",
+    "sector": "Rail",
+    "phase": "Integration",
+    "type": "Scope change",
+    "must_include_any": [
+      "DG-024",
+      "DG-025",
+      "DG-021"
+    ],
+    "notes": "Classic late interface during integration"
+  },
+  {
+    "id": "EQ-02",
+    "problem": "Security stakeholder added a screening route after interface configuration had begun and cutover cannot move.",
+    "sector": "Aviation",
+    "phase": "Integration",
+    "type": "Scope change",
+    "must_include_any": [
+      "DG-012",
+      "DG-029"
+    ],
+    "notes": "Compressed test / cutover risk"
+  },
+  {
+    "id": "EQ-03",
+    "problem": "Add a second installation shift to recover delay while workfront access remained constrained.",
+    "sector": "Energy",
+    "phase": "Construction",
+    "type": "Acceleration",
+    "must_include_any": [
+      "DG-019",
+      "DG-030"
+    ],
+    "notes": "Unsafe acceleration without access"
+  },
+  {
+    "id": "EQ-04",
+    "problem": "Ground conditions required a foundation redesign after piling had mobilised with marine permits constraining sequence.",
+    "sector": "Infrastructure",
+    "phase": "Construction",
+    "type": "Design change",
+    "must_include_any": [
+      "DG-017",
+      "DG-028"
+    ],
+    "notes": "Prototype + resequence pattern"
+  },
+  {
+    "id": "EQ-05",
+    "problem": "Safety-related firmware defect during dynamic testing needs an urgent change with limited assessor availability.",
+    "sector": "Rail",
+    "phase": "Testing",
+    "type": "Technical change",
+    "must_include_any": [
+      "DG-016",
+      "DG-027"
+    ],
+    "notes": "Controlled hotfix / evidence replay"
+  },
+  {
+    "id": "EQ-06",
+    "problem": "Period progress report claims the ready-for-service date is unchanged and no material change to delivery sequence, while the control schedule finish moved substantially after late planning/procurement interface changes during systems integration on a grid connection programme.",
+    "sector": "Energy",
+    "phase": "Integration",
+    "type": "Scope change",
+    "must_include_any": [
+      "DG-033",
+      "DG-024",
+      "DG-012"
+    ],
+    "notes": "Northstar-shaped narrative vs schedule contradiction"
+  }
+]

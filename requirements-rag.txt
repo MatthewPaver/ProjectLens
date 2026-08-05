@@ -1,0 +1,11 @@
+# Optional deps for cited precedent RAG (Gemini + LangGraph + LangSmith).
+# Install with: make install-rag
+fastapi>=0.115,<0.116
+uvicorn[standard]>=0.32,<0.35
+python-dotenv>=1.0,<2.0
+pydantic>=2.0,<3.0
+langgraph>=0.2,<0.4
+langchain-core>=0.3,<0.4
+langchain-google-genai>=2.0,<3.0
+langsmith>=0.1,<0.4
+numpy>=1.23,<1.27
