@@ -14,7 +14,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="change-assurance.css">
 </head>
@@ -30,7 +30,7 @@
     <nav aria-label="Change assurance">
       <a href="#reviews" data-view-link="reviews" class="active">Reviews</a>
       <a href="#decisions" data-view-link="decisions">Decisions</a>
-      <a href="#follow-up" data-view-link="follow-up">Follow-up <b id="conditionNavCount">0</b></a>
+      <a href="#follow-up" data-view-link="follow-up">Follow-up <b id="conditionNavCount" hidden>0</b></a>
     </nav>
     <div class="header-meta">
       <span><i aria-hidden="true"></i> Browser-local</span>
@@ -120,7 +120,7 @@
           <p id="readinessExplanation">Resolve the blockers below or record why the decision authority accepts them.</p>
           <div class="blocker-list" id="blockerList"></div>
           <div class="readiness-actions">
-            <button class="assurance-primary" id="requestAnswers" type="button">Request answers <span>→</span></button>
+            <button class="assurance-primary" id="requestAnswers" type="button">Draft questions for the team <span>→</span></button>
             <button class="assurance-secondary light" id="showDecisionForm" type="button">Record human decision</button>
           </div>
         </article>
@@ -144,6 +144,7 @@
             <p>The system preserves the evidence version and unresolved warnings. It does not make this decision.</p>
           </div>
           <form id="decisionForm">
+            <p id="precedentGateBanner" class="precedent-gate-banner" hidden>Mark Use or Ignore on every cited precedent before saving. Use attaches the case to the decision record; Ignore records that you considered and dismissed it.</p>
             <fieldset>
               <legend>Decision</legend>
               <label><input type="radio" name="decision" value="Approve" required><span>Approve</span></label>
@@ -176,7 +177,7 @@
             </div>
             <div id="precedentSummary" class="precedent-summary" hidden></div>
             <div id="comparableCases" class="comparable-cases"></div>
-            <p class="precedent-gate-note">Mark each card <strong>Use</strong> or <strong>Ignore</strong> before saving a decision. XER comparison stays deterministic in this browser; the optional local RAG sidecar only sees narrative text and filters.</p>
+            <p class="precedent-gate-note"><strong>Use</strong> attaches the precedent (and its sources) to the decision record. <strong>Ignore</strong> records that you considered it and dismissed it. Every card must be marked before save. Matches below 0.80 semantic similarity are flagged as weak. XER comparison stays deterministic in this browser; the optional local RAG sidecar only sees narrative text and filters.</p>
             <a href="schedule-review.html">Open the full schedule evidence review ↗</a>
             <a href="https://matthewpaver.github.io/DecisionGraph/" target="_blank" rel="noreferrer">Explore the synthetic case corpus ↗</a>
           </div>

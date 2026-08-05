@@ -36,7 +36,7 @@ def run_desktop(browser):
     page.wait_for_function("() => document.querySelectorAll('#comparableCases .comparable-case').length >= 3")
     assert page.locator("#comparableCases .comparable-case").count() >= 3
 
-    page.get_by_role("button", name="Request answers").click()
+    page.get_by_role("button", name="Draft questions for the team").click()
     page.locator("#requestPanel").wait_for(state="visible")
     page.locator("#requestOwner").fill("Planning Manager")
     page.locator("#requestDue").fill("2026-07-22")
@@ -45,15 +45,22 @@ def run_desktop(browser):
 
     page.get_by_role("button", name="Record human decision").click()
     page.locator("#decisionPanel").wait_for(state="visible")
-    page.get_by_label("Approve with conditions").check()
+    # gate still locked until Use/Ignore
+    assert page.locator("#decisionForm button[type='submit']").is_disabled()
+    assert page.locator("#precedentGateBanner").is_visible()
+    # human gate first — form fields stay locked until every card is marked
+    # supporting evidence was already opened above
+    for button in page.locator("#comparableCases button[data-gate='use']").all():
+        button.click()
+    assert page.locator("#decisionForm button[type='submit']").is_enabled()
+    assert page.locator("#precedentGateBanner").is_hidden()
+    page.locator("#decisionPanel").scroll_into_view_if_needed()
+    page.get_by_label("Approve with conditions").check(force=True)
     page.locator("#decisionOwner").fill("Change Authority Chair")
     page.locator("#decisionRationale").fill("Proceed only after the named controls are confirmed and owned.")
     page.locator("#decisionCondition").fill("Protect the regression-test window")
     page.locator("#conditionOwner").fill("Test Lead")
     page.locator("#conditionDue").fill("2026-07-29")
-    # human gate: use / ignore every cited precedent before the register
-    for button in page.locator("#comparableCases button[data-gate='use']").all():
-        button.click()
     page.get_by_role("button", name="Save decision record").click()
     page.wait_for_url("**#decisions")
     page.locator("#decisionRegister .register-row").wait_for(state="visible")
@@ -89,8 +96,9 @@ def run_desktop(browser):
     page.locator('a[href="#follow-up"]').click()
     assert page.locator("#conditionRegister .register-row").count() == 1
     assert page.locator("#conditionNavCount").inner_text() == "1"
+    assert page.locator("#conditionNavCount").is_visible()
     page.get_by_role("button", name="Mark closed").click()
-    assert page.locator("#conditionNavCount").inner_text() == "0"
+    assert page.locator("#conditionNavCount").is_hidden()
 
     page.goto(BASE_URL)
     page.wait_for_load_state("networkidle")

@@ -170,10 +170,11 @@ def hybrid_retrieve(
         raw = semantic * 0.72 + (0.1 if sector_hit else 0) + (0.1 if phase_hit else 0) + (0.08 if type_hit else 0)
         score = round(min(0.99, max(0.0, raw)) * 100)
         reasons = [
-            f"Semantic match · {semantic:.2f}",
+            f"Semantic similarity · {semantic:.2f}",
             sector_hit and f"Same sector · {case.get('sector')}",
             phase_hit and f"Same phase · {case.get('phase')}",
             type_hit and f"Same change · {case.get('type')}",
+            semantic < 0.8 and "Below 0.80 similarity threshold · treat as weak",
         ]
         ranked.append(
             {

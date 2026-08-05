@@ -356,16 +356,26 @@ function renderPrecedentPanel({ loading = false, offline = false } = {}) {
       : assuranceState.precedents.ignored[item.id]
         ? "ignored"
         : "pending";
+    const semantic = Number(item.semantic);
+    const weak = Number.isFinite(semantic) && semantic < 0.8;
     const reasons = (item.reasons || []).slice(0, 3).map(escapeHtml).join(" · ");
     const evidence = (item.evidence || []).slice(0, 3).map(escapeHtml).join(" · ");
+    // one score only — hybrid %; semantic stays a decimal similarity, never a second %
+    const scoreLabel = item.score != null
+      ? `${escapeHtml(String(item.score))}% hybrid`
+      : "n/a";
+    const semanticLabel = Number.isFinite(semantic)
+      ? ` · semantic ${semantic.toFixed(2)}${weak ? " · weak" : ""}`
+      : "";
     return `
-    <article class="comparable-case gate-${gate}" data-precedent-id="${escapeHtml(item.id)}">
-      <span>${escapeHtml(item.id)} · ${offline ? "Offline fallback" : "Cited precedent"} · ${item.score != null ? `${escapeHtml(String(item.score))}%` : "n/a"}</span>
+    <article class="comparable-case gate-${gate}${weak ? " weak-match" : ""}" data-precedent-id="${escapeHtml(item.id)}">
+      <span>${escapeHtml(item.id)} · ${offline ? "Offline fallback" : "Cited precedent"} · ${scoreLabel}${semanticLabel}</span>
       <strong>${escapeHtml(item.title)}</strong>
       <p>${escapeHtml(item.decision)}</p>
       <small>${escapeHtml(item.outcome || "")}</small>
       <p class="precedent-reasons">${reasons || "No match reasons supplied"}</p>
       <p class="precedent-evidence">Sources: ${evidence || "None listed"}</p>
+      <p class="precedent-gate-copy">Use → attach to decision record · Ignore → considered and dismissed</p>
       <div class="precedent-gate">
         <button type="button" data-gate="use" data-id="${escapeHtml(item.id)}">Use</button>
         <button type="button" data-gate="ignore" data-id="${escapeHtml(item.id)}">Ignore</button>
@@ -389,6 +399,36 @@ function renderPrecedentPanel({ loading = false, offline = false } = {}) {
     statusHost.textContent = offline
       ? "Sidecar offline — showing static fallback. Run `make precedent-rag` for Gemini + LangSmith."
       : `Mode ${mode} · human gate required before save`;
+  }
+  updateDecisionGateState();
+}
+
+function pendingPrecedentIds() {
+  const items = assuranceState.precedents.items || [];
+  if (!items.length) return [];
+  const gated = new Set([
+    ...Object.keys(assuranceState.precedents.used || {}),
+    ...Object.keys(assuranceState.precedents.ignored || {}),
+  ]);
+  return items.map(item => item.id).filter(id => !gated.has(id));
+}
+
+function updateDecisionGateState() {
+  const pending = pendingPrecedentIds();
+  const panel = $("#decisionPanel");
+  const banner = $("#precedentGateBanner");
+  const submit = $("#decisionForm")?.querySelector('button[type="submit"]');
+  const locked = pending.length > 0;
+  if (panel) panel.classList.toggle("is-gated-locked", locked);
+  if (banner) {
+    banner.hidden = !locked;
+    if (locked) {
+      banner.textContent = `${pending.length} precedent card${pending.length === 1 ? "" : "s"} still need Use or Ignore. Use attaches the case to the decision record; Ignore records that you considered and dismissed it.`;
+    }
+  }
+  if (submit) {
+    submit.disabled = locked;
+    submit.title = locked ? "Mark every cited precedent Use or Ignore first" : "";
   }
 }
 
@@ -531,7 +571,10 @@ function renderDecisionRegister() {
 
 function renderConditionRegister() {
   const conditions = storage(storageKeys.conditions);
-  $("#conditionNavCount").textContent = conditions.filter(item => !item.closed).length;
+  const openCount = conditions.filter(item => !item.closed).length;
+  const badge = $("#conditionNavCount");
+  badge.textContent = String(openCount);
+  badge.hidden = openCount === 0;
   $("#conditionRegister").innerHTML = conditions.length ? conditions.map(item => `
     <article class="register-row ${item.closed ? "closed" : ""}" data-condition-id="${escapeHtml(item.id)}">
       <div><span>${escapeHtml(item.project)}</span><strong>${escapeHtml(item.condition)}</strong><small>Owner: ${escapeHtml(item.owner || "Unassigned")} · Due: ${escapeHtml(item.due ? formatDate(`${item.due}T12:00:00Z`) : "Not set")}</small></div>
@@ -629,14 +672,12 @@ function saveDecision(event) {
     $("#decisionCondition").focus();
     return;
   }
-  const items = assuranceState.precedents.items;
   const usedIds = Object.keys(assuranceState.precedents.used);
   const ignoredIds = Object.keys(assuranceState.precedents.ignored);
-  const gated = new Set([...usedIds, ...ignoredIds]);
-  // every retrieved card must be gated — otherwise "advice" leaks into the register unsigned
-  const pending = items.filter(item => !gated.has(item.id));
-  if (items.length && pending.length) {
+  const pending = pendingPrecedentIds();
+  if (pending.length) {
     showToast(`Mark Use or Ignore on ${pending.length} precedent card${pending.length === 1 ? "" : "s"} before saving.`);
+    updateDecisionGateState();
     $("#comparableCases")?.scrollIntoView({ behavior: "smooth", block: "center" });
     const evidence = document.querySelector(".supporting-evidence");
     if (evidence) evidence.open = true;
@@ -711,6 +752,13 @@ function bindEvents() {
   });
   $("#showDecisionForm").addEventListener("click", () => {
     $("#decisionPanel").hidden = false;
+    updateDecisionGateState();
+    const pending = pendingPrecedentIds();
+    if (pending.length) {
+      const evidence = document.querySelector(".supporting-evidence");
+      if (evidence) evidence.open = true;
+      showToast(`Mark Use or Ignore on ${pending.length} precedent card${pending.length === 1 ? "" : "s"} before the decision can be saved.`);
+    }
     $("#decisionPanel").scrollIntoView({ behavior: "smooth", block: "start" });
   });
   $("#saveEvidenceRequest").addEventListener("click", saveEvidenceRequest);
