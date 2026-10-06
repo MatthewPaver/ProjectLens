@@ -3,7 +3,7 @@ VENV ?= .venv
 PYTHON_BIN := $(VENV)/bin/python
 PIP_BIN := $(PYTHON_BIN) -m pip
 
-.PHONY: venv install install-rag pipeline public-data test browser-test precedent-rag precedent-eval
+.PHONY: venv install install-browser install-rag pipeline public-data public-precedents test browser-test precedent-rag precedent-eval
 
 venv:
 	$(PYTHON) -m venv $(VENV)
@@ -18,10 +18,16 @@ pipeline: install
 public-data: install
 	$(PYTHON_BIN) Processing/gmpp_pipeline.py
 
+public-precedents:
+	python3 Processing/precedent_rag/build_public_cases.py
+
 test: install-rag
 	$(PYTHON_BIN) -m pytest Processing/tests -q
 
-browser-test: install
+install-browser: venv
+	$(PIP_BIN) install -r requirements-browser.txt
+
+browser-test: install-browser
 	$(PYTHON_BIN) -m playwright install chromium
 	$(PYTHON_BIN) scripts/run_browser_tests.py
 

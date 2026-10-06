@@ -1,0 +1,2 @@
+# Browser-only verification: no pandas, forecasting, RAG or model dependencies.
+playwright>=1.50,<2.0
