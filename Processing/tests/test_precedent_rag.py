@@ -133,3 +133,25 @@ def test_eval_fixture_shape():
     for item in queries:
         assert item["must_include_any"]
         assert item["problem"]
+
+
+def test_offline_eval_baseline_is_stable():
+    """Locks the published README number: offline hashing hit@5 on the public corpus."""
+    hits = 0
+    queries = load_eval_queries()
+    for item in queries:
+        got = [
+            case["id"]
+            for case in hybrid_retrieve(
+                {
+                    "problem": item["problem"],
+                    "sector": item.get("sector"),
+                    "phase": item.get("phase"),
+                    "type": item.get("type"),
+                },
+                limit=5,
+                embedder=HashingEmbedder(),
+            )
+        ]
+        hits += int(bool(set(item["must_include_any"]).intersection(got)))
+    assert (hits, len(queries)) == (7, 8)

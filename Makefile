@@ -3,7 +3,7 @@ VENV ?= .venv
 PYTHON_BIN := $(VENV)/bin/python
 PIP_BIN := $(PYTHON_BIN) -m pip
 
-.PHONY: venv install install-browser install-rag pipeline public-data public-precedents test browser-test precedent-rag precedent-eval
+.PHONY: venv install install-browser install-rag pipeline public-data public-precedents test browser-test precedent-rag precedent-eval precedent-eval-offline
 
 venv:
 	$(PYTHON) -m venv $(VENV)
@@ -41,3 +41,7 @@ precedent-rag: install-rag
 
 precedent-eval: install-rag
 	PYTHONPATH=. $(PYTHON_BIN) -m Processing.precedent_rag.cli eval
+
+# Deterministic keyless baseline: hashing embedder, no Gemini or LangSmith calls.
+precedent-eval-offline: install-rag
+	PYTHONPATH=. $(PYTHON_BIN) -m Processing.precedent_rag.cli eval --offline --limit 5

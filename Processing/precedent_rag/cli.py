@@ -19,6 +19,7 @@ if str(ROOT) not in sys.path:
 
 from Processing.precedent_rag.cases import load_eval_queries  # noqa: E402
 from Processing.precedent_rag.graph import run_precedent_query  # noqa: E402
+from Processing.precedent_rag.retrieve import HashingEmbedder, hybrid_retrieve  # noqa: E402
 
 
 def cmd_query(args: argparse.Namespace) -> int:
@@ -42,17 +43,20 @@ def cmd_eval(args: argparse.Namespace) -> int:
     hits = 0
     rows = []
     for item in queries:
-        result = run_precedent_query(
-            {
-                "problem": item["problem"],
-                "sector": item.get("sector"),
-                "phase": item.get("phase"),
-                "type": item.get("type"),
-            },
-            limit=args.limit,
-            summarise=False,
-        )
-        got = [case["id"] for case in result["cases"]]
+        query = {
+            "problem": item["problem"],
+            "sector": item.get("sector"),
+            "phase": item.get("phase"),
+            "type": item.get("type"),
+        }
+        if args.offline:
+            # Deterministic, keyless baseline: same metadata + ranking code,
+            # stable SHA-256 token-hashing embedder instead of Gemini. No
+            # network calls, no LangSmith tracing.
+            cases = hybrid_retrieve(query, limit=args.limit, embedder=HashingEmbedder())
+        else:
+            cases = run_precedent_query(query, limit=args.limit, summarise=False)["cases"]
+        got = [case["id"] for case in cases]
         expected = set(item.get("must_include_any") or [])
         ok = bool(expected.intersection(got))
         hits += int(ok)
@@ -62,9 +66,12 @@ def cmd_eval(args: argparse.Namespace) -> int:
 
     total = len(queries) or 1
     rate = hits / total
-    print(f"\nHit rate: {hits}/{total} = {rate:.0%}")
+    mode = "offline-hashing" if args.offline else "gemini-hybrid"
+    print(f"\nHit@{args.limit} ({mode}): {hits}/{total} = {rate:.0%}")
     if args.json_out:
-        Path(args.json_out).write_text(json.dumps({"hit_rate": rate, "rows": rows}, indent=2))
+        Path(args.json_out).write_text(
+            json.dumps({"mode": mode, "k": args.limit, "hit_rate": rate, "rows": rows}, indent=2)
+        )
     # soft gate for a 24-case corpus — raise later once the eval set grows
     return 0 if rate >= 0.66 else 1
 
@@ -85,6 +92,11 @@ def build_parser() -> argparse.ArgumentParser:
     e = sub.add_parser("eval", help="Score eval_queries.json against hybrid retrieve")
     e.add_argument("--limit", type=int, default=5)
     e.add_argument("--json-out", default=None)
+    e.add_argument(
+        "--offline",
+        action="store_true",
+        help="Deterministic keyless baseline (hashing embedder, no Gemini/LangSmith calls)",
+    )
     e.set_defaults(func=cmd_eval)
 
     return parser
@@ -93,7 +105,7 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
-    if not (os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")):
+    if not getattr(args, "offline", False) and not (os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")):
         print("GEMINI_API_KEY missing — set it in ProjectLens/.env", file=sys.stderr)
         return 2
     return args.func(args)

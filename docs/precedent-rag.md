@@ -41,6 +41,12 @@ Live retrieval quality:
 make precedent-eval   # gold queries → top-k hit rate (needs GEMINI_API_KEY)
 ```
 
+Deterministic keyless baseline (hashing embedder, same ranking code, no network):
+
+```bash
+make precedent-eval-offline   # recorded 2026-10-06: hit@5 = 7/8 on the 189-record public corpus
+```
+
 Judge criteria for the Gemini brief (manual or future LLM-as-judge, non-Gemini):
 
 1. Every substantive claim cites a retrieved `GMPP-*` record id
