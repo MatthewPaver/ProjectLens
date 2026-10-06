@@ -1,4 +1,4 @@
-"""Load the synthetic (then BYO) precedent corpus from JSON."""
+"""Load the traced public programme-evidence corpus from JSON."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from typing import Any
 
 # Cases live next to this package so the sidecar does not need a database yet.
 DATA_DIR = Path(__file__).resolve().parent / "data"
-CASES_PATH = DATA_DIR / "cases.json"
+CASES_PATH = DATA_DIR / "public_cases.json"
 EVAL_PATH = DATA_DIR / "eval_queries.json"
 
 
@@ -16,9 +16,13 @@ def load_cases(path: Path | None = None) -> list[dict[str, Any]]:
     """Return the full case list. Fail loud if the fixture file is missing."""
     target = path or CASES_PATH
     with target.open(encoding="utf-8") as handle:
-        cases = json.load(handle)
+        payload = json.load(handle)
+    cases = payload.get("cases") if isinstance(payload, dict) else payload
     if not isinstance(cases, list) or not cases:
         raise ValueError(f"Precedent corpus at {target} is empty or not a list")
+    missing_sources = [case.get("id") for case in cases if not case.get("sourceUrl")]
+    if path is None and missing_sources:
+        raise ValueError(f"Default public corpus has source-less cases: {missing_sources[:3]}")
     return cases
 
 
@@ -41,6 +45,7 @@ def case_text(case: dict[str, Any]) -> str:
             case.get("decision", ""),
             case.get("intervention", ""),
             case.get("outcome", ""),
+            case.get("claimBoundary", ""),
             risks,
             evidence,
         ]

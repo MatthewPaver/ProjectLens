@@ -11,33 +11,35 @@ const $$ = selector => [...document.querySelectorAll(selector)];
 // offline fallback if the local Gemini/LangSmith sidecar is not running
 const comparableCasesFallback = [
   {
-    id: "DG-024",
-    title: "Late signalling interface change",
-    decision: "Conditional approval with a 10-day design freeze, named interface owner and protected regression-test window.",
-    outcome: "+8 days; no repeated safety retest",
-    reasons: ["Offline fallback · start `make precedent-rag` for Gemini hybrid retrieve"],
-    evidence: ["CR-184 approved 12 Feb 2025", "Integrated plan rev 17"],
+    id: "GMPP-DFT_0033_1819-Q1",
+    title: "East Coast Mainline Programme",
+    decision: "Published delivery confidence: Red (SRO Q4 assessment).",
+    outcome: "Comparable public status evidence; the annual snapshot does not establish a causal outcome.",
+    reasons: ["Infrastructure · schedule · scope · cost"],
+    evidence: ["NISTA Major Projects Annual Report 2025-26", "Source record: DFT_0033_1819-Q1"],
   },
   {
-    id: "DG-021",
-    title: "Passenger information requirement added",
-    decision: "Minimum compliant scope approved behind a feature flag; non-regulatory functions deferred.",
-    outcome: "+3 days; deferred functions followed later",
-    reasons: ["Offline fallback"],
-    evidence: ["Decision DL-077", "Release note 4.8"],
+    id: "GMPP-DCMS_0019_2021-Q4",
+    title: "Project Gigabit",
+    decision: "Published delivery confidence: Amber (SRO Q4 assessment).",
+    outcome: "The source reports finance and supply-chain concerns; it does not prove which intervention worked.",
+    reasons: ["Infrastructure · delivery · commercial supply chain"],
+    evidence: ["NISTA Major Projects Annual Report 2025-26", "Source record: DCMS_0019_2021-Q4"],
   },
   {
-    id: "DG-012",
-    title: "Additional security screening route",
-    decision: "Full change approved while integrated testing was compressed to protect cutover.",
-    outcome: "+17 days after integration defects escaped",
-    reasons: ["Offline fallback"],
-    evidence: ["Security change SC-09", "Test waiver TW-14"],
+    id: "GMPP-HO_0286_2324-Q2",
+    title: "Asylum Support Accommodation Programme",
+    decision: "Published delivery confidence: Red.",
+    outcome: "A traced status comparison, not a decision precedent or recommendation.",
+    reasons: ["Transformation · governance · schedule · commercial"],
+    evidence: ["NISTA Major Projects Annual Report 2025-26", "Source record: HO_0286_2324-Q2"],
   },
 ];
 
-// local sidecar by default — Pages is static; override only via PROJECTLENS_PRECEDENT_RAG_URL
-const PRECEDENT_RAG_URL = window.PROJECTLENS_PRECEDENT_RAG_URL || "http://127.0.0.1:8787";
+// Static and local demos do not probe a port by default. Opt into the sidecar
+// explicitly so GitHub Pages and browser tests do not produce a failed network
+// request that looks like an application error.
+const PRECEDENT_RAG_URL = window.PROJECTLENS_PRECEDENT_RAG_URL || null;
 const IS_PUBLIC_PAGES = /github\.io$/i.test(window.location.hostname);
 
 function precedentSidecarHint() {
@@ -47,7 +49,7 @@ function precedentSidecarHint() {
   if (IS_PUBLIC_PAGES) {
     return "GitHub Pages is static — XER checks run here; live Gemini retrieve needs `make precedent-rag` locally (or set PROJECTLENS_PRECEDENT_RAG_URL). Showing static fallback cards.";
   }
-  return "Local sidecar expected at http://127.0.0.1:8787 — run `make precedent-rag` for Gemini + LangSmith.";
+  return "Static precedent mode. Start `make precedent-rag`, then set window.PROJECTLENS_PRECEDENT_RAG_URL to http://127.0.0.1:8787 to enable live retrieval.";
 }
 
 function escapeHtml(value) {
@@ -105,6 +107,7 @@ function parseXer(text, fileName) {
   });
 
   if (!tables.PROJECT?.length || !tables.TASK?.length) throw new Error(`${fileName} is not a readable Primavera P6 XER export.`);
+  if (tables.PROJECT.length !== 1) throw new Error(`${fileName} contains multiple projects. Export a single project for change assurance, or use the detailed schedule review to inspect first-project scope.`);
 
   const project = tables.PROJECT[0];
   const tasks = tables.TASK.map(row => ({
@@ -368,8 +371,8 @@ function renderPrecedentPanel({ loading = false, offline = false } = {}) {
     host.innerHTML = [1, 2, 3].map(n => `
       <article class="comparable-case is-skeleton" aria-hidden="true">
         <span>Retrieving ${String(n).padStart(2, "0")}</span>
-        <strong>Loading cited precedent</strong>
-        <p>Asking the RAG sidecar for similar past decisions…</p>
+        <strong>Loading comparable public evidence</strong>
+        <p>Asking the RAG sidecar for similar published programme records…</p>
         <small>XER files stay in this browser</small>
       </article>`).join("");
     if (summaryHost) summaryHost.hidden = true;
@@ -389,26 +392,25 @@ function renderPrecedentPanel({ loading = false, offline = false } = {}) {
         ? "ignored"
         : "pending";
     const semantic = Number(item.semantic);
-    const weak = Number.isFinite(semantic) && semantic < 0.8;
     const reasons = (item.reasons || []).slice(0, 3).map(escapeHtml).join(" · ");
     const evidence = (item.evidence || []).slice(0, 3).map(escapeHtml).join(" · ");
-    // one score only — hybrid %; semantic stays a decimal similarity, never a second %
+    // Retrieval relevance is a ranking signal, not confidence or probability.
     const scoreLabel = item.score != null
-      ? `${escapeHtml(String(item.score))}% hybrid`
+      ? `relevance ${escapeHtml(String(item.score))}/100 · not confidence`
       : "n/a";
     const semanticLabel = Number.isFinite(semantic)
-      ? ` · semantic ${semantic.toFixed(2)}${weak ? " · weak" : ""}`
+      ? ` · semantic ${semantic.toFixed(2)}`
       : "";
     const gateLabel = gate === "used" ? "Marked use" : gate === "ignored" ? "Marked ignore" : "Pending";
     return `
-    <article class="comparable-case gate-${gate}${weak ? " weak-match" : ""}" data-precedent-id="${escapeHtml(item.id)}">
-      <span>${escapeHtml(item.id)} · ${offline ? "Offline fallback" : "Cited precedent"} · ${scoreLabel}${semanticLabel}${weak ? " · WEAK" : ""}</span>
+    <article class="comparable-case gate-${gate}" data-precedent-id="${escapeHtml(item.id)}">
+      <span>${escapeHtml(item.id)} · ${offline ? "Bundled public record" : "Retrieved public record"} · ${scoreLabel}${semanticLabel}</span>
       <strong>${escapeHtml(item.title)}</strong>
       <p>${escapeHtml(item.decision)}</p>
       <small>${escapeHtml(item.outcome || "")}</small>
       <p class="precedent-reasons">${reasons || "No match reasons supplied"}</p>
       <p class="precedent-evidence">Sources: ${evidence || "None listed"}</p>
-      <p class="precedent-gate-copy">Use → attach to decision record · Ignore → considered and dismissed</p>
+      <p class="precedent-gate-copy">Use → attach as context · Ignore → considered and dismissed. Neither action imports a recommendation.</p>
       <div class="precedent-gate">
         <button type="button" data-gate="use" data-id="${escapeHtml(item.id)}">Use</button>
         <button type="button" data-gate="ignore" data-id="${escapeHtml(item.id)}">Ignore</button>
@@ -421,7 +423,7 @@ function renderPrecedentPanel({ loading = false, offline = false } = {}) {
   if (summaryHost) {
     if (brief?.text) {
       summaryHost.hidden = false;
-      summaryHost.innerHTML = `<span>Gemini brief · citations only</span><p>${escapeHtml(brief.text)}</p><small>Not advice — mark Use / Ignore on each card before the decision register.</small>`;
+      summaryHost.innerHTML = `<span>Gemini evidence brief · citations only</span><p>${escapeHtml(brief.text)}</p><small>Comparable status evidence, not advice or a proven precedent.</small>`;
     } else {
       summaryHost.hidden = true;
       summaryHost.innerHTML = "";
@@ -478,6 +480,14 @@ function updateDecisionGateState() {
 async function loadPrecedents(review) {
   const filters = inferFilters(review);
   const problem = buildPrecedentQuery(review);
+
+  if (!PRECEDENT_RAG_URL) {
+    assuranceState.precedents.items = comparableCasesFallback;
+    assuranceState.precedents.summary = null;
+    assuranceState.precedents.mode = "offline-fallback";
+    renderPrecedentPanel({ offline: true });
+    return;
+  }
 
   try {
     const response = await fetch(`${PRECEDENT_RAG_URL}/precedents/query`, {

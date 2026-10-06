@@ -1,76 +1,74 @@
 [
   {
-    "id": "EQ-01",
-    "problem": "Approve a late signalling interface change before system integration after a standards clarification.",
-    "sector": "Rail",
-    "phase": "Integration",
-    "type": "Scope change",
-    "must_include_any": [
-      "DG-024",
-      "DG-025",
-      "DG-021"
-    ],
-    "notes": "Classic late interface during integration"
+    "id": "EQ-PUBLIC-01",
+    "problem": "rail infrastructure programme with cost, schedule, approvals and scope pressures",
+    "sector": "Infrastructure and Construction",
+    "phase": "Published portfolio status",
+    "type": "Red",
+    "must_include_any": ["GMPP-DFT_0033_1819-Q1"],
+    "notes": "East Coast Mainline Programme"
   },
   {
-    "id": "EQ-02",
-    "problem": "Security stakeholder added a screening route after interface configuration had begun and cutover cannot move.",
-    "sector": "Aviation",
-    "phase": "Integration",
-    "type": "Scope change",
-    "must_include_any": [
-      "DG-012",
-      "DG-029"
-    ],
-    "notes": "Compressed test / cutover risk"
+    "id": "EQ-PUBLIC-02",
+    "problem": "asylum accommodation programme with commercial supply chain governance and schedule risk",
+    "sector": "Government Transformation and Service Delivery",
+    "phase": "Published portfolio status",
+    "type": "Red",
+    "must_include_any": ["GMPP-HO_0149_2223-Q2", "GMPP-HO_0286_2324-Q2"],
+    "notes": "Two related Home Office programmes form a hard-negative pair"
   },
   {
-    "id": "EQ-03",
-    "problem": "Add a second installation shift to recover delay while workfront access remained constrained.",
-    "sector": "Energy",
-    "phase": "Construction",
-    "type": "Acceleration",
-    "must_include_any": [
-      "DG-019",
-      "DG-030"
-    ],
-    "notes": "Unsafe acceleration without access"
+    "id": "EQ-PUBLIC-03",
+    "problem": "future NHS workforce technology procurement and commercial supply-chain risk",
+    "sector": "Information and Communications Technology (ICT)",
+    "phase": "Published portfolio status",
+    "type": "Amber",
+    "must_include_any": ["GMPP-DHSC_0041_2122-Q3"],
+    "notes": "Future NHS Workforce Solution Transformation Programme"
   },
   {
-    "id": "EQ-04",
-    "problem": "Ground conditions required a foundation redesign after piling had mobilised with marine permits constraining sequence.",
-    "sector": "Infrastructure",
-    "phase": "Construction",
-    "type": "Design change",
-    "must_include_any": [
-      "DG-017",
-      "DG-028"
-    ],
-    "notes": "Prototype + resequence pattern"
+    "id": "EQ-PUBLIC-04",
+    "problem": "national gigabit infrastructure delivery with cost commercial schedule and governance themes",
+    "sector": "Infrastructure and Construction",
+    "phase": "Published portfolio status",
+    "type": "Amber",
+    "must_include_any": ["GMPP-DCMS_0019_2021-Q4"],
+    "notes": "Project Gigabit"
   },
   {
-    "id": "EQ-05",
-    "problem": "Safety-related firmware defect during dynamic testing needs an urgent change with limited assessor availability.",
-    "sector": "Rail",
-    "phase": "Testing",
-    "type": "Technical change",
-    "must_include_any": [
-      "DG-016",
-      "DG-027"
-    ],
-    "notes": "Controlled hotfix / evidence replay"
+    "id": "EQ-PUBLIC-05",
+    "problem": "federated NHS data platform for operational planning and care coordination",
+    "sector": "Government Transformation and Service Delivery",
+    "phase": "Published portfolio status",
+    "type": "Green",
+    "must_include_any": ["GMPP-DHSC_0252_2324-Q1"],
+    "notes": "Federated Data Platform"
   },
   {
-    "id": "EQ-06",
-    "problem": "Period progress report claims the ready-for-service date is unchanged and no material change to delivery sequence, while the control schedule finish moved substantially after late planning/procurement interface changes during systems integration on a grid connection programme.",
-    "sector": "Energy",
-    "phase": "Integration",
-    "type": "Scope change",
-    "must_include_any": [
-      "DG-033",
-      "DG-024",
-      "DG-012"
-    ],
-    "notes": "Northstar-shaped narrative vs schedule contradiction"
+    "id": "EQ-PUBLIC-06",
+    "problem": "early years childcare reform programme delivering funded entitlements",
+    "sector": "Government Transformation and Service Delivery",
+    "phase": "Published portfolio status",
+    "type": "Green",
+    "must_include_any": ["GMPP-DFE_0272_2324-Q2"],
+    "notes": "Early Years Childcare Reform Programme"
+  },
+  {
+    "id": "EQ-PUBLIC-07",
+    "problem": "main battle tank military capability with cost schedule workforce and approvals risk",
+    "sector": "Military Capability",
+    "phase": "Published portfolio status",
+    "type": "Red",
+    "must_include_any": ["GMPP-MOD_0104_1617-Q1"],
+    "notes": "ARMOUR MBT 2025"
+  },
+  {
+    "id": "EQ-PUBLIC-08",
+    "problem": "airborne early warning military capability with cost schedule commercial and assurance concerns",
+    "sector": "Military Capability",
+    "phase": "Published portfolio status",
+    "type": "Red",
+    "must_include_any": ["GMPP-MOD_0120_2021-Q2"],
+    "notes": "E7 Wedgetail"
   }
 ]

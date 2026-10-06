@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import math
 import os
+import hashlib
 from functools import lru_cache
 from typing import Any, Protocol
 
@@ -67,7 +68,11 @@ class HashingEmbedder:
     def _vec(self, text: str) -> list[float]:
         vec = [0.0] * self.dims
         for token in text.lower().split():
-            vec[hash(token) % self.dims] += 1.0
+            # Python's built-in hash is randomized between processes, which
+            # made the offline eval non-reproducible. A stable digest keeps CI,
+            # local runs and captured baselines comparable.
+            digest = hashlib.sha256(token.encode("utf-8")).digest()
+            vec[int.from_bytes(digest[:8], "big") % self.dims] += 1.0
         norm = math.sqrt(sum(v * v for v in vec)) or 1.0
         return [v / norm for v in vec]
 
@@ -101,7 +106,7 @@ def metadata_pass(
 ) -> list[dict[str, Any]]:
     """Soft filter: keep exact metadata matches preferred, but do not empty the pool.
 
-    Pure hard filters are brittle on a 24-case corpus; we score metadata later
+    Pure hard filters are brittle on a heterogeneous public corpus; we score metadata later
     and only drop rows when the pool stays large enough.
     """
     if not any([sector, phase, change_type]):
@@ -138,6 +143,10 @@ def hybrid_retrieve(
     citations are useless if the reviewer cannot inspect the match basis.
     """
     corpus = list(cases) if cases is not None else list(_case_corpus()[0])
+    # The default product promise is sourced retrieval. Callers may inject
+    # fixtures in tests, but production cases without a source fail closed.
+    if cases is None:
+        corpus = [case for case in corpus if case.get("sourceUrl")]
     sector = (query.get("sector") or "").strip() or None
     phase = (query.get("phase") or "").strip() or None
     change_type = (query.get("type") or query.get("change_type") or "").strip() or None
@@ -174,7 +183,6 @@ def hybrid_retrieve(
             sector_hit and f"Same sector · {case.get('sector')}",
             phase_hit and f"Same phase · {case.get('phase')}",
             type_hit and f"Same change · {case.get('type')}",
-            semantic < 0.8 and "Below 0.80 similarity threshold · treat as weak",
         ]
         ranked.append(
             {
@@ -187,9 +195,12 @@ def hybrid_retrieve(
                     "evidence": list(case.get("evidence") or []),
                     "project": case.get("project"),
                     "year": case.get("year"),
+                    "source_url": case.get("sourceUrl"),
+                    "source_label": case.get("sourceLabel"),
+                    "evidence_level": case.get("evidenceLevel"),
                 },
             }
         )
 
-    ranked.sort(key=lambda row: (-row["score"], -float(row.get("confidence") or 0)))
+    ranked.sort(key=lambda row: (-row["score"], str(row.get("id") or "")))
     return ranked[:limit]
