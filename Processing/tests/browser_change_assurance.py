@@ -7,16 +7,28 @@ from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[2]
 BASE_URL = "http://127.0.0.1:8765/change-assurance.html"
+# Optional precedent RAG sidecar (`make precedent-rag`); the page falls back offline when it is absent.
+SIDECAR_HOSTS = ("127.0.0.1:8787", "localhost:8787")
+
+
+def is_sidecar(text):
+    return any(host in text for host in SIDECAR_HOSTS)
+
+
+def record_console_error(errors, message):
+    # Chromium logs refused/CORS-blocked sidecar fetches as console errors; those are expected.
+    if message.type == "error" and not is_sidecar(message.text) and not is_sidecar(message.location.get("url", "")):
+        errors.append(message.text)
 
 
 def run_desktop(browser):
     page = browser.new_page(viewport={"width": 1440, "height": 1000}, device_scale_factor=1)
     errors = []
     failures = []
-    page.on("console", lambda message: errors.append(message.text) if message.type == "error" else None)
+    page.on("console", lambda message: record_console_error(errors, message))
     page.on("pageerror", lambda error: errors.append(str(error)))
     page.on("requestfailed", lambda request: failures.append(f"{request.method} {request.url}")
-            if "127.0.0.1:8787" not in request.url and "localhost:8787" not in request.url else None)
+            if not is_sidecar(request.url) else None)
     page.goto(BASE_URL)
     page.wait_for_load_state("networkidle")
 
