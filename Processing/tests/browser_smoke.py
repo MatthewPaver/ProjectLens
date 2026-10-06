@@ -5,11 +5,14 @@ python3 scripts/with_server.py --server "python3 -m http.server 8000 --directory
 """
 
 from pathlib import Path
+import os
 
 from playwright.sync_api import sync_playwright
 
 
 ROOT = Path(__file__).resolve().parents[2]
+SCREENSHOTS = Path(os.environ.get("PROJECTLENS_SCREENSHOT_DIR", "/tmp/projectlens-browser"))
+SCREENSHOTS.mkdir(parents=True, exist_ok=True)
 BASE_URL = "http://127.0.0.1:8765"
 
 
@@ -30,7 +33,7 @@ def run_desktop(browser):
     assert page.locator("#redCount").inner_text() == "34"
     page.locator(".hero h1").wait_for(state="visible")
     page.wait_for_timeout(900)
-    page.screenshot(path=str(ROOT / "docs" / "assets" / "projectlens-overview.png"))
+    page.screenshot(path=str(SCREENSHOTS / "projectlens-overview.png"))
 
     page.get_by_role("button", name="Explorer", exact=True).click()
     page.locator("#movementFilter").select_option("Worsened")
@@ -77,7 +80,7 @@ def run_mobile(browser):
     page.get_by_role("button", name="Explorer", exact=True).click()
     assert page.locator("#projectTable tr").count() > 0
     page.wait_for_timeout(600)
-    page.screenshot(path=str(ROOT / "docs" / "assets" / "projectlens-mobile.png"), full_page=True)
+    page.screenshot(path=str(SCREENSHOTS / "projectlens-mobile.png"), full_page=True)
     page.close()
 
 

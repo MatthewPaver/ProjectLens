@@ -1,12 +1,15 @@
 """End-to-end browser checks for the local-only XER evidence review."""
 
 from pathlib import Path
+import os
 import json
 
 from playwright.sync_api import sync_playwright
 
 
 ROOT = Path(__file__).resolve().parents[2]
+SCREENSHOTS = Path(os.environ.get("PROJECTLENS_SCREENSHOT_DIR", "/tmp/projectlens-browser"))
+SCREENSHOTS.mkdir(parents=True, exist_ok=True)
 BASE_URL = "http://127.0.0.1:8765/schedule-review.html"
 
 
@@ -83,7 +86,7 @@ def run_desktop(browser):
     assert pack["baselineMovements"]
     assert pack["interventionOutcomes"]
 
-    page.screenshot(path=str(ROOT / "docs" / "assets" / "schedule-review-overview.png"), full_page=True)
+    page.screenshot(path=str(SCREENSHOTS / "schedule-review-overview.png"), full_page=True)
     assert not errors, errors
     assert not failures, failures
     page.close()
@@ -98,7 +101,7 @@ def run_mobile(browser):
     page.locator("#reviewResults").wait_for(state="visible")
     assert page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
     assert page.locator("#changeList .change-row").count() >= 1
-    page.screenshot(path=str(ROOT / "docs" / "assets" / "schedule-review-mobile.png"), full_page=False)
+    page.screenshot(path=str(SCREENSHOTS / "schedule-review-mobile.png"), full_page=False)
     page.close()
 
 

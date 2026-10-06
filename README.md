@@ -2,7 +2,7 @@
 
 ProjectLens is built for the reviewer who has to tell a project board whether a change pack can be trusted — before the meeting, using only the pack's own evidence.
 
-[![Validate](https://github.com/MatthewPaver/ProjectLens/actions/workflows/validate.yml/badge.svg)](https://github.com/MatthewPaver/ProjectLens/actions/workflows/validate.yml)
+[![Verify and deploy](https://github.com/MatthewPaver/ProjectLens/actions/workflows/deploy-pages.yml/badge.svg?branch=main&event=push)](https://github.com/MatthewPaver/ProjectLens/actions/workflows/deploy-pages.yml)
 ![Python](https://img.shields.io/badge/Python-3.11-3670A0?style=flat-square&logo=python&logoColor=ffdd54)
 ![Public data](https://img.shields.io/badge/Data-UK_GMPP-d7ff4f?style=flat-square)
 ![License](https://img.shields.io/badge/Code-MIT-blue?style=flat-square)
@@ -14,14 +14,25 @@ ProjectLens is built for the reviewer who has to tell a project board whether a 
 - [Detailed XER schedule review](https://matthewpaver.github.io/ProjectLens/schedule-review.html) — select **Run the Northstar demo** for a one-click run on bundled synthetic fixtures.
 - [Explore the public GMPP evidence](https://matthewpaver.github.io/ProjectLens/)
 
-**Run it locally** (commands match the [`Makefile`](Makefile)):
+**First useful result:** select **Try the Northstar example**, inspect the three blockers, then draft questions for the team. The example is made up. For your own review, use two Primavera XER exports and keep an exported copy of the resulting decision record.
+
+**Open the browser tool locally** — Python's built-in file server is enough; no packages, API keys or test dependencies are needed:
+
+```bash
+git clone https://github.com/MatthewPaver/ProjectLens.git
+cd ProjectLens
+python3 -m http.server 8000 --bind 127.0.0.1 --directory docs
+```
+
+Open `http://127.0.0.1:8000/change-assurance.html`. Stop the server with Ctrl+C. The optional RAG sidecar is a separate workflow with its own setup and data-sharing considerations.
+
+**Develop or rebuild the data** (commands match the [`Makefile`](Makefile)):
 
 ```bash
 make install       # create .venv and install dependencies
 make test          # pytest suite
 make browser-test  # Playwright browser suite
 make public-data   # rebuild docs/data/gmpp.json from Data/public/raw/
-python -m http.server 8000 --directory docs   # serve the product at http://localhost:8000
 ```
 
 **Know the limits before relying on a finding:** see [Non-goals](#non-goals) and [Boundaries](#boundaries).
@@ -84,7 +95,7 @@ No XER to hand? Two safe synthetic projects are published so the parser is exerc
 - Northstar: [previous](https://matthewpaver.github.io/ProjectLens/demo/northstar-previous.xer) · [current](https://matthewpaver.github.io/ProjectLens/demo/northstar-current.xer)
 - Riverside: [previous](https://matthewpaver.github.io/ProjectLens/demo/riverside-previous.xer) · [current](https://matthewpaver.github.io/ProjectLens/demo/riverside-current.xer) · [narrative](https://matthewpaver.github.io/ProjectLens/demo/riverside-narrative.txt)
 
-The parser is exercised against the bundled Northstar fixtures; real-world XER exports vary, and the [Boundaries](#boundaries) section describes what ProjectLens deliberately does not attempt.
+The parser is exercised against Northstar and Riverside synthetic fixtures and synthetic format variants (BOM, LF/CRLF/CR and reordered fields). These are **not real client exports** and do not establish compatibility with every P6 version. See the [parser compatibility contract](docs/PARSER_COMPATIBILITY.md) for supported fields, rejection cases and known gaps.
 
 ## Public evidence
 
@@ -99,7 +110,9 @@ make test
 make browser-test
 ```
 
-Tests cover the board-readiness human gate, original schedule-processing modules, public-data counts, DCA precedence, matching, transitions, theme classification, score boundaries and the synthetic XER evidence contract. Playwright checks exercise the board review, one-click change and XER demos, real browser file inputs, exported assurance packs, and desktop and mobile layouts. Both suites run in CI ([`validate.yml`](.github/workflows/validate.yml)).
+Tests cover the board-readiness human gate, original schedule-processing modules, public-data counts, DCA precedence, matching, transitions, theme classification, score boundaries and the synthetic XER evidence contract. Playwright checks exercise the board review, one-click change and XER demos, real browser file inputs, exported assurance packs, and desktop and mobile layouts. Both suites run before deployment in [`deploy-pages.yml`](.github/workflows/deploy-pages.yml).
+
+Browser-only verification uses `requirements-browser.txt` (Playwright only); no forecasting/RAG packages or model downloads are needed for `make browser-test`. Screenshots default to `/tmp/projectlens-browser`; set `PROJECTLENS_SCREENSHOT_DIR` explicitly to refresh another location. Verification does not overwrite the checked-in artwork.
 
 The legacy Python pipeline reads optional local settings from `config.json`. Copy [`config.example.json`](config.example.json) when exercising that path; the public browser products require no configuration or credentials.
 
@@ -112,7 +125,7 @@ The legacy Python pipeline reads optional local settings from `config.json`. Cop
 - Absence from a later annual release does not establish whether a project delivered, closed, changed identifier or left the portfolio for another reason.
 - XER comparison identifies observable changes and integrity questions. It does not reproduce Primavera scheduling calculations or prove delay attribution.
 - Baseline assurance requires a separately supplied baseline because XER does not reliably carry baseline project data. Risk and decision links use explicit activity-code matching and remain prompts for human verification.
-- If an XER contains multiple projects, the browser demonstrator analyses the first project and reports that scope limitation.
+- Change assurance rejects multi-project XER files and asks for a single-project export. Detailed schedule review analyses the first project and reports that scope limitation.
 - A production internal version would require secure schedule connectors, permissions, audit logs and organisation-specific validation.
 
 Oracle describes XER as a proprietary exchange format, notes that baseline project data is not supported in XER export, and documents differences in risk and financial-period transfer. Those format constraints are why the workflow begins with an evidence-completeness report. See Oracle's [supported file formats](https://docs.oracle.com/cd/F51303_01/English/admin/p6_pro_importing_exporting/import_export_file_formats.htm), [XER export notes](https://docs.oracle.com/cd/E75426_01/English/User_Guides/p6_pro_user/export_projects_to_an_xer_file.htm) and [risk import guidance](https://docs.oracle.com/cd/G48897_01/p6help/en/101760.htm).
@@ -144,17 +157,30 @@ cp .env.example .env   # set GEMINI_API_KEY + LANGSMITH_API_KEY
 make install-rag
 make precedent-rag     # http://127.0.0.1:8787
 make precedent-eval    # gold queries vs hybrid retrieve (needs Gemini)
+make precedent-eval-offline  # same gold queries, deterministic, no API key
 ```
 
-Flow: hybrid retrieve (metadata filters + Gemini embeddings) → cite evidence refs → optional Gemini brief that may only cite retrieved case ids → human **Use / Ignore** on each card before the decision register. Traces land in LangSmith project `projectlens-precedent-rag` when `LANGSMITH_API_KEY` is set.
+Flow: hybrid retrieve (metadata filters + Gemini embeddings) → cite source-linked public records → optional Gemini brief that passes a fail-closed citation and decision-authority check → human **Use / Ignore** on each card before the decision register. Relevance is a ranking signal, never a confidence or outcome claim. Traces land in LangSmith project `projectlens-precedent-rag` when `LANGSMITH_API_KEY` is set.
 
-Corpus: 24 synthetic cases in `Processing/precedent_rag/data/cases.json` (BYO JSON later). Eval queries: `Processing/precedent_rag/data/eval_queries.json`. Method notes: [`docs/precedent-rag.md`](docs/precedent-rag.md).
+Default corpus: 189 source-linked current GMPP records generated by `make public-precedents` from `docs/data/gmpp.json`. The former 25 synthetic cases remain a clearly non-production legacy fixture in `cases.json`; they are not loaded by the app. Eval queries include related-programme hard negatives. Method notes: [`docs/precedent-rag.md`](docs/precedent-rag.md).
 
-If the sidecar is not running, change assurance falls back to three static cards and still requires the human gate.
+If no sidecar URL is configured, change assurance uses three static cards and still requires the human gate. It does not probe localhost or generate a failed browser request. To enable live retrieval after starting the sidecar, set `window.PROJECTLENS_PRECEDENT_RAG_URL = "http://127.0.0.1:8787"` before loading `change-assurance.js`.
+
+### Evaluation
+
+**Retrieval hit@5 = 7/8 (88%)** on the offline baseline (hit@3 = 6/8, hit@1 = 4/8). Recorded 2026-10-06 at commit `4306d99`.
+
+```bash
+make precedent-eval-offline   # or: PYTHONPATH=. .venv/bin/python -m Processing.precedent_rag.cli eval --offline --limit 5
+```
+
+What it measures: for each of the 8 labelled queries in [`eval_queries.json`](Processing/precedent_rag/data/eval_queries.json), whether at least one expected GMPP record ID appears in the top 5 results from the 189-record source-linked public corpus. It uses the production metadata filter and ranking code with a deterministic SHA-256 token-hashing embedder in place of Gemini, so it needs no key and gives the same number on every run. A test (`test_offline_eval_baseline_is_stable`) fails if the number drifts.
+
+Limits: 8 queries is a smoke-level sample, not a benchmark, and the queries were written by the author against known records. The hashing embedder is a lexical baseline; it does not measure the Gemini embedding path the sidecar uses (`make precedent-eval`), and no Gemini hit rate is published here. It scores retrieval only, not the quality or faithfulness of the generated brief.
 
 ## Related projects
 
-Supporting surfaces in this repository provide longitudinal UK major-project evidence (the GMPP explorer in [`docs/`](docs)) and a detailed browser-local Primavera P6 XER assurance workflow ([schedule review](https://matthewpaver.github.io/ProjectLens/schedule-review.html)). DecisionGraph remains a lightweight token-overlap demonstrator; ProjectLens change assurance now has the Gemini + LangSmith hybrid path above. MeetingProof has been retired from the suite.
+Supporting surfaces in this repository provide longitudinal UK major-project evidence (the GMPP explorer in [`docs/`](docs)) and a detailed browser-local Primavera P6 XER assurance workflow ([schedule review](https://matthewpaver.github.io/ProjectLens/schedule-review.html)). The useful DecisionGraph idea now lives here as a source-locked evidence-retrieval pattern with citation gates and human review. It no longer pretends synthetic outcomes are organisational memory. MeetingProof has been retired from the suite.
 
 ## History
 

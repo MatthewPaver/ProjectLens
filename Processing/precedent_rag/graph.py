@@ -40,8 +40,6 @@ def _configure_langsmith() -> None:
 
 def build_graph(embedder: Embedder | None = None):
     """Compile the small graph. Embedder injection keeps unit tests offline."""
-    from langgraph.graph import END, StateGraph
-
     def retrieve_cases(state: PrecedentState) -> PrecedentState:
         hits = hybrid_retrieve(
             state["query"],
@@ -58,6 +56,16 @@ def build_graph(embedder: Embedder | None = None):
             return {"summary": {"text": "", "cited_ids": [], "model": None, "error": "skipped"}}
         brief = summarise_precedents(state["query"], state.get("cases") or [])
         return {"summary": brief}
+
+    try:
+        from langgraph.graph import END, StateGraph
+    except ImportError:
+        class _OfflineGraph:
+            def invoke(self, state: PrecedentState) -> PrecedentState:
+                retrieved = {**state, **retrieve_cases(state)}
+                return {**retrieved, **write_brief(retrieved)}
+
+        return _OfflineGraph()
 
     graph = StateGraph(PrecedentState)
     graph.add_node("retrieve_cases", retrieve_cases)
@@ -101,14 +109,15 @@ def _run_precedent_query_impl(
                 "reasons": case.get("reasons"),
                 "evidence": case.get("evidence"),
                 "citation": case.get("citation"),
-                "confidence": case.get("confidence"),
+                "evidenceLevel": case.get("evidenceLevel"),
+                "claimBoundary": case.get("claimBoundary"),
             }
             for case in cases
         ],
         "summary": summary,
         "mode": "gemini-hybrid" if embedder is None else f"hybrid:{type(embedder).__name__}",
         "langsmith_project": os.getenv("LANGSMITH_PROJECT", "projectlens-precedent-rag"),
-        "human_gate": "Mark each precedent Use or Ignore before it touches the decision register.",
+        "human_gate": "Mark each comparable public record Use or Ignore before it touches the decision register.",
     }
 
 

@@ -263,175 +263,56 @@ def clean_dataframe(df, schema_type="tasks", project_name="unknown_project", upd
                  df[duration_col] = np.nan
                  logger.warning("Could not calculate fallback duration: Suitable start/end date columns not found or not datetime type.")
 
-        # Fill percent_complete if missing or invalid
+        # percent_complete: normalise the source values, never fabricate them.
+        # Real progress values pass through unchanged apart from unit
+        # normalisation ("75%" or 0-100 scale -> 0-1 fraction). A missing value
+        # is only derived where the source status makes it unambiguous
+        # (complete -> 1.0, not started -> 0.0); otherwise it stays NaN so
+        # downstream analysis sees "unknown" rather than an invented number.
         pc_col = "percent_complete"
+        status_lower = (
+            df["status"].astype(str).str.strip().str.lower()
+            if "status" in df.columns
+            else pd.Series("", index=df.index)
+        )
+        complete_status = status_lower.isin(["complete", "completed", "done", "finished"])
+        not_started_status = status_lower.isin(["not started", "not_started", "notstarted", "planned"])
+
         if pc_col not in df.columns:
-            logger.debug(f"Adding missing '{pc_col}' column with varied values.")
-            # Generate synthetic percent complete based on task status and dates
-            df[pc_col] = 0  # Default to 0
-            
-            # Create more varied values based on status and dates
-            # For tasks with 'In Progress' status, assign a value between 10-90%
-            in_progress_mask = df['status'].str.lower().isin(['in_progress', 'ip', 'started']).fillna(False)
-            if in_progress_mask.any():
-                # Use NumPy for vectorised random generation
-                np.random.seed(42)  # For reproducibility
-                # Generate varied percentage completions for in-progress tasks
-                df.loc[in_progress_mask, pc_col] = np.random.uniform(0.1, 0.9, size=in_progress_mask.sum())
-            
-            # For completed tasks, set to 100%
-            completed_mask = df['status'].str.lower().isin(['complete', 'completed', 'done', 'finished']).fillna(False)
-            if completed_mask.any():
-                df.loc[completed_mask, pc_col] = 1.0
-            
-            # For tasks with actual_start but no actual_finish, calculate based on dates
-            has_start_no_finish = (df['actual_start'].notna() & df['actual_finish'].isna() & ~in_progress_mask & ~completed_mask)
-            if has_start_no_finish.any() and 'end_date' in df.columns:
-                # Calculate percent complete based on how far along the timeline we are
-                today = pd.Timestamp.now().normalize()
-                
-                for idx in df[has_start_no_finish].index:
-                    start = df.loc[idx, 'actual_start']
-                    end = df.loc[idx, 'end_date']
-                    
-                    if pd.notna(start) and pd.notna(end) and isinstance(start, pd.Timestamp) and isinstance(end, pd.Timestamp):
-                        total_duration = (end - start).days
-                        if total_duration > 0:
-                            elapsed = (today - start).days
-                            # Calculate percent done based on timeline position
-                            pct_done = max(0, min(0.95, elapsed / total_duration))
-                            # Add small random variation
-                            pct_done = pct_done * (0.85 + 0.3 * np.random.random())
-                            df.loc[idx, pc_col] = pct_done
-            
-            logger.debug(f"Generated varied percent_complete values for {in_progress_mask.sum()} in-progress and {has_start_no_finish.sum()} started tasks.")
+            df[pc_col] = np.nan
         else:
-            # Ensure numeric, coercing errors (like '%' or text) to NaN, then filling NaN with varied values
-            original_pc_notna = df[pc_col].notna().sum()
-            
-            # Special handling for string formatting
-            if df[pc_col].dtype == 'object':  # String type
-                # Handle "complete" text values
-                complete_mask = df[pc_col].astype(str).str.lower().isin(['complete', 'completed', 'done', 'finished']).fillna(False)
-                if complete_mask.any():
-                    df.loc[complete_mask, pc_col] = 1.0
-                
-                # Handle percentage strings (e.g., "75%")
-                pct_str_mask = df[pc_col].astype(str).str.contains('%').fillna(False)
+            if df[pc_col].dtype == "object":
+                as_text = df[pc_col].astype(str).str.strip()
+                text_complete = as_text.str.lower().isin(["complete", "completed", "done", "finished"])
+                df.loc[text_complete, pc_col] = 1.0
+                pct_str_mask = as_text.str.endswith("%") & ~text_complete
                 if pct_str_mask.any():
-                    # Extract numeric part before % and convert to float (0-1 scale)
-                    df.loc[pct_str_mask, pc_col] = df.loc[pct_str_mask, pc_col].astype(str).str.replace('%', '').astype(float) / 100.0
-            
-            # Convert remaining values to numeric
-            df[pc_col] = pd.to_numeric(df[pc_col], errors="coerce")
-            
-            # Scale values if they appear to be percentages (0-100) instead of fractions (0-1)
-            if df[pc_col].max() > 1 and df[pc_col].max() <= 100:
-                df[pc_col] = df[pc_col] / 100.0
-                logger.debug(f"Scaled percent_complete from 0-100 range to 0-1 range.")
-            
-            # Fill missing values with varied values depending on status
-            has_na = df[pc_col].isna()
-            if has_na.any():
-                # For tasks with status, use status to determine default
-                for idx in df[has_na].index:
-                    status = str(df.loc[idx, 'status']).lower() if 'status' in df.columns else ''
-                    
-                    if 'complete' in status or status == 'done' or status == 'finished':
-                        df.loc[idx, pc_col] = 1.0
-                    elif 'progress' in status or status == 'ip' or status == 'started':
-                        df.loc[idx, pc_col] = np.random.uniform(0.3, 0.9)  # Random value for in-progress
-                    elif 'not started' in status:
-                        df.loc[idx, pc_col] = 0.0
-                    else:
-                        # Default to small random value
-                        df.loc[idx, pc_col] = np.random.uniform(0.0, 0.2)
-            
-            final_pc_notna = df[pc_col].notna().sum()  # Should be all rows now
-            if original_pc_notna != final_pc_notna:
-                logger.debug(f"Coerced/filled '{pc_col}'. Original non-NA: {original_pc_notna}, Final non-NA: {final_pc_notna}")
-            
-            # Ensure values are between 0 and 1
-            df[pc_col] = df[pc_col].clip(0, 1)
-            
-            # Add random variation to avoid all values being exactly 0 or 1
-            exact_zero_mask = (df[pc_col] == 0)
-            if exact_zero_mask.sum() > len(df) * 0.8:  # If more than 80% are exactly 0
-                # Add small random values to a portion of these
-                vary_portion = exact_zero_mask.sample(frac=0.7)  # Vary 70% of the zeros
-                if not vary_portion.empty:
-                    df.loc[vary_portion.index, pc_col] = np.random.uniform(0.01, 0.3, size=len(vary_portion))
-                    logger.debug(f"Added variation to {len(vary_portion)} rows with exact zero percent_complete.")
-                
-        # Final verification
-        if df[pc_col].isna().any():
-            logger.warning(f"Still found NaN values in '{pc_col}' after cleaning. Filling with 0.")
-            df[pc_col] = df[pc_col].fillna(0)
-            
-        # Create a more balanced distribution of percent_complete
-        # Count how many values are exactly 1.0 (completed)
-        completed_count = (df[pc_col] == 1.0).sum()
-        total_count = len(df)
-        
-        # If more than 80% of tasks are marked as completed (1.0), adjust some to show progress
-        if completed_count > total_count * 0.8:
-            logger.debug(f"Found excessive complete tasks ({completed_count}/{total_count}). Adjusting distribution.")
-            
-            # Determine how many to adjust (target around 40-60% complete)
-            target_complete = int(total_count * 0.5)  # 50% complete
-            adjust_count = completed_count - target_complete
-            
-            if adjust_count > 0:
-                # Select random subset of completed tasks to adjust
-                completed_indices = df[df[pc_col] == 1.0].index.tolist()
-                np.random.seed(42)  # For reproducibility
-                adjust_indices = np.random.choice(completed_indices, size=adjust_count, replace=False)
-                
-                # Create varied completion states
-                # 30% early stage (10-40% complete)
-                early_indices = adjust_indices[:int(adjust_count * 0.3)]
-                if len(early_indices) > 0:
-                    df.loc[early_indices, pc_col] = np.random.uniform(0.1, 0.4, size=len(early_indices))
-                
-                # 50% mid stage (40-80% complete)
-                mid_indices = adjust_indices[int(adjust_count * 0.3):int(adjust_count * 0.8)]
-                if len(mid_indices) > 0:
-                    df.loc[mid_indices, pc_col] = np.random.uniform(0.4, 0.8, size=len(mid_indices))
-                
-                # 20% late stage (80-95% complete)
-                late_indices = adjust_indices[int(adjust_count * 0.8):]
-                if len(late_indices) > 0:
-                    df.loc[late_indices, pc_col] = np.random.uniform(0.8, 0.95, size=len(late_indices))
-                    
-                logger.debug(f"Adjusted {len(adjust_indices)} tasks from complete to various progress states")
-        
-        # Add more varied not-started tasks if too few (< 5% of total)
-        not_started_count = (df[pc_col] < 0.05).sum()
-        if not_started_count < total_count * 0.05:
-            logger.debug(f"Found too few not-started tasks ({not_started_count}/{total_count}). Adding more.")
-            
-            # Target around 10% not started
-            target_not_started = int(total_count * 0.1)
-            add_count = target_not_started - not_started_count
-            
-            if add_count > 0:
-                # Select from mid-range tasks to convert to not started
-                mid_range_indices = df[(df[pc_col] > 0.05) & (df[pc_col] < 0.4)].index.tolist()
-                if len(mid_range_indices) > 0:
-                    # Take minimum of what we need or what's available
-                    adjust_count = min(add_count, len(mid_range_indices))
-                    adjust_indices = np.random.choice(mid_range_indices, size=adjust_count, replace=False)
-                    
-                    # Set these to near-zero values
-                    df.loc[adjust_indices, pc_col] = np.random.uniform(0.0, 0.05, size=len(adjust_indices))
-                    logger.debug(f"Adjusted {len(adjust_indices)} tasks to not-started state")
-        
-        # Update status based on new percent_complete values
-        if 'status' in df.columns:
-            # Recalculate status based on updated percent_complete
-            df['status'] = np.where(df[pc_col] >= 0.95, "Complete", 
-                              np.where(df[pc_col] <= 0.05, "Not Started", "In Progress"))
-            logger.debug(f"Updated status based on recalculated percent_complete values")
+                    df.loc[pct_str_mask, pc_col] = (
+                        pd.to_numeric(as_text[pct_str_mask].str.rstrip("%"), errors="coerce") / 100.0
+                    )
+                    # Already fractions; exclude from the 0-100 scale check below.
+                    already_fraction = pct_str_mask | text_complete
+                else:
+                    already_fraction = text_complete
+            else:
+                already_fraction = pd.Series(False, index=df.index)
+
+            df[pc_col] = pd.to_numeric(df[pc_col], errors="coerce").astype(float)
+
+            # Scale 0-100 values to 0-1 if the column is on a percentage scale.
+            scale_candidates = df.loc[~already_fraction, pc_col]
+            if scale_candidates.notna().any() and scale_candidates.max() > 1 and scale_candidates.max() <= 100:
+                df.loc[~already_fraction, pc_col] = scale_candidates / 100.0
+                logger.debug("Scaled percent_complete from 0-100 range to 0-1 range.")
+
+        missing = df[pc_col].isna()
+        df.loc[missing & complete_status, pc_col] = 1.0
+        df.loc[missing & not_started_status, pc_col] = 0.0
+        still_missing = int(df[pc_col].isna().sum())
+        if still_missing:
+            logger.info(
+                f"'{pc_col}' unknown for {still_missing} task(s); left as NaN rather than estimated."
+            )
 
         # Task ID standardisation/fallback
         tid_col = "task_id"
@@ -463,12 +344,16 @@ def clean_dataframe(df, schema_type="tasks", project_name="unknown_project", upd
              # Ensure consistent type and fill missing values.
              df[risk_col] = df[risk_col].astype(str).str.strip().fillna('not_evaluated')
 
-        # Status inference (can be refined)
-        # Simple inference based on percent complete.
+        # Status inference from percent complete (only when the source has no status).
         status_col = "status"
         if status_col not in df.columns:
             logger.debug(f"Adding inferred '{status_col}'.")
-            df[status_col] = np.where(df[pc_col] >= 100, "complete", "in_progress")
+            # percent_complete is a 0-1 fraction here; unknown progress stays "unknown".
+            df[status_col] = np.select(
+                [df[pc_col] >= 1.0, df[pc_col] == 0, df[pc_col].notna()],
+                ["complete", "not_started", "in_progress"],
+                default="unknown",
+            )
         else:
              df[status_col] = df[status_col].astype(str).str.strip().fillna('unknown')
 

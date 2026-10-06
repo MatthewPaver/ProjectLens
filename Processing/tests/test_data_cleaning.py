@@ -68,3 +68,54 @@ def test_cleaning_logic():
         assert "status" in cleaned.columns # Column where the error occurred
         assert cleaned["task_id"].notna().all()
         assert cleaned["status"].notna().all()
+
+
+def _run_clean_with_standardised(df_standardised):
+    """Run clean_dataframe with SchemaManager stubbed to return df_standardised."""
+    with patch('Processing.core.data_cleaning.SchemaManager') as MockSchemaManager:
+        mock_instance = MagicMock()
+        MockSchemaManager.return_value = mock_instance
+        mock_instance.required = []
+        mock_instance.standardise_columns.return_value = df_standardised.copy()
+        mock_instance.convert_data_types.side_effect = lambda df: df
+        mock_instance.enforce_not_null.side_effect = lambda df: df
+        return clean_dataframe(df_standardised.copy(), schema_type="tasks", project_name="UnitTest")
+
+
+def test_real_percent_complete_passes_through_unchanged():
+    """Real progress values must never be replaced, rebalanced or jittered.
+
+    Uses a mostly-complete schedule (>80% at 1.0) and a mostly-zero schedule
+    (>80% at 0.0): the shapes that the old cleaning code used to overwrite
+    with random values.
+    """
+    mostly_complete = [1.0] * 9 + [0.4]
+    mostly_zero = [0.0] * 9 + [0.25]
+    for values in (mostly_complete, mostly_zero):
+        df = pd.DataFrame({
+            "task_code": [f"T{i}" for i in range(len(values))],
+            "task_name": [f"Task {i}" for i in range(len(values))],
+            "status": ["In Progress"] * len(values),
+            "percent_complete": values,
+        })
+        for _ in range(2):  # deterministic across runs
+            cleaned = _run_clean_with_standardised(df)
+            assert cleaned["percent_complete"].tolist() == values
+            # Source status is kept, not recomputed from progress.
+            assert cleaned["status"].tolist() == ["In Progress"] * len(values)
+
+
+def test_percent_complete_units_normalised_and_unknowns_left_missing():
+    df = pd.DataFrame({
+        "task_code": ["A", "B", "C", "D", "E"],
+        "task_name": ["A", "B", "C", "D", "E"],
+        "status": ["In Progress", "In Progress", "Complete", "Not Started", "In Progress"],
+        "percent_complete": ["50%", "100", None, None, None],
+    })
+    cleaned = _run_clean_with_standardised(df)
+    pc = cleaned["percent_complete"].tolist()
+    assert pc[0] == 0.5
+    assert pc[1] == 1.0
+    assert pc[2] == 1.0  # derived only from an unambiguous "Complete" status
+    assert pc[3] == 0.0  # derived only from an unambiguous "Not Started" status
+    assert pd.isna(pc[4])  # in progress with no value: unknown, not invented

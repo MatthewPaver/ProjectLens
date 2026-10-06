@@ -1,11 +1,14 @@
 """End-to-end browser checks for the simplified project change assurance workflow."""
 
 from pathlib import Path
+import os
 
 from playwright.sync_api import sync_playwright
 
 
 ROOT = Path(__file__).resolve().parents[2]
+SCREENSHOTS = Path(os.environ.get("PROJECTLENS_SCREENSHOT_DIR", "/tmp/projectlens-browser"))
+SCREENSHOTS.mkdir(parents=True, exist_ok=True)
 BASE_URL = "http://127.0.0.1:8765/change-assurance.html"
 
 
@@ -15,8 +18,9 @@ def run_desktop(browser):
     failures = []
     page.on("console", lambda message: errors.append(message.text) if message.type == "error" else None)
     page.on("pageerror", lambda error: errors.append(str(error)))
-    page.on("requestfailed", lambda request: failures.append(f"{request.method} {request.url}")
-            if "127.0.0.1:8787" not in request.url and "localhost:8787" not in request.url else None)
+    sidecar_requests = []
+    page.on("requestfailed", lambda request: failures.append(f"{request.method} {request.url}"))
+    page.on("request", lambda request: sidecar_requests.append(request.url) if ":8787" in request.url else None)
     page.goto(BASE_URL)
     page.wait_for_load_state("networkidle")
 
@@ -33,9 +37,11 @@ def run_desktop(browser):
     assert page.get_by_role("button", name="Review cited precedents").is_visible()
 
     assert page.locator("#evidenceSummary .evidence-fact").count() == 6
-    # wait for offline fallback or live RAG cards (either is fine in CI)
+    # Unconfigured static mode must work without attempting a sidecar request.
     page.wait_for_function("() => document.querySelectorAll('#comparableCases .comparable-case:not(.is-skeleton)').length >= 3")
     assert page.locator("#comparableCases .comparable-case").count() >= 3
+    assert "static" in page.locator("#precedentStatus").inner_text().lower()
+    assert not sidecar_requests, sidecar_requests
     # gate label is section-level, not repeated on every card
     assert page.locator("#precedentSectionGate").is_visible()
     assert page.locator("#comparableCases .precedent-gate i").first.inner_text().casefold() != "awaiting human gate"
@@ -109,7 +115,7 @@ def run_desktop(browser):
     page.get_by_role("button", name="Try the Northstar example").click()
     page.locator("#readinessWorkspace").wait_for(state="visible")
     page.evaluate("document.querySelector('#readinessWorkspace').scrollIntoView()")
-    page.screenshot(path=str(ROOT / "docs" / "assets" / "change-assurance-overview.png"), full_page=False)
+    page.screenshot(path=str(SCREENSHOTS / "change-assurance-overview.png"), full_page=False)
     assert not errors, errors
     assert not failures, failures
     page.close()
@@ -126,7 +132,7 @@ def run_mobile(browser):
     assert page.locator("#blockerList .blocker").count() == 3
     assert page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
     page.evaluate("document.querySelector('#readinessWorkspace').scrollIntoView()")
-    page.screenshot(path=str(ROOT / "docs" / "assets" / "change-assurance-mobile.png"), full_page=False)
+    page.screenshot(path=str(SCREENSHOTS / "change-assurance-mobile.png"), full_page=False)
     page.close()
 
 
