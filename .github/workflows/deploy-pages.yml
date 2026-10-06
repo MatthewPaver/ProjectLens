@@ -1,50 +1,65 @@
-name: Test and deploy command centre
+name: Verify and deploy ProjectLens
 
 on:
   push:
+    branches: [main]
+  pull_request:
     branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: projectlens-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  test-and-deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
           cache: pip
-      - name: Install dependencies
-        run: |
-          python -m pip install -r requirements.txt
-          # precedent RAG unit tests need langgraph; Pages itself stays static HTML
-          python -m pip install -r requirements-rag.txt
-      - name: Run decision and pipeline tests
-        run: python -m pytest Processing/tests -q
-      - name: Build validated public portfolio dataset
-        run: python Processing/gmpp_pipeline.py
-      - name: Configure Pages
-        uses: actions/configure-pages@v6
-      - name: Assemble public demo
+          cache-dependency-path: |
+            requirements.txt
+            requirements-rag.txt
+      - name: Install test and RAG dependencies
+        run: make install-rag
+      - name: Run deterministic and RAG tests
+        run: .venv/bin/python -m pytest Processing/tests -q
+      - name: Install Chromium
+        run: .venv/bin/python -m playwright install --with-deps chromium
+      - name: Run browser journeys
+        run: .venv/bin/python scripts/run_browser_tests.py
+      - name: Rebuild the public fixture
+        run: .venv/bin/python Processing/gmpp_pipeline.py
+      - name: Assemble the Pages artifact
+        if: github.event_name != 'pull_request'
         run: |
           mkdir -p _site
           cp -R docs/. _site/
-      - name: Upload static command centre
+      - name: Upload the verified Pages artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v5
         with:
           path: _site
-      - name: Deploy
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: verify
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Deploy the verified artifact
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
