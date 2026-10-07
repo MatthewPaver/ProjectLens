@@ -51,7 +51,7 @@ The latest snapshot was reported by departments at 31 March 2026. Source links a
 
 nPlan, SmartPM, Nodes & Links and InEight already provide strong private schedule analytics, forecasting, quantitative risk and enterprise controls. ProjectLens deliberately does not imitate them.
 
-Its narrower gap is open, source-linked, longitudinal public delivery intelligence, plus an evidence-linked assurance workflow that asks what an XER does not contain, reconciles the submission with other project evidence and tracks whether responses worked. It is designed to complement existing planning tools. The dated market scan and source notes are in [`competitor-profiles/`](../competitor-profiles).
+Its narrower gap is open, source-linked, longitudinal public delivery intelligence, plus an evidence-linked assurance workflow that asks what an XER does not contain, reconciles the submission with other project evidence and tracks whether responses worked. It is designed to complement existing planning tools.
 
 ## History
 

@@ -1,4 +1,4 @@
-"""Record a deliberately paced, silent XER assurance walkthrough for LinkedIn."""
+"""Record the paced, silent change-assurance walkthrough video (docs/assets/projectlens-evidence-demo.*)."""
 
 from pathlib import Path
 

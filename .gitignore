@@ -51,3 +51,12 @@ work/
 # Precedent RAG local secrets + embed cache
 .env
 Processing/precedent_rag/.cache/
+
+# Local-only notes, agent prompts/logs and research (never published)
+CLAUDE-*.md
+.impeccable.md
+DONE.md
+docs/AUDIT_*.md
+competitor-profiles/
+Portfolio Overview Thumbnail.png
+docs/assets/architecture.svg
