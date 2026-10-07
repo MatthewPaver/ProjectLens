@@ -1,199 +1,122 @@
-# ProjectLens
+# ProjectLens: checks a change pack against its own evidence
 
-ProjectLens is built for the reviewer who has to tell a project board whether a change pack can be trusted — before the meeting, using only the pack's own evidence.
+For the project controls reviewer who has to tell a board whether a change pack can be trusted: ProjectLens compares the pack's narrative with its Primavera P6 schedules, risks and prior conditions, shows where they disagree, and records the human decision, all in the browser.
 
 [![Verify and deploy](https://github.com/MatthewPaver/ProjectLens/actions/workflows/deploy-pages.yml/badge.svg?branch=main&event=push)](https://github.com/MatthewPaver/ProjectLens/actions/workflows/deploy-pages.yml)
-![Python](https://img.shields.io/badge/Python-3.11-3670A0?style=flat-square&logo=python&logoColor=ffdd54)
-![Public data](https://img.shields.io/badge/Data-UK_GMPP-d7ff4f?style=flat-square)
-![License](https://img.shields.io/badge/Code-MIT-blue?style=flat-square)
+[![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
 
-**Try it now — no install, no account.** Everything runs in the browser; XER files, decisions and conditions never leave your machine.
+![ProjectLens change assurance workspace comparing a change pack narrative against its schedule evidence](docs/assets/change-assurance-overview.png)
 
-- [Review a change pack](https://matthewpaver.github.io/ProjectLens/change-assurance.html) — the primary workflow: register evidence, check conflicts, record the board decision.
-- [Prepare a board review](https://matthewpaver.github.io/ProjectLens/board-readiness.html)
-- [Detailed XER schedule review](https://matthewpaver.github.io/ProjectLens/schedule-review.html) — select **Run the Northstar demo** for a one-click run on bundled synthetic fixtures.
-- [Explore the public GMPP evidence](https://matthewpaver.github.io/ProjectLens/)
+**Live demo (no install, no account):** [review a change pack](https://matthewpaver.github.io/ProjectLens/change-assurance.html) · [XER schedule review](https://matthewpaver.github.io/ProjectLens/schedule-review.html) · [board review](https://matthewpaver.github.io/ProjectLens/board-readiness.html) · [public GMPP evidence](https://matthewpaver.github.io/ProjectLens/) · [2-minute walkthrough (MP4)](docs/assets/projectlens-evidence-demo.mp4)
 
-**First useful result:** select **Try the Northstar example**, inspect the three blockers, then draft questions for the team. The example is made up. For your own review, use two Primavera XER exports and keep an exported copy of the resulting decision record.
+On the change-assurance page, select **Try the Northstar example**. It is a synthetic pack, and the result is one readiness verdict with three blockers and the questions to send the team before the meeting.
 
-**Open the browser tool locally** — Python's built-in file server is enough; no packages, API keys or test dependencies are needed:
+## The problem
+
+A board often decides on how polished the pack looks, because nobody has time to reconcile the narrative with the schedules, risks, actions and prior conditions submitted with it. The bundled Northstar example reproduces the failure. Its progress report says there is "no change to the finish date", but the current schedule has moved the finish by 73 days. The same pack also carries a high risk with no owner, an overdue action and an approval condition from the last board that is still open. If nobody checks the evidence against the story, the board approves the story.
+
+ProjectLens gives the reviewer:
+
+- **Source-linked conflicts and gaps.** Each finding names the evidence that produced it: current or previous schedule, risk register, commitments or narrative.
+- **A prepared decision, not a dashboard.** One readiness verdict, at most three blockers, and specific questions for the team.
+- **A record of the decision.** The decision, its owner, rationale and conditions are kept; each condition stays open until it is closed or formally waived.
+
+## Quickstart
+
+The browser tool is static HTML and JavaScript. Python's built-in server is enough: no packages, no API keys.
 
 ```bash
 git clone https://github.com/MatthewPaver/ProjectLens.git
 cd ProjectLens
 python3 -m http.server 8000 --bind 127.0.0.1 --directory docs
+# open http://127.0.0.1:8000/change-assurance.html and select "Try the Northstar example"
 ```
 
-Open `http://127.0.0.1:8000/change-assurance.html`. Stop the server with Ctrl+C. The optional RAG sidecar is a separate workflow with its own setup and data-sharing considerations.
+Expected result: the readiness headline reports the 73-day finish movement and the blocker list shows three items. Stop the server with Ctrl+C.
 
-**Develop or rebuild the data** (commands match the [`Makefile`](Makefile)):
+**Your own schedules.** Export two single-project XER files from Primavera P6 (**File → Export → Primavera XER**): the comparison point and the latest submission. Select **Review my change pack**, choose both files and paste the narrative. Files are parsed in the browser and never uploaded. If you have no XER to hand, use the synthetic [Northstar](https://matthewpaver.github.io/ProjectLens/demo/northstar-previous.xer) ([current](https://matthewpaver.github.io/ProjectLens/demo/northstar-current.xer)) or [Riverside](https://matthewpaver.github.io/ProjectLens/demo/riverside-previous.xer) ([current](https://matthewpaver.github.io/ProjectLens/demo/riverside-current.xer), [narrative](https://matthewpaver.github.io/ProjectLens/demo/riverside-narrative.txt)) pairs.
+
+## How it works
+
+```mermaid
+flowchart LR
+    X[(Two XER exports<br/>+ narrative, risks, conditions)] --> P[Parse XER in the browser]
+    P --> R[Deterministic checks<br/>finish movement vs narrative,<br/>constraints, logic, float, ownership]
+    R --> V[Readiness verdict<br/>≤3 blockers + questions]
+    V -. optional .-> S[Precedent sidecar<br/>local FastAPI]
+    S --> H[Hybrid retrieve over<br/>189 public GMPP records]
+    H --> C{Citation and<br/>authority check}
+    C -- pass, brief shown --> U[Human Use / Ignore<br/>on each precedent]
+    C -- fail, brief dropped --> U
+    V --> D[Decision register<br/>owner, rationale, conditions]
+    U --> D
+```
+
+- **Change assurance** (`docs/change-assurance.html`, `.js`): parses both XER files, runs the deterministic checks against the narrative and evidence, and keeps the decision and condition registers in the browser's local storage, with an export of the decision record.
+- **Schedule review** (`docs/schedule-review.html`, `docs/xer-review.js`): the detailed XER comparison, reducing raw changes to material ones (on Northstar, 22 raw changes become 9 material changes) with integrity findings.
+- **Public evidence** (`docs/index.html`, `Processing/gmpp_pipeline.py`): joins seven annual UK Government Major Projects Portfolio (GMPP) releases into one history of delivery-confidence ratings and end-date changes. Method: [`docs/method.md`](docs/method.md).
+- **Precedent sidecar** (`Processing/precedent_rag/`, optional, local): FastAPI plus LangGraph. It retrieves comparable public records with metadata filters and Gemini embeddings. An optional Gemini brief is shown only if every claim cites a retrieved record and it does not recommend approving or rejecting the pack (`summarize.py: evaluate_summary`). It receives narrative text and filters only, never the XER. Method: [`docs/precedent-rag.md`](docs/precedent-rag.md).
+
+To run the sidecar, copy `.env.example` to `.env`, set `GEMINI_API_KEY` (and `LANGSMITH_API_KEY` for traces), then run `make precedent-rag` and set `window.PROJECTLENS_PRECEDENT_RAG_URL = "http://127.0.0.1:8787"` before `change-assurance.js` loads. Without it, the page shows three static precedent cards and the same human gate.
+
+## Results
+
+**Precedent retrieval: hit@5 = 7/8 (88%)** on the offline baseline; hit@3 = 6/8 and hit@1 = 4/8. Reproduced on 2026-10-07:
 
 ```bash
-make install       # create .venv and install dependencies
-make test          # pytest suite
-make browser-test  # Playwright browser suite
+make precedent-eval-offline
+# or: PYTHONPATH=. .venv/bin/python -m Processing.precedent_rag.cli eval --offline --limit 5
+# last line: Hit@5 (offline-hashing): 7/8 = 88%
+```
+
+For each of 8 labelled queries in [`eval_queries.json`](Processing/precedent_rag/data/eval_queries.json), it checks whether an expected GMPP record is in the top 5 of the 189-record corpus. It uses the production filter and ranking code with a deterministic SHA-256 token-hashing embedder in place of Gemini, so it needs no key and returns the same number on every run. `test_offline_eval_baseline_is_stable` fails if the number drifts.
+
+What it does not show: 8 author-written queries are a smoke test, not a benchmark. The hashing embedder is a lexical baseline and does not measure the Gemini path (`make precedent-eval`); no Gemini hit rate is published. It scores retrieval only, not the quality of the generated brief.
+
+**Change-assurance behaviour** is checked in a real browser (Playwright). On Northstar the suite asserts the 73-day headline and exactly three blockers. It also exercises real file inputs, the decision and condition flow, exported packs, and mobile layouts. The XER parser is tested on the Northstar and Riverside fixtures plus synthetic format variants (BOM; LF, CRLF and CR line endings; reordered fields). These are not real client exports; see the [parser compatibility contract](docs/PARSER_COMPATIBILITY.md).
+
+## Design decisions and trade-offs
+
+- **Browser-local comparison, not a hosted platform.** Schedule submissions are commercially sensitive, so XER files, decisions and conditions never leave the machine, and a reviewer can try it on a real pack with no install, account or data-sharing approval. The cost: records live in one browser's local storage, with no multi-user working, permissions or organisational audit log.
+- **Deterministic rules for schedule findings, not a language model reading the schedule.** Finish movement against the narrative, constraint, logic and float changes, and responses with no owner are calculated in code, so the same pack always gives the same blockers and each one traces to a field. The cost: it finds only what the rules encode, and it reads XER and CSV only.
+- **Retrieval is an opt-in sidecar with no localhost probe.** The static site never tries to reach a local server, so the default page makes no failed requests and needs no key. The cost: live precedent retrieval needs a local setup step and an explicit URL.
+- **Generated text fails closed and the human decides.** A brief with an invalid or missing citation, or one that recommends approving or rejecting, is dropped rather than shown with a warning. Each precedent still needs **Use** or **Ignore** before the decision register. The cost: some useful briefs are discarded.
+- **A reproducible offline eval alongside the live one.** The hashing-embedder baseline runs in CI with no key and cannot drift silently. The alternative, publishing only a Gemini number, could not be reproduced by a reader without a key. The cost: the published number is a lexical floor, not the production path.
+
+## Limits and non-goals
+
+- Findings prompt human verification. ProjectLens does not establish contractual entitlement, delay causation or a probability of failure, and it does not reproduce Primavera scheduling calculations.
+- It does not make the decision. The workflow ends by recording a human decision with its rationale and conditions.
+- It reads Primavera P6 XER and CSV only, not Microsoft Project or PDF. Change assurance rejects multi-project XER files; schedule review analyses the first project and says so.
+- XER does not reliably carry baseline data (see Oracle's [XER export notes](https://docs.oracle.com/cd/E75426_01/English/User_Guides/p6_pro_user/export_projects_to_an_xer_file.htm)), so baseline assurance needs a separately supplied baseline. Risk and decision links use explicit activity-code matching.
+- GMPP delivery-confidence ratings are point-in-time judgements, not outcomes. Annual data cannot support activity-level forecasting, and a project's absence from a later release does not show whether it delivered.
+- Precedent relevance is a ranking signal, not a confidence or outcome claim. Public records show status, not which intervention worked.
+- A production internal version would need secure schedule connectors, permissions, audit logs and organisation-specific validation.
+
+## Repository layout and tests
+
+```text
+docs/                         GitHub Pages site (the product)
+  change-assurance.*          change pack review and decision register
+  schedule-review.*, xer-review.js   detailed XER comparison
+  board-readiness.*           board review preparation
+  demo/                       synthetic, share-safe XER and evidence files
+  data/gmpp.json              generated public dataset
+Data/public/raw/              unmodified annual GMPP CSV releases
+Processing/gmpp_pipeline.py   builds and validates docs/data/gmpp.json
+Processing/precedent_rag/     optional retrieval sidecar and offline eval
+Processing/analysis/, core/   earlier CSV schedule-analysis pipeline (make pipeline)
+Processing/tests/             pytest suite and Playwright journeys
+```
+
+```bash
+make test          # pytest: board gate, GMPP pipeline, precedent RAG, schedule modules
+make browser-test  # Playwright journeys on desktop and mobile layouts
 make public-data   # rebuild docs/data/gmpp.json from Data/public/raw/
 ```
 
-**Know the limits before relying on a finding:** see [Non-goals](#non-goals) and [Boundaries](#boundaries).
+Both suites run in [`deploy-pages.yml`](.github/workflows/deploy-pages.yml) before every deploy. Python 3.11. Browser tests need only `requirements-browser.txt`; screenshots go to `/tmp/projectlens-browser` unless `PROJECTLENS_SCREENSHOT_DIR` is set.
 
-## The problem
+## Licence
 
-A project board usually decides on the polish of the pack, because nobody has time to reconcile the narrative against the schedules, risks, actions and prior conditions submitted alongside it. That is how a green status narrative claiming "no change to the finish date" gets approved while the current schedule has actually moved it by 73 days — exactly the failure the bundled Northstar example reproduces, alongside a high risk with no accountable owner, an overdue action and a prior approval condition still open. When the evidence disagrees with the story and no one checks, the board approves the story.
-
-**Who it's for:** the project controls reviewer or PMO lead preparing a board decision on a change pack.
-
-**What you get:**
-
-- **Source-linked conflicts and gaps** — each finding names the evidence item that produced it (current pack, previous pack, RAID, commitments, schedule).
-- **A prepared decision, not a dashboard** — one readiness verdict, at most three blockers, and the specific questions to send for answers before the meeting.
-- **A durable record** — the human decision, its owner, rationale and approval conditions are preserved, and each condition stays open until it is closed or formally waived.
-
-![ProjectLens change assurance workspace comparing a change pack narrative against its schedule evidence](docs/assets/change-assurance-overview.png)
-
-[**2-minute walkthrough**](docs/assets/projectlens-evidence-demo.mp4) — a paced, silent MP4 product tour.
-
-## Non-goals
-
-- It does not establish contractual entitlement, delay causation or a probability of failure — findings are prompts for human verification, not claims.
-- It does not replace the board. The workflow ends by recording a human decision with its rationale and conditions; the system never makes the decision.
-- It does not read Microsoft Project (MSP) or PDF schedules. The browser workflows parse Primavera P6 XER exports and CSV evidence only.
-
-## Why this design
-
-The central trade-off is browser-local XER comparison instead of a hosted platform. Schedule submissions are commercially sensitive, so the comparison runs entirely in the browser: XER files, decisions and conditions never leave the machine, which also means a reviewer can evaluate the product against a real pack with no install, no account and no data-sharing approval. The cost is deliberate: records persist only in one browser's local storage, there is no multi-user collaboration, and there are no server-side schedule connectors, permissions or organisational audit logs — a production internal version would need all of those (see Boundaries). That trade is acceptable because the target user is a single reviewer preparing one board meeting, and the fastest route to trust is letting them test it on private data without asking anyone's permission.
-
-## The Northstar demo
-
-Open [the live schedule evidence review](https://matthewpaver.github.io/ProjectLens/schedule-review.html) and select **Run the Northstar demo**. The synthetic pair is safe to share and intentionally contains:
-
-- a 73-day project finish movement
-- 22 raw changes reduced to 9 material changes and 8 executive priorities
-- a separate baseline, risk register, schedule basis and decision log
-- changed logic, constraints, float erosion and integrity findings
-- an approved change, an unlinked change and a deferred decision
-- a **realistic period progress report** that still claims the key date is unchanged and asks the board only to “note progress”
-- a previous intervention that can be assessed against the later submission
-
-On [change assurance](https://matthewpaver.github.io/ProjectLens/change-assurance.html), **Try the Northstar example** runs the same pack: deterministic XER blockers first, then cited precedent retrieval against that board-style covering note.
-
-You can switch between executive and analyst views, inspect why each change was prioritised, save assurance actions in the browser and download the complete evidence-linked review pack as JSON.
-
-Users can also register their own evidence locally in the browser; the detailed schedule module parses XER and CSV evidence without uploading it.
-
-## Bring your own XER
-
-The [change assurance review](https://matthewpaver.github.io/ProjectLens/change-assurance.html) works on your own schedules, not just the demo:
-
-1. Export two Primavera P6 schedules as XER files (**File → Export → Primavera XER (.xer)**): the comparison point (previous update or baseline) and the latest submission.
-2. Open the review, select **Review my change pack**, and choose the two files. They are parsed in your browser and never uploaded.
-3. Paste the progress narrative that accompanied the update (optional, but required for contradiction checks).
-4. Run the check, resolve or accept the blockers, and record the decision.
-
-No XER to hand? Two safe synthetic projects are published so the parser is exercised beyond a single pack:
-
-- Northstar: [previous](https://matthewpaver.github.io/ProjectLens/demo/northstar-previous.xer) · [current](https://matthewpaver.github.io/ProjectLens/demo/northstar-current.xer)
-- Riverside: [previous](https://matthewpaver.github.io/ProjectLens/demo/riverside-previous.xer) · [current](https://matthewpaver.github.io/ProjectLens/demo/riverside-current.xer) · [narrative](https://matthewpaver.github.io/ProjectLens/demo/riverside-narrative.txt)
-
-The parser is exercised against Northstar and Riverside synthetic fixtures and synthetic format variants (BOM, LF/CRLF/CR and reordered fields). These are **not real client exports** and do not establish compatibility with every P6 version. See the [parser compatibility contract](docs/PARSER_COMPATIBILITY.md) for supported fields, rejection cases and known gaps.
-
-## Public evidence
-
-Beyond the private change-pack workflow, ProjectLens joins seven annual Government Major Projects Portfolio releases into an inspectable history: which published delivery-confidence ratings worsened, which end dates changed and by how much, what explanations departments are publishing, and which projects have left the portfolio without a confirmed outcome. The full method, the score definition and the current evidence-base counts are in [`docs/method.md`](docs/method.md). Source links and licensing notes are in [`Data/public/README.md`](Data/public/README.md).
-
-To rebuild the validated dataset locally, run `make public-data`; it reads the unmodified annual CSV files under `Data/public/raw/` and writes `docs/data/gmpp.json`.
-
-## Tests
-
-```bash
-make test
-make browser-test
-```
-
-Tests cover the board-readiness human gate, original schedule-processing modules, public-data counts, DCA precedence, matching, transitions, theme classification, score boundaries and the synthetic XER evidence contract. Playwright checks exercise the board review, one-click change and XER demos, real browser file inputs, exported assurance packs, and desktop and mobile layouts. Both suites run before deployment in [`deploy-pages.yml`](.github/workflows/deploy-pages.yml).
-
-Browser-only verification uses `requirements-browser.txt` (Playwright only); no forecasting/RAG packages or model downloads are needed for `make browser-test`. Screenshots default to `/tmp/projectlens-browser`; set `PROJECTLENS_SCREENSHOT_DIR` explicitly to refresh another location. Verification does not overwrite the checked-in artwork.
-
-The legacy Python pipeline reads optional local settings from `config.json`. Copy [`config.example.json`](config.example.json) when exercising that path; the public browser products require no configuration or credentials.
-
-## Boundaries
-
-- Delivery Confidence Assessments are point-in-time judgements, not outcomes.
-- Annual portfolio data cannot support activity-level critical-path forecasting.
-- Theme matching does not prove root cause.
-- Comparable cases prompt investigation and do not prescribe an intervention.
-- Absence from a later annual release does not establish whether a project delivered, closed, changed identifier or left the portfolio for another reason.
-- XER comparison identifies observable changes and integrity questions. It does not reproduce Primavera scheduling calculations or prove delay attribution.
-- Baseline assurance requires a separately supplied baseline because XER does not reliably carry baseline project data. Risk and decision links use explicit activity-code matching and remain prompts for human verification.
-- Change assurance rejects multi-project XER files and asks for a single-project export. Detailed schedule review analyses the first project and reports that scope limitation.
-- A production internal version would require secure schedule connectors, permissions, audit logs and organisation-specific validation.
-
-Oracle describes XER as a proprietary exchange format, notes that baseline project data is not supported in XER export, and documents differences in risk and financial-period transfer. Those format constraints are why the workflow begins with an evidence-completeness report. See Oracle's [supported file formats](https://docs.oracle.com/cd/F51303_01/English/admin/p6_pro_importing_exporting/import_export_file_formats.htm), [XER export notes](https://docs.oracle.com/cd/E75426_01/English/User_Guides/p6_pro_user/export_projects_to_an_xer_file.htm) and [risk import guidance](https://docs.oracle.com/cd/G48897_01/p6help/en/101760.htm).
-
-## Repository layout
-
-```text
-docs/                    GitHub Pages product and generated JSON
-docs/change-assurance.*  browser-local change pack review + human decision gate
-docs/precedent-rag.md    cited precedent RAG method (Gemini + LangSmith)
-docs/schedule-review.*   browser-local XER evidence review
-docs/demo/               synthetic, share-safe XER and evidence kit
-docs/method.md           method detail, evidence-base counts, market position
-Data/public/             official annual GMPP source files
-Processing/gmpp_pipeline.py
-                         longitudinal preparation and validation
-Processing/precedent_rag/  optional local sidecar: hybrid retrieve → cite → summarise
-Processing/analysis/     legacy schedule-analysis modules, retained for tests
-Processing/tests/        deterministic and integration tests
-competitor-profiles/     dated market scan and source notes
-```
-
-## Cited precedent RAG (optional local sidecar)
-
-XER comparison stays **deterministic in the browser**. The optional sidecar answers only “what happened last time?” with inspectable sources — not a chatbot bolted onto the schedule maths.
-
-```bash
-cp .env.example .env   # set GEMINI_API_KEY + LANGSMITH_API_KEY
-make install-rag
-make precedent-rag     # http://127.0.0.1:8787
-make precedent-eval    # gold queries vs hybrid retrieve (needs Gemini)
-make precedent-eval-offline  # same gold queries, deterministic, no API key
-```
-
-Flow: hybrid retrieve (metadata filters + Gemini embeddings) → cite source-linked public records → optional Gemini brief that passes a fail-closed citation and decision-authority check → human **Use / Ignore** on each card before the decision register. Relevance is a ranking signal, never a confidence or outcome claim. Traces land in LangSmith project `projectlens-precedent-rag` when `LANGSMITH_API_KEY` is set.
-
-Default corpus: 189 source-linked current GMPP records generated by `make public-precedents` from `docs/data/gmpp.json`. The former 25 synthetic cases remain a clearly non-production legacy fixture in `cases.json`; they are not loaded by the app. Eval queries include related-programme hard negatives. Method notes: [`docs/precedent-rag.md`](docs/precedent-rag.md).
-
-If no sidecar URL is configured, change assurance uses three static cards and still requires the human gate. It does not probe localhost or generate a failed browser request. To enable live retrieval after starting the sidecar, set `window.PROJECTLENS_PRECEDENT_RAG_URL = "http://127.0.0.1:8787"` before loading `change-assurance.js`.
-
-### Evaluation
-
-**Retrieval hit@5 = 7/8 (88%)** on the offline baseline (hit@3 = 6/8, hit@1 = 4/8). Recorded 2026-10-06 at commit `4306d99`.
-
-```bash
-make precedent-eval-offline   # or: PYTHONPATH=. .venv/bin/python -m Processing.precedent_rag.cli eval --offline --limit 5
-```
-
-What it measures: for each of the 8 labelled queries in [`eval_queries.json`](Processing/precedent_rag/data/eval_queries.json), whether at least one expected GMPP record ID appears in the top 5 results from the 189-record source-linked public corpus. It uses the production metadata filter and ranking code with a deterministic SHA-256 token-hashing embedder in place of Gemini, so it needs no key and gives the same number on every run. A test (`test_offline_eval_baseline_is_stable`) fails if the number drifts.
-
-Limits: 8 queries is a smoke-level sample, not a benchmark, and the queries were written by the author against known records. The hashing embedder is a lexical baseline; it does not measure the Gemini embedding path the sidecar uses (`make precedent-eval`), and no Gemini hit rate is published here. It scores retrieval only, not the quality or faithfulness of the generated brief.
-
-## Related projects
-
-Supporting surfaces in this repository provide longitudinal UK major-project evidence (the GMPP explorer in [`docs/`](docs)) and a detailed browser-local Primavera P6 XER assurance workflow ([schedule review](https://matthewpaver.github.io/ProjectLens/schedule-review.html)). The useful DecisionGraph idea now lives here as a source-locked evidence-retrieval pattern with citation gates and human review. It no longer pretends synthetic outcomes are organisational memory. MeetingProof has been retired from the suite.
-
-## History
-
-The arc, from the repository's own log:
-
-- **2025-04 to 2025-05** — repository created; initial schedule-processing pipeline and data uploads.
-- **2025-11 to 2026-03** — housekeeping: README restructure, MIT licence, `.gitignore`, `requirements.txt`, standardised setup.
-- **2026-05** — validation workflow, CI badge, reviewer notes and packaging; portfolio quick read.
-- **2026-07-14 to 2026-07-15** — rebuilt as an evidence-linked assurance product: risk command centre, self-serve evidence room, XER comparison turned into evidence assurance, change assurance workflow.
-- **2026-07-20** — project evidence desk built.
-- **2026-07-27** — [v1.0.0 release](https://github.com/MatthewPaver/ProjectLens/releases/tag/v1.0.0).
-- **2026-07-28** — browser workflows verified end-to-end and generated data removed from the tree.
-
-## License
-
-ProjectLens code is MIT licensed. Government source data is used under the Open Government Licence. See each official publication for source terms.
+Code: MIT, see [LICENSE](LICENSE). GMPP source data is Crown copyright, used under the Open Government Licence; source links are in [`Data/public/README.md`](Data/public/README.md).
