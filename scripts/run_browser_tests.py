@@ -24,9 +24,15 @@ class QuietHandler(SimpleHTTPRequestHandler):
         return
 
 
+class DocsServer(ThreadingHTTPServer):
+    # The default listen backlog of 5 makes macOS reset connections when a
+    # page fires several parallel fetches (the XER demo loads seven files).
+    request_queue_size = 64
+
+
 def main() -> None:
     handler = partial(QuietHandler, directory=ROOT / "docs")
-    server = ThreadingHTTPServer(("127.0.0.1", 8765), handler)
+    server = DocsServer(("127.0.0.1", 8765), handler)
     thread = Thread(target=server.serve_forever, daemon=True)
     thread.start()
     try:
