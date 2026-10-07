@@ -4,6 +4,8 @@ import numpy as np
 import logging
 import traceback
 
+CHANGEPOINT_OUTPUT_COLUMNS = ['project_name', 'task_id', 'task_name', 'update_phase', 'slip_days', 'severity_score', 'change_type']
+
 def detect_change_points_pelt(series: pd.Series, model="rbf", pen=3) -> list[int]:
     """Detects change points in a time series using the PELT algorithm.
 
@@ -161,7 +163,7 @@ def detect_change_points(df: pd.DataFrame, project_name: str) -> pd.DataFrame:
                 changepoint_data['task_id'] = task_id # Ensure task_id is present
                 
                 # Select relevant columns for the output, including severity_score and change_type if available
-                output_cols = ['project_name', 'task_id', 'task_name', 'update_phase', 'slip_days', 'severity_score', 'change_type']
+                output_cols = CHANGEPOINT_OUTPUT_COLUMNS
                 # Ensure all columns exist, handle missing ones if necessary.
                 final_changepoint_data = changepoint_data[[col for col in output_cols if col in changepoint_data.columns]]
                 
@@ -177,49 +179,10 @@ def detect_change_points(df: pd.DataFrame, project_name: str) -> pd.DataFrame:
     if not all_changepoints:
         logger.info(f"[{project_name}] Change point detection finished. No change points detected across all tasks.")
         
-        # Create synthetic change points for demonstration when none are detected
-        if not df.empty and 'task_id' in df.columns:
-            logger.info(f"[{project_name}] Creating synthetic change points for demonstration purposes.")
-            synthetic_changepoints = []
-            
-            # Get a sample of task_ids to create change points for
-            task_sample = df['task_id'].drop_duplicates().head(5).tolist()
-            
-            for task_id in task_sample:
-                # Get task name if available
-                task_name = f"Task {task_id}"
-                if 'task_name' in df.columns:
-                    task_names = df[df['task_id'] == task_id]['task_name'].drop_duplicates()
-                    if not task_names.empty:
-                        task_name = task_names.iloc[0]
-                
-                # Get update phase if available
-                update_phase = "Update_005"
-                if 'update_phase' in df.columns:
-                    phases = df[df['task_id'] == task_id]['update_phase'].drop_duplicates()
-                    if not phases.empty:
-                        update_phase = phases.iloc[0]
-                
-                # Create sample change point data
-                import random
-                slip_days = random.randint(5, 20)
-                severity_score = min(slip_days / 2, 10)  # Calculate a reasonable severity score
-                
-                synthetic_changepoints.append({
-                    'project_name': project_name,
-                    'task_id': task_id,
-                    'task_name': task_name,
-                    'update_phase': update_phase,
-                    'slip_days': slip_days,
-                    'severity_score': severity_score,
-                    'change_type': 'Slipped Further'
-                })
-            
-            result_df = pd.DataFrame(synthetic_changepoints)
-            logger.info(f"[{project_name}] Created {len(result_df)} synthetic change points for demonstration.")
-            return result_df
-            
-        return pd.DataFrame() # Return empty DataFrame if no synthetic data created
+        # No detected change points is a valid finding: report none rather than
+        # inventing any. Keep the output columns so downstream writers still
+        # produce a header-only file.
+        return pd.DataFrame(columns=CHANGEPOINT_OUTPUT_COLUMNS)
 
     # Concatenate results from all tasks into a single DataFrame.
     try:

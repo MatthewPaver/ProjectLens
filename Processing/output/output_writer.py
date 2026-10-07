@@ -3,7 +3,6 @@ import json
 import pandas as pd
 import numpy as np
 import logging
-import math
 
 # Define a helper function to prepare and save DataFrames
 def _save_output_csv(df_input, required_columns, output_filepath, rename_map=None, default_values=None, unique_cols_subset=None):
@@ -129,6 +128,47 @@ def _save_output_csv(df_input, required_columns, output_filepath, rename_map=Non
     except Exception as e:
         logger.error(f"Failed to write {os.path.basename(output_filepath)}: {e}", exc_info=True)
 
+
+
+def milestone_deviation_percentage(milestones: pd.DataFrame, cleaned_df: pd.DataFrame | None) -> pd.Series:
+    """Return slip as a percentage of each milestone's baseline duration.
+
+    deviation_percentage = slip_days / (baseline_end_date - baseline_start_date in days) * 100
+
+    Baseline dates come from the milestone rows when present, otherwise from the
+    latest cleaned row for the same task_id. Rows without slip_days, without both
+    baseline dates, or with a zero or negative baseline duration (for example a
+    zero-duration milestone) get NA: the input cannot support a percentage, so
+    none is reported.
+    """
+    result = pd.Series(np.nan, index=milestones.index, dtype="float64")
+    if milestones.empty or 'slip_days' not in milestones.columns:
+        return result
+
+    dates = milestones[[c for c in ('task_id', 'baseline_start_date', 'baseline_end_date') if c in milestones.columns]].copy()
+    needed = ['baseline_start_date', 'baseline_end_date']
+    missing = [c for c in needed if c not in dates.columns]
+    if missing and cleaned_df is not None and not cleaned_df.empty and 'task_id' in dates.columns \
+            and 'task_id' in cleaned_df.columns and all(c in cleaned_df.columns for c in missing):
+        source = cleaned_df[['task_id'] + missing].copy()
+        if 'update_phase' in cleaned_df.columns:
+            source['update_phase'] = cleaned_df['update_phase']
+            source = source.sort_values('update_phase')
+        source = source.drop_duplicates(subset=['task_id'], keep='last')[['task_id'] + missing]
+        merged = dates[['task_id']].merge(source, on='task_id', how='left')
+        merged.index = dates.index
+        for col in missing:
+            dates[col] = merged[col]
+    if not all(c in dates.columns for c in needed):
+        return result
+
+    start = pd.to_datetime(dates['baseline_start_date'], errors='coerce')
+    end = pd.to_datetime(dates['baseline_end_date'], errors='coerce')
+    duration_days = (end - start).dt.days
+    slip = pd.to_numeric(milestones['slip_days'], errors='coerce')
+    valid = duration_days.gt(0) & slip.notna()
+    result.loc[valid] = (slip[valid] / duration_days[valid] * 100).round(1)
+    return result
 
 def write_outputs(
     output_path: str,
@@ -334,7 +374,7 @@ def write_outputs(
     milestone_defaults = {
         "slip_days": 0,
         "severity_score": 0.0,
-        "deviation_percentage": 0.0,
+        "deviation_percentage": pd.NA,  # unknown is reported as NA, never as 0%
         "no_milestones": False, # Default assuming milestones exist if df is not empty
         "project_name": project_name,
         "task_name": "Unknown Milestone"
@@ -390,62 +430,11 @@ def write_outputs(
             else:
                 logger.warning(f"[{project_name}] Cannot merge slippage data into milestones: insufficient data.")
         
-        # Calculate deviation percentage based on slip days vs baseline duration
-        # Deviation percent = (slip_days / baseline_duration_days) * 100 
-        if 'slip_days' in milestones_to_save.columns:
-            try:
-                # Generate varied deviation percentages based on slip_days
-                # For more interesting visualization, we'll use a more dynamic approach
-                
-                # Get absolute slip days to work with
-                absolute_slip = milestones_to_save['slip_days'].abs().fillna(0)
-                
-                # Create deviation percentage:
-                # 1. For early milestones (negative slip), use lower percentages (1-25%)
-                # 2. For on-time/slightly late (0-7 days), use moderate percentages (10-40%)
-                # 3. For late milestones (>7 days), use higher percentages (30-100%)
-                
-                # Initialise with random baseline values (5-15%)
-                milestones_to_save['deviation_percentage'] = [random.uniform(5, 15) for _ in range(len(milestones_to_save))]
-                
-                # Update early milestones (negative slip)
-                early_mask = milestones_to_save['slip_days'] < 0
-                if early_mask.any():
-                    # Scale based on how early: more negative = lower percentage (good performance)
-                    for idx in milestones_to_save[early_mask].index:
-                        slip = abs(milestones_to_save.loc[idx, 'slip_days'])
-                        # Early completion gets a small percentage (1-25%)
-                        milestones_to_save.loc[idx, 'deviation_percentage'] = min(25, max(1, slip / 2))
-                
-                # Update on-time or slightly late (0-7 days)
-                slight_delay_mask = (milestones_to_save['slip_days'] >= 0) & (milestones_to_save['slip_days'] <= 7)
-                if slight_delay_mask.any():
-                    # Slight delays get moderate percentages (10-40%)
-                    for idx in milestones_to_save[slight_delay_mask].index:
-                        slip = milestones_to_save.loc[idx, 'slip_days']
-                        # Scaling factor depends on how close to 7 days
-                        factor = slip / 7
-                        milestones_to_save.loc[idx, 'deviation_percentage'] = 10 + (factor * 30)
-                
-                # Update significantly late milestones (>7 days)
-                late_mask = milestones_to_save['slip_days'] > 7
-                if late_mask.any():
-                    # Late milestones get higher percentages (30-100%)
-                    for idx in milestones_to_save[late_mask].index:
-                        slip = milestones_to_save.loc[idx, 'slip_days']
-                        # Use a logarithmic scale to avoid extreme values for very large slips
-                        log_factor = math.log(slip + 1, 10)  # +1 to avoid log(0)
-                        # 30% minimum for late, scaling up to 100% for very late
-                        milestones_to_save.loc[idx, 'deviation_percentage'] = min(100, 30 + (log_factor * 35))
-                
-                logger.debug(f"[{project_name}] Calculated varied deviation percentages based on slip days")
-                
-            except Exception as e_dev:
-                logger.warning(f"[{project_name}] Error calculating deviation percentage: {e_dev}")
-                milestones_to_save['deviation_percentage'] = milestone_defaults['deviation_percentage']
-        else:
-            logger.warning(f"[{project_name}] Cannot calculate deviation percentage: 'slip_days' missing")
-            milestones_to_save['deviation_percentage'] = milestone_defaults['deviation_percentage']
+        # Deviation percent = slip_days / baseline duration (days) * 100, computed
+        # only from the schedule's own baseline dates. Missing inputs give NA.
+        milestones_to_save['deviation_percentage'] = milestone_deviation_percentage(
+            milestones_to_save, cleaned_df
+        )
     else:
         # Handle case where milestones_df was empty from the start
         logger.info(f"[{project_name}] No milestones found to write.")
