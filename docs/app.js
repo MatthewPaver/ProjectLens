@@ -337,9 +337,9 @@ function renderMethod() {
 
 const demoSteps = [
   { title: "Start with the portfolio pulse", copy: "ProjectLens begins with the 18 comparable projects whose official published DCA worsened this year.", action() { setView("briefing"); $(".pulse-strip").scrollIntoView({ behavior: "smooth", block: "center" }); } },
-  { title: "Open the evidence, not a black box", copy: "The Unity Programme moved from Amber to Red. The detail view shows the exact scoring reasons and the published narrative.", action() { const project = state.data.projects.find(item => item.name.includes("UNITY PROGRAMME")) || state.data.projects.find(item => item.transition === "Worsened"); openProject(project.id); } },
-  { title: "Ask what happened elsewhere", copy: "Case match retrieves projects that improved in a later release and explains the theme, category and department overlap.", action() { $("#projectDialog").close(); setView("cases"); renderCases(); } },
-  { title: "End with the boundary", copy: "The score is a transparent attention queue. It is not a probability of failure, and every recommendation remains a human decision.", action() { setView("method"); } }
+  { title: "Open a project's evidence", copy: "The Unity Programme moved from Amber to Red. The detail view shows the exact scoring reasons and the published narrative.", action() { const project = state.data.projects.find(item => item.name.includes("UNITY PROGRAMME")) || state.data.projects.find(item => item.transition === "Worsened"); openProject(project.id); } },
+  { title: "Look at similar projects", copy: "Case match retrieves projects that improved in a later release and explains the theme, category and department overlap.", action() { $("#projectDialog").close(); setView("cases"); renderCases(); } },
+  { title: "Read the limits", copy: "The score sets a review order from published signals. It does not give a probability of failure, and a person makes every decision.", action() { setView("method"); } }
 ];
 
 function renderDemo() {
@@ -382,7 +382,7 @@ function bindEvents() {
       state.demoStep += 1;
       setTimeout(() => { renderDemo(); $("#demoDialog").showModal(); }, 900);
     } else {
-      showToast("Demo complete. Every signal remains linked to official evidence.");
+      showToast("Demo finished. Each signal links to its official source.");
     }
   });
 }

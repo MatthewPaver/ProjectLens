@@ -68,7 +68,7 @@ def test_demo_includes_bounded_assurance_evidence():
 def test_review_page_states_privacy_and_model_boundary():
     page = (DOCS / "schedule-review.html").read_text(encoding="utf-8")
     script = (DOCS / "xer-review.js").read_text(encoding="utf-8")
-    assert "Upload the schedule, narrative and previous commitments" in page
+    assert "Add the schedule, narrative and previous commitments" in page
 
     assert "Nothing uploaded" in page
     assert "run in your browser" in page
@@ -86,7 +86,7 @@ def test_change_assurance_exposes_one_simple_decision_workflow():
     script = (DOCS / "change-assurance.js").read_text(encoding="utf-8")
     stylesheet = (DOCS / "change-assurance.css").read_text(encoding="utf-8")
 
-    assert "Is this change" in page
+    assert "Check the change pack" in page
     assert "Add the pack" in page
     assert "Review blockers" in page
     assert "Record decision" in page
@@ -96,7 +96,7 @@ def test_change_assurance_exposes_one_simple_decision_workflow():
     assert "localStorage" in script
     assert "fetch(\"demo/" in script
     assert "prefers-reduced-motion" in stylesheet
-    assert "Files stay here" in page
+    assert "Your files stay in this browser" in page
 
 
 def test_riverside_pair_is_a_second_comparable_project():

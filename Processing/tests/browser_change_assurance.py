@@ -25,7 +25,7 @@ def run_desktop(browser):
     page.wait_for_load_state("networkidle")
 
     assert page.locator("[data-view-link]").count() == 3
-    assert page.get_by_role("heading", name="Is this change ready to decide?").is_visible()
+    assert page.get_by_role("heading", name="Check the change pack before you decide.").is_visible()
     page.get_by_role("button", name="Try the Northstar example").click()
     page.locator("#readinessWorkspace").wait_for(state="visible")
     readiness_status = page.locator("#readinessStatus").inner_text()

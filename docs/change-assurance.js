@@ -47,7 +47,7 @@ function precedentSidecarHint() {
     return `Using configured RAG API · ${PRECEDENT_RAG_URL}`;
   }
   if (IS_PUBLIC_PAGES) {
-    return "GitHub Pages is static — XER checks run here; live Gemini retrieve needs `make precedent-rag` locally (or set PROJECTLENS_PRECEDENT_RAG_URL). Showing static fallback cards.";
+    return "This GitHub Pages site is static, so it shows bundled example cards. XER checks still run here. For live Gemini retrieval, run `make precedent-rag` locally or set PROJECTLENS_PRECEDENT_RAG_URL.";
   }
   return "Static precedent mode. Start `make precedent-rag`, then set window.PROJECTLENS_PRECEDENT_RAG_URL to http://127.0.0.1:8787 to enable live retrieval.";
 }
@@ -181,37 +181,37 @@ function analyseReview(previous, current, narrative) {
   }
   if (statedStable && finishMovement >= 7) {
     blockers.push({
-      type: "Direct contradiction",
-      title: `Finish moved ${finishMovement} days but the narrative presents stability`,
+      type: "Contradiction",
+      title: `The finish moved ${finishMovement} days but the narrative says the schedule is stable`,
       detail: `${formatDate(previous.project.scheduledFinish)} → ${formatDate(current.project.scheduledFinish)}.`,
     });
   }
   if (changes.constraintChanges && !/\bconstraint|mandatory|fixed date|must finish|must start\b/.test(text)) {
     blockers.push({
       type: "Unexplained change",
-      title: `${changes.constraintChanges} constraint changes are not addressed`,
-      detail: "Dated constraints can influence float and the apparent driving path.",
+      title: `The narrative does not mention ${changes.constraintChanges} constraint changes`,
+      detail: "Dated constraints can change float and which path drives the finish.",
     });
   }
   if (changes.relationChanges && !/\b(logic|relationship|predecessor|successor|resequence|sequence)\b/.test(text)) {
     blockers.push({
       type: "Unexplained change",
-      title: `${changes.relationChanges} relationship changes are not addressed`,
-      detail: "Changed logic can move the driving path even when headline dates appear stable.",
+      title: `The narrative does not mention ${changes.relationChanges} relationship changes`,
+      detail: "Changed logic can move the driving path even when the headline dates stay the same.",
     });
   }
   if (changes.floatErosion && statedStable) {
     blockers.push({
-      type: "Hidden pressure",
-      title: `${changes.floatErosion} changed activities consumed float`,
-      detail: "The narrative presents stability while schedule resilience reduced.",
+      type: "Float loss",
+      title: `Float reduced on ${changes.floatErosion} changed activities`,
+      detail: "The narrative calls the schedule stable, but these activities now have less float.",
     });
   }
   if (/\b(manage|mitigat|governance|action)\b/.test(text) && !/\b(owner|responsible|accountable|due|by \d{1,2})\b/.test(text)) {
     blockers.push({
       type: "Ownership gap",
       title: "The stated response has no named owner or due date",
-      detail: "A mitigation cannot be followed through unless responsibility and timing are explicit.",
+      detail: "Name an owner and a date so someone can follow the mitigation up.",
     });
   }
 
@@ -260,18 +260,18 @@ function renderReview(review) {
   $("#readinessCard").classList.toggle("ready", ready);
   $("#readinessStatus").textContent = ready ? "Ready for human decision" : "Needs evidence before decision";
   $("#readinessHeadline").textContent = ready
-    ? "No deterministic decision blocker was found in the supplied evidence."
+    ? "The fixed checks found no blockers in this evidence."
     : topBlockers[0].title;
   $("#readinessExplanation").textContent = ready
-    ? "This does not guarantee that the pack is complete. A named decision authority must still review it."
-    : `Resolve ${review.blockers.length} blocker${review.blockers.length === 1 ? "" : "s"} or record why the decision authority accepts the remaining uncertainty.`;
+    ? "The pack may still be incomplete. A named decision-maker still needs to review it."
+    : `Resolve ${review.blockers.length === 1 ? "the blocker" : `the ${review.blockers.length} blockers`}, or record why the decision-maker accepts ${review.blockers.length === 1 ? "it" : "them"}.`;
   $("#blockerList").innerHTML = topBlockers.length ? topBlockers.map((blocker, index) => `
     <article class="blocker">
       <span>${String(index + 1).padStart(2, "0")}</span>
       <div><strong>${escapeHtml(blocker.title)}</strong><small>${escapeHtml(blocker.detail)}</small></div>
       <i>${escapeHtml(blocker.type)}</i>
     </article>`).join("") : `
-    <article class="blocker"><span>✓</span><div><strong>No deterministic blockers found</strong><small>Continue with professional and contractual review.</small></div><i>Review</i></article>`;
+    <article class="blocker"><span>✓</span><div><strong>No blockers found</strong><small>Carry on with the usual professional and contractual review.</small></div><i>Review</i></article>`;
   $("#requestAnswers").hidden = ready;
   $("#decisionWarning").hidden = ready;
 
@@ -377,7 +377,7 @@ function renderPrecedentPanel({ loading = false, offline = false } = {}) {
       </article>`).join("");
     if (summaryHost) summaryHost.hidden = true;
     if (sectionGate) sectionGate.hidden = true;
-    if (statusHost) statusHost.textContent = "Hybrid retrieve in progress — XER stays in this browser.";
+    if (statusHost) statusHost.textContent = "Retrieving similar cases. XER files stay in this browser.";
     return;
   }
 
@@ -410,7 +410,7 @@ function renderPrecedentPanel({ loading = false, offline = false } = {}) {
       <small>${escapeHtml(item.outcome || "")}</small>
       <p class="precedent-reasons">${reasons || "No match reasons supplied"}</p>
       <p class="precedent-evidence">Sources: ${evidence || "None listed"}</p>
-      <p class="precedent-gate-copy">Use → attach as context · Ignore → considered and dismissed. Neither action imports a recommendation.</p>
+      <p class="precedent-gate-copy">Use adds this case to the decision record as context. Ignore records that you set it aside. Neither adds a recommendation.</p>
       <div class="precedent-gate">
         <button type="button" data-gate="use" data-id="${escapeHtml(item.id)}">Use</button>
         <button type="button" data-gate="ignore" data-id="${escapeHtml(item.id)}">Ignore</button>
@@ -423,7 +423,7 @@ function renderPrecedentPanel({ loading = false, offline = false } = {}) {
   if (summaryHost) {
     if (brief?.text) {
       summaryHost.hidden = false;
-      summaryHost.innerHTML = `<span>Gemini evidence brief · citations only</span><p>${escapeHtml(brief.text)}</p><small>Comparable status evidence, not advice or a proven precedent.</small>`;
+      summaryHost.innerHTML = `<span>Gemini evidence brief · citations only</span><p>${escapeHtml(brief.text)}</p><small>Comparable status evidence only. It is not advice and does not prove a precedent.</small>`;
     } else {
       summaryHost.hidden = true;
       summaryHost.innerHTML = "";
@@ -433,9 +433,9 @@ function renderPrecedentPanel({ loading = false, offline = false } = {}) {
     const mode = assuranceState.precedents.mode || (offline ? "offline-fallback" : "unknown");
     statusHost.textContent = offline
       ? (IS_PUBLIC_PAGES
-        ? "Public Pages demo · static cited-precedent cards (no Gemini key on this host). Clone the repo and run `make precedent-rag` for live hybrid retrieve + LangSmith traces."
-        : "Sidecar offline — showing static fallback. Run `make precedent-rag` for Gemini + LangSmith.")
-      : `Mode ${mode} · human gate required before save`;
+        ? "Static demo: these are bundled public-record cards because this site holds no Gemini key. Clone the repo and run `make precedent-rag` for live retrieval with LangSmith traces."
+        : "The retrieval service is offline, so these are the static fallback cards. Run `make precedent-rag` for Gemini and LangSmith.")
+      : `Mode: ${mode}. Mark each card Use or Ignore before you save.`;
   }
   updateDecisionGateState();
 }
@@ -468,7 +468,7 @@ function updateDecisionGateState() {
     // one section-level gate label — not repeated on every card
     sectionGate.hidden = !locked;
     if (locked) {
-      sectionGate.textContent = `Awaiting human gate · ${pending.length} card${pending.length === 1 ? "" : "s"} still need Use or Ignore before save.`;
+      sectionGate.textContent = `Mark Use or Ignore on ${pending.length} remaining card${pending.length === 1 ? "" : "s"} before you save the decision.`;
     }
   }
   if (submit) {
@@ -533,10 +533,11 @@ function setPrecedentGate(id, gate) {
 }
 
 function questionFor(blocker) {
-  if (blocker.type === "Direct contradiction") return "How should the narrative be corrected or evidenced against the finish movement?";
+  if (blocker.type === "Contradiction") return "How should the narrative be corrected or evidenced against the finish movement?";
   if (blocker.type === "Ownership gap") return "Who owns the stated response, and by when must it be complete?";
   if (blocker.type === "Evidence gap") return "What narrative, reason and approval basis supports this submission?";
-  return `What approved change or evidence explains: ${blocker.title.toLowerCase()}?`;
+  if (blocker.type === "Float loss") return "Which approved change explains the lost float, and does the narrative need correcting?";
+  return `Which approved change or evidence explains this? ${blocker.title}.`;
 }
 
 async function loadFile(kind, file) {
@@ -551,7 +552,7 @@ async function loadFile(kind, file) {
   label.closest(".assurance-file").classList.add("loaded");
   const ready = Boolean(assuranceState.files.previous && assuranceState.files.current);
   $("#runAssuranceReview").disabled = !ready;
-  $("#intakeMessage").textContent = ready ? "Evidence pair ready for a browser-local check." : "Choose the second XER file to continue.";
+  $("#intakeMessage").textContent = ready ? "Both files loaded. Ready to check." : "Choose the second XER file to continue.";
 }
 
 async function runReview() {
@@ -629,7 +630,7 @@ function renderDecisionRegister() {
     <article class="register-row">
       <div><span>${escapeHtml(item.project)} · ${escapeHtml(item.evidenceVersion)}</span><strong>${escapeHtml(item.rationale)}</strong><small>Decision owner: ${escapeHtml(item.owner)} · ${escapeHtml(formatTimestamp(item.createdAt))}</small></div>
       <aside><b>${escapeHtml(item.decision)}</b>${item.unresolved ? `<small>${item.unresolved} unresolved blocker${item.unresolved === 1 ? "" : "s"} preserved</small>` : ""}</aside>
-    </article>`).join("") : `<div class="register-empty">No decision has been recorded in this browser yet. Try the Northstar review to create one.</div>`;
+    </article>`).join("") : `<div class="register-empty">No decisions saved in this browser yet. Run the Northstar example to record one.</div>`;
 }
 
 function renderConditionRegister() {
@@ -662,7 +663,7 @@ function decisionExportText() {
   const conditions = storage(storageKeys.conditions);
   const lines = ["# ProjectLens decision record", ""];
   decisions.forEach(item => {
-    lines.push(`## ${item.project} — ${item.decision}`);
+    lines.push(`## ${item.project}: ${item.decision}`);
     lines.push(`- Date: ${formatTimestamp(item.createdAt)}`);
     lines.push(`- Verdict: ${item.decision}`);
     lines.push(`- Decision owner: ${item.owner}`);
@@ -688,7 +689,7 @@ async function exportDecisions() {
   try {
     await navigator.clipboard.writeText(text);
     $("#exportFallback").hidden = true;
-    showToast("Copied — the decision record is on your clipboard.");
+    showToast("Decision record copied to your clipboard.");
   } catch {
     const fallback = $("#exportFallback");
     const area = $("#exportFallbackText");
@@ -696,7 +697,7 @@ async function exportDecisions() {
     area.value = text;
     area.focus();
     area.select();
-    showToast("Clipboard unavailable — select and copy the record below.");
+    showToast("Clipboard unavailable. Select and copy the record below.");
   }
 }
 

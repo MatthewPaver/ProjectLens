@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="ProjectLens tracks how delivery confidence, dates and published risks changed across the UK Government Major Projects Portfolio.">
   <meta name="theme-color" content="#071a1b">
-  <meta property="og:title" content="ProjectLens | Open Major Project Evidence">
-  <meta property="og:description" content="189 current projects. Seven annual releases. Every signal linked to published evidence.">
+  <meta property="og:title" content="ProjectLens | UK major projects evidence">
+  <meta property="og:description" content="Year-on-year changes across the UK Government Major Projects Portfolio, with a link to the published source for each figure.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://matthewpaver.github.io/ProjectLens/assets/projectlens-overview.png">
   <meta name="twitter:card" content="summary_large_image">
-  <title>ProjectLens | Open Major Project Evidence</title>
+  <title>ProjectLens | UK major projects evidence</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +22,7 @@
   <header class="masthead">
     <a class="brand" href="#top" aria-label="ProjectLens home">
       <span class="brand-eye" aria-hidden="true"></span>
-      <span><b>PROJECT</b>LENS<small>PUBLIC DELIVERY INTELLIGENCE</small></span>
+      <span><b>PROJECT</b>LENS<small>PUBLIC PROJECT EVIDENCE</small></span>
     </a>
     <nav aria-label="Primary navigation">
       <button class="nav-button active" data-view="briefing" type="button">Briefing</button>
@@ -42,10 +42,10 @@
       <div class="hero" id="top">
         <div class="hero-copy reveal">
           <p class="eyebrow"><span>31 March 2026 snapshot</span> Published by NISTA · analysed 15 July 2026</p>
-          <h1>Which major projects<br><em>changed direction?</em></h1>
-          <p class="hero-intro">ProjectLens turns disconnected public major-project disclosures into an inspectable history. See what changed, where signals conflict and which evidence deserves scrutiny.</p>
+          <h1>Year-on-year changes<br><em>in UK major projects</em></h1>
+          <p class="hero-intro">ProjectLens links seven annual Government Major Projects Portfolio releases project by project. You can see which ratings and end dates moved, where the published signals disagree and where each figure came from.</p>
           <div class="hero-actions">
-            <button id="openPriority" class="primary-button" type="button">Inspect the highest-priority change <span>↗</span></button>
+            <button id="openPriority" class="primary-button" type="button">Open the top-ranked project <span>↗</span></button>
             <a class="plain-button" href="board-readiness.html">Check a project board pack</a>
           </div>
         </div>
@@ -67,22 +67,22 @@
 
       <section class="priority-section reveal delay-3" aria-labelledby="priorityTitle">
         <div class="section-heading">
-          <div><span>Executive attention queue</span><h2 id="priorityTitle">Start with material change</h2></div>
-          <p>Ranking combines published delivery confidence, year-on-year movement, end-date movement and in-year variance. It is a review queue, not a prediction.</p>
+          <div><h2 id="priorityTitle">Projects to review first</h2></div>
+          <p>Ranking combines published delivery confidence, year-on-year movement, end-date movement and in-year variance. It sets a review order and does not predict outcomes.</p>
         </div>
         <div class="priority-grid" id="priorityGrid" aria-live="polite"></div>
       </section>
 
       <section class="movement-section reveal delay-4" aria-labelledby="movementTitle">
         <div class="section-heading inverse">
-          <div><span>Portfolio movement</span><h2 id="movementTitle">The story is not just Red or Green</h2></div>
-          <p>A better rating can coincide with a later published end date. ProjectLens keeps both facts visible.</p>
+          <div><h2 id="movementTitle">Rating changes across the portfolio</h2></div>
+          <p>A project can improve its rating while its published end date moves later. The chart shows both.</p>
         </div>
         <div class="movement-layout">
           <div class="transition-chart" id="transitionChart"></div>
           <div class="contradictions">
-            <span>Signals worth challenging</span>
-            <h3>Improved confidence,<br>later finish.</h3>
+            <span>Mixed signals</span>
+            <h3>Better rating, later finish</h3>
             <div id="contradictionList"></div>
             <button class="inverse-button" data-go="explorer" data-preset="Improved" type="button">Explore all improved projects →</button>
           </div>
@@ -91,8 +91,8 @@
 
       <section class="themes-section reveal" aria-labelledby="themesTitle">
         <div class="section-heading">
-          <div><span>Published narrative signals</span><h2 id="themesTitle">What departments are talking about</h2></div>
-          <p>Transparent keyword signals help organise the evidence. They do not prove root cause.</p>
+          <div><h2 id="themesTitle">Themes in the published narratives</h2></div>
+          <p>A fixed keyword list groups the narratives into themes. A theme does not show the root cause.</p>
         </div>
         <div class="theme-cloud" id="themeCloud"></div>
       </section>
@@ -110,7 +110,7 @@
     <section class="view" data-view-panel="explorer" hidden>
       <div class="view-hero">
         <p class="eyebrow"><span>Portfolio explorer</span> 189 current projects · source-linked</p>
-        <h1>Find the change.<br><em>Read the evidence.</em></h1>
+        <h1>Search the portfolio<br><em>and open each source</em></h1>
       </div>
       <section class="filter-bar" aria-label="Portfolio filters">
         <label class="search-field"><span>Search</span><input id="searchInput" type="search" placeholder="Project, department or narrative"></label>
@@ -132,8 +132,8 @@
 
     <section class="view" data-view-panel="cases" hidden>
       <div class="view-hero cases-hero">
-        <p class="eyebrow"><span>Comparable case finder</span> Evidence before analogy</p>
-        <h1>What happened<br><em>to similar projects?</em></h1>
+        <p class="eyebrow"><span>Comparable case finder</span></p>
+        <h1>Find similar projects<br><em>that later improved</em></h1>
         <p>Select a current project. ProjectLens searches projects that improved in a later annual release and explains the overlap.</p>
       </div>
       <section class="case-picker">
@@ -143,14 +143,14 @@
       </section>
       <div class="case-context" id="caseContext"></div>
       <div class="case-grid" id="caseGrid"></div>
-      <div class="case-boundary"><strong>Human approval required.</strong> Similarity is based on shared themes, category and department. It is a prompt to inspect evidence, not proof that the same intervention will work.</div>
+      <div class="case-boundary"><strong>A person decides what to use.</strong> Similarity comes from shared themes, category and department. Use a match to choose what to read next; it does not show that the same intervention will work.</div>
     </section>
 
     <section class="view" data-view-panel="method" hidden>
       <div class="view-hero method-hero">
-        <p class="eyebrow"><span>Open methodology</span> Exact maths, bounded language</p>
-        <h1>No mystery score.<br><em>No invented forecast.</em></h1>
-        <p>ProjectLens uses deterministic comparisons for dates, ratings and variances. Text classification is deliberately simple and inspectable.</p>
+        <p class="eyebrow"><span>Method</span></p>
+        <h1>How ProjectLens<br><em>ranks projects</em></h1>
+        <p>ProjectLens compares dates, ratings and variances with fixed rules. Theme tagging uses a fixed keyword list.</p>
       </div>
       <section class="method-grid">
         <article><span>01</span><h2>Acquire</h2><p>Seven official GMPP CSV releases are retained unchanged with links to the source publication.</p></article>
@@ -160,8 +160,8 @@
       </section>
       <section class="score-explainer">
         <div>
-          <span>Attention score</span><h2>A queue for scrutiny,<br>not probability of failure.</h2>
-          <p>The score deliberately prioritises obvious published signals. It does not claim to predict project outcomes.</p>
+          <span>Attention score</span><h2>Points for each published signal</h2>
+          <p>The score adds points for the clearest published signals. It sets a review order and does not predict project outcomes or a probability of failure.</p>
         </div>
         <div class="score-formula">
           <div><b>+35</b><span>Current Red published DCA</span></div>
@@ -180,7 +180,7 @@
         <div id="sourceList"></div>
       </section>
       <section class="source-register external-register">
-        <div class="section-heading"><div><span>Evidence expansion</span><h2>Connect delivery to scrutiny, procurement and outcomes</h2></div><p>These authoritative routes define the next evidence layer. They remain separate so ProjectLens never presents a generic source as project-specific proof.</p></div>
+        <div class="section-heading"><div><span>Related sources</span><h2>Scrutiny, procurement and outcome sources</h2></div><p>These official sources could add a further layer of evidence. ProjectLens keeps them separate so it does not present a general source as evidence about one project.</p></div>
         <div id="externalSourceList"></div>
       </section>
       <section class="source-register">
@@ -215,7 +215,7 @@
     </article>
   </dialog>
 
-  <footer class="site-footer">Built by Matthew Paver — <a href="https://matthewpaver.github.io/store/apps/projectlens/">product notes</a> · <a href="https://github.com/MatthewPaver/ProjectLens">source</a> · <a href="https://www.linkedin.com/in/matthew-paver-534262166/">LinkedIn</a> · <a href="https://matthewpaver.github.io/">matthewpaver.github.io</a></footer>
+  <footer class="site-footer">Built by Matthew Paver · <a href="https://matthewpaver.github.io/store/apps/projectlens/">product notes</a> · <a href="https://github.com/MatthewPaver/ProjectLens">source</a> · <a href="https://www.linkedin.com/in/matthew-paver-534262166/">LinkedIn</a> · <a href="https://matthewpaver.github.io/">matthewpaver.github.io</a></footer>
 
   <div id="loading" class="loading" role="status"><span></span><b>Reading seven years of public project evidence…</b></div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>

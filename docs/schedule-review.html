@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Compare Primavera P6 XER submissions locally, find material changes and create an evidence-linked assurance review.">
   <meta name="theme-color" content="#071a1b">
-  <meta property="og:title" content="ProjectLens | Schedule Evidence Review">
-  <meta property="og:description" content="Private, browser-local XER comparison for project assurance.">
-  <title>ProjectLens | Schedule Evidence Review</title>
+  <meta property="og:title" content="ProjectLens | Schedule review">
+  <meta property="og:description" content="Compare two Primavera P6 XER files in your browser and list the material changes for review.">
+  <title>ProjectLens | Schedule review</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,8 +39,8 @@
     <section class="schedule-hero">
       <div class="schedule-hero-copy reveal">
         <p class="eyebrow"><span>Primavera P6 assurance</span> XER files stay on this device</p>
-        <h1>Find the change<br><em>they did not explain.</em></h1>
-        <p>Upload the schedule, narrative and previous commitments. ProjectLens shows what materially changed, what was not explained and which decisions need attention.</p>
+        <h1>Compare two schedules<br><em>with the narrative</em></h1>
+        <p>Add the schedule, narrative and previous commitments. ProjectLens shows what changed materially, what the narrative leaves out and which decisions need attention.</p>
         <div class="hero-actions">
           <button class="primary-button" id="loadDemo" type="button">Run the Northstar demo <span>→</span></button>
           <button class="plain-button" id="jumpToFiles" type="button">Use my own XER files</button>
@@ -61,8 +61,8 @@
 
     <section class="privacy-strip" aria-label="Privacy and method boundaries">
       <div><strong>Nothing uploaded</strong><span>Parsing and comparison run in your browser.</span></div>
-      <div><strong>Deterministic checks</strong><span>No invented probability of project failure.</span></div>
-      <div><strong>Human decision</strong><span>Findings become questions, not automatic conclusions.</span></div>
+      <div><strong>Fixed rules</strong><span>The checks do not estimate a probability of failure.</span></div>
+      <div><strong>Human decision</strong><span>Each finding becomes a question for a person to answer.</span></div>
     </section>
 
     <section class="intake-section" id="intakeSection">
@@ -163,7 +163,7 @@
 
       <section class="completeness-section">
         <div class="section-heading compact">
-          <div><span>02 · Evidence completeness</span><h2>What is missing matters</h2></div>
+          <div><span>02 · Evidence completeness</span><h2>Missing evidence</h2></div>
           <p id="completenessSummary">ProjectLens reports what the submission can and cannot support before presenting findings.</p>
         </div>
         <div id="completenessGrid" class="completeness-grid"></div>
@@ -192,8 +192,8 @@
         </article>
         <article>
           <div class="panel-label"><span>06 · Decision reconciliation</span><i>APPROVAL TRACE</i></div>
-          <h2>Was the material change approved?</h2>
-          <p>Matches activity codes and decision language. Unlinked changes become questions, not accusations.</p>
+          <h2>Approval check for each change</h2>
+          <p>Matches activity codes and decision language. Unlinked changes become questions for the team.</p>
           <div id="decisionReconciliation" class="focus-list"></div>
         </article>
         <article>
@@ -206,7 +206,7 @@
 
       <section class="material-section">
         <div class="section-heading compact">
-          <div><span>08 · Material change funnel</span><h2>What deserves attention</h2></div>
+          <div><span>08 · Material change funnel</span><h2>Material changes, ranked</h2></div>
           <p id="materialFunnelCopy">Executive view shows the smallest useful queue. Analyst view retains the wider material set.</p>
         </div>
         <div class="change-filters" role="group" aria-label="Filter material changes">
@@ -233,7 +233,7 @@
 
       <section class="question-section">
         <div class="section-heading compact inverse">
-          <div><span>11 · Assurance questions</span><h2>Move from insight to action</h2></div>
+          <div><span>11 · Assurance questions</span><h2>Questions for the team</h2></div>
           <p>Each question retains the evidence that produced it. Add the useful ones to the local review log and assign an owner.</p>
         </div>
         <div id="questionList" class="question-list"></div>
@@ -241,7 +241,7 @@
 
       <section class="follow-through-section">
         <div class="section-heading compact inverse">
-          <div><span>12 · Intervention follow-through</span><h2>Did the response work?</h2></div>
+          <div><span>12 · Intervention follow-through</span><h2>Follow-up on earlier actions</h2></div>
           <p>When a later submission is reviewed for the same project, ProjectLens checks whether linked signals resolved, repeated or cannot yet be assessed.</p>
         </div>
         <div id="followThroughList" class="follow-through-list"></div>
@@ -249,7 +249,7 @@
 
       <section class="action-section">
         <div class="section-heading compact">
-          <div><span>13 · Decision memory</span><h2>Close the loop next month</h2></div>
+          <div><span>13 · Decision memory</span><h2>Review log</h2></div>
           <p>Actions are stored in this browser only. When the next XER arrives, the team can see whether the questioned signal was resolved or repeated.</p>
         </div>
         <form id="actionForm" class="action-form">

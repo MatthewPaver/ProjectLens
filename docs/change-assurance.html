@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Review a project change pack, identify decision blockers and preserve the human decision and its conditions.">
   <meta name="theme-color" content="#071a1b">
-  <meta property="og:title" content="ProjectLens | Project Change Assurance">
-  <meta property="og:description" content="Add the pack. Review blockers. Cite precedents. Record the human decision. Track the conditions.">
+  <meta property="og:title" content="ProjectLens | Change assurance">
+  <meta property="og:description" content="Compare two Primavera P6 schedules with the change narrative, see up to three blockers and record the decision a person makes.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://matthewpaver.github.io/ProjectLens/assets/change-assurance-overview.png">
   <meta name="twitter:card" content="summary_large_image">
-  <title>ProjectLens | Project Change Assurance</title>
+  <title>ProjectLens | Change assurance</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,7 +25,7 @@
   <header class="assurance-header">
     <a class="brand assurance-brand" href="#reviews" aria-label="ProjectLens change assurance home">
       <span class="brand-eye" aria-hidden="true"></span>
-      <span><b>PROJECT</b>LENS<small>PROJECT EVIDENCE DESK · CHANGE REVIEW</small></span>
+      <span><b>PROJECT</b>LENS<small>CHANGE REVIEW</small></span>
     </a>
     <nav aria-label="Change assurance">
       <a href="#reviews" data-view-link="reviews" class="active">Reviews</a>
@@ -42,18 +42,13 @@
     <section class="assurance-view active" data-view="reviews">
       <section class="assurance-hero" id="top">
         <div class="hero-copy assurance-reveal">
-          <p class="eyebrow"><span>Before the decision meeting</span> Evidence, authority & follow-through</p>
-          <h1>Is this change<br><em>ready to decide?</em></h1>
-          <p class="hero-intro">Add the change pack. ProjectLens checks the schedule narrative, surfaces the 3 most important blockers and preserves what a person decides. Bring your own Primavera P6 XER pair — files stay in this browser.</p>
+          <h1>Check the change pack<br><em>before you decide.</em></h1>
+          <p class="hero-intro">Load the previous and current Primavera P6 XER exports and the update narrative. ProjectLens compares the schedules with what the narrative claims, lists up to 3 blockers and keeps a record of what you decide.</p>
           <div class="assurance-actions">
             <button class="assurance-primary" id="loadAssuranceDemo" type="button">Try the Northstar example <span>→</span></button>
-            <button class="assurance-secondary" id="showOwnPack" type="button">Review my change pack (2× XER)</button>
+            <button class="assurance-secondary" id="showOwnPack" type="button">Use my own XER files</button>
           </div>
-          <div class="trust-line" aria-label="Product boundaries">
-            <span>Files stay here</span>
-            <span>Code checks dates</span>
-            <span>People decide</span>
-          </div>
+          <p class="trust-line">Your files stay in this browser. Fixed rules compare the dates, and a person makes the decision.</p>
         </div>
         <aside class="decision-preview assurance-reveal delay-1" aria-label="Example readiness result">
           <div class="preview-top"><span>Example result</span><b>Needs evidence</b></div>
@@ -61,9 +56,9 @@
           <ol>
             <li><span>01</span> Finish movement not acknowledged</li>
             <li><span>02</span> Constraint changes unexplained</li>
-            <li><span>03</span> Mitigation ownership missing</li>
+            <li><span>03</span> Float reduced on 9 changed activities</li>
           </ol>
-          <small>One decision brief. Supporting analysis stays behind it.</small>
+          <small>Northstar is a synthetic example project.</small>
         </aside>
       </section>
 
@@ -81,9 +76,9 @@
 
       <section class="pack-intake" id="packIntake" hidden aria-labelledby="intakeTitle">
         <div class="compact-heading">
-          <div><span>New review</span><h2 id="intakeTitle">Add the decision evidence</h2></div>
-          <p>Only the 2 XER files are required for a schedule comparison — Primavera P6 exports (File &rarr; Export &rarr; Primavera XER). Both files are read in your browser and never uploaded. Add the narrative to test what the update claims.</p>
-          <p class="sample-pair">No XER to hand? Download a synthetic pair and choose them below — two projects so the parser is not Northstar-only: <a href="./demo/northstar-previous.xer" download>Northstar previous</a> &middot; <a href="./demo/northstar-current.xer" download>Northstar current</a> · <a href="./demo/riverside-previous.xer" download>Riverside previous</a> &middot; <a href="./demo/riverside-current.xer" download>Riverside current</a>. Optional narrative: <a href="./demo/riverside-narrative.txt" download>Riverside narrative</a>.</p>
+          <div><h2 id="intakeTitle">Add your two XER files</h2></div>
+          <p>Export both schedules from Primavera P6 (File &rarr; Export &rarr; Primavera XER): the previous submission and the current one. Your browser reads the files and uploads nothing. Add the narrative if you want ProjectLens to check what the update claims.</p>
+          <p class="sample-pair">No XER files to hand? Download a synthetic pair from either example project and choose the files below: <a href="./demo/northstar-previous.xer" download>Northstar previous</a> &middot; <a href="./demo/northstar-current.xer" download>Northstar current</a> · <a href="./demo/riverside-previous.xer" download>Riverside previous</a> &middot; <a href="./demo/riverside-current.xer" download>Riverside current</a>. Optional narrative: <a href="./demo/riverside-narrative.txt" download>Riverside narrative</a>.</p>
         </div>
         <div class="pack-grid">
           <label class="assurance-file" for="assurancePrevious">
@@ -131,7 +126,7 @@
         <section class="request-panel" id="requestPanel" hidden aria-labelledby="requestTitle">
           <div class="compact-heading inverse">
             <div><span>Evidence request</span><h2 id="requestTitle">Questions for the review</h2></div>
-            <p>Each question keeps the finding that produced it. Assign an owner and due date before copying the request.</p>
+            <p>Each question keeps the finding that produced it. Add an owner and due date, then save the request.</p>
           </div>
           <div id="requestList" class="request-list"></div>
           <div class="request-controls">
@@ -143,8 +138,8 @@
 
         <section class="decision-panel" id="decisionPanel" hidden aria-labelledby="decisionTitle">
           <div class="compact-heading">
-            <div><span>Human authority</span><h2 id="decisionTitle">Record what was decided</h2></div>
-            <p>The system preserves the evidence version and unresolved warnings. It does not make this decision.</p>
+            <div><h2 id="decisionTitle">Record the decision</h2></div>
+            <p>ProjectLens saves the evidence version and any unresolved blockers with your decision. You make the decision; ProjectLens does not.</p>
           </div>
           <form id="decisionForm">
             <p id="precedentGateBanner" class="precedent-gate-banner" hidden>Mark Use or Ignore on every cited precedent before saving. Use attaches the case to the decision record; Ignore records that you considered and dismissed it.</p>
@@ -174,16 +169,15 @@
           <div class="evidence-summary" id="evidenceSummary"></div>
           <div class="comparable-section" id="precedentSection">
             <div>
-              <span>Cited precedent retrieval</span>
-              <h3>Has a similar change caused this problem before?</h3>
-              <p id="precedentSectionGate" class="precedent-section-gate" hidden>Awaiting human gate — mark Use or Ignore on every card before the decision can be saved.</p>
+              <h3>Similar cases from public records</h3>
+              <p id="precedentSectionGate" class="precedent-section-gate" hidden>Mark Use or Ignore on every card before you save the decision.</p>
               <p id="precedentStatus" class="precedent-status">Run a review to retrieve precedents.</p>
             </div>
             <div id="precedentSummary" class="precedent-summary" hidden></div>
             <div id="comparableCases" class="comparable-cases"></div>
-            <p class="precedent-gate-note"><strong>Use</strong> attaches the precedent (and its sources) to the decision record. <strong>Ignore</strong> records that you considered it and dismissed it. Every card must be marked before save. Matches below 0.80 semantic similarity are flagged as weak. XER comparison stays deterministic in this browser; the optional local RAG sidecar only sees narrative text and filters.</p>
+            <p class="precedent-gate-note"><strong>Use</strong> attaches the case and its sources to the decision record. <strong>Ignore</strong> records that you looked at it and set it aside. Mark every card before you save. The XER comparison runs in this browser with fixed rules. The optional local retrieval service sees only the narrative text and filters.</p>
             <a href="schedule-review.html">Open the full schedule evidence review ↗</a>
-            <a href="precedent-rag.md">Inspect the case corpus and retrieval method ↗</a>
+            <a href="precedent-rag.md">How precedent retrieval works ↗</a>
           </div>
           <p class="evidence-boundary">Evidence review only. It does not establish contractual entitlement, causation or a probability of failure.</p>
         </details>
@@ -191,25 +185,25 @@
     </section>
 
     <section class="assurance-view register-view" data-view="decisions" hidden>
-      <div class="register-heading"><span>Decision register</span><h1>What did we decide?</h1><p>Decision records are stored in this browser for the demonstrator.</p></div>
+      <div class="register-heading"><h1>Decision register</h1><p>This demo stores decision records in this browser only.</p></div>
       <div class="register-actions">
         <button class="assurance-secondary" id="exportDecisions" type="button">Export record</button>
         <small>Copies the recorded decisions — date, verdict, owner, rationale and conditions — as plain text for your own register.</small>
       </div>
       <div class="export-fallback" id="exportFallback" hidden>
-        <label for="exportFallbackText"><span>Clipboard unavailable — select and copy the record below</span>
+        <label for="exportFallbackText"><span>Clipboard unavailable. Select and copy the record below.</span>
         <textarea id="exportFallbackText" rows="12" readonly spellcheck="false"></textarea></label>
       </div>
       <div id="decisionRegister" class="register-list"></div>
     </section>
 
     <section class="assurance-view register-view" data-view="follow-up" hidden>
-      <div class="register-heading"><span>Condition register</span><h1>What remains open?</h1><p>Approval is not the end of the workflow. Close or formally waive every condition.</p></div>
+      <div class="register-heading"><h1>Condition register</h1><p>Close or formally waive each condition attached to an approval.</p></div>
       <div id="conditionRegister" class="register-list"></div>
     </section>
   </main>
 
-  <footer class="site-footer">Built by Matthew Paver — <a href="https://matthewpaver.github.io/store/apps/projectlens/">product notes</a> · <a href="https://github.com/MatthewPaver/ProjectLens">source</a> · <a href="https://www.linkedin.com/in/matthew-paver-534262166/">LinkedIn</a> · <a href="https://matthewpaver.github.io/">matthewpaver.github.io</a></footer>
+  <footer class="site-footer">Built by Matthew Paver · <a href="https://matthewpaver.github.io/store/apps/projectlens/">product notes</a> · <a href="https://github.com/MatthewPaver/ProjectLens">source</a> · <a href="https://www.linkedin.com/in/matthew-paver-534262166/">LinkedIn</a> · <a href="https://matthewpaver.github.io/">matthewpaver.github.io</a></footer>
 
   <div class="assurance-toast" id="assuranceToast" role="status" aria-live="polite"></div>
   <script src="change-assurance.js"></script>
