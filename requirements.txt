@@ -1,5 +1,7 @@
 pandas>=1.5,<2.2
 numpy>=1.23,<1.27
+# PyArrow 26 requires NumPy 2; keep the existing NumPy 1 analytics stack compatible.
+pyarrow>=14,<26
 statsforecast>=1.5,<1.8
 ruptures>=1.1,<1.2
 openpyxl>=3.0,<3.2
