@@ -13,7 +13,7 @@ BASE_URL = "http://127.0.0.1:8765/change-assurance.html"
 
 
 def run_desktop(browser):
-    page = browser.new_page(viewport={"width": 1440, "height": 1000}, device_scale_factor=1)
+    page = browser.new_page(viewport={"width": 1280, "height": 720}, device_scale_factor=1, reduced_motion="reduce")
     errors = []
     failures = []
     page.on("console", lambda message: errors.append(message.text) if message.type == "error" else None)
@@ -31,20 +31,15 @@ def run_desktop(browser):
     readiness_status = page.locator("#readinessStatus").inner_text()
     assert readiness_status.casefold() == "needs evidence before decision", readiness_status
     assert page.locator("#blockerList .blocker").count() == 3
-    assert "73 days" in page.locator("#readinessHeadline").inner_text().casefold()
-    # precedents surface by default — the RAG differentiator must not hide in a closed disclosure
-    assert page.locator("#supportingEvidence").get_attribute("open") is not None
-    assert page.get_by_role("button", name="Review cited precedents").is_visible()
-
+    assert "3 findings" in page.locator("#readinessHeadline").inner_text()
+    assert "26 Feb 2028" in page.locator("#findingEvidence").inner_text()
+    assert page.locator("#showDecisionForm").bounding_box()["y"] < 720
+    assert page.locator("#supportingEvidence").get_attribute("open") is None
     assert page.locator("#evidenceSummary .evidence-fact").count() == 6
-    # Unconfigured static mode must work without attempting a sidecar request.
-    page.wait_for_function("() => document.querySelectorAll('#comparableCases .comparable-case:not(.is-skeleton)').length >= 3")
-    assert page.locator("#comparableCases .comparable-case").count() >= 3
-    assert "static" in page.locator("#precedentStatus").inner_text().lower()
     assert not sidecar_requests, sidecar_requests
-    # gate label is section-level, not repeated on every card
-    assert page.locator("#precedentSectionGate").is_visible()
-    assert page.locator("#comparableCases .precedent-gate i").first.inner_text().casefold() != "awaiting human gate"
+    page.screenshot(path=str(SCREENSHOTS / "change-assurance-overview.png"), full_page=False)
+    page.locator("[data-finding='1']").click()
+    assert "constraint" in page.locator("#findingEvidence").inner_text().lower()
 
     page.get_by_role("button", name="Draft questions for the team").click()
     page.locator("#requestPanel").wait_for(state="visible")
@@ -55,28 +50,30 @@ def run_desktop(browser):
 
     page.get_by_role("button", name="Record human decision").click()
     page.locator("#decisionPanel").wait_for(state="visible")
-    # gate still locked until Use/Ignore
-    assert page.locator("#decisionForm button[type='submit']").is_disabled()
-    assert page.locator("#precedentGateBanner").is_visible()
-    # human gate first — form fields stay locked until every card is marked
-    # supporting evidence was already opened above
-    for button in page.locator("#comparableCases button[data-gate='use']").all():
-        button.click()
+    # Supplemental context must never force the reviewer to dismiss unrelated examples.
     assert page.locator("#decisionForm button[type='submit']").is_enabled()
-    assert page.locator("#precedentGateBanner").is_hidden()
-    page.locator("#decisionPanel").scroll_into_view_if_needed()
+    assert "not reviewed" in page.locator("#precedentGateBanner").inner_text()
     page.get_by_label("Approve with conditions").check(force=True)
     page.locator("#decisionOwner").fill("Change Authority Chair")
     page.locator("#decisionRationale").fill("Proceed only after the named controls are confirmed and owned.")
     page.locator("#decisionCondition").fill("Protect the regression-test window")
     page.locator("#conditionOwner").fill("Test Lead")
     page.locator("#conditionDue").fill("2026-07-29")
+    page.get_by_role("button", name="Save draft on this device").click()
+    page.reload()
+    page.get_by_role("button", name="Resume saved draft").click()
+    assert page.locator("#decisionOwner").input_value() == "Change Authority Chair"
+    assert page.locator("#conditionOwner").input_value() == "Test Lead"
     page.get_by_role("button", name="Save decision record").click()
     page.wait_for_url("**#decisions")
     page.locator("#decisionRegister .register-row").wait_for(state="visible")
     assert page.locator("#decisionRegister .register-row").count() == 1
     stored = page.evaluate("JSON.parse(localStorage.getItem('projectlens:change-decisions:v1'))[0]")
-    assert stored.get("precedentsUsed"), stored
+    assert stored.get("precedentsNotReviewed") and len(stored["precedentsNotReviewed"]) == 3, stored
+    assert not stored["precedentsUsed"], stored
+    assert any(finding["type"] == "Ownership gap" for finding in stored["findings"])
+    assert page.evaluate("localStorage.getItem('projectlens:review-draft:v1')") is None
+    assert len(stored["findings"]) >= 3, stored
 
     page.evaluate(
         """() => {
@@ -91,6 +88,9 @@ def run_desktop(browser):
     page.wait_for_function("() => window.__copied !== null")
     copied = page.evaluate("() => window.__copied")
     assert "Verdict: Approve with conditions" in copied, copied
+    assert "Public-record context not reviewed:" in copied, copied
+    assert "northstar-current.xer" in copied, copied
+    assert "relationship:" in copied and "hours" in copied, copied
     assert "Decision owner: Change Authority Chair" in copied, copied
     assert "Protect the regression-test window" in copied, copied
     assert page.locator("#exportFallback").is_hidden()
@@ -122,7 +122,7 @@ def run_desktop(browser):
 
 
 def run_mobile(browser):
-    page = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1)
+    page = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1, reduced_motion="reduce")
     page.goto(BASE_URL)
     page.wait_for_load_state("networkidle")
     assert page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
@@ -131,8 +131,81 @@ def run_mobile(browser):
     page.locator("#readinessWorkspace").wait_for(state="visible")
     assert page.locator("#blockerList .blocker").count() == 3
     assert page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
-    page.evaluate("document.querySelector('#readinessWorkspace').scrollIntoView()")
+    page.locator("[data-finding='2']").scroll_into_view_if_needed()
+    finding_scroll = page.evaluate("window.scrollY")
+    page.locator("[data-finding='2']").click()
+    assert page.locator("#findingEvidence").is_visible()
+    page.get_by_role("button", name="Back to findings").click()
+    assert page.locator("[data-finding='2']").evaluate("el => el === document.activeElement")
+    assert abs(page.evaluate("window.scrollY") - finding_scroll) <= 1
+    page.evaluate("window.scrollTo(0, 0)")
     page.screenshot(path=str(SCREENSHOTS / "change-assurance-mobile.png"), full_page=False)
+    page.close()
+
+
+def run_recovery(browser):
+    page = browser.new_page(viewport={"width": 1280, "height": 720}, reduced_motion="reduce")
+    page.goto(BASE_URL)
+    rejected = page.evaluate("""([beforeText, afterText]) => {
+        const api = window.ProjectLensChangeAssurance;
+        const results = {};
+        for (const kind of ['identical', 'reversed', 'identity']) {
+            const before = api.parseXer(beforeText, 'previous.xer');
+            const after = api.parseXer(afterText, 'current.xer');
+            if (kind === 'identity') after.project.id = 'different';
+            try { api.analyseReview(kind === 'reversed' ? after : before, kind === 'identical' ? before : kind === 'reversed' ? before : after, 'On track and unchanged.'); results[kind] = false; }
+            catch { results[kind] = true; }
+        }
+        const before = api.parseXer(beforeText, 'previous.xer');
+        const after = api.parseXer(afterText, 'current.xer');
+        after.tasks.forEach(task => { task.float = null; });
+        results.coverage = api.analyseReview(before, after, 'On track.').blockers.some(blocker => blocker.title.includes('could not be compared'));
+        const relationshipReview = api.analyseReview(api.parseXer(beforeText, 'previous.xer'), api.parseXer(afterText, 'current.xer'), 'Unchanged.');
+        results.relationships = relationshipReview.changes.relationEvidence.length === 5 && relationshipReview.changes.relationEvidence.every(item => item.predecessor && item.successor && item.type);
+        return results;
+    }""", [(ROOT / "docs/demo/northstar-previous.xer").read_text(), (ROOT / "docs/demo/northstar-current.xer").read_text()])
+    assert all(rejected.values()), rejected
+    page.get_by_role("button", name="Use my own XER files").click()
+    page.locator("#assurancePrevious").set_input_files(ROOT / "docs/demo/northstar-previous.xer")
+    page.locator("#assuranceCurrent").set_input_files(ROOT / "docs/demo/riverside-current.xer")
+    page.get_by_role("button", name="Check decision readiness").click()
+    page.locator("#workspaceError").wait_for(state="visible")
+    assert "project names differ" in page.locator("#workspaceError").inner_text()
+    assert page.locator("#packIntake").is_visible()
+    page.locator("#assuranceCurrent").set_input_files(ROOT / "docs/demo/northstar-current.xer")
+    page.locator("#assuranceNarrative").fill("Unchanged.")
+    page.get_by_role("button", name="Check decision readiness").click()
+    page.locator("#readinessWorkspace").wait_for(state="visible")
+    page.locator("[data-finding='2']").click()
+    assert "Relationship field evidence (5)" in page.locator("#findingEvidence").inner_text()
+    assert page.locator("#findingEvidence li").count() == 5
+    assert "Type:" in page.locator("#findingEvidence").inner_text()
+    page.once("dialog", lambda dialog: dialog.accept())
+    page.get_by_role("button", name="Start another review").click()
+    page.locator("#assurancePrevious").set_input_files(ROOT / "docs/demo/riverside-previous.xer")
+    page.locator("#assuranceCurrent").set_input_files(ROOT / "docs/demo/riverside-current.xer")
+    page.locator("#assuranceNarrative").fill((ROOT / "docs/demo/riverside-narrative.txt").read_text())
+    page.get_by_role("button", name="Check decision readiness").click()
+    page.locator("#readinessWorkspace").wait_for(state="visible")
+    page.get_by_role("button", name="Record human decision").click()
+    page.get_by_label("Approve with conditions").check()
+    page.locator("#decisionOwner").fill("Review Chair")
+    page.locator("#decisionRationale").fill("Accept only with owned follow-up.")
+    page.locator("#decisionCondition").fill("Confirm schedule basis")
+    page.get_by_role("button", name="Save decision record").click()
+    assert "owner and a due date" in page.locator("#workspaceError").inner_text()
+    page.locator("#conditionOwner").fill("Planner")
+    page.locator("#conditionDue").fill("2026-11-01")
+    page.evaluate("() => { window.__originalSetItem = Storage.prototype.setItem; Storage.prototype.setItem = function() { throw new DOMException('Quota exceeded', 'QuotaExceededError'); }; }")
+    page.get_by_role("button", name="Save decision record").click()
+    assert "could not be saved" in page.locator("#workspaceError").inner_text()
+    assert page.locator("#decisionOwner").input_value() == "Review Chair"
+    assert page.evaluate("localStorage.getItem('projectlens:change-decisions:v1')") is None
+    page.evaluate("() => { Storage.prototype.setItem = window.__originalSetItem; }")
+    page.get_by_role("button", name="Save decision record").click()
+    page.wait_for_url("**#decisions")
+    page.locator("#decisionRegister .register-row").wait_for(state="visible")
+    assert page.locator("#decisionRegister .register-row").count() == 1
     page.close()
 
 
@@ -140,5 +213,6 @@ with sync_playwright() as playwright:
     chromium = playwright.chromium.launch(headless=True)
     run_desktop(chromium)
     run_mobile(chromium)
+    run_recovery(chromium)
     chromium.close()
     print("Change assurance browser test passed: blockers, requests, decisions, conditions and mobile")
