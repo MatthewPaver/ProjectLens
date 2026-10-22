@@ -1,6 +1,6 @@
 # ProjectLens: checks a change pack against its own evidence
 
-For the project controls reviewer who has to tell a board whether a change pack can be trusted: ProjectLens compares the pack's narrative with its Primavera P6 schedules, risks and prior conditions, shows where they disagree, and records the human decision, all in the browser.
+For the project controls reviewer who has to tell a board whether a change pack can be trusted: ProjectLens compares the pack's narrative with its previous and current Primavera P6 XER schedules, shows where they disagree, and records the human decision, all in the browser.
 
 [![Verify and deploy](https://github.com/MatthewPaver/ProjectLens/actions/workflows/deploy-pages.yml/badge.svg?branch=main&event=push)](https://github.com/MatthewPaver/ProjectLens/actions/workflows/deploy-pages.yml)
 [![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
@@ -13,13 +13,13 @@ On the change-assurance page, select **Try the Northstar example**. It is a synt
 
 ## The problem
 
-A board often decides on how polished the pack looks, because nobody has time to reconcile the narrative with the schedules, risks, actions and prior conditions submitted with it. The bundled Northstar example reproduces the failure. Its progress report says there is "no change to the finish date", but the current schedule has moved the finish by 73 days. The same pack also carries a high risk with no owner, an overdue action and an approval condition from the last board that is still open. If nobody checks the evidence against the story, the board approves the story.
+A board often decides on how polished the pack looks, because nobody has time to reconcile the narrative with the schedules, risks, actions and prior conditions submitted with it. The bundled Northstar example reproduces the failure. Its progress report says there is "no change to the finish date", but the current schedule has moved the finish by 73 days. The change-assurance page checks schedule fields and narrative keywords; the separate board-readiness page covers risks, actions and earlier conditions. If nobody checks the evidence against the story, the board approves the story.
 
 ProjectLens gives the reviewer:
 
-- **Source-linked conflicts and gaps.** Each finding names the evidence that produced it: current or previous schedule, risk register, commitments or narrative.
+- **Source-linked conflicts and gaps.** Each finding names the evidence that produced it: current or previous schedule fields and the narrative under review.
 - **A prepared decision, not a dashboard.** One readiness verdict, at most three blockers, and specific questions for the team.
-- **A record of the decision.** The decision, its owner, rationale and conditions are kept; each condition stays open until it is closed or formally waived.
+- **A record of the decision.** The decision, its owner, rationale and conditions are kept; each condition stays open until it is marked closed.
 
 ## Quickstart
 
@@ -32,15 +32,15 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory docs
 # open http://127.0.0.1:8000/change-assurance.html and select "Try the Northstar example"
 ```
 
-Expected result: the readiness headline reports the 73-day finish movement and the blocker list shows three items. Stop the server with Ctrl+C.
+Expected result: the evidence desk shows three findings, including the 73-day finish movement, with source dates beside the selected finding. Stop the server with Ctrl+C.
 
-**Your own schedules.** Export two single-project XER files from Primavera P6 (**File → Export → Primavera XER**): the comparison point and the latest submission. Select **Review my change pack**, choose both files and paste the narrative. Files are parsed in the browser and never uploaded. If you have no XER to hand, use the synthetic [Northstar](https://matthewpaver.github.io/ProjectLens/demo/northstar-previous.xer) ([current](https://matthewpaver.github.io/ProjectLens/demo/northstar-current.xer)) or [Riverside](https://matthewpaver.github.io/ProjectLens/demo/riverside-previous.xer) ([current](https://matthewpaver.github.io/ProjectLens/demo/riverside-current.xer), [narrative](https://matthewpaver.github.io/ProjectLens/demo/riverside-narrative.txt)) pairs.
+**Your own schedules.** Export two single-project XER files from Primavera P6 (**File → Export → Primavera XER**): the comparison point and the latest submission. Select **Use my own XER files**, choose both files and paste the narrative. Files are parsed in the browser and never uploaded. If you have no XER to hand, use the synthetic [Northstar](https://matthewpaver.github.io/ProjectLens/demo/northstar-previous.xer) ([current](https://matthewpaver.github.io/ProjectLens/demo/northstar-current.xer)) or [Riverside](https://matthewpaver.github.io/ProjectLens/demo/riverside-previous.xer) ([current](https://matthewpaver.github.io/ProjectLens/demo/riverside-current.xer), [narrative](https://matthewpaver.github.io/ProjectLens/demo/riverside-narrative.txt)) pairs.
 
 ## How it works
 
 ```mermaid
 flowchart LR
-    X[(Two XER exports<br/>+ narrative, risks, conditions)] --> P[Parse XER in the browser]
+    X[(Two XER exports<br/>+ narrative)] --> P[Parse XER in the browser]
     P --> R[Deterministic checks<br/>finish movement vs narrative,<br/>constraints, logic, float, ownership]
     R --> V[Readiness verdict<br/>≤3 blockers + questions]
     V -. optional .-> S[Precedent sidecar<br/>local FastAPI]
@@ -49,7 +49,7 @@ flowchart LR
     C -- pass, brief shown --> U[Human Use / Ignore<br/>on each precedent]
     C -- fail, brief dropped --> U
     V --> D[Decision register<br/>owner, rationale, conditions]
-    U --> D
+    U -. optional context .-> D
 ```
 
 - **Change assurance** (`docs/change-assurance.html`, `.js`): parses both XER files, runs the deterministic checks against the narrative and evidence, and keeps the decision and condition registers in the browser's local storage, with an export of the decision record.
@@ -57,7 +57,15 @@ flowchart LR
 - **Public evidence** (`docs/index.html`, `Processing/gmpp_pipeline.py`): joins seven annual UK Government Major Projects Portfolio (GMPP) releases into one history of delivery-confidence ratings and end-date changes. Method: [`docs/method.md`](docs/method.md).
 - **Precedent sidecar** (`Processing/precedent_rag/`, optional, local): FastAPI plus LangGraph. It retrieves comparable public records with metadata filters and Gemini embeddings. An optional Gemini brief is shown only if every claim cites a retrieved record and it does not recommend approving or rejecting the pack (`summarize.py: evaluate_summary`). It receives narrative text and filters only, never the XER. Method: [`docs/precedent-rag.md`](docs/precedent-rag.md).
 
-To run the sidecar, copy `.env.example` to `.env`, set `GEMINI_API_KEY` (and `LANGSMITH_API_KEY` for traces), then run `make precedent-rag` and set `window.PROJECTLENS_PRECEDENT_RAG_URL = "http://127.0.0.1:8787"` before `change-assurance.js` loads. Without it, the page shows three static precedent cards and the same human gate.
+To run the sidecar, copy `.env.example` to `.env`, set `GEMINI_API_KEY` (and `LANGSMITH_API_KEY` for traces), then run `make precedent-rag` and set `window.PROJECTLENS_PRECEDENT_RAG_URL = "http://127.0.0.1:8787"` before `change-assurance.js` loads. Without it, the page shows three static precedent cards as optional illustrative context. Untouched cards are recorded as not reviewed; Use or Ignore is required only when you choose to attach or dismiss a record.
+
+## Review, resume and export
+
+The evidence desk puts three prioritised findings (with any additional findings disclosed and retained in the record) beside their source dates, activity movements and original narrative. The decision maker supplies a decision, owner and rationale. Conditional approval also needs a condition, owner and due date. Export preserves findings, the full SHA-256 input identity and optional context dispositions. Existing records without a hash remain readable and explicitly lack that identity.
+
+**Save draft on this device** deliberately stores both XER contents, narrative and decision fields in browser storage. Save again after further edits; use **Resume saved draft** after reopening, and **Delete saved draft** when finished. Anyone with access to this browser profile may access that stored data. Normal review processing uploads nothing. Browser storage is not a shared or tamper-proof audit system.
+
+Project names and source IDs must match. Identical evidence and reversed data dates are rejected. Missing activity finish or float fields produce an evidence gap. Renamed or re-imported projects need exports with consistent identity before comparison. The narrative checks are keyword heuristics, not semantic understanding; this is not critical-path, causation, entitlement or contractual approval analysis. Validate on representative real exports before operational use.
 
 ## Results
 

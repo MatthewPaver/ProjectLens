@@ -39,6 +39,12 @@
   </header>
 
   <main id="workspace">
+    <div id="workspaceError" class="workspace-notice" role="alert" hidden></div>
+    <div id="draftNotice" class="workspace-notice" hidden>
+      <span id="draftStatus">A review draft is saved on this device.</span>
+      <button id="resumeDraft" type="button">Resume saved draft</button>
+      <button id="discardDraft" type="button">Delete saved draft</button>
+    </div>
     <section class="assurance-view active" data-view="reviews">
       <section class="assurance-hero" id="top">
         <div class="hero-copy assurance-reveal">
@@ -67,7 +73,7 @@
         <i aria-hidden="true">→</i>
         <div><b>2</b><span>Review blockers</span></div>
         <i aria-hidden="true">→</i>
-        <div><b>3</b><span>Cite precedents</span></div>
+        <div><b>3</b><span>Check source evidence</span></div>
         <i aria-hidden="true">→</i>
         <div><b>4</b><span>Record decision</span></div>
         <i aria-hidden="true">→</i>
@@ -105,22 +111,26 @@
         </div>
       </section>
 
-      <section class="readiness-workspace" id="readinessWorkspace" hidden aria-live="polite">
+      <section class="readiness-workspace" id="readinessWorkspace" hidden>
         <div class="review-context">
           <div><span>Active review</span><strong id="reviewName">Northstar Grid Connection</strong><small id="reviewEvidenceVersion"></small></div>
-          <button type="button" id="startAnotherReview">Start another review</button>
+          <div class="review-tools"><button type="button" id="saveDraft">Save draft on this device</button><button type="button" id="startAnotherReview">Start another review</button></div>
         </div>
 
         <article class="readiness-card" id="readinessCard">
-          <div class="readiness-status"><i aria-hidden="true"></i><span id="readinessStatus">Needs evidence before decision</span></div>
+          <div class="readiness-status"><i aria-hidden="true"></i><span id="readinessStatus" role="status">Needs evidence before decision</span></div>
           <h2 id="readinessHeadline">The proposed finish is not supported by the current narrative.</h2>
           <p id="readinessExplanation">Resolve the blockers below or record why the decision authority accepts them.</p>
-          <div class="blocker-list" id="blockerList"></div>
           <div class="readiness-actions">
-            <button class="assurance-primary" id="reviewPrecedents" type="button">Review cited precedents <span>→</span></button>
+            <button class="assurance-primary" id="showDecisionForm" type="button">Record human decision</button>
             <button class="assurance-secondary light" id="requestAnswers" type="button">Draft questions for the team</button>
-            <button class="assurance-secondary light" id="showDecisionForm" type="button">Record human decision</button>
+            <button class="assurance-secondary light" id="reviewPrecedents" type="button">Explore public-record context</button>
           </div>
+          <div class="evidence-desk" id="evidenceDesk">
+            <div><h3>Findings</h3><div class="blocker-list" id="blockerList"></div></div>
+            <section class="finding-evidence" id="findingEvidence" tabindex="-1" aria-label="Selected finding evidence"></section>
+          </div>
+
         </article>
 
         <section class="request-panel" id="requestPanel" hidden aria-labelledby="requestTitle">
@@ -142,7 +152,7 @@
             <p>ProjectLens saves the evidence version and any unresolved blockers with your decision. You make the decision; ProjectLens does not.</p>
           </div>
           <form id="decisionForm">
-            <p id="precedentGateBanner" class="precedent-gate-banner" hidden>Mark Use or Ignore on every cited precedent before saving. Use attaches the case to the decision record; Ignore records that you considered and dismissed it.</p>
+            <p id="precedentGateBanner" class="precedent-gate-banner">Public-record context is optional. Untouched examples are recorded as not reviewed.</p>
             <fieldset>
               <legend>Decision</legend>
               <label><input type="radio" name="decision" value="Approve" required><span>Approve</span></label>
@@ -164,8 +174,8 @@
           </form>
         </section>
 
-        <details class="supporting-evidence" id="supportingEvidence" open>
-          <summary><span>Cited precedents & supporting evidence</span><small>Use / Ignore gate · schedule movements · narrative checks</small></summary>
+        <details class="supporting-evidence" id="supportingEvidence">
+          <summary><span>Supporting evidence & public-record context</span><small>Optional context · schedule movements · narrative checks</small></summary>
           <div class="evidence-summary" id="evidenceSummary"></div>
           <div class="comparable-section" id="precedentSection">
             <div>
@@ -175,7 +185,7 @@
             </div>
             <div id="precedentSummary" class="precedent-summary" hidden></div>
             <div id="comparableCases" class="comparable-cases"></div>
-            <p class="precedent-gate-note"><strong>Use</strong> attaches the case and its sources to the decision record. <strong>Ignore</strong> records that you looked at it and set it aside. Mark every card before you save. The XER comparison runs in this browser with fixed rules. The optional local retrieval service sees only the narrative text and filters.</p>
+            <p class="precedent-gate-note"><strong>Use</strong> attaches the case and its sources as context. <strong>Ignore</strong> records that you considered and dismissed it. Untouched cards stay <strong>not reviewed</strong>. Bundled records are illustrative context, not matched causal precedents. The XER comparison runs in this browser with fixed rules. Live retrieval, if configured, receives only narrative text and filters.</p>
             <a href="schedule-review.html">Open the full schedule evidence review ↗</a>
             <a href="precedent-rag.md">How precedent retrieval works ↗</a>
           </div>

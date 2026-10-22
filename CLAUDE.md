@@ -12,7 +12,7 @@ Browser-local change-assurance tool for project controls reviewers: compares a c
 ## Constraints
 - Never fabricate numbers. No random or synthetic values in outputs; missing inputs give NA or an empty result. `test_no_fabricated_outputs.py` AST-guards `Processing/` (only the seeded `decision_support.py` simulation is allowed).
 - XER files, decisions and conditions stay in the browser. The static site must not probe localhost or hold API keys; the sidecar receives narrative and filters only.
-- Schedule findings are deterministic code, not LLM output. Generated briefs fail closed (`summarize.py: evaluate_summary`) and every precedent needs a human Use/Ignore.
+- Schedule findings are deterministic code, not LLM output. Generated briefs fail closed (`summarize.py: evaluate_summary`) and public-record context is optional. An attached or dismissed record needs a human Use/Ignore; untouched records remain not reviewed.
 - Every README number must be reproducible by the command shown next to it.
 - Internal notes, agent prompts/logs and market research stay out of the tree (see `.gitignore`). UK English in public docs.
 

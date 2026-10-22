@@ -1,7 +1,7 @@
 const assuranceState = {
   files: { previous: null, current: null },
   review: null,
-  // human gate before the decision register — use / ignore only, never auto-apply
+  // Optional context stays human-controlled: use / ignore only, never auto-apply.
   precedents: { items: [], used: {}, ignored: {}, summary: null, mode: null },
 };
 
@@ -110,6 +110,7 @@ function parseXer(text, fileName) {
   if (tables.PROJECT.length !== 1) throw new Error(`${fileName} contains multiple projects. Export a single project for change assurance, or use the detailed schedule review to inspect first-project scope.`);
 
   const project = tables.PROJECT[0];
+  if (!project.proj_id?.trim()) throw new Error(`${fileName} has no project ID. Export a supported single-project XER and retry.`);
   const tasks = tables.TASK.map(row => ({
     code: row.task_code || row.task_id,
     name: row.task_name || row.task_code || row.task_id,
@@ -118,10 +119,14 @@ function parseXer(text, fileName) {
     constraint: row.constraint_type || row.cstr_type || "",
     constraintDate: parseDate(row.cstr_date || row.constraint_date),
   }));
-  const relations = (tables.TASKPRED || []).map(row => `${row.pred_task_id}|${row.task_id}|${row.pred_type || "PR_FS"}|${row.lag_hr_cnt || 0}`);
+  if (tasks.some(task => !task.code) || new Set(tasks.map(task => task.code)).size !== tasks.length) throw new Error(`${fileName} needs unique, non-empty activity codes for comparison.`);
+  if (!parseDate(project.scd_end_date || project.plan_end_date)) throw new Error(`${fileName} has no supported project scheduled finish. Export a calculated single-project schedule and retry.`);
+  const codeById = new Map((tables.TASK || []).map(row => [row.task_id, row.task_code || row.task_id]));
+  const relations = (tables.TASKPRED || []).map(row => JSON.stringify([codeById.get(row.pred_task_id) || row.pred_task_id, codeById.get(row.task_id) || row.task_id, row.pred_type || "Not supplied", numberValue(row.lag_hr_cnt)]));
 
   return {
     fileName,
+    sourceText: text.replace(/\r\n?/g, "\n").trim(),
     project: {
       id: project.proj_id || "unassigned",
       name: project.proj_short_name || project.proj_name || "Unnamed project",
@@ -137,6 +142,8 @@ function parseXer(text, fileName) {
 function taskChanges(previous, current) {
   const codes = new Set([...previous.taskByCode.keys(), ...current.taskByCode.keys()]);
   const changes = [];
+  const activityEvidence = [];
+  const snapshot = task => task ? { finish: formatDate(task.finish), totalFloatHours: task.float, constraintType: task.constraint || "None", constraintDate: formatDate(task.constraintDate) } : null;
   let constraintChanges = 0;
   let floatErosion = 0;
 
@@ -144,12 +151,14 @@ function taskChanges(previous, current) {
     const before = previous.taskByCode.get(code);
     const after = current.taskByCode.get(code);
     if (!before || !after) {
+      activityEvidence.push({ code, name: (after || before).name, before: snapshot(before), after: snapshot(after) });
       changes.push({ code, name: (after || before).name, summary: after ? "Activity added" : "Activity removed" });
       return;
     }
     const finishDelta = dayDifference(after.finish, before.finish);
     const constraintChanged = `${before.constraint}|${formatDate(before.constraintDate)}` !== `${after.constraint}|${formatDate(after.constraintDate)}`;
     const floatDelta = before.float !== null && after.float !== null ? after.float - before.float : null;
+    if (finishDelta || constraintChanged || (floatDelta !== null && floatDelta !== 0)) activityEvidence.push({ code, name: after.name, before: snapshot(before), after: snapshot(after) });
     if (constraintChanged) constraintChanges += 1;
     if (floatDelta !== null && floatDelta < 0) floatErosion += 1;
     if ((finishDelta && Math.abs(finishDelta) >= 7) || constraintChanged || (floatDelta !== null && floatDelta <= -8)) {
@@ -161,16 +170,27 @@ function taskChanges(previous, current) {
     }
   });
 
-  const relationChanges = [...new Set([...previous.relations, ...current.relations])].filter(signature => previous.relations.has(signature) !== current.relations.has(signature)).length;
-  return { changes, constraintChanges, floatErosion, relationChanges };
+  const relationEvidence = [...new Set([...previous.relations, ...current.relations])].filter(signature => previous.relations.has(signature) !== current.relations.has(signature)).map(signature => {
+    const [predecessor, successor, type, lagHours] = JSON.parse(signature);
+    return { change: current.relations.has(signature) ? "Added" : "Removed", predecessor, successor, type, lagHours };
+  });
+  const relationChanges = relationEvidence.length;
+  return { changes, activityEvidence, relationEvidence, constraintChanges, floatErosion, relationChanges };
 }
 
 function analyseReview(previous, current, narrative) {
+  if (previous.project.name !== current.project.name) throw new Error("The project names differ. Choose previous and current exports of the same project before comparing.");
+  if (previous.project.id !== current.project.id) throw new Error("The project IDs differ. Choose exports of the same source project; re-imported projects with new IDs are not supported by this comparison.");
+  if (previous.sourceText === current.sourceText) throw new Error("These exports contain identical evidence. Choose a previous and a current schedule, then retry.");
+  if (!previous.project.dataDate || !current.project.dataDate) throw new Error("Both exports need a supported project data date before comparison.");
+  if (current.project.dataDate < previous.project.dataDate) throw new Error("The current data date precedes the previous export. Swap the files and retry.");
   const finishMovement = dayDifference(current.project.scheduledFinish, previous.project.scheduledFinish);
   const changes = taskChanges(previous, current);
   const text = narrative.toLowerCase();
   const statedStable = /\b(unchanged|no material change|on track|as planned|remains stable|no impact)\b/.test(text);
   const blockers = [];
+  const coverage = [previous, current].map(schedule => ({ file: schedule.fileName, tasks: schedule.tasks.length, finishDates: schedule.tasks.filter(task => task.finish !== null).length, floatValues: schedule.tasks.filter(task => task.float !== null).length }));
+  if (coverage.some(item => item.finishDates !== item.tasks || item.floatValues !== item.tasks)) blockers.push({ type: "Evidence gap", title: "Some activity finish dates or float values could not be compared", detail: coverage.map(item => `${item.file}: ${item.finishDates}/${item.tasks} finishes and ${item.floatValues}/${item.tasks} float values`).join("; ") });
 
   if (!narrative.trim()) {
     blockers.push({
@@ -220,7 +240,8 @@ function analyseReview(previous, current, narrative) {
     current,
     finishMovement,
     changes,
-    blockers: blockers.slice(0, 3),
+    blockers,
+    coverage,
     generatedAt: new Date().toISOString(),
   };
 }
@@ -234,24 +255,40 @@ function showToast(message) {
 }
 
 function storage(key) {
-  try { return JSON.parse(localStorage.getItem(key) || "[]"); } catch { return []; }
+  try {
+    const value = JSON.parse(localStorage.getItem(key) || "[]");
+    return key === storageKeys.draft ? value : Array.isArray(value) ? value : [];
+  } catch { return []; }
 }
 
 function saveStorage(key, value) {
-  localStorage.setItem(key, JSON.stringify(value));
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch {
+    showError("This browser could not save the record. Free device storage or allow site storage, then try again. Keep this tab open.");
+    return false;
+  }
 }
 
 const storageKeys = {
   decisions: "projectlens:change-decisions:v1",
   conditions: "projectlens:change-conditions:v1",
   requests: "projectlens:evidence-requests:v1",
+  draft: "projectlens:review-draft:v1",
 };
 
 function evidenceVersion(review) {
-  return `${review.previous.fileName} → ${review.current.fileName}`;
+  return `${review.previous.fileName} → ${review.current.fileName}${review.inputIdentity ? ` · SHA-256 ${review.inputIdentity.slice(0, 12)}` : " · identity unavailable (legacy record)"}`;
 }
 
-function renderReview(review) {
+async function inputIdentity() {
+  const inputs = { schema: 2, previous: assuranceState.files.previous.text, current: assuranceState.files.current.text, narrative: $("#assuranceNarrative").value };
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(JSON.stringify(inputs)));
+  return [...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2, "0")).join("");
+}
+
+function renderReview(review, restoredContext = null) {
   assuranceState.review = review;
   const ready = review.blockers.length === 0;
   const topBlockers = review.blockers.slice(0, 3);
@@ -259,23 +296,24 @@ function renderReview(review) {
   $("#reviewEvidenceVersion").textContent = `${evidenceVersion(review)} · checked ${new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(new Date(review.generatedAt))}`;
   $("#readinessCard").classList.toggle("ready", ready);
   $("#readinessStatus").textContent = ready ? "Ready for human decision" : "Needs evidence before decision";
-  $("#readinessHeadline").textContent = ready
-    ? "The fixed checks found no blockers in this evidence."
-    : topBlockers[0].title;
+  document.body.classList.add("has-review");
+  $("#readinessHeadline").textContent = ready ? "Review the evidence and record a decision" : `${topBlockers.length} findings need your review${review.blockers.length > 3 ? ` · ${review.blockers.length} total` : ""}`;
   $("#readinessExplanation").textContent = ready
-    ? "The pack may still be incomplete. A named decision-maker still needs to review it."
-    : `Resolve ${review.blockers.length === 1 ? "the blocker" : `the ${review.blockers.length} blockers`}, or record why the decision-maker accepts ${review.blockers.length === 1 ? "it" : "them"}.`;
+    ? "No blockers found by these fixed checks. Professional and contractual review still applies."
+    : "Select a finding to check its source. Resolve it or record why the decision authority accepts it.";
   $("#blockerList").innerHTML = topBlockers.length ? topBlockers.map((blocker, index) => `
     <article class="blocker">
-      <span>${String(index + 1).padStart(2, "0")}</span>
-      <div><strong>${escapeHtml(blocker.title)}</strong><small>${escapeHtml(blocker.detail)}</small></div>
-      <i>${escapeHtml(blocker.type)}</i>
-    </article>`).join("") : `
-    <article class="blocker"><span>✓</span><div><strong>No blockers found</strong><small>Carry on with the usual professional and contractual review.</small></div><i>Review</i></article>`;
+      <button type="button" class="finding-select" data-finding="${index}" aria-pressed="${index === 0}">
+        <span>${escapeHtml(blocker.type)}</span><strong>${escapeHtml(blocker.title)}</strong><small>${escapeHtml(blocker.detail)}</small>
+      </button>
+    </article>`).join("") : `<p>No blockers found. Inspect the finish dates and narrative beside this list.</p>`;
+  if (review.blockers.length > 3) $("#blockerList").insertAdjacentHTML("beforeend", `<details><summary>Additional findings (${review.blockers.length - 3})</summary>${review.blockers.slice(3).map((blocker, index) => `<button class="finding-select" type="button" data-finding="${index + 3}" aria-pressed="false"><span>${escapeHtml(blocker.type)}</span><strong>${escapeHtml(blocker.title)}</strong></button>`).join("")}</details>`);
+  assuranceState.selectedFinding = 0;
+  renderSelectedFinding(0);
   $("#requestAnswers").hidden = ready;
   $("#decisionWarning").hidden = ready;
 
-  $("#requestList").innerHTML = topBlockers.map((blocker, index) => `
+  $("#requestList").innerHTML = review.blockers.map((blocker, index) => `
     <article class="request-item"><span>Question ${String(index + 1).padStart(2, "0")} · ${escapeHtml(blocker.type)}</span><strong>${escapeHtml(questionFor(blocker))}</strong><small>${escapeHtml(blocker.detail)}</small></article>`).join("");
 
   const facts = [
@@ -292,16 +330,17 @@ function renderReview(review) {
   // kick off cited precedent retrieval — XER never leaves the browser; only narrative + blockers
   assuranceState.precedents = { items: [], used: {}, ignored: {}, summary: null, mode: null };
   renderPrecedentPanel({ loading: true });
-  void loadPrecedents(review);
+  if (restoredContext) { assuranceState.precedents = restoredContext; renderPrecedentPanel({ offline: restoredContext.mode === "offline-fallback" }); }
+  else void loadPrecedents(review);
 
-  // keep the differentiator visible — open precedents panel by default after readiness
-  openPrecedentSection({ scroll: false });
+  // Keep optional context available without displacing primary schedule evidence.
+  $("#supportingEvidence").open = false;
 
   $("#packIntake").hidden = true;
   $("#readinessWorkspace").hidden = false;
   $("#requestPanel").hidden = true;
   $("#decisionPanel").hidden = true;
-  $("#readinessWorkspace").scrollIntoView({ behavior: "smooth", block: "start" });
+  moveTo($("#readinessWorkspace"));
 }
 
 function inferFilters(review) {
@@ -355,7 +394,7 @@ function openPrecedentSection({ scroll = true } = {}) {
   if (evidence) evidence.open = true;
   if (scroll) {
     const target = $("#precedentSection") || evidence;
-    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+    target?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "start" });
   }
 }
 
@@ -384,6 +423,7 @@ function renderPrecedentPanel({ loading = false, offline = false } = {}) {
   const items = assuranceState.precedents.items.length
     ? assuranceState.precedents.items
     : comparableCasesFallback;
+  assuranceState.precedents.items = items;
 
   host.innerHTML = items.map(item => {
     const gate = assuranceState.precedents.used[item.id]
@@ -401,7 +441,7 @@ function renderPrecedentPanel({ loading = false, offline = false } = {}) {
     const semanticLabel = Number.isFinite(semantic)
       ? ` · semantic ${semantic.toFixed(2)}`
       : "";
-    const gateLabel = gate === "used" ? "Marked use" : gate === "ignored" ? "Marked ignore" : "Pending";
+    const gateLabel = gate === "used" ? "Used as context" : gate === "ignored" ? "Ignored" : "Not reviewed";
     return `
     <article class="comparable-case gate-${gate}" data-precedent-id="${escapeHtml(item.id)}">
       <span>${escapeHtml(item.id)} · ${offline ? "Bundled public record" : "Retrieved public record"} · ${scoreLabel}${semanticLabel}</span>
@@ -432,10 +472,8 @@ function renderPrecedentPanel({ loading = false, offline = false } = {}) {
   if (statusHost) {
     const mode = assuranceState.precedents.mode || (offline ? "offline-fallback" : "unknown");
     statusHost.textContent = offline
-      ? (IS_PUBLIC_PAGES
-        ? "Static demo: these are bundled public-record cards because this site holds no Gemini key. Clone the repo and run `make precedent-rag` for live retrieval with LangSmith traces."
-        : "The retrieval service is offline, so these are the static fallback cards. Run `make precedent-rag` for Gemini and LangSmith.")
-      : `Mode: ${mode}. Mark each card Use or Ignore before you save.`;
+      ? "Bundled public records, shown as illustrative context. They were not matched to your project and do not establish causation."
+      : `Retrieved public records (${mode}). Check source and relevance before using a case as context.`;
   }
   updateDecisionGateState();
 }
@@ -452,29 +490,11 @@ function pendingPrecedentIds() {
 
 function updateDecisionGateState() {
   const pending = pendingPrecedentIds();
-  const panel = $("#decisionPanel");
-  const banner = $("#precedentGateBanner");
-  const sectionGate = $("#precedentSectionGate");
-  const submit = $("#decisionForm")?.querySelector('button[type="submit"]');
-  const locked = pending.length > 0;
-  if (panel) panel.classList.toggle("is-gated-locked", locked);
-  if (banner) {
-    banner.hidden = !locked;
-    if (locked) {
-      banner.textContent = `${pending.length} precedent card${pending.length === 1 ? "" : "s"} still need Use or Ignore. Use attaches the case to the decision record; Ignore records that you considered and dismissed it.`;
-    }
-  }
-  if (sectionGate) {
-    // one section-level gate label — not repeated on every card
-    sectionGate.hidden = !locked;
-    if (locked) {
-      sectionGate.textContent = `Mark Use or Ignore on ${pending.length} remaining card${pending.length === 1 ? "" : "s"} before you save the decision.`;
-    }
-  }
-  if (submit) {
-    submit.disabled = locked;
-    submit.title = locked ? "Mark every cited precedent Use or Ignore first" : "";
-  }
+  $("#precedentGateBanner").hidden = false;
+  $("#precedentGateBanner").textContent = `Public-record context is optional. ${pending.length} example${pending.length === 1 ? " is" : "s are"} not reviewed. Saving preserves that status.`;
+  // One section-level status, not repeated instructions on every card.
+  $("#precedentSectionGate").hidden = true;
+  $("#decisionForm button[type=submit]").disabled = false;
 }
 
 async function loadPrecedents(review) {
@@ -506,11 +526,13 @@ async function loadPrecedents(review) {
     });
     if (!response.ok) throw new Error(`Precedent API ${response.status}`);
     const payload = await response.json();
+    if (assuranceState.review !== review) return;
     assuranceState.precedents.items = payload.cases || [];
     assuranceState.precedents.summary = payload.summary || null;
     assuranceState.precedents.mode = payload.mode || "gemini-hybrid";
     renderPrecedentPanel({ offline: false });
   } catch (error) {
+    if (assuranceState.review !== review) return;
     console.warn("Precedent RAG sidecar unavailable", error);
     assuranceState.precedents.items = comparableCasesFallback;
     assuranceState.precedents.summary = null;
@@ -543,7 +565,7 @@ function questionFor(blocker) {
 async function loadFile(kind, file) {
   if (!file) return;
   if (!/\.xer$/i.test(file.name)) {
-    showToast("Choose a Primavera P6 .xer file.");
+    showError("Choose a Primavera P6 .xer file, then run the check again.");
     return;
   }
   assuranceState.files[kind] = { name: file.name, text: await file.text() };
@@ -557,6 +579,7 @@ async function loadFile(kind, file) {
 
 async function runReview() {
   if (!assuranceState.files.previous || !assuranceState.files.current) return;
+  $("#workspaceError").hidden = true;
   const button = $("#runAssuranceReview");
   button.disabled = true;
   button.innerHTML = "Checking evidence…";
@@ -564,11 +587,12 @@ async function runReview() {
     const previous = parseXer(assuranceState.files.previous.text, assuranceState.files.previous.name);
     const current = parseXer(assuranceState.files.current.text, assuranceState.files.current.name);
     const review = analyseReview(previous, current, $("#assuranceNarrative").value.trim());
+    review.inputIdentity = await inputIdentity();
     renderReview(review);
     showToast("Readiness check complete. Files remained in this browser.");
   } catch (error) {
     console.error(error);
-    showToast(error.message || "The evidence could not be checked.");
+    showError(error.message || "The evidence could not be checked. Choose two readable single-project XER exports and try again.");
   } finally {
     button.disabled = false;
     button.innerHTML = "Check decision readiness <span>→</span>";
@@ -598,14 +622,15 @@ async function loadDemo() {
     // show step 1 (intake) so the demo path matches the flow diagram, then auto-run
     $("#packIntake").hidden = false;
     $("#readinessWorkspace").hidden = true;
-    $("#packIntake").scrollIntoView({ behavior: "smooth", block: "start" });
-    await new Promise(resolve => setTimeout(resolve, 700));
+    $("#packIntake").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "start" });
     const previous = parseXer(previousText, assuranceState.files.previous.name);
     const current = parseXer(currentText, assuranceState.files.current.name);
-    renderReview(analyseReview(previous, current, narrative));
+    const review = analyseReview(previous, current, narrative);
+    review.inputIdentity = await inputIdentity();
+    renderReview(review);
   } catch (error) {
     console.error(error);
-    showToast(error.message);
+    showError(error.message);
   } finally {
     button.disabled = false;
     button.innerHTML = "Try the Northstar example <span>→</span>";
@@ -619,7 +644,11 @@ function showView(name) {
     view.hidden = !active;
     view.classList.toggle("active", active);
   });
-  $$("[data-view-link]").forEach(link => link.classList.toggle("active", link.dataset.viewLink === safeName));
+  $$("[data-view-link]").forEach(link => {
+    link.classList.toggle("active", link.dataset.viewLink === safeName);
+    if (link.dataset.viewLink === safeName) link.setAttribute("aria-current", "page");
+    else link.removeAttribute("aria-current");
+  });
   if (safeName === "decisions") renderDecisionRegister();
   if (safeName === "follow-up") renderConditionRegister();
 }
@@ -669,7 +698,18 @@ function decisionExportText() {
     lines.push(`- Decision owner: ${item.owner}`);
     lines.push(`- Rationale: ${item.rationale}`);
     lines.push(`- Evidence version: ${item.evidenceVersion}`);
+    lines.push(`- Input SHA-256: ${item.inputIdentity || "Unavailable (legacy record)"}`);
+    if (item.sourceEvidence) lines.push(`- Scheduled finish: ${item.sourceEvidence.finishPrevious} → ${item.sourceEvidence.finishCurrent}`);
+    if (item.narrative) lines.push(`- Narrative under review: ${item.narrative}`);
+    (item.sourceEvidence?.activityEvidence || []).forEach(activity => lines.push(`- Activity ${activity.code} (${activity.name}): previous ${JSON.stringify(activity.before)}; current ${JSON.stringify(activity.after)}`));
+    (item.sourceEvidence?.relationEvidence || []).forEach(relation => lines.push(`- ${relation.change} relationship: ${relation.predecessor} → ${relation.successor}; type ${relation.type}; lag ${relation.lagHours === null ? "Not supplied" : `${relation.lagHours} hours`}`));
     if (item.unresolved) lines.push(`- Unresolved blockers preserved: ${item.unresolved}`);
+    (item.findings || []).forEach(finding => lines.push(`  - ${finding.type}: ${finding.title}. ${finding.detail}`));
+    lines.push(`- Context status: ${item.contextStatus || "Unknown (legacy record)"}`);
+    lines.push(`- Public-record context used: ${(item.precedentsUsed || []).join(", ") || "None"}`);
+    lines.push(`- Public-record context ignored: ${(item.precedentsIgnored || []).join(", ") || "None"}`);
+    lines.push(`- Public-record context not reviewed: ${item.schemaVersion === 2 ? (item.precedentsNotReviewed.join(", ") || "None") : "Unknown (legacy record)"}`);
+    (item.contextSources || []).forEach(source => lines.push(`  - ${source.id}: ${source.title}; ${(source.evidence || []).join("; ")}`));
     const linked = conditions.filter(condition => condition.decisionId === item.id);
     if (linked.length) {
       lines.push("- Conditions:");
@@ -716,10 +756,10 @@ function saveEvidenceRequest() {
     project: review.current.project.name,
     owner,
     due,
-    questions: review.blockers.slice(0, 3).map(questionFor),
+    questions: review.blockers.map(questionFor),
     createdAt: new Date().toISOString(),
   });
-  saveStorage(storageKeys.requests, requests);
+  if (!saveStorage(storageKeys.requests, requests)) return;
   $("#readinessStatus").textContent = "Waiting for evidence";
   showToast("Evidence request saved in this browser.");
 }
@@ -731,24 +771,24 @@ function saveDecision(event) {
   const form = new FormData(event.currentTarget);
   const decision = form.get("decision");
   const condition = String(form.get("condition") || "").trim();
-  if (decision === "Approve with conditions" && !condition) {
-    showToast("Add at least one condition for a conditional approval.");
+  if ((decision === "Approve with conditions" || condition) && (!condition || !String(form.get("conditionOwner") || "").trim() || !form.get("conditionDue"))) {
+    showError("Conditional approval needs a condition, its owner and a due date.");
     $("#decisionCondition").focus();
     return;
   }
   const usedIds = Object.keys(assuranceState.precedents.used);
   const ignoredIds = Object.keys(assuranceState.precedents.ignored);
   const pending = pendingPrecedentIds();
-  if (pending.length) {
-    showToast(`Mark Use or Ignore on ${pending.length} precedent card${pending.length === 1 ? "" : "s"} before saving.`);
-    updateDecisionGateState();
-    openPrecedentSection({ scroll: true });
+  if (!decision || !String(form.get("owner") || "").trim() || !String(form.get("rationale") || "").trim()) {
+    showError("Choose a decision and add a named owner and rationale.");
     return;
   }
   const record = {
     id: `DR-${Date.now()}`,
     project: review.current.project.name,
     evidenceVersion: evidenceVersion(review),
+    schemaVersion: 2,
+    inputIdentity: review.inputIdentity,
     decision,
     owner: String(form.get("owner") || "").trim(),
     rationale: String(form.get("rationale") || "").trim(),
@@ -756,12 +796,18 @@ function saveDecision(event) {
     createdAt: new Date().toISOString(),
     precedentsUsed: usedIds,
     precedentsIgnored: ignoredIds,
+    precedentsNotReviewed: pending,
+    findings: review.blockers,
+    narrative: $("#assuranceNarrative").value,
+    sourceEvidence: { finishPrevious: formatDate(review.previous.project.scheduledFinish), finishCurrent: formatDate(review.current.project.scheduledFinish), materialChanges: review.changes.changes, activityEvidence: review.changes.activityEvidence, relationEvidence: review.changes.relationEvidence },
+    contextSources: assuranceState.precedents.items.filter(item => usedIds.includes(item.id)),
     precedentSummary: usedIds.length ? (assuranceState.precedents.summary?.text || null) : null,
     precedentMode: assuranceState.precedents.mode,
+    contextStatus: assuranceState.precedents.mode ? "Available context; dispositions recorded below" : "Retrieval incomplete; no context review is implied",
   };
   const decisions = storage(storageKeys.decisions);
   decisions.unshift(record);
-  saveStorage(storageKeys.decisions, decisions);
+  const updates = { [storageKeys.decisions]: decisions };
 
   if (condition) {
     const conditions = storage(storageKeys.conditions);
@@ -774,7 +820,12 @@ function saveDecision(event) {
       due: String(form.get("conditionDue") || ""),
       closed: false,
     });
-    saveStorage(storageKeys.conditions, conditions);
+    updates[storageKeys.conditions] = conditions;
+  }
+  if (!saveRecordGroup(updates)) return;
+  $("#workspaceError").hidden = true;
+  if (storage(storageKeys.draft)?.inputIdentity === review.inputIdentity) {
+    try { localStorage.removeItem(storageKeys.draft); $("#draftNotice").hidden = true; } catch { /* A saved decision remains valid if the old draft cannot be removed. */ }
   }
   renderConditionRegister();
   window.location.hash = "decisions";
@@ -783,6 +834,8 @@ function saveDecision(event) {
 }
 
 function resetReview() {
+  if (assuranceState.review && !window.confirm("Start another review? Unsaved work in this tab will be cleared. A saved device draft is kept until you delete or replace it.")) return;
+  document.body.classList.remove("has-review");
   assuranceState.files = { previous: null, current: null };
   assuranceState.review = null;
   $("#assurancePrevious").value = "";
@@ -795,14 +848,14 @@ function resetReview() {
   $("#intakeMessage").textContent = "Choose 2 XER files to begin.";
   $("#readinessWorkspace").hidden = true;
   $("#packIntake").hidden = false;
-  $("#packIntake").scrollIntoView({ behavior: "smooth" });
+  $("#packIntake").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
 }
 
 function bindEvents() {
   $("#loadAssuranceDemo").addEventListener("click", loadDemo);
   $("#showOwnPack").addEventListener("click", () => {
     $("#packIntake").hidden = false;
-    $("#packIntake").scrollIntoView({ behavior: "smooth" });
+    $("#packIntake").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
   });
   $("#assurancePrevious").addEventListener("change", event => loadFile("previous", event.target.files[0]));
   $("#assuranceCurrent").addEventListener("change", event => loadFile("current", event.target.files[0]));
@@ -811,17 +864,35 @@ function bindEvents() {
   $("#reviewPrecedents")?.addEventListener("click", () => openPrecedentSection({ scroll: true }));
   $("#requestAnswers").addEventListener("click", () => {
     $("#requestPanel").hidden = false;
-    $("#requestPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+    moveTo($("#requestTitle"));
   });
   $("#showDecisionForm").addEventListener("click", () => {
     $("#decisionPanel").hidden = false;
     updateDecisionGateState();
-    const pending = pendingPrecedentIds();
-    if (pending.length) {
-      openPrecedentSection({ scroll: true });
-      showToast(`Mark Use or Ignore on ${pending.length} precedent card${pending.length === 1 ? "" : "s"} before the decision can be saved.`);
+    moveTo($("#decisionTitle"));
+  });
+  $("#blockerList").addEventListener("click", event => {
+    const button = event.target.closest("[data-finding]");
+    if (!button) return;
+    renderSelectedFinding(Number(button.dataset.finding));
+    if (matchMedia("(max-width: 760px)").matches) {
+      assuranceState.findingScrollY = window.scrollY;
+      $("#evidenceDesk").classList.add("evidence-open");
+      moveTo($("#findingEvidence"));
     }
-    $("#decisionPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  $("#findingEvidence").addEventListener("click", event => {
+    if (!event.target.closest("#backToFindings")) return;
+    $("#evidenceDesk").classList.remove("evidence-open");
+    $(`[data-finding="${assuranceState.selectedFinding}"]`).focus({ preventScroll: true });
+    window.scrollTo({ top: assuranceState.findingScrollY || 0, behavior: "instant" });
+  });
+  $("#saveDraft").addEventListener("click", saveDraft);
+  $("#resumeDraft").addEventListener("click", resumeDraft);
+  $("#discardDraft").addEventListener("click", () => {
+    if (!window.confirm("Delete the saved draft from this device? The current open review stays in this tab.")) return;
+    try { localStorage.removeItem(storageKeys.draft); $("#draftNotice").hidden = true; }
+    catch { showError("The saved draft could not be deleted. Check browser storage permissions."); }
   });
   $("#saveEvidenceRequest").addEventListener("click", saveEvidenceRequest);
   $("#decisionForm").addEventListener("submit", saveDecision);
@@ -834,7 +905,95 @@ function bindEvents() {
   window.addEventListener("hashchange", () => showView(window.location.hash.slice(1)));
 }
 
+
+function showError(message) {
+  const error = $("#workspaceError");
+  error.textContent = message;
+  error.hidden = false;
+  moveTo(error);
+}
+
+function moveTo(element) {
+  if (!element) return;
+  if (!element.hasAttribute("tabindex")) element.setAttribute("tabindex", "-1");
+  element.focus({ preventScroll: true });
+  element.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "start" });
+}
+
+function renderSelectedFinding(index) {
+  assuranceState.selectedFinding = index;
+  const review = assuranceState.review;
+  const finding = review.blockers[index];
+  $$("[data-finding]").forEach(button => button.setAttribute("aria-pressed", String(Number(button.dataset.finding) === index)));
+  const constraintFinding = finding?.title.includes("constraint");
+  const floatFinding = finding?.type === "Float loss";
+  const relationshipFinding = finding?.title.includes("relationship");
+  const relevant = review.changes.activityEvidence.filter(change => {
+    if (constraintFinding) return change.before && change.after && (change.before.constraintType !== change.after.constraintType || change.before.constraintDate !== change.after.constraintDate);
+    if (floatFinding) return change.before?.totalFloatHours !== null && change.after?.totalFloatHours !== null && change.before?.totalFloatHours > change.after?.totalFloatHours;
+    return true;
+  });
+  const value = item => !item ? "Activity absent" : constraintFinding ? `${item.constraintType} · ${item.constraintDate}` : floatFinding ? `${item.totalFloatHours ?? "Not supplied"} hours total float` : item.finish;
+  const activityRows = relevant.map(change => `<li><code>${escapeHtml(change.code)}</code> ${escapeHtml(change.name)}<br><span>Previous: ${escapeHtml(value(change.before))}<br>Current: ${escapeHtml(value(change.after))}</span></li>`).join("") || "<li>No supporting activity changes found.</li>";
+  const relationshipRows = review.changes.relationEvidence.map(relation => `<li>${escapeHtml(relation.change)}: <code>${escapeHtml(relation.predecessor)}</code> → <code>${escapeHtml(relation.successor)}</code><br><span>Type: ${escapeHtml(relation.type)} · lag: ${relation.lagHours === null ? "Not supplied" : `${escapeHtml(relation.lagHours)} hours`}</span></li>`).join("");
+  $("#findingEvidence").innerHTML = `
+    <button id="backToFindings" type="button">Back to findings</button>
+    <h3>${escapeHtml(finding?.type || "Schedule evidence")}</h3>
+    <p>${escapeHtml(finding?.detail || "No blockers found by these fixed checks.")}</p>
+    <dl class="source-dates"><div><dt>Previous finish</dt><dd>${escapeHtml(formatDate(review.previous.project.scheduledFinish))}</dd></div><div><dt>Current finish</dt><dd>${escapeHtml(formatDate(review.current.project.scheduledFinish))}</dd></div></dl>
+    <p class="source-files">Sources: ${escapeHtml(evidenceVersion(review))} · PROJECT scheduled finish; TASK activity dates, constraints and total float.</p>
+    <details ${constraintFinding || floatFinding || relationshipFinding ? "open" : ""}><summary>${relationshipFinding ? `Relationship field evidence (${review.changes.relationEvidence.length})` : `Activity field evidence (${relevant.length})`}</summary><ul>${relationshipFinding ? relationshipRows : activityRows}</ul></details>
+    <h4>Narrative under review · keyword checks</h4><blockquote>${escapeHtml(($("#assuranceNarrative").value.split(/\n\s*\n/).find(paragraph => /unchanged|on track|stable|no impact/i.test(paragraph)) || $("#assuranceNarrative").value || "No narrative supplied.").trim())}</blockquote><details><summary>Read full narrative</summary><p>${escapeHtml($("#assuranceNarrative").value || "No narrative supplied.")}</p></details>
+    <p class="source-boundary">Field coverage: ${review.coverage.map(item => `${escapeHtml(item.file)}: ${item.finishDates}/${item.tasks} finishes, ${item.floatValues}/${item.tasks} float values`).join("; ")}. Fixed checks flag conflicts. They do not establish causation, entitlement or contractual approval.</p>`;
+}
+
+function saveRecordGroup(updates) {
+  const previous = {};
+  try {
+    for (const key of Object.keys(updates)) previous[key] = localStorage.getItem(key);
+    for (const [key, value] of Object.entries(updates)) localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch {
+    for (const [key, value] of Object.entries(previous)) {
+      try { if (value === null) localStorage.removeItem(key); else localStorage.setItem(key, value); } catch { /* Keep the open form available for recovery. */ }
+    }
+    showError("The decision could not be saved. Keep this tab open, allow site storage or free device space, then retry.");
+    return false;
+  }
+}
+
+function saveDraft() {
+  const fields = Object.fromEntries(new FormData($("#decisionForm")));
+  const draft = { inputIdentity: assuranceState.review?.inputIdentity, files: assuranceState.files, narrative: $("#assuranceNarrative").value, fields, precedents: assuranceState.precedents, selectedFinding: assuranceState.selectedFinding, decisionOpen: !$("#decisionPanel").hidden, savedAt: new Date().toISOString() };
+  if (!saveStorage(storageKeys.draft, draft)) return;
+  $("#draftNotice").hidden = false;
+  $("#draftStatus").textContent = "Draft saved on this device, including XER contents and decision fields. Save again after further edits. Delete it when finished.";
+  showToast("Draft saved on this device. You can resume after reopening.");
+}
+
+async function resumeDraft() {
+  try {
+    const draft = storage(storageKeys.draft);
+    if (!draft.files?.previous?.text || !draft.files?.current?.text) throw new Error("The saved draft is incomplete. Delete it and reload your two XER files.");
+    assuranceState.files = draft.files;
+    $("#assuranceNarrative").value = draft.narrative || "";
+    const review = analyseReview(parseXer(draft.files.previous.text, draft.files.previous.name), parseXer(draft.files.current.text, draft.files.current.name), draft.narrative || "");
+    review.inputIdentity = await inputIdentity();
+    renderReview(review, draft.precedents);
+    assuranceState.precedents = draft.precedents || assuranceState.precedents;
+    renderPrecedentPanel({ offline: assuranceState.precedents.mode === "offline-fallback" });
+    for (const [name, value] of Object.entries(draft.fields || {})) {
+      const input = $("#decisionForm").elements.namedItem(name);
+      if (input) input.value = value;
+    }
+    $("#decisionPanel").hidden = !draft.decisionOpen;
+    renderSelectedFinding(draft.selectedFinding || 0);
+    showToast("Saved draft restored. Recheck the evidence before deciding.");
+  } catch (error) { showError(error.message || "The saved draft could not be restored. Reload your source files."); }
+}
+
 bindEvents();
+$("#draftNotice").hidden = !storage(storageKeys.draft)?.files;
 renderConditionRegister();
 showView(window.location.hash.slice(1) || "reviews");
 const bootStatus = $("#precedentStatus");
