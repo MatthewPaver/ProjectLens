@@ -16,6 +16,7 @@ if (IS_WALKTHROUGH) {
 const assuranceState = {
   files: { previous: null, current: null },
   review: null,
+  originalNarrative: null,
   // Optional context stays human-controlled: use / ignore only, never auto-apply.
   precedents: { items: [], used: {}, ignored: {}, summary: null, mode: null },
 };
@@ -202,7 +203,10 @@ function analyseReview(previous, current, narrative) {
   const finishMovement = dayDifference(current.project.scheduledFinish, previous.project.scheduledFinish);
   const changes = taskChanges(previous, current);
   const text = narrative.toLowerCase();
-  const statedStable = /\b(unchanged|no material change|on track|as planned|remains stable|no impact)\b/.test(text);
+  // These are bounded text prompts, not a judgement that a claim is true.
+  // Exclude explicit local negations such as "not on track" before matching.
+  const stabilityText = text.replace(/\b(?:not|never|no longer)\s+(?:\w+\s+){0,3}(?:on track|unchanged|as planned|stable)\b/g, "");
+  const statedStable = /\b(unchanged|no material change|on track|as planned|remains stable|no impact)\b/.test(stabilityText);
   const blockers = [];
   const coverage = [previous, current].map(schedule => ({ file: schedule.fileName, tasks: schedule.tasks.length, finishDates: schedule.tasks.filter(task => task.finish !== null).length, floatValues: schedule.tasks.filter(task => task.float !== null).length }));
   if (coverage.some(item => item.finishDates !== item.tasks || item.floatValues !== item.tasks)) blockers.push({ type: "Evidence gap", title: "Some activity finish dates or float values could not be compared", detail: coverage.map(item => `${item.file}: ${item.finishDates}/${item.tasks} finishes and ${item.floatValues}/${item.tasks} float values`).join("; ") });
@@ -220,29 +224,32 @@ function analyseReview(previous, current, narrative) {
       title: `The finish moved ${finishMovement} days but the narrative says the schedule is stable`,
       detail: `${formatDate(previous.project.scheduledFinish)} → ${formatDate(current.project.scheduledFinish)}.`,
     });
+  } else if (finishMovement !== null && Math.abs(finishMovement) >= 7) {
+    blockers.push({ type: "Schedule movement", title: `The scheduled finish moved ${finishMovement > 0 ? "+" : ""}${finishMovement} days`, detail: "Check the reason and supporting evidence. Mentioning the movement does not verify its cause." });
   }
-  if (changes.constraintChanges && !/\bconstraint|mandatory|fixed date|must finish|must start\b/.test(text)) {
+  if (changes.constraintChanges) {
     blockers.push({
       type: "Unexplained change",
-      title: `The narrative does not mention ${changes.constraintChanges} constraint changes`,
-      detail: "Dated constraints can change float and which path drives the finish.",
+      title: `${changes.constraintChanges} constraint changes need review`,
+      detail: "Constraint type or date changed. Inspect the source fields and the instruction supporting each change; narrative wording does not close this review question.",
     });
   }
-  if (changes.relationChanges && !/\b(logic|relationship|predecessor|successor|resequence|sequence)\b/.test(text)) {
+  if (changes.relationChanges) {
     blockers.push({
       type: "Unexplained change",
-      title: `The narrative does not mention ${changes.relationChanges} relationship changes`,
-      detail: "Changed logic can move the driving path even when the headline dates stay the same.",
+      title: `${changes.relationChanges} relationship signatures changed`,
+      detail: "Added or removed predecessor signatures can affect sequencing. Ask which instruction explains the differences; these exports do not establish causation.",
     });
   }
-  if (changes.floatErosion && statedStable) {
+  if (changes.floatErosion) {
     blockers.push({
       type: "Float loss",
       title: `Float reduced on ${changes.floatErosion} changed activities`,
-      detail: "The narrative calls the schedule stable, but these activities now have less float.",
+      detail: "Reported total float is lower in the current export. Check the underlying fields and planning assumptions; this does not prove a delay or a critical path.",
     });
   }
-  if (/\b(manage|mitigat|governance|action)\b/.test(text) && !/\b(owner|responsible|accountable|due|by \d{1,2})\b/.test(text)) {
+  const explicitMissingOwnership = /\b(?:no|without|missing|unassigned)\s+(?:named\s+)?(?:owner|due date)\b|\b(?:owner|due date)\s+(?:is\s+)?(?:missing|unassigned|unknown|not set)\b/.test(text);
+  if (explicitMissingOwnership || (/\b(manage\w*|mitigat\w*|governance|action)\b/.test(text) && !/\b(owner|responsible|accountable|due|by \d{1,2})\b/.test(text))) {
     blockers.push({
       type: "Ownership gap",
       title: "The stated response has no named owner or due date",
@@ -305,16 +312,18 @@ async function inputIdentity() {
 
 function renderReview(review, restoredContext = null) {
   assuranceState.review = review;
+  $("#revisedNarrative").value = $("#assuranceNarrative").value;
+  $("#narrativeRevision").open = false;
   const ready = review.blockers.length === 0;
   const topBlockers = review.blockers.slice(0, 3);
   $("#reviewName").textContent = review.current.project.name;
   $("#reviewEvidenceVersion").textContent = `${evidenceVersion(review)} · checked ${new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(new Date(review.generatedAt))}`;
   $("#readinessCard").classList.toggle("ready", ready);
-  $("#readinessStatus").textContent = ready ? "Ready for human decision" : "Needs evidence before decision";
+  $("#readinessStatus").textContent = ready ? "Human review still required" : "Needs evidence before decision";
   document.body.classList.add("has-review");
   $("#readinessHeadline").textContent = ready ? "Review the evidence and record a decision" : `${topBlockers.length} findings need your review${review.blockers.length > 3 ? ` · ${review.blockers.length} total` : ""}`;
   $("#readinessExplanation").textContent = ready
-    ? "No blockers found by these fixed checks. Professional and contractual review still applies."
+    ? "These fixed checks raised no additional questions. Inspect all source facts; this is not an approval or an assurance verdict."
     : "Select a finding to check its source. Resolve it or record why the decision authority accepts it.";
   $("#blockerList").innerHTML = topBlockers.length ? topBlockers.map((blocker, index) => `
     <article class="blocker">
@@ -341,6 +350,7 @@ function renderReview(review, restoredContext = null) {
   ];
   $("#evidenceSummary").innerHTML = facts.map(([label, value, detail]) => `
     <article class="evidence-fact"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong><small>${escapeHtml(detail)}</small></article>`).join("");
+  $("#reviewFacts").innerHTML = facts.slice(1, 5).map(([label, value, detail]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd><small>${escapeHtml(detail)}</small></div>`).join("");
 
   // kick off cited precedent retrieval — XER never leaves the browser; only narrative + blockers
   assuranceState.precedents = { items: [], used: {}, ignored: {}, summary: null, mode: null };
@@ -571,6 +581,9 @@ function setPrecedentGate(id, gate) {
 
 function questionFor(blocker) {
   if (blocker.type === "Contradiction") return "How should the narrative be corrected or evidenced against the finish movement?";
+  if (blocker.type === "Schedule movement") return "What source evidence explains the scheduled finish movement?";
+  if (blocker.title.includes("constraint")) return "Which instruction or approval explains each constraint change?";
+  if (blocker.title.includes("relationship")) return "What changed in the delivery sequence, and why?";
   if (blocker.type === "Ownership gap") return "Who owns the stated response, and by when must it be complete?";
   if (blocker.type === "Evidence gap") return "What narrative, reason and approval basis supports this submission?";
   if (blocker.type === "Float loss") return "Which approved change explains the lost float, and does the narrative need correcting?";
@@ -584,6 +597,7 @@ async function loadFile(kind, file) {
     return;
   }
   assuranceState.files[kind] = { name: file.name, text: await file.text() };
+  assuranceState.originalNarrative = null;
   const label = kind === "previous" ? $("#assurancePreviousName") : $("#assuranceCurrentName");
   label.textContent = file.name;
   label.closest(".assurance-file").classList.add("loaded");
@@ -602,6 +616,7 @@ async function runReview() {
     const previous = parseXer(assuranceState.files.previous.text, assuranceState.files.previous.name);
     const current = parseXer(assuranceState.files.current.text, assuranceState.files.current.name);
     const review = analyseReview(previous, current, $("#assuranceNarrative").value.trim());
+    assuranceState.originalNarrative ??= $("#assuranceNarrative").value;
     review.inputIdentity = await inputIdentity();
     renderReview(review);
     showToast("Readiness check complete. Files remained in this browser.");
@@ -629,6 +644,7 @@ async function loadDemo() {
     assuranceState.files.previous = { name: "northstar-previous.xer", text: previousText };
     assuranceState.files.current = { name: "northstar-current.xer", text: currentText };
     $("#assuranceNarrative").value = narrative;
+    assuranceState.originalNarrative = narrative;
     $("#assurancePreviousName").textContent = "northstar-previous.xer";
     $("#assuranceCurrentName").textContent = "northstar-current.xer";
     $$(".assurance-file").forEach(card => card.classList.add("loaded"));
@@ -654,6 +670,7 @@ async function loadDemo() {
 
 function showView(name) {
   const safeName = ["reviews", "decisions", "follow-up"].includes(name) ? name : "reviews";
+  document.body.dataset.currentView = safeName;
   $$("[data-view]").forEach(view => {
     const active = view.dataset.view === safeName;
     view.hidden = !active;
@@ -717,6 +734,7 @@ function decisionExportText() {
     lines.push(`- Input SHA-256: ${item.inputIdentity || "Unavailable (legacy record)"}`);
     if (item.sourceEvidence) lines.push(`- Scheduled finish: ${item.sourceEvidence.finishPrevious} → ${item.sourceEvidence.finishCurrent}`);
     if (item.narrative) lines.push(`- Narrative under review: ${item.narrative}`);
+    if (item.originalNarrative !== undefined) lines.push(`- Original narrative at first check: ${item.originalNarrative}`);
     (item.sourceEvidence?.activityEvidence || []).forEach(activity => lines.push(`- Activity ${activity.code} (${activity.name}): previous ${JSON.stringify(activity.before)}; current ${JSON.stringify(activity.after)}`));
     (item.sourceEvidence?.relationEvidence || []).forEach(relation => lines.push(`- ${relation.change} relationship: ${relation.predecessor} → ${relation.successor}; type ${relation.type}; lag ${relation.lagHours === null ? "Not supplied" : `${relation.lagHours} hours`}`));
     if (item.unresolved) lines.push(`- Unresolved blockers preserved: ${item.unresolved}`);
@@ -815,6 +833,7 @@ function saveDecision(event) {
     precedentsNotReviewed: pending,
     findings: review.blockers,
     narrative: $("#assuranceNarrative").value,
+    originalNarrative: assuranceState.originalNarrative,
     sourceEvidence: { finishPrevious: formatDate(review.previous.project.scheduledFinish), finishCurrent: formatDate(review.current.project.scheduledFinish), materialChanges: review.changes.changes, activityEvidence: review.changes.activityEvidence, relationEvidence: review.changes.relationEvidence },
     contextSources: assuranceState.precedents.items.filter(item => usedIds.includes(item.id)),
     precedentSummary: usedIds.length ? (assuranceState.precedents.summary?.text || null) : null,
@@ -850,11 +869,14 @@ function saveDecision(event) {
   document.dispatchEvent(new Event("projectlens:decision-saved"));
 }
 
-function resetReview() {
-  if (assuranceState.review && !window.confirm("Start another review? Unsaved work in this tab will be cleared. A saved device draft is kept until you delete or replace it.")) return;
+function resetReview(options = {}) {
+  const landing = options.landing === true;
+  if ((assuranceState.review || assuranceState.files.previous || assuranceState.files.current) && !window.confirm("Start another review? Unsaved work in this tab will be cleared. A saved device draft is kept until you delete or replace it.")) return;
   document.body.classList.remove("has-review");
+  document.body.classList.toggle("has-intake", !landing);
   assuranceState.files = { previous: null, current: null };
   assuranceState.review = null;
+  assuranceState.originalNarrative = null;
   $("#assurancePrevious").value = "";
   $("#assuranceCurrent").value = "";
   $("#assuranceNarrative").value = "";
@@ -864,19 +886,25 @@ function resetReview() {
   $("#runAssuranceReview").disabled = true;
   $("#intakeMessage").textContent = "Choose 2 XER files to begin.";
   $("#readinessWorkspace").hidden = true;
-  $("#packIntake").hidden = false;
-  $("#packIntake").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+  $("#packIntake").hidden = landing;
+  moveTo(landing ? $("#productTitle") : $("#intakeTitle"));
 }
 
 function bindEvents() {
   $("#loadAssuranceDemo").addEventListener("click", loadDemo);
   $("#showOwnPack").addEventListener("click", () => {
+    document.body.classList.add("has-intake");
     $("#packIntake").hidden = false;
-    $("#packIntake").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+    moveTo($("#intakeTitle"));
   });
+  $("#backToProduct").addEventListener("click", () => resetReview({ landing: true }));
   $("#assurancePrevious").addEventListener("change", event => loadFile("previous", event.target.files[0]));
   $("#assuranceCurrent").addEventListener("change", event => loadFile("current", event.target.files[0]));
   $("#runAssuranceReview").addEventListener("click", runReview);
+  $("#recheckNarrative").addEventListener("click", () => {
+    $("#assuranceNarrative").value = $("#revisedNarrative").value;
+    void runReview();
+  });
   $("#startAnotherReview").addEventListener("click", resetReview);
   $("#reviewPrecedents")?.addEventListener("click", () => openPrecedentSection({ scroll: true }));
   $("#requestAnswers").addEventListener("click", () => {
@@ -955,12 +983,14 @@ function renderSelectedFinding(index) {
   const relationshipRows = review.changes.relationEvidence.map(relation => `<li>${escapeHtml(relation.change)}: <code>${escapeHtml(relation.predecessor)}</code> → <code>${escapeHtml(relation.successor)}</code><br><span>Type: ${escapeHtml(relation.type)} · lag: ${relation.lagHours === null ? "Not supplied" : `${escapeHtml(relation.lagHours)} hours`}</span></li>`).join("");
   $("#findingEvidence").innerHTML = `
     <button id="backToFindings" type="button">Back to findings</button>
-    <h3>${escapeHtml(finding?.type || "Schedule evidence")}</h3>
+    <h3>${escapeHtml(finding?.title || "Schedule evidence")}</h3>
     <p>${escapeHtml(finding?.detail || "No blockers found by these fixed checks.")}</p>
+    <div class="review-question"><h4>Next review question</h4><p>${escapeHtml(finding ? questionFor(finding) : "What evidence supports the proposed update?")}</p></div>
     <dl class="source-dates"><div><dt>Previous finish</dt><dd>${escapeHtml(formatDate(review.previous.project.scheduledFinish))}</dd></div><div><dt>Current finish</dt><dd>${escapeHtml(formatDate(review.current.project.scheduledFinish))}</dd></div></dl>
     <p class="source-files">Sources: ${escapeHtml(evidenceVersion(review))} · PROJECT scheduled finish; TASK activity dates, constraints and total float.</p>
     <details ${constraintFinding || floatFinding || relationshipFinding ? "open" : ""}><summary>${relationshipFinding ? `Relationship field evidence (${review.changes.relationEvidence.length})` : `Activity field evidence (${relevant.length})`}</summary><ul>${relationshipFinding ? relationshipRows : activityRows}</ul></details>
-    <h4>Narrative under review · keyword checks</h4><blockquote>${escapeHtml(($("#assuranceNarrative").value.split(/\n\s*\n/).find(paragraph => /unchanged|on track|stable|no impact/i.test(paragraph)) || $("#assuranceNarrative").value || "No narrative supplied.").trim())}</blockquote><details><summary>Read full narrative</summary><p>${escapeHtml($("#assuranceNarrative").value || "No narrative supplied.")}</p></details>
+    <h4>Narrative under review</h4><blockquote>${escapeHtml(($("#assuranceNarrative").value.split(/\n\s*\n/).find(paragraph => /unchanged|on track|stable|no impact/i.test(paragraph)) || $("#assuranceNarrative").value || "No narrative supplied.").trim())}</blockquote><details><summary>Read full narrative</summary><p>${escapeHtml($("#assuranceNarrative").value || "No narrative supplied.")}</p></details>
+    ${assuranceState.originalNarrative !== null && assuranceState.originalNarrative !== $("#assuranceNarrative").value ? `<details class="original-narrative"><summary>Read original narrative from the first check</summary><p>${escapeHtml(assuranceState.originalNarrative || "No narrative was supplied at the first check.")}</p></details>` : ""}
     <p class="source-boundary">Field coverage: ${review.coverage.map(item => `${escapeHtml(item.file)}: ${item.finishDates}/${item.tasks} finishes, ${item.floatValues}/${item.tasks} float values`).join("; ")}. Fixed checks flag conflicts. They do not establish causation, entitlement or contractual approval.</p>`;
 }
 
@@ -981,7 +1011,7 @@ function saveRecordGroup(updates) {
 
 function saveDraft() {
   const fields = Object.fromEntries(new FormData($("#decisionForm")));
-  const draft = { inputIdentity: assuranceState.review?.inputIdentity, files: assuranceState.files, narrative: $("#assuranceNarrative").value, fields, precedents: assuranceState.precedents, selectedFinding: assuranceState.selectedFinding, decisionOpen: !$("#decisionPanel").hidden, savedAt: new Date().toISOString() };
+  const draft = { inputIdentity: assuranceState.review?.inputIdentity, files: assuranceState.files, narrative: $("#assuranceNarrative").value, originalNarrative: assuranceState.originalNarrative, pendingNarrative: $("#revisedNarrative").value, revisionOpen: $("#narrativeRevision").open, fields, precedents: assuranceState.precedents, selectedFinding: assuranceState.selectedFinding, decisionOpen: !$("#decisionPanel").hidden, savedAt: new Date().toISOString() };
   if (!saveStorage(storageKeys.draft, draft)) return;
   $("#draftNotice").hidden = false;
   $("#draftStatus").textContent = "Draft saved on this device, including XER contents and decision fields. Save again after further edits. Delete it when finished.";
@@ -993,10 +1023,13 @@ async function resumeDraft() {
     const draft = storage(storageKeys.draft);
     if (!draft.files?.previous?.text || !draft.files?.current?.text) throw new Error("The saved draft is incomplete. Delete it and reload your two XER files.");
     assuranceState.files = draft.files;
+    assuranceState.originalNarrative = draft.originalNarrative ?? draft.narrative ?? "";
     $("#assuranceNarrative").value = draft.narrative || "";
     const review = analyseReview(parseXer(draft.files.previous.text, draft.files.previous.name), parseXer(draft.files.current.text, draft.files.current.name), draft.narrative || "");
     review.inputIdentity = await inputIdentity();
     renderReview(review, draft.precedents);
+    $("#revisedNarrative").value = draft.pendingNarrative ?? draft.narrative ?? "";
+    $("#narrativeRevision").open = Boolean(draft.revisionOpen);
     assuranceState.precedents = draft.precedents || assuranceState.precedents;
     renderPrecedentPanel({ offline: assuranceState.precedents.mode === "offline-fallback" });
     for (const [name, value] of Object.entries(draft.fields || {})) {

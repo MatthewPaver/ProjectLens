@@ -53,6 +53,7 @@ work/
 Processing/precedent_rag/.cache/
 
 # Local-only notes, agent prompts/logs and research (never published)
+.impeccable/
 CLAUDE-*.md
 .impeccable.md
 DONE.md

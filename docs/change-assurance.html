@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Review a project change pack, identify decision blockers and preserve the human decision and its conditions.">
+  <meta name="description" content="Compare Primavera P6 exports with the project update. Inspect source evidence, ask clearer questions and record a human decision.">
   <meta name="theme-color" content="#071a1b">
-  <meta property="og:title" content="ProjectLens | Change assurance">
-  <meta property="og:description" content="Compare two Primavera P6 schedules with the change narrative, see up to three blockers and record the decision a person makes.">
+  <meta property="og:title" content="ProjectLens | Schedule change review">
+  <meta property="og:description" content="Compare two Primavera P6 schedules with the change narrative, inspect factual changes and record the decision a person makes.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://matthewpaver.github.io/ProjectLens/assets/change-assurance-overview.png">
+  <meta property="og:image" content="https://matthewpaver.github.io/ProjectLens/assets/product-landing-overview.png">
   <meta name="twitter:card" content="summary_large_image">
-  <title>ProjectLens | Change assurance</title>
+  <title>ProjectLens | Schedule change review</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,25 +18,26 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="change-assurance.css">
   <link rel="stylesheet" href="walkthrough.css">
+  <link rel="stylesheet" href="product-landing.css">
 </head>
-<body class="assurance-body">
+<body class="assurance-body product-design">
   <a class="skip-link" href="#workspace">Skip to review workspace</a>
   <div class="assurance-grid" aria-hidden="true"></div>
 
   <header class="assurance-header">
-    <a class="brand assurance-brand" href="#reviews" aria-label="ProjectLens change assurance home">
-      <span class="brand-eye" aria-hidden="true"></span>
-      <span><b>PROJECT</b>LENS<small>CHANGE REVIEW</small></span>
-    </a>
-    <nav aria-label="Change assurance">
+    <a class="product-wordmark" href="change-assurance.html" aria-label="ProjectLens home">ProjectLens</a>
+    <nav class="product-navigation" aria-label="Product">
+      <a href="#how-it-works">How it works</a>
+      <a href="#product-method">Method</a>
+      <a href="https://github.com/MatthewPaver/ProjectLens">GitHub</a>
+      <button class="product-open" type="button" data-load-example>Open demo</button>
+    </nav>
+    <nav class="review-navigation" aria-label="Change assurance">
       <a href="#reviews" data-view-link="reviews" class="active">Reviews</a>
       <a href="#decisions" data-view-link="decisions">Decisions</a>
       <a href="#follow-up" data-view-link="follow-up">Follow-up <b id="conditionNavCount" hidden>0</b></a>
     </nav>
-    <div class="header-meta">
-      <span><i aria-hidden="true"></i> Browser-local</span>
-      <a href="board-readiness.html">Board readiness ↗</a>
-    </div>
+    <a class="product-register-link" href="#decisions">Saved decisions</a>
   </header>
 
   <p id="walkthroughSession" class="tour-session" hidden>Synthetic walkthrough · records exist only in this tab until reload. <a href="change-assurance.html">Exit to full ProjectLens</a></p>
@@ -50,42 +51,67 @@
       <button id="discardDraft" type="button">Delete saved draft</button>
     </div>
     <section class="assurance-view active" data-view="reviews">
-      <section class="assurance-hero" id="top">
-        <div class="hero-copy assurance-reveal">
-          <h1>Check the change pack<br><em>before you decide.</em></h1>
-          <p class="hero-intro">Load the previous and current Primavera P6 XER exports and the update narrative. ProjectLens compares the schedules with what the narrative claims, lists up to 3 blockers and keeps a record of what you decide.</p>
-          <div class="assurance-actions">
-            <button class="assurance-primary" id="loadAssuranceDemo" type="button">Try the Northstar example <span>→</span></button>
-            <button class="assurance-secondary" id="showOwnPack" type="button">Use my own XER files</button>
+      <div id="productLanding">
+        <section class="product-hero" id="top" aria-labelledby="productTitle">
+          <h1 id="productTitle">The schedule changed.<br>Did the update explain it?</h1>
+          <p class="product-introduction">Compare two Primavera P6 schedules with the project update. See the evidence behind the movement, then record a human decision.</p>
+          <div class="product-actions">
+            <button class="assurance-primary" id="loadAssuranceDemo" type="button">Try the Northstar example</button>
+            <button class="product-text-button" id="showOwnPack" type="button">Use your own XER files</button>
           </div>
-          <p class="walkthrough-entry"><a href="?walkthrough=1">Take the guided walkthrough</a> · about one minute, at your pace</p>
-          <p class="trust-line">Your files stay in this browser. Fixed rules compare the dates, and a person makes the decision.</p>
-        </div>
-        <aside class="decision-preview assurance-reveal delay-1" aria-label="Example readiness result">
-          <div class="preview-top"><span>Example result</span><b>Needs evidence</b></div>
-          <p>The finish moved <strong>73 days</strong>, but the narrative says it is unchanged.</p>
-          <ol>
-            <li><span>01</span> Finish movement not acknowledged</li>
-            <li><span>02</span> Constraint changes unexplained</li>
-            <li><span>03</span> Float reduced on 9 changed activities</li>
-          </ol>
-          <small>Northstar is a synthetic example project.</small>
-        </aside>
-      </section>
-
-      <section class="simple-flow" aria-label="Five-step review workflow">
-        <div><b>1</b><span>Add the pack</span></div>
-        <i aria-hidden="true">→</i>
-        <div><b>2</b><span>Review blockers</span></div>
-        <i aria-hidden="true">→</i>
-        <div><b>3</b><span>Check source evidence</span></div>
-        <i aria-hidden="true">→</i>
-        <div><b>4</b><span>Record decision</span></div>
-        <i aria-hidden="true">→</i>
-        <div><b>5</b><span>Track conditions</span></div>
-      </section>
+          <p class="product-privacy">Runs in your browser. Your schedule files stay with you.</p>
+        </section>
+        <section class="product-example" aria-label="Interactive Northstar example">
+          <div class="example-heading"><div><strong>Northstar Grid Connection</strong><span>Synthetic example</span></div><span>2 XER exports + narrative</span></div>
+          <div class="example-workspace">
+            <div class="example-selector"><h2>Changes to review</h2><div role="tablist" aria-label="Example changes" aria-orientation="vertical">
+              <button type="button" role="tab" id="example-finish" aria-selected="true" aria-controls="examplePanel" data-example="finish" disabled>Finish movement</button>
+              <button type="button" role="tab" id="example-constraints" aria-selected="false" aria-controls="examplePanel" data-example="constraints" tabindex="-1" disabled>Constraint changes</button>
+              <button type="button" role="tab" id="example-relationships" aria-selected="false" aria-controls="examplePanel" data-example="relationships" tabindex="-1" disabled>Relationship changes</button>
+            </div></div>
+            <div class="example-panel" id="examplePanel" role="tabpanel" aria-labelledby="example-finish" tabindex="0">
+              <h2 id="exampleTitle">The finish moves by 73 days.</h2>
+              <div class="example-comparison" id="exampleComparison"><div><span>Previous finish</span><strong>15 Dec 2027</strong></div><div class="example-connection"><span>+73 days</span><div class="example-line" aria-hidden="true"></div></div><div><span>Current finish</span><strong>26 Feb 2028</strong></div></div>
+              <div class="example-reading"><div><span>The update says</span><blockquote id="exampleClaim">“The key completion date is unchanged.”</blockquote></div><div><span>The schedules show</span><p id="exampleObservation">Scheduled finish moves by 73 days.</p></div></div>
+              <div class="example-question"><div><span>Next review question</span><p id="exampleQuestion">What explains the revised finish?</p></div><button type="button" id="exampleInspect" class="product-text-button" aria-expanded="false" aria-controls="exampleSource" disabled>Inspect source evidence</button></div>
+              <div id="exampleSource" class="example-source" hidden></div>
+            </div>
+          </div>
+          <div class="example-footer"><p id="exampleStatus" role="status">Loading the real comparison. Schedule movement is a fact; its cause still needs evidence.</p><button type="button" id="exampleReplay" class="product-text-button" disabled>Replay movement</button><button type="button" id="exampleRetry" class="product-text-button" hidden>Retry example</button></div>
+        </section>
+        <section class="product-journey" id="how-it-works" aria-labelledby="journeyTitle">
+          <h2 id="journeyTitle">From a changed date to a recorded decision.</h2>
+          <p>Review what moved, see the evidence, then record your decision and any follow-up conditions.</p>
+          <div class="journey-detail">
+            <ol class="journey-list">
+              <li><h3>Bring the update</h3><p>Add the previous and current XER exports and the accompanying narrative.</p></li>
+              <li><h3>Inspect what changed</h3><p>Read finish dates, constraints, relationships and reported float beside the source fields.</p></li>
+              <li><h3>Ask the next question</h3><p>Keep a factual movement distinct from its explanation. Name an owner and due date for missing evidence.</p></li>
+              <li><h3>Keep the decision</h3><p>Record a human outcome and rationale. Export the evidence, then track any conditions.</p></li>
+            </ol>
+            <aside class="journey-demo">
+              <h3>Follow one complete review.</h3>
+              <p>The guided Northstar example uses the same parser, forms and decision records as the full product.</p>
+              <a class="assurance-primary" href="?walkthrough=1">Take the guided walkthrough</a>
+              <p class="journey-note">Synthetic inputs. Walkthrough records exist only in that tab until reload. Downloads remain yours to keep.</p>
+              <a class="product-text-button" href="#decisions">View saved decisions</a>
+            </aside>
+          </div>
+        </section>
+        <section class="product-method" id="product-method" aria-labelledby="methodTitle">
+          <div><h2 id="methodTitle">Clear evidence. Clear limits.</h2><p>ProjectLens compares the fields in your exports. A person interprets them and makes the decision.</p><a href="method.md">Read the method</a></div>
+          <div class="product-questions">
+            <details><summary>Do my schedule files leave this browser?</summary><p>The standard review reads your files locally. Saving a draft or decision stores it on this device. Downloads give you a copy to keep or share. Optional public-record research is separately configured and receives narrative text, never XER files.</p></details>
+            <details><summary>Does a flagged change mean the project is delayed?</summary><p>A later scheduled finish is an observed difference between exports. These checks do not recalculate the critical path or establish cause, contractual entitlement or the right decision.</p></details>
+            <details><summary>What can I compare?</summary><p>Two supported, single-project Primavera P6 XER exports from the same source project. ProjectLens checks their identity, dates and field coverage before comparing them. Missing fields and unsupported inputs are reported.</p></details>
+          </div>
+        </section>
+        <section class="product-start" aria-labelledby="startTitle"><div><h2 id="startTitle">Bring a change pack. Leave with clearer questions.</h2><p>Start with the example, or review your own two schedule exports.</p></div><div class="product-actions"><button class="assurance-primary" type="button" data-load-example>Open Northstar review</button><button class="product-text-button" type="button" data-own-files>Use my files</button></div></section>
+        <noscript><p class="product-noscript">JavaScript is needed for the interactive comparison. You can still <a href="demo/northstar-previous.xer" download>download the previous example</a>, <a href="demo/northstar-current.xer" download>download the current example</a> and <a href="method.md">read the method</a>.</p></noscript>
+      </div>
 
       <section class="pack-intake" id="packIntake" hidden aria-labelledby="intakeTitle">
+        <button type="button" id="backToProduct" class="product-text-button">Back to product</button>
         <div class="compact-heading">
           <div><h2 id="intakeTitle">Add your two XER files</h2></div>
           <p>Export both schedules from Primavera P6 (File &rarr; Export &rarr; Primavera XER): the previous submission and the current one. Your browser reads the files and uploads nothing. Add the narrative if you want ProjectLens to check what the update claims.</p>
@@ -126,11 +152,19 @@
           <div class="readiness-status"><i aria-hidden="true"></i><span id="readinessStatus" role="status">Needs evidence before decision</span></div>
           <h2 id="readinessHeadline">The proposed finish is not supported by the current narrative.</h2>
           <p id="readinessExplanation">Resolve the blockers below or record why the decision authority accepts them.</p>
+          <dl id="reviewFacts" class="review-facts" aria-label="Schedule facts independent of narrative wording"></dl>
           <div class="readiness-actions">
             <button class="assurance-primary" id="showDecisionForm" type="button">Record human decision</button>
             <button class="assurance-secondary light" id="requestAnswers" type="button">Draft questions for the team</button>
             <button class="assurance-secondary light" id="reviewPrecedents" type="button">Explore public-record context</button>
           </div>
+          <details class="narrative-revision" id="narrativeRevision">
+            <summary>Check a revised narrative</summary>
+            <p>Recheck a revision against these same schedules. The first checked narrative stays in the record. Unchecked edits do not change the decision evidence.</p>
+            <label for="revisedNarrative">Narrative revision</label>
+            <textarea id="revisedNarrative" rows="7"></textarea>
+            <button type="button" class="assurance-secondary" id="recheckNarrative">Recheck against these schedules</button>
+          </details>
           <div class="evidence-desk" id="evidenceDesk">
             <div><h3>Findings</h3><div class="blocker-list" id="blockerList"></div></div>
             <section class="finding-evidence" id="findingEvidence" tabindex="-1" aria-label="Selected finding evidence"></section>
@@ -224,5 +258,6 @@
   <div class="assurance-toast" id="assuranceToast" role="status" aria-live="polite"></div>
   <script src="change-assurance.js"></script>
   <script src="walkthrough.js"></script>
+  <script src="product-landing.js"></script>
 </body>
 </html>

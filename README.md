@@ -9,16 +9,16 @@ For the project controls reviewer who has to tell a board whether a change pack 
 
 **Live demo (no install, no account):** [interactive guided review](https://matthewpaver.github.io/ProjectLens/change-assurance.html?walkthrough=1) · [review a change pack](https://matthewpaver.github.io/ProjectLens/change-assurance.html) · [XER schedule review](https://matthewpaver.github.io/ProjectLens/schedule-review.html) · [board review](https://matthewpaver.github.io/ProjectLens/board-readiness.html) · [public GMPP evidence](https://matthewpaver.github.io/ProjectLens/) · [2-minute walkthrough (MP4)](docs/assets/projectlens-evidence-demo.mp4)
 
-On the change-assurance page, select **Try the Northstar example**. It is a synthetic pack, and the result is one readiness verdict with three blockers and the questions to send the team before the meeting.
+On the change-assurance page, select **Try the Northstar example**. The landing example lets you inspect real finish, constraint and relationship fields before opening a review. Northstar is synthetic; its review contains five questions, with three prioritised beside the evidence and two available under additional findings.
 
 ## The problem
 
-A board often decides on how polished the pack looks, because nobody has time to reconcile the narrative with the schedules, risks, actions and prior conditions submitted with it. The bundled Northstar example reproduces the failure. Its progress report says there is "no change to the finish date", but the current schedule has moved the finish by 73 days. The change-assurance page checks schedule fields and narrative keywords; the separate board-readiness page covers risks, actions and earlier conditions. If nobody checks the evidence against the story, the board approves the story.
+A board often decides on how polished the pack looks, because nobody has time to reconcile the narrative with the schedules, risks, actions and prior conditions submitted with it. The bundled Northstar example reproduces the failure. Its progress report says the "key completion date is unchanged", but the current schedule has moved the finish by 73 days. The change-assurance page checks schedule fields and narrative keywords; the separate board-readiness page covers risks, actions and earlier conditions. If nobody checks the evidence against the story, the board approves the story.
 
 ProjectLens gives the reviewer:
 
 - **Source-linked conflicts and gaps.** Each finding names the evidence that produced it: current or previous schedule fields and the narrative under review.
-- **A prepared decision, not a dashboard.** One readiness verdict, at most three blockers, and specific questions for the team.
+- **A review tied to source facts.** Three prioritised questions, additional findings retained, and an explicit human decision. Rewording a narrative never removes factual constraint, relationship or float changes.
 - **A record of the decision.** The decision, its owner, rationale and conditions are kept; each condition stays open until it is marked closed.
 
 ## Quickstart
@@ -32,9 +32,9 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory docs
 # open http://127.0.0.1:8000/change-assurance.html and select "Try the Northstar example"
 ```
 
-Expected result: the evidence desk shows three findings, including the 73-day finish movement, with source dates beside the selected finding. Stop the server with Ctrl+C.
+Expected result: the evidence desk shows three prioritised findings and five total questions, including the 73-day finish movement, with source dates beside the selected finding. Stop the server with Ctrl+C.
 
-**Your own schedules.** Export two single-project XER files from Primavera P6 (**File → Export → Primavera XER**): the comparison point and the latest submission. Select **Use my own XER files**, choose both files and paste the narrative. Files are parsed in the browser and never uploaded. If you have no XER to hand, use the synthetic [Northstar](https://matthewpaver.github.io/ProjectLens/demo/northstar-previous.xer) ([current](https://matthewpaver.github.io/ProjectLens/demo/northstar-current.xer)) or [Riverside](https://matthewpaver.github.io/ProjectLens/demo/riverside-previous.xer) ([current](https://matthewpaver.github.io/ProjectLens/demo/riverside-current.xer), [narrative](https://matthewpaver.github.io/ProjectLens/demo/riverside-narrative.txt)) pairs.
+**Your own schedules.** Export two single-project XER files from Primavera P6 (**File → Export → Primavera XER**): the comparison point and the latest submission. Select **Use your own XER files**, choose both files and paste the narrative. Files are parsed in the browser and never uploaded. If you have no XER to hand, use the synthetic [Northstar](https://matthewpaver.github.io/ProjectLens/demo/northstar-previous.xer) ([current](https://matthewpaver.github.io/ProjectLens/demo/northstar-current.xer)) or [Riverside](https://matthewpaver.github.io/ProjectLens/demo/riverside-previous.xer) ([current](https://matthewpaver.github.io/ProjectLens/demo/riverside-current.xer), [narrative](https://matthewpaver.github.io/ProjectLens/demo/riverside-narrative.txt)) pairs.
 
 ## Guided review
 
@@ -50,7 +50,7 @@ The walkthrough journey, isolation, playback, phone layout and failed-load recov
 flowchart LR
     X[(Two XER exports<br/>+ narrative)] --> P[Parse XER in the browser]
     P --> R[Deterministic checks<br/>finish movement vs narrative,<br/>constraints, logic, float, ownership]
-    R --> V[Readiness verdict<br/>≤3 blockers + questions]
+    R --> V[Source review<br/>3 prioritised questions + additional findings]
     V -. optional .-> S[Precedent sidecar<br/>local FastAPI]
     S --> H[Hybrid retrieve over<br/>189 public GMPP records]
     H --> C{Citation and<br/>authority check}
@@ -69,11 +69,11 @@ To run the sidecar, copy `.env.example` to `.env`, set `GEMINI_API_KEY` (and `LA
 
 ## Review, resume and export
 
-The evidence desk puts three prioritised findings (with any additional findings disclosed and retained in the record) beside their source dates, activity movements and original narrative. The decision maker supplies a decision, owner and rationale. Conditional approval also needs a condition, owner and due date. Export preserves findings, the full SHA-256 input identity and optional context dispositions. Existing records without a hash remain readable and explicitly lack that identity.
+The evidence desk puts three prioritised findings (with any additional findings disclosed and retained in the record) beside their source dates, activity movements and original narrative. The decision maker supplies a decision, owner and rationale. Conditional approval also needs a condition, owner and due date. Export preserves findings, the full SHA-256 input identity, original and revised narratives, and optional context dispositions. Use **Check a revised narrative** to rerun a revision against the same exports; unchecked edits do not change decision evidence. Existing records without a hash remain readable and explicitly lack that identity.
 
 **Save draft on this device** deliberately stores both XER contents, narrative and decision fields in browser storage. Save again after further edits; use **Resume saved draft** after reopening, and **Delete saved draft** when finished. Anyone with access to this browser profile may access that stored data. Normal review processing uploads nothing. Browser storage is not a shared or tamper-proof audit system.
 
-Project names and source IDs must match. Identical evidence and reversed data dates are rejected. Missing activity finish or float fields produce an evidence gap. Renamed or re-imported projects need exports with consistent identity before comparison. The narrative checks are keyword heuristics, not semantic understanding; this is not critical-path, causation, entitlement or contractual approval analysis. Validate on representative real exports before operational use.
+Project names and source IDs must match. Identical evidence and reversed data dates are rejected. Missing activity finish or float fields produce an evidence gap. Renamed or re-imported projects need exports with consistent identity before comparison. The narrative checks are bounded keyword heuristics with local negation handling, not semantic understanding; factual changes persist independently of narrative wording; this is not critical-path, causation, entitlement or contractual approval analysis. Validate on representative real exports before operational use.
 
 ## Results
 
@@ -89,7 +89,7 @@ For each of 8 labelled queries in [`eval_queries.json`](Processing/precedent_rag
 
 What it does not show: 8 author-written queries are a smoke test, not a benchmark. The hashing embedder is a lexical baseline and does not measure the Gemini path (`make precedent-eval`); no Gemini hit rate is published. It scores retrieval only, not the quality of the generated brief.
 
-**Change-assurance behaviour** is checked in a real browser (Playwright). On Northstar the suite asserts the 73-day headline and exactly three blockers. It also exercises real file inputs, the decision and condition flow, exported packs, and mobile layouts. The XER parser is tested on the Northstar and Riverside fixtures plus synthetic format variants (BOM; LF, CRLF and CR line endings; reordered fields). These are not real client exports; see the [parser compatibility contract](docs/PARSER_COMPATIBILITY.md).
+**Change-assurance behaviour** is checked in a real browser (Playwright). On Northstar the suites assert the 73-day movement, five total questions and three prioritised findings. The landing suite also checks the real-engine preview, keyboard selections, explicit animation and reduced motion, own-file input, revised and original narratives, draft restoration, export, condition closure, five viewport widths and loading recovery. Adversarial narratives cannot erase schedule facts, and “not on track” must not become a stability claim. It also exercises real file inputs, the decision and condition flow, exported packs, and mobile layouts. The XER parser is tested on the Northstar and Riverside fixtures plus synthetic format variants (BOM; LF, CRLF and CR line endings; reordered fields). These are not real client exports; see the [parser compatibility contract](docs/PARSER_COMPATIBILITY.md).
 
 ## Design decisions and trade-offs
 
