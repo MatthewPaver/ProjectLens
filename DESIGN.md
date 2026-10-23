@@ -110,11 +110,11 @@ Moderately rounded controls and fields sit within larger rounded evidence and de
 - **Actions:** cobalt primary buttons, white text, restrained background hover; secondary actions use white or transparent backgrounds and blue text. Keyboard focus uses a 3px cobalt outline with 4px offset. Disabled buttons retain their disabled behaviour and reduced opacity.
 - **Navigation:** native header links preserve real destinations. Active review links use cobalt text and a bottom rule with aria-current. Landing navigation switches to Reviews, Decisions and Follow-up within the operating journey.
 - **Evidence selectors:** selected state uses pale blue, cobalt text and a labelled selected/pressed state. Findings retain title, explanation and source context.
-- **Evidence panels:** tonal backgrounds contain dates, facts, quoted narrative, source files and a separately labelled review question. File names can wrap.
+- **Evidence panels:** tonal backgrounds lead with the practical finding, dates, quoted narrative and a separately labelled review question. The finish example states the schedule/update contradiction in its heading. The review finding uses “The finish moved N days. The update needs clarification.” while retaining the exact narrative as evidence. Review provenance sits in “Source files and check time”; exact source identity and fields remain in “Inspect source files and fields”, alongside activity or relationship evidence disclosures. File names can wrap.
 - **Inputs and decisions:** white fields on tonal panels, visible labels and thin borders. Owner and rationale remain required; conditional decisions retain condition, owner and due date. Persistent errors include recovery guidance.
 - **Preview and walkthrough:** the clearly labelled synthetic preview reads the real comparison engine. Factual questions are fixed independently of narrative matching. Replay explicitly draws the finish relationship over 700ms; evidence changes use bounded 180ms transitions. No looping motion. Reduced motion removes animation and replay while retaining facts and relationships. Walkthrough records remain disposable and isolated from ordinary decisions.
 
-**The Human Decision Rule.** Interface hierarchy leads from fact to source to question before presenting the action that records a person's decision.
+**The Human Decision Rule.** Interface hierarchy leads with the finding and next review question, keeps source evidence easy to inspect, and leaves the decision to a person.
 
 ## Do's and Don'ts
 

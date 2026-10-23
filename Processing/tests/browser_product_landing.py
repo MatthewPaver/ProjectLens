@@ -26,7 +26,7 @@ def landing(browser):
     page.on("request", lambda request: requests.append((request.method, request.url)))
     loaded(page)
     expect(page.locator("#productTitle")).to_have_text("The schedule changed.Did the update explain it?")
-    expect(page.locator("#exampleTitle")).to_have_text("The finish moves by 73 days.")
+    expect(page.locator("#exampleTitle")).to_have_text("The finish moves by 73 days. The update says unchanged.")
     expect(page.locator("#exampleComparison")).to_contain_text("15 Dec 2027")
     expect(page.locator("#exampleComparison")).to_contain_text("26 Feb 2028")
     assert page.evaluate("localStorage.getItem('projectlens:change-decisions:v1')") is None

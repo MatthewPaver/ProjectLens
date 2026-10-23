@@ -165,7 +165,7 @@ def run_recovery(browser):
         return results;
     }""", [(ROOT / "docs/demo/northstar-previous.xer").read_text(), (ROOT / "docs/demo/northstar-current.xer").read_text()])
     assert all(rejected.values()), rejected
-    page.get_by_role("button", name="Use your own XER files").click()
+    page.get_by_role("button", name="Use your own schedules").click()
     page.locator("#assurancePrevious").set_input_files(ROOT / "docs/demo/northstar-previous.xer")
     page.locator("#assuranceCurrent").set_input_files(ROOT / "docs/demo/riverside-current.xer")
     page.get_by_role("button", name="Check decision readiness").click()

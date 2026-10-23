@@ -221,7 +221,7 @@ function analyseReview(previous, current, narrative) {
   if (statedStable && finishMovement >= 7) {
     blockers.push({
       type: "Contradiction",
-      title: `The finish moved ${finishMovement} days but the narrative says the schedule is stable`,
+      title: `The finish moved ${finishMovement} days. The update needs clarification.`,
       detail: `${formatDate(previous.project.scheduledFinish)} → ${formatDate(current.project.scheduledFinish)}.`,
     });
   } else if (finishMovement !== null && Math.abs(finishMovement) >= 7) {
@@ -342,10 +342,10 @@ function renderReview(review, restoredContext = null) {
 
   const facts = [
     ["Scheduled finish", review.finishMovement === null ? "Not comparable" : `${review.finishMovement > 0 ? "+" : ""}${review.finishMovement} days`, `${formatDate(review.previous.project.scheduledFinish)} → ${formatDate(review.current.project.scheduledFinish)}`],
-    ["Material activities", String(review.changes.changes.length), "Activities with material date, float, constraint or presence changes"],
-    ["Constraint changes", String(review.changes.constraintChanges), "Compared by constraint type and date"],
-    ["Float erosion", String(review.changes.floatErosion), "Changed activities with lower total float"],
-    ["Relationship changes", String(review.changes.relationChanges), "Added or removed predecessor signatures"],
+    ["Material activities", String(review.changes.changes.length), "Activities with changed dates, spare time, fixed dates, or added or removed activities"],
+    ["Constraint changes", String(review.changes.constraintChanges), "Changes to imposed dates or rules (constraints)"],
+    ["Float erosion", String(review.changes.floatErosion), "Activities with less spare time before delaying the finish (total float)"],
+    ["Relationship changes", String(review.changes.relationChanges), "Changed activity links: predecessor, successor, link type or lag"],
     ["Evidence supplied", "2 XER files", $("#assuranceNarrative").value.trim() ? "Schedule narrative included" : "No narrative supplied"],
   ];
   $("#evidenceSummary").innerHTML = facts.map(([label, value, detail]) => `
@@ -987,7 +987,7 @@ function renderSelectedFinding(index) {
     <p>${escapeHtml(finding?.detail || "No blockers found by these fixed checks.")}</p>
     <div class="review-question"><h4>Next review question</h4><p>${escapeHtml(finding ? questionFor(finding) : "What evidence supports the proposed update?")}</p></div>
     <dl class="source-dates"><div><dt>Previous finish</dt><dd>${escapeHtml(formatDate(review.previous.project.scheduledFinish))}</dd></div><div><dt>Current finish</dt><dd>${escapeHtml(formatDate(review.current.project.scheduledFinish))}</dd></div></dl>
-    <p class="source-files">Sources: ${escapeHtml(evidenceVersion(review))} · PROJECT scheduled finish; TASK activity dates, constraints and total float.</p>
+    <details><summary>Inspect source files and fields</summary><p class="source-files">Sources: ${escapeHtml(evidenceVersion(review))} · PROJECT scheduled finish; TASK activity dates, constraints and total float.</p></details>
     <details ${constraintFinding || floatFinding || relationshipFinding ? "open" : ""}><summary>${relationshipFinding ? `Relationship field evidence (${review.changes.relationEvidence.length})` : `Activity field evidence (${relevant.length})`}</summary><ul>${relationshipFinding ? relationshipRows : activityRows}</ul></details>
     <h4>Narrative under review</h4><blockquote>${escapeHtml(($("#assuranceNarrative").value.split(/\n\s*\n/).find(paragraph => /unchanged|on track|stable|no impact/i.test(paragraph)) || $("#assuranceNarrative").value || "No narrative supplied.").trim())}</blockquote><details><summary>Read full narrative</summary><p>${escapeHtml($("#assuranceNarrative").value || "No narrative supplied.")}</p></details>
     ${assuranceState.originalNarrative !== null && assuranceState.originalNarrative !== $("#assuranceNarrative").value ? `<details class="original-narrative"><summary>Read original narrative from the first check</summary><p>${escapeHtml(assuranceState.originalNarrative || "No narrative was supplied at the first check.")}</p></details>` : ""}
