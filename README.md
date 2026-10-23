@@ -7,7 +7,7 @@ For the project controls reviewer who has to tell a board whether a change pack 
 
 ![ProjectLens change assurance workspace comparing a change pack narrative against its schedule evidence](docs/assets/change-assurance-overview.png)
 
-**Live demo (no install, no account):** [review a change pack](https://matthewpaver.github.io/ProjectLens/change-assurance.html) · [XER schedule review](https://matthewpaver.github.io/ProjectLens/schedule-review.html) · [board review](https://matthewpaver.github.io/ProjectLens/board-readiness.html) · [public GMPP evidence](https://matthewpaver.github.io/ProjectLens/) · [2-minute walkthrough (MP4)](docs/assets/projectlens-evidence-demo.mp4)
+**Live demo (no install, no account):** [interactive guided review](https://matthewpaver.github.io/ProjectLens/change-assurance.html?walkthrough=1) · [review a change pack](https://matthewpaver.github.io/ProjectLens/change-assurance.html) · [XER schedule review](https://matthewpaver.github.io/ProjectLens/schedule-review.html) · [board review](https://matthewpaver.github.io/ProjectLens/board-readiness.html) · [public GMPP evidence](https://matthewpaver.github.io/ProjectLens/) · [2-minute walkthrough (MP4)](docs/assets/projectlens-evidence-demo.mp4)
 
 On the change-assurance page, select **Try the Northstar example**. It is a synthetic pack, and the result is one readiness verdict with three blockers and the questions to send the team before the meeting.
 
@@ -35,6 +35,14 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory docs
 Expected result: the evidence desk shows three findings, including the 73-day finish movement, with source dates beside the selected finding. Stop the server with Ctrl+C.
 
 **Your own schedules.** Export two single-project XER files from Primavera P6 (**File → Export → Primavera XER**): the comparison point and the latest submission. Select **Use my own XER files**, choose both files and paste the narrative. Files are parsed in the browser and never uploaded. If you have no XER to hand, use the synthetic [Northstar](https://matthewpaver.github.io/ProjectLens/demo/northstar-previous.xer) ([current](https://matthewpaver.github.io/ProjectLens/demo/northstar-current.xer)) or [Riverside](https://matthewpaver.github.io/ProjectLens/demo/riverside-previous.xer) ([current](https://matthewpaver.github.io/ProjectLens/demo/riverside-current.xer), [narrative](https://matthewpaver.github.io/ProjectLens/demo/riverside-narrative.txt)) pairs.
+
+## Guided review
+
+[Take the Northstar walkthrough](https://matthewpaver.github.io/ProjectLens/change-assurance.html?walkthrough=1) to inspect the two bundled XER exports, edit the narrative and rerun the actual checks. Choose a human decision, download the source-linked record and close an owned condition. The guide uses the same parser, checks, form validation and registers as the full application.
+
+Playback starts only when selected and pauses for the human decision, editing or a hidden tab. Reduced-motion visitors use Next. Walkthrough records are held in memory only, separate from saved work; reload or Restart discards them. The downloaded JSON is labelled as a demonstration. The walkthrough makes no causation or approval claim.
+
+The walkthrough journey, isolation, playback, phone layout and failed-load recovery run with `make browser-test` (the focused suite is `Processing/tests/browser_walkthrough.py`).
 
 ## How it works
 

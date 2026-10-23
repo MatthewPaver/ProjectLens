@@ -14,6 +14,7 @@ SUITES = (
     "browser_smoke.py",
     "browser_board_readiness.py",
     "browser_change_assurance.py",
+    "browser_walkthrough.py",
     "browser_xer_review.py",
     "browser_parser_compatibility.py",
 )

@@ -17,6 +17,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Libre+Franklin:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="change-assurance.css">
+  <link rel="stylesheet" href="walkthrough.css">
 </head>
 <body class="assurance-body">
   <a class="skip-link" href="#workspace">Skip to review workspace</a>
@@ -38,6 +39,9 @@
     </div>
   </header>
 
+  <p id="walkthroughSession" class="tour-session" hidden>Synthetic walkthrough · records exist only in this tab until reload. <a href="change-assurance.html">Exit to full ProjectLens</a></p>
+  <div class="tour-layout">
+  <aside id="walkthroughGuide" class="tour-guide" hidden aria-label="Walkthrough guide"></aside>
   <main id="workspace">
     <div id="workspaceError" class="workspace-notice" role="alert" hidden></div>
     <div id="draftNotice" class="workspace-notice" hidden>
@@ -54,6 +58,7 @@
             <button class="assurance-primary" id="loadAssuranceDemo" type="button">Try the Northstar example <span>→</span></button>
             <button class="assurance-secondary" id="showOwnPack" type="button">Use my own XER files</button>
           </div>
+          <p class="walkthrough-entry"><a href="?walkthrough=1">Take the guided walkthrough</a> · about one minute, at your pace</p>
           <p class="trust-line">Your files stay in this browser. Fixed rules compare the dates, and a person makes the decision.</p>
         </div>
         <aside class="decision-preview assurance-reveal delay-1" aria-label="Example readiness result">
@@ -212,10 +217,12 @@
       <div id="conditionRegister" class="register-list"></div>
     </section>
   </main>
+  </div>
 
   <footer class="site-footer">Built by Matthew Paver · <a href="https://matthewpaver.github.io/store/apps/projectlens/">product notes</a> · <a href="https://github.com/MatthewPaver/ProjectLens">source</a> · <a href="https://www.linkedin.com/in/matthew-paver-534262166/">LinkedIn</a> · <a href="https://matthewpaver.github.io/">matthewpaver.github.io</a></footer>
 
   <div class="assurance-toast" id="assuranceToast" role="status" aria-live="polite"></div>
   <script src="change-assurance.js"></script>
+  <script src="walkthrough.js"></script>
 </body>
 </html>

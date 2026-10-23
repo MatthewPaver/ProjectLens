@@ -1,3 +1,18 @@
+// Walkthrough records are disposable and never share the real-work store.
+const IS_WALKTHROUGH = new URLSearchParams(window.location.search).get("walkthrough") === "1";
+const walkthroughRecords = new Map();
+function recordStore() {
+  return IS_WALKTHROUGH ? {
+    getItem: key => walkthroughRecords.get(key) ?? null,
+    setItem: (key, value) => walkthroughRecords.set(key, value),
+    removeItem: key => walkthroughRecords.delete(key),
+  } : localStorage;
+}
+if (IS_WALKTHROUGH) {
+  document.body.classList.add("walkthrough-session");
+  document.querySelector("#walkthroughSession").hidden = false;
+}
+
 const assuranceState = {
   files: { previous: null, current: null },
   review: null,
@@ -256,14 +271,14 @@ function showToast(message) {
 
 function storage(key) {
   try {
-    const value = JSON.parse(localStorage.getItem(key) || "[]");
+    const value = JSON.parse(recordStore().getItem(key) || "[]");
     return key === storageKeys.draft ? value : Array.isArray(value) ? value : [];
   } catch { return []; }
 }
 
 function saveStorage(key, value) {
   try {
-    localStorage.setItem(key, JSON.stringify(value));
+    recordStore().setItem(key, JSON.stringify(value));
     return true;
   } catch {
     showError("This browser could not save the record. Free device storage or allow site storage, then try again. Keep this tab open.");
@@ -680,6 +695,7 @@ function renderConditionRegister() {
     if (condition) condition.closed = !condition.closed;
     saveStorage(storageKeys.conditions, all);
     renderConditionRegister();
+    document.dispatchEvent(new Event("projectlens:condition-changed"));
   }));
 }
 
@@ -825,12 +841,13 @@ function saveDecision(event) {
   if (!saveRecordGroup(updates)) return;
   $("#workspaceError").hidden = true;
   if (storage(storageKeys.draft)?.inputIdentity === review.inputIdentity) {
-    try { localStorage.removeItem(storageKeys.draft); $("#draftNotice").hidden = true; } catch { /* A saved decision remains valid if the old draft cannot be removed. */ }
+    try { recordStore().removeItem(storageKeys.draft); $("#draftNotice").hidden = true; } catch { /* A saved decision remains valid if the old draft cannot be removed. */ }
   }
   renderConditionRegister();
   window.location.hash = "decisions";
   showToast("Decision record saved with its evidence version.");
   event.currentTarget.reset();
+  document.dispatchEvent(new Event("projectlens:decision-saved"));
 }
 
 function resetReview() {
@@ -891,7 +908,7 @@ function bindEvents() {
   $("#resumeDraft").addEventListener("click", resumeDraft);
   $("#discardDraft").addEventListener("click", () => {
     if (!window.confirm("Delete the saved draft from this device? The current open review stays in this tab.")) return;
-    try { localStorage.removeItem(storageKeys.draft); $("#draftNotice").hidden = true; }
+    try { recordStore().removeItem(storageKeys.draft); $("#draftNotice").hidden = true; }
     catch { showError("The saved draft could not be deleted. Check browser storage permissions."); }
   });
   $("#saveEvidenceRequest").addEventListener("click", saveEvidenceRequest);
@@ -950,12 +967,12 @@ function renderSelectedFinding(index) {
 function saveRecordGroup(updates) {
   const previous = {};
   try {
-    for (const key of Object.keys(updates)) previous[key] = localStorage.getItem(key);
-    for (const [key, value] of Object.entries(updates)) localStorage.setItem(key, JSON.stringify(value));
+    for (const key of Object.keys(updates)) previous[key] = recordStore().getItem(key);
+    for (const [key, value] of Object.entries(updates)) recordStore().setItem(key, JSON.stringify(value));
     return true;
   } catch {
     for (const [key, value] of Object.entries(previous)) {
-      try { if (value === null) localStorage.removeItem(key); else localStorage.setItem(key, value); } catch { /* Keep the open form available for recovery. */ }
+      try { if (value === null) recordStore().removeItem(key); else recordStore().setItem(key, value); } catch { /* Keep the open form available for recovery. */ }
     }
     showError("The decision could not be saved. Keep this tab open, allow site storage or free device space, then retry.");
     return false;
@@ -999,3 +1016,21 @@ showView(window.location.hash.slice(1) || "reviews");
 const bootStatus = $("#precedentStatus");
 if (bootStatus) bootStatus.textContent = `Run a review to retrieve precedents. ${precedentSidecarHint()}`;
 window.ProjectLensChangeAssurance = { parseXer, analyseReview };
+
+// A narrow bridge lets the guide use the product's real actions and records.
+if (IS_WALKTHROUGH) window.ProjectLensWalkthrough = {
+  async load() {
+    $("#workspaceError").hidden = true;
+    await loadDemo();
+    if (!assuranceState.review) throw new Error("The example could not load. Retry the walkthrough.");
+  },
+  async recheck(narrative) {
+    $("#assuranceNarrative").value = narrative;
+    await runReview();
+    if (!$("#workspaceError").hidden) throw new Error($("#workspaceError").textContent);
+  },
+  snapshot() {
+    return structuredClone({ review: assuranceState.review, narrative: $("#assuranceNarrative").value,
+      decisions: storage(storageKeys.decisions), conditions: storage(storageKeys.conditions) });
+  },
+};
