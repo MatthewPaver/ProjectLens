@@ -345,3 +345,8 @@ body.product-design { margin: 0; background: var(--pl-white); color: var(--pl-in
   .product-design .tour-guide { top: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .product-design *, .product-design *::before,.product-design *::after { animation: none !important; scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+
+/* Keep review provenance available without preceding the practical outcome. */
+.review-source-details { margin-top: 8px; max-width: 72ch; }
+.review-source-details summary { cursor: pointer; font-size: 14px; }
+.review-source-details small { display: block; overflow-wrap: anywhere; margin-top: 8px; }

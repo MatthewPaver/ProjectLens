@@ -47,4 +47,4 @@ No verified customer logos, testimonials, time savings, independent accuracy cla
 2. Keep observations, narrative claims, unresolved questions and human decisions distinct.
 3. Demonstrate real behaviour with clearly labelled synthetic inputs.
 4. State practical limits at the point where they affect interpretation.
-5. Make product value understandable to a visitor without hiding the evidence from a practitioner.
+5. Make product value understandable to a visitor without hiding the evidence from a practitioner. Lead with the practical finding and next review question; keep source files, check time and exact fields available through labelled disclosures.

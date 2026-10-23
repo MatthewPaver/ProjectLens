@@ -26,7 +26,7 @@
     tabs.forEach(tab => { const active = tab.dataset.example === name; tab.setAttribute('aria-selected', String(active)); tab.tabIndex = active ? 0 : -1; });
     byId('examplePanel').setAttribute('aria-labelledby', `example-${name}`);
     const options = {
-      finish: { title: `The finish moves by ${review.finishMovement} days.`, claim: (narrative.match(/the key completion date[^.!?]*[.!?]/i)?.[0] || sentence(/key completion date/)).replace(/^the/, 'The'), observation: `Scheduled finish moves by ${review.finishMovement} days.`, question: 'What explains the revised finish?' },
+      finish: { title: `The finish moves by ${review.finishMovement} days. The update says unchanged.`, claim: (narrative.match(/the key completion date[^.!?]*[.!?]/i)?.[0] || sentence(/key completion date/)).replace(/^the/, 'The'), observation: `Scheduled finish moves by ${review.finishMovement} days.`, question: 'What explains the revised finish?' },
       constraints: { title: `${review.changes.constraintChanges} activities have changed constraints.`, claim: sentence(/programme continues to manage/), observation: 'Constraint types or dates changed between the two exports.', question: 'Which instruction or approval explains each constraint change?' },
       relationships: { title: `${review.changes.relationChanges} relationship signatures changed.`, claim: sentence(/No material change to the delivery sequence/), observation: 'Predecessor links, relationship types or lag values differ.', question: 'What changed in the delivery sequence, and why?' },
     };

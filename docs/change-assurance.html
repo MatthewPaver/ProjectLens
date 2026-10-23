@@ -54,10 +54,10 @@
       <div id="productLanding">
         <section class="product-hero" id="top" aria-labelledby="productTitle">
           <h1 id="productTitle">The schedule changed.<br>Did the update explain it?</h1>
-          <p class="product-introduction">Compare two Primavera P6 schedules with the project update. See the evidence behind the movement, then record a human decision.</p>
+          <p class="product-introduction">Compare two project schedules from Primavera P6 planning software with the project update. See the evidence behind the movement, then record a human decision.</p>
           <div class="product-actions">
             <button class="assurance-primary" id="loadAssuranceDemo" type="button">Try the Northstar example</button>
-            <button class="product-text-button" id="showOwnPack" type="button">Use your own XER files</button>
+            <button class="product-text-button" id="showOwnPack" type="button">Use your own schedules</button>
           </div>
           <p class="product-privacy">Runs in your browser. Your schedule files stay with you.</p>
         </section>
@@ -70,7 +70,7 @@
               <button type="button" role="tab" id="example-relationships" aria-selected="false" aria-controls="examplePanel" data-example="relationships" tabindex="-1" disabled>Relationship changes</button>
             </div></div>
             <div class="example-panel" id="examplePanel" role="tabpanel" aria-labelledby="example-finish" tabindex="0">
-              <h2 id="exampleTitle">The finish moves by 73 days.</h2>
+              <h2 id="exampleTitle">The finish moves by 73 days. The update says unchanged.</h2>
               <div class="example-comparison" id="exampleComparison"><div><span>Previous finish</span><strong>15 Dec 2027</strong></div><div class="example-connection"><span>+73 days</span><div class="example-line" aria-hidden="true"></div></div><div><span>Current finish</span><strong>26 Feb 2028</strong></div></div>
               <div class="example-reading"><div><span>The update says</span><blockquote id="exampleClaim">“The key completion date is unchanged.”</blockquote></div><div><span>The schedules show</span><p id="exampleObservation">Scheduled finish moves by 73 days.</p></div></div>
               <div class="example-question"><div><span>Next review question</span><p id="exampleQuestion">What explains the revised finish?</p></div><button type="button" id="exampleInspect" class="product-text-button" aria-expanded="false" aria-controls="exampleSource" disabled>Inspect source evidence</button></div>
@@ -114,7 +114,7 @@
         <button type="button" id="backToProduct" class="product-text-button">Back to product</button>
         <div class="compact-heading">
           <div><h2 id="intakeTitle">Add your two XER files</h2></div>
-          <p>Export both schedules from Primavera P6 (File &rarr; Export &rarr; Primavera XER): the previous submission and the current one. Your browser reads the files and uploads nothing. Add the narrative if you want ProjectLens to check what the update claims.</p>
+          <p>XER is the schedule export format from Primavera P6 planning software. Export both schedules (File &rarr; Export &rarr; Primavera XER): the previous submission and the current one. Your browser reads the files and uploads nothing. Add the narrative if you want ProjectLens to check what the update claims.</p>
           <p class="sample-pair">No XER files to hand? Download a synthetic pair from either example project and choose the files below: <a href="./demo/northstar-previous.xer" download>Northstar previous</a> &middot; <a href="./demo/northstar-current.xer" download>Northstar current</a> · <a href="./demo/riverside-previous.xer" download>Riverside previous</a> &middot; <a href="./demo/riverside-current.xer" download>Riverside current</a>. Optional narrative: <a href="./demo/riverside-narrative.txt" download>Riverside narrative</a>.</p>
         </div>
         <div class="pack-grid">
@@ -144,7 +144,7 @@
 
       <section class="readiness-workspace" id="readinessWorkspace" hidden>
         <div class="review-context">
-          <div><span>Active review</span><strong id="reviewName">Northstar Grid Connection</strong><small id="reviewEvidenceVersion"></small></div>
+          <div><span>Active review</span><strong id="reviewName">Northstar Grid Connection</strong><details class="review-source-details"><summary>Source files and check time</summary><small id="reviewEvidenceVersion"></small></details></div>
           <div class="review-tools"><button type="button" id="saveDraft">Save draft on this device</button><button type="button" id="startAnotherReview">Start another review</button></div>
         </div>
 
