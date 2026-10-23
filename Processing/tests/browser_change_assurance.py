@@ -25,7 +25,7 @@ def run_desktop(browser):
     page.wait_for_load_state("networkidle")
 
     assert page.locator("[data-view-link]").count() == 3
-    assert page.get_by_role("heading", name="Check the change pack before you decide.").is_visible()
+    assert page.get_by_role("heading", name="The schedule changed. Did the update explain it?").is_visible()
     page.get_by_role("button", name="Try the Northstar example").click()
     page.locator("#readinessWorkspace").wait_for(state="visible")
     readiness_status = page.locator("#readinessStatus").inner_text()
@@ -165,7 +165,7 @@ def run_recovery(browser):
         return results;
     }""", [(ROOT / "docs/demo/northstar-previous.xer").read_text(), (ROOT / "docs/demo/northstar-current.xer").read_text()])
     assert all(rejected.values()), rejected
-    page.get_by_role("button", name="Use my own XER files").click()
+    page.get_by_role("button", name="Use your own XER files").click()
     page.locator("#assurancePrevious").set_input_files(ROOT / "docs/demo/northstar-previous.xer")
     page.locator("#assuranceCurrent").set_input_files(ROOT / "docs/demo/riverside-current.xer")
     page.get_by_role("button", name="Check decision readiness").click()

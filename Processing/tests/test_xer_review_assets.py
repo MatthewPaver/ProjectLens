@@ -86,17 +86,17 @@ def test_change_assurance_exposes_one_simple_decision_workflow():
     script = (DOCS / "change-assurance.js").read_text(encoding="utf-8")
     stylesheet = (DOCS / "change-assurance.css").read_text(encoding="utf-8")
 
-    assert "Check the change pack" in page
-    assert "Add the pack" in page
-    assert "Review blockers" in page
-    assert "Record decision" in page
-    assert "Track conditions" in page
+    assert "The schedule changed." in page
+    assert "Bring the update" in page
+    assert "Inspect what changed" in page
+    assert "Keep the decision" in page
+    assert "track any conditions" in page
     assert page.count('data-view-link=') == 3
     assert "window.ProjectLensChangeAssurance" in script
     assert "localStorage" in script
     assert "fetch(\"demo/" in script
     assert "prefers-reduced-motion" in stylesheet
-    assert "Your files stay in this browser" in page
+    assert "Your schedule files stay with you" in page
 
 
 def test_riverside_pair_is_a_second_comparable_project():

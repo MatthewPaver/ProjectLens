@@ -56,7 +56,7 @@ def run_journey(browser):
     page.locator("#tourNarrative").fill("A new narrative awaiting checks.")
     expect(page.locator("#tourNext")).to_be_disabled()
     page.get_by_role("button", name="Try an acknowledged finish change", exact=True).click()
-    expect(page.locator("#tourCheckStatus")).to_contain_text("4 findings in the original pack; 3 now")
+    expect(page.locator("#tourCheckStatus")).to_contain_text("5 findings in the original pack; 5 now")
     changed = snapshot(page)
     assert changed["review"]["inputIdentity"] != original["review"]["inputIdentity"]
     assert changed["review"]["previous"] == original["review"]["previous"]
