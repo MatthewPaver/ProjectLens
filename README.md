@@ -1,15 +1,23 @@
-# ProjectLens: checks a change pack against its own evidence
+# ProjectLens
 
-For the project controls reviewer who has to tell a board whether a change pack can be trusted: ProjectLens compares the pack's narrative with its previous and current Primavera P6 XER schedules, shows where they disagree, and records the human decision, all in the browser.
+Compare a project update with its schedules, inspect what changed, and record the human review decision.
+
+**For:** project managers, project controls reviewers and planners checking a submitted update against two Primavera P6 schedule exports.
+
+**Start here:** [Try ProjectLens](https://matthewpaver.github.io/ProjectLens/change-assurance.html) — no install or account.
+
+1. Select **Try the Northstar example**. Its finish moves by 73 days while the update says unchanged.
+2. Inspect the source fields and review questions. Three findings are prioritised; all five remain available.
+3. Record a decision with its owner and rationale, then download the evidence-linked record.
+
+Northstar is synthetic. Checks cover supported schedule fields and narrative keywords; they do not establish cause, entitlement or approval.
+
+**Technical evidence:** [How the checks work](#how-it-works) · [Results](#results) · [Tests](#repository-layout-and-tests) · [Run locally](#quickstart) · [Limits](#limits-and-non-goals)
 
 [![Verify and deploy](https://github.com/MatthewPaver/ProjectLens/actions/workflows/deploy-pages.yml/badge.svg?branch=main&event=push)](https://github.com/MatthewPaver/ProjectLens/actions/workflows/deploy-pages.yml)
 [![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
 
 ![ProjectLens change assurance workspace comparing a change pack narrative against its schedule evidence](docs/assets/change-assurance-overview.png)
-
-**Live demo (no install, no account):** [interactive guided review](https://matthewpaver.github.io/ProjectLens/change-assurance.html?walkthrough=1) · [review a change pack](https://matthewpaver.github.io/ProjectLens/change-assurance.html) · [XER schedule review](https://matthewpaver.github.io/ProjectLens/schedule-review.html) · [board review](https://matthewpaver.github.io/ProjectLens/board-readiness.html) · [public GMPP evidence](https://matthewpaver.github.io/ProjectLens/) · [2-minute walkthrough (MP4)](docs/assets/projectlens-evidence-demo.mp4)
-
-On the change-assurance page, select **Try the Northstar example**. The landing example lets you inspect real finish, constraint and relationship fields before opening a review. Northstar is synthetic; its review contains five questions, with three prioritised beside the evidence and two available under additional findings.
 
 ## The problem
 
@@ -77,6 +85,14 @@ Project names and source IDs must match. Identical evidence and reversed data da
 
 ## Results
 
+**Primary browser review.** `make browser-test` exercises the real parser, comparisons, decision forms and exports on synthetic fixtures. Its seven browser suites cover source-field tracing, revised narratives, required decision details, input identities, drafts, condition closure, invalid-input recovery, keyboard access, reduced motion and phone layouts. [Inspect the browser suite runner](scripts/run_browser_tests.py) and [the verification workflow](.github/workflows/deploy-pages.yml).
+
+`make test` runs the Python regression suite. These authored checks establish behaviour on the included inputs; they do not establish usefulness on representative project exports or observed user task completion.
+
+### Optional public-record retrieval
+
+The following result belongs to the separate local research sidecar, rather than the primary browser comparison.
+
 **Precedent retrieval: hit@5 = 7/8 (88%)** on the offline baseline; hit@3 = 6/8 and hit@1 = 4/8. Reproduced on 2026-10-07:
 
 ```bash
@@ -108,6 +124,16 @@ What it does not show: 8 author-written queries are a smoke test, not a benchmar
 - GMPP delivery-confidence ratings are point-in-time judgements, not outcomes. Annual data cannot support activity-level forecasting, and a project's absence from a later release does not show whether it delivered.
 - Precedent relevance is a ranking signal, not a confidence or outcome claim. Public records show status, not which intervention worked.
 - A production internal version would need secure schedule connectors, permissions, audit logs and organisation-specific validation.
+
+## Additional tools and walkthroughs
+
+The change-assurance demo above is the main product entry. These supporting routes remain available:
+
+- [Guided Northstar review](https://matthewpaver.github.io/ProjectLens/change-assurance.html?walkthrough=1): a paced version of the same review and decision journey.
+- [XER schedule review](https://matthewpaver.github.io/ProjectLens/schedule-review.html): inspect schedule fields directly.
+- [Board review](https://matthewpaver.github.io/ProjectLens/board-readiness.html): review risks, actions and earlier conditions.
+- [Public GMPP evidence explorer](https://matthewpaver.github.io/ProjectLens/): a separate public-data research tool.
+- [Two-minute video walkthrough](docs/assets/projectlens-evidence-demo.mp4).
 
 ## Repository layout and tests
 
