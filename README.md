@@ -12,6 +12,8 @@ Compare a project update with its schedules, inspect what changed, and record th
 
 Northstar is synthetic. Checks cover supported schedule fields and narrative keywords; they do not establish cause, entitlement or approval.
 
+**Case study:** [The problem, review journey and before-and-after design](https://matthewpaver.github.io/work/projectlens/).
+
 **Technical evidence:** [How the checks work](#how-it-works) · [Results](#results) · [Tests](#repository-layout-and-tests) · [Run locally](#quickstart) · [Limits](#limits-and-non-goals)
 
 [![Verify and deploy](https://github.com/MatthewPaver/ProjectLens/actions/workflows/deploy-pages.yml/badge.svg?branch=main&event=push)](https://github.com/MatthewPaver/ProjectLens/actions/workflows/deploy-pages.yml)
