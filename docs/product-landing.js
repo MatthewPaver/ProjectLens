@@ -16,7 +16,7 @@
   }
   function sourceRows() {
     if (selected === 'finish') return `<p>PROJECT scheduled finish from each original export.</p><table><thead><tr><th>Source file</th><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>${escape(review.previous.fileName)}</td><td><code>PROJECT.scd_end_date</code></td><td>${escape(date(review.previous.project.scheduledFinish))}</td></tr><tr><td>${escape(review.current.fileName)}</td><td><code>PROJECT.scd_end_date</code></td><td>${escape(date(review.current.project.scheduledFinish))}</td></tr></tbody></table>`;
-    if (selected === 'relationships') return `<p>TASKPRED signatures from the previous and current exports. Added and removed signatures are counted separately.</p><table><thead><tr><th>Change</th><th>Predecessor</th><th>Successor</th><th>Type / lag</th></tr></thead><tbody>${review.changes.relationEvidence.map(row => `<tr><td>${escape(row.change)}</td><td><code>${escape(row.predecessor)}</code></td><td><code>${escape(row.successor)}</code></td><td>${escape(row.type)} / ${row.lagHours === null ? 'not supplied' : `${escape(row.lagHours)}h`}</td></tr>`).join('')}</tbody></table>`;
+    if (selected === 'relationships') return `<p>Links between tasks (TASKPRED rows) from the previous and current exports. Added and removed links are counted separately.</p><table><thead><tr><th>Change</th><th>Predecessor</th><th>Successor</th><th>Type / lag</th></tr></thead><tbody>${review.changes.relationEvidence.map(row => `<tr><td>${escape(row.change)}</td><td><code>${escape(row.predecessor)}</code></td><td><code>${escape(row.successor)}</code></td><td>${escape(row.type)} / ${row.lagHours === null ? 'not supplied' : `${escape(row.lagHours)}h`}</td></tr>`).join('')}</tbody></table>`;
     const rows = review.changes.activityEvidence.filter(row => row.before && row.after && (row.before.constraintType !== row.after.constraintType || row.before.constraintDate !== row.after.constraintDate));
     return `<p>TASK constraint type and date, compared by activity code.</p><table><thead><tr><th>Activity</th><th>Previous constraint</th><th>Current constraint</th></tr></thead><tbody>${rows.map(row => `<tr><td><code>${escape(row.code)}</code> ${escape(row.name)}</td><td>${escape(row.before.constraintType)}<br>${escape(row.before.constraintDate)}</td><td>${escape(row.after.constraintType)}<br>${escape(row.after.constraintDate)}</td></tr>`).join('')}</tbody></table>`;
   }
@@ -26,9 +26,9 @@
     tabs.forEach(tab => { const active = tab.dataset.example === name; tab.setAttribute('aria-selected', String(active)); tab.tabIndex = active ? 0 : -1; });
     byId('examplePanel').setAttribute('aria-labelledby', `example-${name}`);
     const options = {
-      finish: { title: `The finish moves by ${review.finishMovement} days. The update says unchanged.`, claim: (narrative.match(/the key completion date[^.!?]*[.!?]/i)?.[0] || sentence(/key completion date/)).replace(/^the/, 'The'), observation: `Scheduled finish moves by ${review.finishMovement} days.`, question: 'What explains the revised finish?' },
-      constraints: { title: `${review.changes.constraintChanges} activities have changed constraints.`, claim: sentence(/programme continues to manage/), observation: 'Constraint types or dates changed between the two exports.', question: 'Which instruction or approval explains each constraint change?' },
-      relationships: { title: `${review.changes.relationChanges} relationship signatures changed.`, claim: sentence(/No material change to the delivery sequence/), observation: 'Predecessor links, relationship types or lag values differ.', question: 'What changed in the delivery sequence, and why?' },
+      finish: { title: `The finish moves ${review.finishMovement} days but the update says unchanged`, claim: (narrative.match(/the key completion date[^.!?]*[.!?]/i)?.[0] || sentence(/key completion date/)).replace(/^the/, 'The'), observation: `Scheduled finish moves by ${review.finishMovement} days.`, question: 'What explains the revised finish?' },
+      constraints: { title: `${review.changes.constraintChanges} activities have changed fixed dates (constraints)`, claim: sentence(/programme continues to manage/), observation: 'Constraint types or dates changed between the two exports.', question: 'Which instruction or approval explains each constraint change?' },
+      relationships: { title: `${review.changes.relationChanges} links between tasks changed`, claim: sentence(/No material change to the delivery sequence/), observation: 'Which task waits for which, the link type or the waiting time (lag) differs.', question: 'What changed in the delivery sequence, and why?' },
     };
     const content = options[name];
     byId('exampleTitle').textContent = content.title;
@@ -57,7 +57,7 @@
       byId('exampleStatus').textContent = 'Schedule movement is a fact. Its cause still needs evidence.';
       select(selected, false);
     } catch {
-      byId('exampleStatus').textContent = 'The interactive example could not load. Retry, or use your own XER files. The preview above is the bundled made-up example.';
+      byId('exampleStatus').textContent = 'The interactive example could not load. Retry, or use your own schedule files (XER). The preview above is the bundled made-up example.';
       byId('exampleRetry').hidden = false;
     }
   }

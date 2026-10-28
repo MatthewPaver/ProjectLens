@@ -184,3 +184,7 @@ dialog { padding: 0; border: 0; box-shadow: 0 28px 80px rgba(0,0,0,.4); } dialog
 
 .site-footer { padding: 1.1rem max(4vw,2rem); border-top: 1px solid var(--line); color: var(--muted); font: 500 .52rem/1.5 "JetBrains Mono",monospace; text-transform: uppercase; letter-spacing: .04em; }
 .site-footer a { color: inherit; text-underline-offset: .25em; }
+
+/* Link to the main ProjectLens product, shown above the explorer at every width. */
+.product-bar { margin: 0; padding: .75rem 1.25rem; background: #fff; color: #0b1933; border-bottom: 1px solid #d5dce6; font: 400 15px/1.5 "Libre Franklin", sans-serif; text-align: center; }
+.product-bar a { color: #0857e8; font-weight: 600; text-underline-offset: .2em; }

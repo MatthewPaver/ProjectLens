@@ -39,7 +39,6 @@ body.product-design { margin: 0; background: var(--pl-white); color: var(--pl-in
 .product-design.has-intake #productLanding { display: none; }
 .product-hero { max-width: var(--pl-width); margin: 0 auto; padding: 45px 24px 0; text-align: center; }
 .product-hero h1 { margin: 0; color: var(--pl-ink); font: 700 61px/1.02 var(--pl-font); letter-spacing: -.035em; text-wrap: balance; overflow-wrap: break-word; min-width: 0; }
-.product-hero h1 > span { display: block; text-wrap: balance; }
 .product-introduction { max-width: 830px; margin: 17px auto 0; color: var(--pl-muted); font-size: 21px; line-height: 1.3; }
 .product-actions { display: flex; align-items: center; justify-content: center; gap: 28px; margin: 19px auto 0; }
 .product-design .assurance-primary { display: inline-flex; justify-content: center; gap: 12px; min-width: 0; min-height: 47px; padding: 12px 28px; border: 0; border-radius: 7px; color: var(--pl-white); background: var(--pl-blue); font: 500 16px/1.35 var(--pl-font); text-transform: none; transition: background-color 150ms ease; }
@@ -66,7 +65,7 @@ body.product-design { margin: 0; background: var(--pl-white); color: var(--pl-in
 .example-comparison strong { display: block; margin-top: 4px; font-size: 25px; font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .example-comparison strong.example-file { font-size: 15px; white-space: normal; overflow-wrap: anywhere; }
 .example-connection { text-align: center; }
-.example-connection > span { color: var(--pl-blue) !important; }
+.example-connection > span { color: var(--pl-ink) !important; font-weight: 500; font-variant-numeric: tabular-nums; }
 .example-line { height: 2px; margin: 10px auto 0; background: var(--pl-blue); position: relative; transform-origin: left; }
 .example-line::after { content: ""; position: absolute; width: 7px; height: 7px; border-top: 2px solid var(--pl-blue); border-right: 2px solid var(--pl-blue); transform: rotate(45deg); right: 0; top: -2px; }
 .example-reading { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; border-top: 1px solid var(--pl-line); padding: 12px 0 31px; }
@@ -360,3 +359,13 @@ body.product-design { margin: 0; background: var(--pl-white); color: var(--pl-in
 .review-source-details { margin-top: 8px; max-width: 72ch; }
 .review-source-details summary { cursor: pointer; font-size: 14px; }
 .review-source-details small { display: block; overflow-wrap: anywhere; margin-top: 8px; }
+
+/* Pressed feedback: a short scale on press, none when reduced motion is requested. */
+@media (prefers-reduced-motion: no-preference) {
+  .product-design button,.product-design .assurance-primary,.product-design .product-text-button { transition-property: background-color, color, border-color, transform; transition-duration: 150ms, 150ms, 150ms, 100ms; transition-timing-function: ease, ease, ease, var(--pl-ease); }
+  .product-design button:active:not(:disabled),.product-design .assurance-primary:active,.product-design .product-text-button:active { transform: scale(.98); }
+}
+/* Figures that line up: tables, dates and counts. */
+.product-design table,.product-design .source-dates,.product-design .register-list,.product-design .evidence-summary,.product-design .finding-evidence li { font-variant-numeric: tabular-nums; }
+/* Supporting-evidence cards: no copy under 12px, in the product face. */
+.product-design .comparable-case > span,.product-design .precedent-gate i,.product-design .precedent-gate button { font-family: var(--pl-font); font-size: 12px; line-height: 1.4; }

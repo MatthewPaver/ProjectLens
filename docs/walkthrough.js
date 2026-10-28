@@ -5,17 +5,17 @@
   const byId = id => document.getElementById(id);
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const steps = [
-    ['Read the pack', 'The update says “unchanged”. What do the two schedules actually show?', 'These are the bundled Northstar XER files. The dates below come from the same parser used by the full application.'],
-    ['Inspect the conflict', 'The finish moved. The narrative did not.', 'Select a finding in the real evidence desk. Inspect the original activity fields and the narrative beside them. All detected findings remain available.'],
-    ['Change the claim', 'Same schedules. A different narrative.', 'Edit the text, then rerun the real checks. Acknowledging movement can remove a keyword conflict; it does not repair the schedule or prove the explanation.'],
-    ['Make a decision', 'The next step belongs to a person.', 'Choose an outcome and complete the real form. “Approve with conditions” also needs a condition, owner and due date. Unresolved findings stay in the record.'],
-    ['Export the record', 'The decision keeps its evidence.', 'Download the engine-generated record, including the exact narrative, findings, source identity and any condition. This walkthrough stores nothing in your saved-work register.'],
-    ['Track the follow-up', 'An owned condition stays visible.', 'If you added a condition, mark it closed in the real register. Closure changes its status; it does not erase the decision or its original findings.'],
+    ['Read the pack', 'What do the two schedules show against an “unchanged” update?', 'These are the bundled Northstar schedule files (XER). The dates below come from the same parser used by the full application.'],
+    ['Inspect the conflict', 'The finish moved but the narrative did not', 'Select a finding in the real evidence desk. Inspect the original activity fields and the narrative beside them. All detected findings remain available.'],
+    ['Change the claim', 'The same schedules with a different narrative', 'Edit the text, then rerun the real checks. Acknowledging movement can remove a keyword conflict; it does not repair the schedule or prove the explanation.'],
+    ['Make a decision', 'The next step belongs to a person', 'Choose an outcome and complete the real form. “Approve with conditions” also needs a condition, owner and due date. Unresolved findings stay in the record.'],
+    ['Export the record', 'The decision keeps its evidence', 'Download the engine-generated record, including the exact narrative, findings, source identity and any condition. This walkthrough stores nothing in your saved-work register.'],
+    ['Track the follow-up', 'An owned condition stays visible', 'If you added a condition, mark it closed in the real register. Closure changes its status; it does not erase the decision or its original findings.'],
   ];
   let step = 0, playing = false, timer, busy = false, loaded = false, dirty = false, original = '', originalCount = 0;
   let downloaded = false;
   const guide = byId('walkthroughGuide');
-  guide.innerHTML = `<h1>See a change review through.</h1><p class="tour-intro">A short guided example, with the working application. Play the introduction or explore at your pace.</p>
+  guide.innerHTML = `<h1>See a change review through</h1><p class="tour-intro">A short guided example, with the working application. Play the introduction or explore at your pace.</p>
     <ol class="tour-steps">${steps.map(([label], i) => `<li><button type="button" data-tour-step="${i}" disabled><span>${i + 1}</span>${label}</button></li>`).join('')}</ol>
     <div class="tour-controls"><button type="button" id="tourPlay" disabled>Play walkthrough</button><button type="button" id="tourRestart">Restart</button></div>
     <p id="tourPlayback" class="tour-fine" role="status">Loading the original evidence…</p>

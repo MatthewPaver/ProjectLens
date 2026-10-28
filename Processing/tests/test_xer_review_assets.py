@@ -86,7 +86,9 @@ def test_change_assurance_exposes_one_simple_decision_workflow():
     script = (DOCS / "change-assurance.js").read_text(encoding="utf-8")
     stylesheet = (DOCS / "change-assurance.css").read_text(encoding="utf-8")
 
-    assert "The schedule changed." in page
+    assert "Check the schedule against the update" in page
+    assert "Try the example project" in page and "Open demo" not in page
+    assert "Review the first finding" in page
     assert "Bring the update" in page
     assert "Inspect what changed" in page
     assert "Keep the decision" in page

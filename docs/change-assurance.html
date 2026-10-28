@@ -30,7 +30,7 @@
       <a href="#how-it-works">How it works</a>
       <a href="#product-method">Method</a>
       <a href="https://github.com/MatthewPaver/ProjectLens">GitHub</a>
-      <button class="product-open" type="button" data-load-example>Open demo</button>
+      <button class="product-open" type="button" data-load-example>Try the example project</button>
     </nav>
     <nav class="review-navigation" aria-label="Change assurance">
       <a href="#reviews" data-view-link="reviews" class="active">Reviews</a>
@@ -53,8 +53,8 @@
     <section class="assurance-view active" data-view="reviews">
       <div id="productLanding">
         <section class="product-hero" id="top" aria-labelledby="productTitle">
-          <h1 id="productTitle"><span>The schedule changed.</span><span>Did the update explain it?</span></h1>
-          <p class="product-introduction">Compare two project schedules from Primavera P6 planning software with the project update. See the evidence behind the movement, then record a human decision.</p>
+          <h1 id="productTitle">Check the schedule against the update</h1>
+          <p class="product-introduction">Compare two project schedules from Primavera P6 planning software with the written project update. See the evidence behind each change, then record the decision a person makes.</p>
           <div class="product-actions">
             <button class="assurance-primary" id="loadAssuranceDemo" type="button">Try the example project</button>
             <button class="product-text-button" id="showOwnPack" type="button">Use your own schedules</button>
@@ -67,10 +67,10 @@
             <div class="example-selector"><h2>Changes to review</h2><div role="tablist" aria-label="Example changes" aria-orientation="vertical">
               <button type="button" role="tab" id="example-finish" aria-selected="true" aria-controls="examplePanel" data-example="finish" disabled>Finish movement</button>
               <button type="button" role="tab" id="example-constraints" aria-selected="false" aria-controls="examplePanel" data-example="constraints" tabindex="-1" disabled>Constraint changes</button>
-              <button type="button" role="tab" id="example-relationships" aria-selected="false" aria-controls="examplePanel" data-example="relationships" tabindex="-1" disabled>Relationship changes</button>
+              <button type="button" role="tab" id="example-relationships" aria-selected="false" aria-controls="examplePanel" data-example="relationships" tabindex="-1" disabled>Task link changes</button>
             </div></div>
             <div class="example-panel" id="examplePanel" role="tabpanel" aria-labelledby="example-finish" tabindex="0">
-              <h2 id="exampleTitle">The finish moves by 73 days. The update says unchanged.</h2>
+              <h2 id="exampleTitle">The finish moves 73 days but the update says unchanged</h2>
               <div class="example-comparison" id="exampleComparison"><div><span>Previous finish</span><strong>15 Dec 2027</strong></div><div class="example-connection"><span>+73 days</span><div class="example-line" aria-hidden="true"></div></div><div><span>Current finish</span><strong>26 Feb 2028</strong></div></div>
               <div class="example-reading"><div><span>The update says</span><blockquote id="exampleClaim">“The key completion date is unchanged.”</blockquote></div><div><span>The schedules show</span><p id="exampleObservation">Scheduled finish moves by 73 days.</p></div></div>
               <div class="example-question"><div><span>Next review question</span><p id="exampleQuestion">What explains the revised finish?</p></div><button type="button" id="exampleInspect" class="product-text-button" aria-expanded="false" aria-controls="exampleSource" disabled>Inspect source evidence</button></div>
@@ -80,64 +80,64 @@
           <div class="example-footer"><p id="exampleStatus" role="status">Loading the real comparison. Schedule movement is a fact; its cause still needs evidence.</p><button type="button" id="exampleReplay" class="product-text-button" disabled>Replay movement</button><button type="button" id="exampleRetry" class="product-text-button" hidden>Retry example</button></div>
         </section>
         <section class="product-journey" id="how-it-works" aria-labelledby="journeyTitle">
-          <h2 id="journeyTitle">From a changed date to a recorded decision.</h2>
+          <h2 id="journeyTitle">From a changed date to a recorded decision</h2>
           <p>Review what moved, see the evidence, then record your decision and any follow-up conditions.</p>
           <div class="journey-detail">
             <ol class="journey-list">
-              <li><h3>Bring the update</h3><p>Add the previous and current XER exports and the accompanying narrative.</p></li>
-              <li><h3>Inspect what changed</h3><p>Read finish dates, constraints, relationships and reported float beside the source fields.</p></li>
+              <li><h3>Bring the update</h3><p>Add the previous and current schedule files (XER exports from Primavera P6) and the written update.</p></li>
+              <li><h3>Inspect what changed</h3><p>Read finish dates, fixed dates (constraints), links between tasks and spare time before the finish moves (float) beside the source fields.</p></li>
               <li><h3>Ask the next question</h3><p>Keep a factual movement distinct from its explanation. Name an owner and due date for missing evidence.</p></li>
               <li><h3>Keep the decision</h3><p>Record a human outcome and rationale. Export the evidence, then track any conditions.</p></li>
             </ol>
             <aside class="journey-demo">
-              <h3>Follow one complete review.</h3>
+              <h3>Follow one complete review</h3>
               <p>The guided example uses the same file reader, forms and decision records as the full product.</p>
-              <a class="assurance-primary" href="?walkthrough=1">Take the guided walkthrough</a>
+              <a class="assurance-primary" href="?walkthrough=1">Try the example project with a guide</a>
               <p class="journey-note">Made-up inputs. Walkthrough records exist only in that tab until reload. Downloads remain yours to keep.</p>
               <a class="product-text-button" href="#decisions">View saved decisions</a>
             </aside>
           </div>
         </section>
         <section class="product-method" id="product-method" aria-labelledby="methodTitle">
-          <div><h2 id="methodTitle">Clear evidence. Clear limits.</h2><p>ProjectLens compares the fields in your exports. A person interprets them and makes the decision.</p><a href="method.md">Read the method</a></div>
+          <div><h2 id="methodTitle">The checks and their limits</h2><p>ProjectLens compares the fields in your exports. A person interprets them and makes the decision.</p><a href="method.md">Read the method</a></div>
           <div class="product-questions">
             <details><summary>Do my schedule files leave this browser?</summary><p>The standard review reads your files locally. Saving a draft or decision stores it on this device. Downloads give you a copy to keep or share. Optional public-record research is separately configured and receives narrative text, never XER files.</p></details>
             <details><summary>Does a flagged change mean the project is delayed?</summary><p>A flagged change is a difference that needs review. Check its source and ask the owner to explain it. A later finish does not by itself prove why a project is late or who is responsible. These checks do not recalculate the critical path (the tasks that determine the finish), decide contractual rights or approve the change.</p></details>
-            <details><summary>What can I compare?</summary><p>Two supported, single-project Primavera P6 XER exports from the same source project. ProjectLens checks their identity, dates and field coverage before comparing them. Missing fields and unsupported inputs are reported.</p></details>
+            <details><summary>What can I compare?</summary><p>Two schedule files (XER exports) from Primavera P6, each holding one project, from the same source project. ProjectLens checks their identity, dates and field coverage before comparing them. Missing fields and unsupported inputs are reported.</p></details>
           </div>
         </section>
-        <section class="product-start" aria-labelledby="startTitle"><div><h2 id="startTitle">Bring a change pack. Leave with clearer questions.</h2><p>Start with the example, or review your own two schedule exports.</p></div><div class="product-actions"><button class="assurance-primary" type="button" data-load-example>Open the example review</button><button class="product-text-button" type="button" data-own-files>Use my files</button></div></section>
+        <section class="product-start" aria-labelledby="startTitle"><div><h2 id="startTitle">Turn a change pack into clearer questions</h2><p>Start with the example, or review your own two schedule files.</p></div><div class="product-actions"><button class="assurance-primary" type="button" data-load-example>Try the example project</button><button class="product-text-button" type="button" data-own-files>Use my files</button></div></section>
         <noscript><p class="product-noscript">JavaScript is needed for the interactive comparison. You can still <a href="demo/northstar-previous.xer" download>download the previous example</a>, <a href="demo/northstar-current.xer" download>download the current example</a> and <a href="method.md">read the method</a>.</p></noscript>
       </div>
 
       <section class="pack-intake" id="packIntake" hidden aria-labelledby="intakeTitle">
         <button type="button" id="backToProduct" class="product-text-button">Back to product</button>
         <div class="compact-heading">
-          <div><h2 id="intakeTitle">Add your two XER files</h2></div>
+          <div><h2 id="intakeTitle">Add your two schedule files</h2></div>
           <p>XER is the schedule export format from Primavera P6 planning software. Export both schedules (File &rarr; Export &rarr; Primavera XER): the previous submission and the current one. Your browser reads the files and uploads nothing. Add the narrative if you want ProjectLens to check what the update claims.</p>
           <p class="sample-pair">No XER files to hand? Download a made-up pair from either example project and choose the files below: <a href="./demo/northstar-previous.xer" download>Northstar previous</a> &middot; <a href="./demo/northstar-current.xer" download>Northstar current</a> · <a href="./demo/riverside-previous.xer" download>Riverside previous</a> &middot; <a href="./demo/riverside-current.xer" download>Riverside current</a>. Optional narrative: <a href="./demo/riverside-narrative.txt" download>Riverside narrative</a>.</p>
         </div>
         <div class="pack-grid">
           <label class="assurance-file" for="assurancePrevious">
-            <input id="assurancePrevious" type="file" accept=".xer,text/plain">
-            <span>Previous XER</span>
+            <input id="assurancePrevious" name="assurancePrevious" type="file" accept=".xer,text/plain">
+            <span>Previous schedule (XER)</span>
             <strong id="assurancePreviousName">Choose comparison point</strong>
             <small>Required</small>
           </label>
           <label class="assurance-file" for="assuranceCurrent">
-            <input id="assuranceCurrent" type="file" accept=".xer,text/plain">
-            <span>Current XER</span>
+            <input id="assuranceCurrent" name="assuranceCurrent" type="file" accept=".xer,text/plain">
+            <span>Current schedule (XER)</span>
             <strong id="assuranceCurrentName">Choose latest submission</strong>
             <small>Required</small>
           </label>
           <label class="assurance-narrative" for="assuranceNarrative">
             <span>What the update claims</span>
-            <textarea id="assuranceNarrative" rows="7" placeholder="Paste the progress or change narrative…"></textarea>
+            <textarea id="assuranceNarrative" name="assuranceNarrative" rows="7" placeholder="Paste the progress or change narrative…"></textarea>
             <small>Optional; needed for contradiction checks</small>
           </label>
         </div>
         <div class="intake-run">
-          <p id="intakeMessage" role="status">Choose 2 XER files to begin.</p>
+          <p id="intakeMessage" role="status">Choose both schedule files (XER) to begin.</p>
           <button class="assurance-primary" id="runAssuranceReview" type="button" disabled>Check decision readiness <span>→</span></button>
         </div>
       </section>
@@ -151,9 +151,10 @@
         <article class="readiness-card" id="readinessCard">
           <div class="readiness-status"><i aria-hidden="true"></i><span id="readinessStatus" role="status">Needs evidence before decision</span></div>
           <h2 id="readinessHeadline">The proposed finish is not supported by the current narrative.</h2>
-          <p id="readinessExplanation">Resolve the blockers below or record why the decision authority accepts them.</p>
+          <p id="readinessExplanation">Resolve the blockers below, or record why the person or board who approves changes accepts them.</p>
           <div class="readiness-actions">
-            <button class="assurance-primary" id="showDecisionForm" type="button">Record human decision</button>
+            <button class="assurance-primary" id="reviewFirstFinding" type="button">Review the first finding</button>
+            <button class="product-text-button" id="showDecisionForm" type="button">Record the decision</button>
             <button class="product-text-button" id="requestAnswers" type="button">Draft questions for the team</button>
           </div>
           <div class="evidence-desk" id="evidenceDesk">
@@ -168,7 +169,7 @@
             <summary>Check a revised narrative</summary>
             <p>Recheck a revision against these same schedules. The first checked narrative stays in the record. Unchecked edits do not change the decision evidence.</p>
             <label for="revisedNarrative">Narrative revision</label>
-            <textarea id="revisedNarrative" rows="7"></textarea>
+            <textarea id="revisedNarrative" name="revisedNarrative" rows="7" placeholder="Paste the revised narrative…"></textarea>
             <button type="button" class="assurance-secondary" id="recheckNarrative">Recheck against these schedules</button>
           </details>
 
@@ -181,8 +182,8 @@
           </div>
           <div id="requestList" class="request-list"></div>
           <div class="request-controls">
-            <label for="requestOwner"><span>Owner</span><input id="requestOwner" type="text" autocomplete="off" placeholder="Role or person…"></label>
-            <label for="requestDue"><span>Due date</span><input id="requestDue" type="date" autocomplete="off"></label>
+            <label for="requestOwner"><span>Owner</span><input id="requestOwner" name="requestOwner" type="text" autocomplete="off" placeholder="Role or person…"></label>
+            <label for="requestDue"><span>Due date</span><input id="requestDue" name="requestDue" type="date" autocomplete="off"></label>
             <button type="button" id="saveEvidenceRequest">Save evidence request</button>
           </div>
         </section>
@@ -203,7 +204,7 @@
             </fieldset>
             <div class="decision-fields">
               <label for="decisionOwner"><span>Decision owner</span><input id="decisionOwner" name="owner" type="text" autocomplete="off" required placeholder="Role or person…"></label>
-              <label for="decisionRationale"><span>Rationale</span><textarea id="decisionRationale" name="rationale" rows="5" required placeholder="Why was this decision made?…"></textarea></label>
+              <label for="decisionRationale"><span>Rationale</span><textarea id="decisionRationale" name="rationale" rows="5" required placeholder="Why was this decision made…"></textarea></label>
               <label for="decisionCondition"><span>Condition, if required</span><input id="decisionCondition" name="condition" type="text" autocomplete="off" placeholder="What must happen next?…"></label>
               <label for="conditionOwner"><span>Condition owner</span><input id="conditionOwner" name="conditionOwner" type="text" autocomplete="off" placeholder="Role or person…"></label>
               <label for="conditionDue"><span>Condition due date</span><input id="conditionDue" name="conditionDue" type="date" autocomplete="off"></label>
@@ -243,7 +244,7 @@
       </div>
       <div class="export-fallback" id="exportFallback" hidden>
         <label for="exportFallbackText"><span>Clipboard unavailable. Select and copy the record below.</span>
-        <textarea id="exportFallbackText" rows="12" readonly spellcheck="false"></textarea></label>
+        <textarea id="exportFallbackText" name="exportFallbackText" rows="12" readonly spellcheck="false"></textarea></label>
       </div>
       <div id="decisionRegister" class="register-list"></div>
     </section>

@@ -25,8 +25,10 @@ def run_desktop(browser):
     page.wait_for_load_state("networkidle")
 
     assert page.locator("[data-view-link]").count() == 3
-    assert page.get_by_role("heading", name="The schedule changed. Did the update explain it?").is_visible()
-    page.get_by_role("button", name="Try the example project").click()
+    assert page.get_by_role("heading", name="Check the schedule against the update").is_visible()
+    # One name for the example entry everywhere: header, hero and closing section.
+    assert page.get_by_role("button", name="Try the example project", exact=True).count() == 3
+    page.locator("#loadAssuranceDemo").click()
     page.locator("#readinessWorkspace").wait_for(state="visible")
     readiness_status = page.locator("#readinessStatus").inner_text()
     assert readiness_status.casefold() == "needs evidence before decision", readiness_status
@@ -38,8 +40,13 @@ def run_desktop(browser):
     assert page.locator("#evidenceSummary .evidence-fact").count() == 6
     assert not sidecar_requests, sidecar_requests
     page.screenshot(path=str(SCREENSHOTS / "change-assurance-overview.png"), full_page=False)
+    # Before any finding is opened, reviewing it is the primary action; then recording the decision is.
+    assert "assurance-primary" in page.locator("#reviewFirstFinding").get_attribute("class")
+    assert "assurance-primary" not in page.locator("#showDecisionForm").get_attribute("class")
     page.locator("[data-finding='1']").click()
     assert "constraint" in page.locator("#findingEvidence").inner_text().lower()
+    assert page.locator("#reviewFirstFinding").is_hidden()
+    assert "assurance-primary" in page.locator("#showDecisionForm").get_attribute("class")
 
     page.get_by_role("button", name="Draft questions for the team").click()
     page.locator("#requestPanel").wait_for(state="visible")
@@ -48,7 +55,7 @@ def run_desktop(browser):
     page.get_by_role("button", name="Save evidence request").click()
     assert page.evaluate("JSON.parse(localStorage.getItem('projectlens:evidence-requests:v1')).length") == 1
 
-    page.get_by_role("button", name="Record human decision").click()
+    page.get_by_role("button", name="Record the decision").click()
     page.locator("#decisionPanel").wait_for(state="visible")
     # Supplemental context must never force the reviewer to dismiss unrelated examples.
     assert page.locator("#decisionForm button[type='submit']").is_enabled()
@@ -112,7 +119,7 @@ def run_desktop(browser):
 
     page.goto(BASE_URL)
     page.wait_for_load_state("networkidle")
-    page.get_by_role("button", name="Try the example project").click()
+    page.locator("#loadAssuranceDemo").click()
     page.locator("#readinessWorkspace").wait_for(state="visible")
     page.evaluate("document.querySelector('#readinessWorkspace').scrollIntoView()")
     page.screenshot(path=str(SCREENSHOTS / "change-assurance-overview.png"), full_page=False)
@@ -127,7 +134,7 @@ def run_mobile(browser):
     page.wait_for_load_state("networkidle")
     assert page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
     assert page.locator("[data-view-link]").count() == 3
-    page.get_by_role("button", name="Try the example project").click()
+    page.locator("#loadAssuranceDemo").click()
     page.locator("#readinessWorkspace").wait_for(state="visible")
     assert page.locator("#blockerList .blocker").count() == 3
     assert page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
@@ -177,7 +184,7 @@ def run_recovery(browser):
     page.get_by_role("button", name="Check decision readiness").click()
     page.locator("#readinessWorkspace").wait_for(state="visible")
     page.locator("[data-finding='2']").click()
-    assert "Relationship field evidence (5)" in page.locator("#findingEvidence").inner_text()
+    assert "Task link field evidence (5)" in page.locator("#findingEvidence").inner_text()
     assert page.locator("#findingEvidence li").count() == 5
     assert "Type:" in page.locator("#findingEvidence").inner_text()
     page.once("dialog", lambda dialog: dialog.accept())
@@ -187,7 +194,7 @@ def run_recovery(browser):
     page.locator("#assuranceNarrative").fill((ROOT / "docs/demo/riverside-narrative.txt").read_text())
     page.get_by_role("button", name="Check decision readiness").click()
     page.locator("#readinessWorkspace").wait_for(state="visible")
-    page.get_by_role("button", name="Record human decision").click()
+    page.get_by_role("button", name="Record the decision").click()
     page.get_by_label("Approve with conditions").check()
     page.locator("#decisionOwner").fill("Review Chair")
     page.locator("#decisionRationale").fill("Accept only with owned follow-up.")
