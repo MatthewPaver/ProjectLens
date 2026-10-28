@@ -33,7 +33,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .assurance-view[hidden] { display: none !important; }
 .assurance-hero { min-height: calc(100vh - 74px); display: grid; grid-template-columns: 1.08fr .92fr; align-items: center; gap: 5vw; padding: 5.5rem max(5vw,2rem); overflow: hidden; }
 .assurance-hero h1 { margin: 0; max-width: 960px; font: 400 clamp(3rem,5.2vw,5.8rem)/.98 "Archivo Black",sans-serif; letter-spacing: -.045em; text-wrap: balance; }
-.assurance-hero .eyebrow { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem; line-height: 1.45; }
 .assurance-hero h1 em { color: var(--assurance-orange); font-style: normal; }
 .assurance-hero .hero-intro { max-width: 780px; margin: 2rem 0 0; color: #40514e; font-size: clamp(1rem,1.45vw,1.28rem); line-height: 1.62; text-wrap: pretty; }
 .assurance-actions { display: flex; align-items: center; gap: .8rem; margin-top: 2rem; }

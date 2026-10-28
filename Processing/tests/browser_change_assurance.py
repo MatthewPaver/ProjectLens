@@ -26,7 +26,7 @@ def run_desktop(browser):
 
     assert page.locator("[data-view-link]").count() == 3
     assert page.get_by_role("heading", name="The schedule changed. Did the update explain it?").is_visible()
-    page.get_by_role("button", name="Try the Northstar example").click()
+    page.get_by_role("button", name="Try the example project").click()
     page.locator("#readinessWorkspace").wait_for(state="visible")
     readiness_status = page.locator("#readinessStatus").inner_text()
     assert readiness_status.casefold() == "needs evidence before decision", readiness_status
@@ -112,7 +112,7 @@ def run_desktop(browser):
 
     page.goto(BASE_URL)
     page.wait_for_load_state("networkidle")
-    page.get_by_role("button", name="Try the Northstar example").click()
+    page.get_by_role("button", name="Try the example project").click()
     page.locator("#readinessWorkspace").wait_for(state="visible")
     page.evaluate("document.querySelector('#readinessWorkspace').scrollIntoView()")
     page.screenshot(path=str(SCREENSHOTS / "change-assurance-overview.png"), full_page=False)
@@ -127,7 +127,7 @@ def run_mobile(browser):
     page.wait_for_load_state("networkidle")
     assert page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
     assert page.locator("[data-view-link]").count() == 3
-    page.get_by_role("button", name="Try the Northstar example").click()
+    page.get_by_role("button", name="Try the example project").click()
     page.locator("#readinessWorkspace").wait_for(state="visible")
     assert page.locator("#blockerList .blocker").count() == 3
     assert page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")

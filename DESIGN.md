@@ -36,6 +36,11 @@ typography:
     fontSize: "13px"
     fontWeight: 500
     lineHeight: 1.4
+  code:
+    fontFamily: '"JetBrains Mono", monospace'
+    fontSize: "12px"
+    fontWeight: 500
+    lineHeight: 1.5
 rounded:
   control: "7px"
   field: "6px"
@@ -62,10 +67,8 @@ components:
     rounded: "{rounded.panel}"
     padding: "24px"
   status:
-    backgroundColor: "{colors.attention-ground}"
     textColor: "{colors.attention}"
-    rounded: "{rounded.status}"
-    padding: "6px 10px"
+    padding: "0"
 ---
 
 ## Overview

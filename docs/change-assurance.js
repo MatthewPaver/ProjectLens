@@ -310,6 +310,16 @@ async function inputIdentity() {
   return [...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2, "0")).join("");
 }
 
+// The four change counts as one plain sentence, each with its meaning.
+function numbersSentence(changes) {
+  const count = (value, one, many) => `${value} ${value === 1 ? one : many}`;
+  const activities = changes.changes.length;
+  return `Between the two schedules, ${count(activities, "activity has", "activities have")} changed dates, spare time or fixed dates, or ${activities === 1 ? "was" : "were"} added or removed; `
+    + `there ${changes.constraintChanges === 1 ? "is" : "are"} ${count(changes.constraintChanges, "constraint change", "constraint changes")} (imposed dates or rules); `
+    + `${count(changes.floatErosion, "activity has", "activities have")} less spare time before delaying the finish (total float erosion); `
+    + `and ${count(changes.relationChanges, "activity link has", "activity links have")} changed (predecessor, successor, link type or lag).`;
+}
+
 function renderReview(review, restoredContext = null) {
   assuranceState.review = review;
   $("#revisedNarrative").value = $("#assuranceNarrative").value;
@@ -338,7 +348,7 @@ function renderReview(review, restoredContext = null) {
   $("#decisionWarning").hidden = ready;
 
   $("#requestList").innerHTML = review.blockers.map((blocker, index) => `
-    <article class="request-item"><span>Question ${String(index + 1).padStart(2, "0")} · ${escapeHtml(blocker.type)}</span><strong>${escapeHtml(questionFor(blocker))}</strong><small>${escapeHtml(blocker.detail)}</small></article>`).join("");
+    <article class="request-item"><span>Question ${index + 1} · ${escapeHtml(blocker.type)}</span><strong>${escapeHtml(questionFor(blocker))}</strong><small>${escapeHtml(blocker.detail)}</small></article>`).join("");
 
   const facts = [
     ["Scheduled finish", review.finishMovement === null ? "Not comparable" : `${review.finishMovement > 0 ? "+" : ""}${review.finishMovement} days`, `${formatDate(review.previous.project.scheduledFinish)} → ${formatDate(review.current.project.scheduledFinish)}`],
@@ -350,7 +360,7 @@ function renderReview(review, restoredContext = null) {
   ];
   $("#evidenceSummary").innerHTML = facts.map(([label, value, detail]) => `
     <article class="evidence-fact"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong><small>${escapeHtml(detail)}</small></article>`).join("");
-  $("#reviewFacts").innerHTML = facts.slice(1, 5).map(([label, value, detail]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd><small>${escapeHtml(detail)}</small></div>`).join("");
+  $("#reviewFacts").textContent = numbersSentence(review.changes);
 
   // kick off cited precedent retrieval — XER never leaves the browser; only narrative + blockers
   assuranceState.precedents = { items: [], used: {}, ignored: {}, summary: null, mode: null };
@@ -434,7 +444,7 @@ function renderPrecedentPanel({ loading = false, offline = false } = {}) {
     // three skeletons so a 3–8s retrieve doesn't look like a broken one-card grid
     host.innerHTML = [1, 2, 3].map(n => `
       <article class="comparable-case is-skeleton" aria-hidden="true">
-        <span>Retrieving ${String(n).padStart(2, "0")}</span>
+        <span>Retrieving ${n}</span>
         <strong>Loading comparable public evidence</strong>
         <p>Asking the RAG sidecar for similar published programme records…</p>
         <small>XER files stay in this browser</small>
@@ -516,7 +526,9 @@ function pendingPrecedentIds() {
 function updateDecisionGateState() {
   const pending = pendingPrecedentIds();
   $("#precedentGateBanner").hidden = false;
-  $("#precedentGateBanner").textContent = `Public-record context is optional. ${pending.length} example${pending.length === 1 ? " is" : "s are"} not reviewed. Saving preserves that status.`;
+  $("#precedentGateBanner").textContent = pending.length
+    ? "You can save without reviewing the optional public-record examples. They stay marked as not reviewed."
+    : "You have marked every public-record example. Your choices are saved with the decision.";
   // One section-level status, not repeated instructions on every card.
   $("#precedentSectionGate").hidden = true;
   $("#decisionForm button[type=submit]").disabled = false;
@@ -639,7 +651,7 @@ async function loadDemo() {
       fetch("demo/northstar-current.xer"),
       fetch("demo/northstar-narrative.txt"),
     ]);
-    if (![previousResponse, currentResponse, narrativeResponse].every(response => response.ok)) throw new Error("The Northstar evidence could not be loaded.");
+    if (![previousResponse, currentResponse, narrativeResponse].every(response => response.ok)) throw new Error("The example project files could not be loaded.");
     const [previousText, currentText, narrative] = await Promise.all([previousResponse.text(), currentResponse.text(), narrativeResponse.text()]);
     assuranceState.files.previous = { name: "northstar-previous.xer", text: previousText };
     assuranceState.files.current = { name: "northstar-current.xer", text: currentText };
@@ -649,7 +661,7 @@ async function loadDemo() {
     $("#assuranceCurrentName").textContent = "northstar-current.xer";
     $$(".assurance-file").forEach(card => card.classList.add("loaded"));
     $("#runAssuranceReview").disabled = false;
-    $("#intakeMessage").textContent = "Northstar demo pack loaded. Checking readiness…";
+    $("#intakeMessage").textContent = "Example project loaded. Checking readiness…";
     // Go straight to the review. Scrolling to the intake first raced the review's own scroll
     // and left visitors past the summary and the decision button.
     const previous = parseXer(previousText, assuranceState.files.previous.name);
@@ -662,7 +674,7 @@ async function loadDemo() {
     showError(error.message);
   } finally {
     button.disabled = false;
-    button.innerHTML = "Try the Northstar example <span>→</span>";
+    button.textContent = "Try the example project";
   }
 }
 
@@ -689,7 +701,7 @@ function renderDecisionRegister() {
     <article class="register-row">
       <div><span>${escapeHtml(item.project)} · ${escapeHtml(item.evidenceVersion)}</span><strong>${escapeHtml(item.rationale)}</strong><small>Decision owner: ${escapeHtml(item.owner)} · ${escapeHtml(formatTimestamp(item.createdAt))}</small></div>
       <aside><b>${escapeHtml(item.decision)}</b>${item.unresolved ? `<small>${item.unresolved} unresolved blocker${item.unresolved === 1 ? "" : "s"} preserved</small>` : ""}</aside>
-    </article>`).join("") : `<div class="register-empty">No decisions saved in this browser yet. Run the Northstar example to record one.</div>`;
+    </article>`).join("") : `<div class="register-empty">No decisions saved in this browser yet. Try the example project to record one.</div>`;
 }
 
 function renderConditionRegister() {
