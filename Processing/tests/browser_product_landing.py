@@ -95,7 +95,7 @@ def own_files(browser):
     page.locator("#assuranceNarrative").fill(original)
     page.locator("#runAssuranceReview").click()
     expect(page.locator("#readinessWorkspace")).to_be_visible()
-    expect(page.locator("#reviewFacts")).to_contain_text("Constraint changes")
+    expect(page.locator("#reviewFacts")).to_contain_text("constraint changes")
     page.screenshot(path=str(CAPTURES / "projectlens-redesign-after-review.png"))
     revision = "This project is not on track. The finish moves 73 days. All constraint and logic changes are acknowledged. The action owner is the Planning Manager, due 1 December 2027."
     page.locator("#narrativeRevision summary").click()
@@ -103,7 +103,7 @@ def own_files(browser):
     page.locator("#recheckNarrative").click()
     expect(page.locator("#narrativeRevision")).not_to_have_attribute("open", "")
     expect(page.locator(".original-narrative")).to_contain_text(original)
-    expect(page.locator("#reviewFacts")).to_contain_text("Constraint changes")
+    expect(page.locator("#reviewFacts")).to_contain_text("constraint changes")
     page.locator("#showDecisionForm").click()
     page.get_by_label("Approve with conditions", exact=True).check()
     page.locator("#decisionOwner").fill("Review chair")

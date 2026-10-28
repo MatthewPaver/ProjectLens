@@ -6,7 +6,7 @@ Compare a project update with its schedules, inspect what changed, and record th
 
 **Start here:** [Try ProjectLens](https://matthewpaver.github.io/ProjectLens/change-assurance.html). No install or account needed.
 
-1. Select **Try the Northstar example**. Its finish moves by 73 days while the update says unchanged.
+1. Select **Try the example project** (Northstar Grid Connection, a made-up project). Its finish moves by 73 days while the update says unchanged.
 2. Inspect the source fields and review questions. Three findings are prioritised; all five remain available.
 3. Record a decision with its owner and rationale, then download the evidence-linked record.
 
@@ -39,7 +39,7 @@ The browser tool is static HTML and JavaScript. Python's built-in server is enou
 git clone https://github.com/MatthewPaver/ProjectLens.git
 cd ProjectLens
 python3 -m http.server 8000 --bind 127.0.0.1 --directory docs
-# open http://127.0.0.1:8000/change-assurance.html and select "Try the Northstar example"
+# open http://127.0.0.1:8000/change-assurance.html and select "Try the example project"
 ```
 
 Expected result: the evidence desk shows three prioritised findings and five total questions, including the 73-day finish movement, with source dates beside the selected finding. Stop the server with Ctrl+C.

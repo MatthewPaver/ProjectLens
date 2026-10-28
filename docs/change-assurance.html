@@ -14,7 +14,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Libre+Franklin:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="change-assurance.css">
   <link rel="stylesheet" href="walkthrough.css">
@@ -40,7 +40,7 @@
     <a class="product-register-link" href="#decisions">Saved decisions</a>
   </header>
 
-  <p id="walkthroughSession" class="tour-session" hidden>Synthetic walkthrough · records exist only in this tab until reload. <a href="change-assurance.html">Exit to full ProjectLens</a></p>
+  <p id="walkthroughSession" class="tour-session" hidden>Made-up example walkthrough. Records exist only in this tab until reload. <a href="change-assurance.html">Exit to full ProjectLens</a></p>
   <div class="tour-layout">
   <aside id="walkthroughGuide" class="tour-guide" hidden aria-label="Walkthrough guide"></aside>
   <main id="workspace">
@@ -53,16 +53,16 @@
     <section class="assurance-view active" data-view="reviews">
       <div id="productLanding">
         <section class="product-hero" id="top" aria-labelledby="productTitle">
-          <h1 id="productTitle">The schedule changed.<br>Did the update explain it?</h1>
+          <h1 id="productTitle"><span>The schedule changed.</span><span>Did the update explain it?</span></h1>
           <p class="product-introduction">Compare two project schedules from Primavera P6 planning software with the project update. See the evidence behind the movement, then record a human decision.</p>
           <div class="product-actions">
-            <button class="assurance-primary" id="loadAssuranceDemo" type="button">Try the Northstar example</button>
+            <button class="assurance-primary" id="loadAssuranceDemo" type="button">Try the example project</button>
             <button class="product-text-button" id="showOwnPack" type="button">Use your own schedules</button>
           </div>
           <p class="product-privacy">Runs in your browser. Your schedule files stay with you.</p>
         </section>
-        <section class="product-example" aria-label="Interactive Northstar example">
-          <div class="example-heading"><div><strong>Northstar Grid Connection</strong><span>Synthetic example</span></div><span>2 XER exports + narrative</span></div>
+        <section class="product-example" aria-label="Interactive example project: Northstar Grid Connection">
+          <div class="example-heading"><div><strong>Northstar Grid Connection</strong><span>Made-up example</span></div><span>2 schedule files + written update</span></div>
           <div class="example-workspace">
             <div class="example-selector"><h2>Changes to review</h2><div role="tablist" aria-label="Example changes" aria-orientation="vertical">
               <button type="button" role="tab" id="example-finish" aria-selected="true" aria-controls="examplePanel" data-example="finish" disabled>Finish movement</button>
@@ -91,9 +91,9 @@
             </ol>
             <aside class="journey-demo">
               <h3>Follow one complete review.</h3>
-              <p>The guided Northstar example uses the same parser, forms and decision records as the full product.</p>
+              <p>The guided example uses the same file reader, forms and decision records as the full product.</p>
               <a class="assurance-primary" href="?walkthrough=1">Take the guided walkthrough</a>
-              <p class="journey-note">Synthetic inputs. Walkthrough records exist only in that tab until reload. Downloads remain yours to keep.</p>
+              <p class="journey-note">Made-up inputs. Walkthrough records exist only in that tab until reload. Downloads remain yours to keep.</p>
               <a class="product-text-button" href="#decisions">View saved decisions</a>
             </aside>
           </div>
@@ -106,7 +106,7 @@
             <details><summary>What can I compare?</summary><p>Two supported, single-project Primavera P6 XER exports from the same source project. ProjectLens checks their identity, dates and field coverage before comparing them. Missing fields and unsupported inputs are reported.</p></details>
           </div>
         </section>
-        <section class="product-start" aria-labelledby="startTitle"><div><h2 id="startTitle">Bring a change pack. Leave with clearer questions.</h2><p>Start with the example, or review your own two schedule exports.</p></div><div class="product-actions"><button class="assurance-primary" type="button" data-load-example>Open Northstar review</button><button class="product-text-button" type="button" data-own-files>Use my files</button></div></section>
+        <section class="product-start" aria-labelledby="startTitle"><div><h2 id="startTitle">Bring a change pack. Leave with clearer questions.</h2><p>Start with the example, or review your own two schedule exports.</p></div><div class="product-actions"><button class="assurance-primary" type="button" data-load-example>Open the example review</button><button class="product-text-button" type="button" data-own-files>Use my files</button></div></section>
         <noscript><p class="product-noscript">JavaScript is needed for the interactive comparison. You can still <a href="demo/northstar-previous.xer" download>download the previous example</a>, <a href="demo/northstar-current.xer" download>download the current example</a> and <a href="method.md">read the method</a>.</p></noscript>
       </div>
 
@@ -115,7 +115,7 @@
         <div class="compact-heading">
           <div><h2 id="intakeTitle">Add your two XER files</h2></div>
           <p>XER is the schedule export format from Primavera P6 planning software. Export both schedules (File &rarr; Export &rarr; Primavera XER): the previous submission and the current one. Your browser reads the files and uploads nothing. Add the narrative if you want ProjectLens to check what the update claims.</p>
-          <p class="sample-pair">No XER files to hand? Download a synthetic pair from either example project and choose the files below: <a href="./demo/northstar-previous.xer" download>Northstar previous</a> &middot; <a href="./demo/northstar-current.xer" download>Northstar current</a> · <a href="./demo/riverside-previous.xer" download>Riverside previous</a> &middot; <a href="./demo/riverside-current.xer" download>Riverside current</a>. Optional narrative: <a href="./demo/riverside-narrative.txt" download>Riverside narrative</a>.</p>
+          <p class="sample-pair">No XER files to hand? Download a made-up pair from either example project and choose the files below: <a href="./demo/northstar-previous.xer" download>Northstar previous</a> &middot; <a href="./demo/northstar-current.xer" download>Northstar current</a> · <a href="./demo/riverside-previous.xer" download>Riverside previous</a> &middot; <a href="./demo/riverside-current.xer" download>Riverside current</a>. Optional narrative: <a href="./demo/riverside-narrative.txt" download>Riverside narrative</a>.</p>
         </div>
         <div class="pack-grid">
           <label class="assurance-file" for="assurancePrevious">
@@ -152,12 +152,18 @@
           <div class="readiness-status"><i aria-hidden="true"></i><span id="readinessStatus" role="status">Needs evidence before decision</span></div>
           <h2 id="readinessHeadline">The proposed finish is not supported by the current narrative.</h2>
           <p id="readinessExplanation">Resolve the blockers below or record why the decision authority accepts them.</p>
-          <dl id="reviewFacts" class="review-facts" aria-label="Schedule facts independent of narrative wording"></dl>
           <div class="readiness-actions">
             <button class="assurance-primary" id="showDecisionForm" type="button">Record human decision</button>
-            <button class="assurance-secondary light" id="requestAnswers" type="button">Draft questions for the team</button>
-            <button class="assurance-secondary light" id="reviewPrecedents" type="button">Explore public-record context</button>
+            <button class="product-text-button" id="requestAnswers" type="button">Draft questions for the team</button>
           </div>
+          <div class="evidence-desk" id="evidenceDesk">
+            <div><h3>Findings</h3><div class="blocker-list" id="blockerList"></div></div>
+            <section class="finding-evidence" id="findingEvidence" tabindex="-1" aria-label="Selected finding evidence"></section>
+          </div>
+          <details class="review-numbers" id="reviewNumbers">
+            <summary>What changed in numbers</summary>
+            <p id="reviewFacts" class="review-facts"></p>
+          </details>
           <details class="narrative-revision" id="narrativeRevision">
             <summary>Check a revised narrative</summary>
             <p>Recheck a revision against these same schedules. The first checked narrative stays in the record. Unchecked edits do not change the decision evidence.</p>
@@ -165,10 +171,6 @@
             <textarea id="revisedNarrative" rows="7"></textarea>
             <button type="button" class="assurance-secondary" id="recheckNarrative">Recheck against these schedules</button>
           </details>
-          <div class="evidence-desk" id="evidenceDesk">
-            <div><h3>Findings</h3><div class="blocker-list" id="blockerList"></div></div>
-            <section class="finding-evidence" id="findingEvidence" tabindex="-1" aria-label="Selected finding evidence"></section>
-          </div>
 
         </article>
 
@@ -191,7 +193,7 @@
             <p>ProjectLens saves the evidence version and any unresolved blockers with your decision. You make the decision; ProjectLens does not.</p>
           </div>
           <form id="decisionForm">
-            <p id="precedentGateBanner" class="precedent-gate-banner">Public-record context is optional. Untouched examples are recorded as not reviewed.</p>
+            <p id="precedentGateBanner" class="precedent-gate-banner">You can save without reviewing the optional public-record examples. They stay marked as not reviewed.</p>
             <fieldset>
               <legend>Decision</legend>
               <label><input type="radio" name="decision" value="Approve" required><span>Approve</span></label>
@@ -214,7 +216,7 @@
         </section>
 
         <details class="supporting-evidence" id="supportingEvidence">
-          <summary><span>Supporting evidence & public-record context</span><small>Optional context · schedule movements · narrative checks</small></summary>
+          <summary><span>Supporting evidence and public-record context</span><small>Schedule movements, narrative checks and optional examples from public records</small></summary>
           <div class="evidence-summary" id="evidenceSummary"></div>
           <div class="comparable-section" id="precedentSection">
             <div>

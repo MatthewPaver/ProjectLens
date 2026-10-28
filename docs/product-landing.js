@@ -57,7 +57,7 @@
       byId('exampleStatus').textContent = 'Schedule movement is a fact. Its cause still needs evidence.';
       select(selected, false);
     } catch {
-      byId('exampleStatus').textContent = 'The interactive example could not load. Retry, or use your own XER files. The preview above is the bundled synthetic example.';
+      byId('exampleStatus').textContent = 'The interactive example could not load. Retry, or use your own XER files. The preview above is the bundled made-up example.';
       byId('exampleRetry').hidden = false;
     }
   }
