@@ -139,12 +139,13 @@ def run_mobile(browser):
     assert page.locator("#blockerList .blocker").count() == 3
     assert page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
     page.locator("[data-finding='2']").scroll_into_view_if_needed()
-    finding_scroll = page.evaluate("window.scrollY")
+    finding_top = page.locator("[data-finding='2']").evaluate("el => el.getBoundingClientRect().top")
     page.locator("[data-finding='2']").click()
     assert page.locator("#findingEvidence").is_visible()
     page.get_by_role("button", name="Back to findings").click()
     assert page.locator("[data-finding='2']").evaluate("el => el === document.activeElement")
-    assert abs(page.evaluate("window.scrollY") - finding_scroll) <= 1
+    # The finding returns to the same place on screen, even though the main action above it changed.
+    assert abs(page.locator("[data-finding='2']").evaluate("el => el.getBoundingClientRect().top") - finding_top) <= 1
     page.evaluate("window.scrollTo(0, 0)")
     page.screenshot(path=str(SCREENSHOTS / "change-assurance-mobile.png"), full_page=False)
     page.close()

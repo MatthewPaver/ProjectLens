@@ -936,8 +936,13 @@ function bindEvents() {
   $("#findingEvidence").addEventListener("click", event => {
     if (!event.target.closest("#backToFindings")) return;
     $("#evidenceDesk").classList.remove("evidence-open");
-    $(`[data-finding="${assuranceState.selectedFinding}"]`).focus({ preventScroll: true });
+    const finding = $(`[data-finding="${assuranceState.selectedFinding}"]`);
+    finding.focus({ preventScroll: true });
     window.scrollTo({ top: assuranceState.findingScrollY || 0, behavior: "instant" });
+    // Put the finding back where it was on screen, even if the actions above it changed height.
+    if (assuranceState.findingTop !== null && assuranceState.findingTop !== undefined) {
+      window.scrollBy({ top: finding.getBoundingClientRect().top - assuranceState.findingTop, behavior: "instant" });
+    }
   });
   $("#saveDraft").addEventListener("click", saveDraft);
   $("#resumeDraft").addEventListener("click", resumeDraft);
@@ -988,9 +993,11 @@ function setFindingViewed(viewed) {
 }
 
 function openFinding(index, { focus = false } = {}) {
+  const narrow = matchMedia("(max-width: 760px)").matches;
+  // Remember where the finding sat on screen, before the main action swaps and the layout above it changes.
+  if (narrow) assuranceState.findingTop = $(`[data-finding="${index}"]`)?.getBoundingClientRect().top ?? null;
   renderSelectedFinding(index);
   setFindingViewed(true);
-  const narrow = matchMedia("(max-width: 760px)").matches;
   if (narrow) {
     assuranceState.findingScrollY = window.scrollY;
     $("#evidenceDesk").classList.add("evidence-open");
