@@ -25,8 +25,8 @@ def landing(browser):
     page.on("pageerror", lambda error: errors.append(str(error)))
     page.on("request", lambda request: requests.append((request.method, request.url)))
     loaded(page)
-    expect(page.locator("#productTitle")).to_have_text("The schedule changed.Did the update explain it?")
-    expect(page.locator("#exampleTitle")).to_have_text("The finish moves by 73 days. The update says unchanged.")
+    expect(page.locator("#productTitle")).to_have_text("Check the schedule against the update")
+    expect(page.locator("#exampleTitle")).to_have_text("The finish moves 73 days but the update says unchanged")
     expect(page.locator("#exampleComparison")).to_contain_text("15 Dec 2027")
     expect(page.locator("#exampleComparison")).to_contain_text("26 Feb 2028")
     assert page.evaluate("localStorage.getItem('projectlens:change-decisions:v1')") is None
@@ -37,7 +37,7 @@ def landing(browser):
     page.locator("#example-finish").focus()
     page.keyboard.press("ArrowDown")
     expect(page.locator("#example-constraints")).to_be_focused()
-    expect(page.locator("#exampleTitle")).to_have_text("3 activities have changed constraints.")
+    expect(page.locator("#exampleTitle")).to_have_text("3 activities have changed fixed dates (constraints)")
     page.locator("#exampleInspect").click()
     expect(page.locator("#exampleSource tbody tr")).to_have_count(3)
     expect(page.locator("#exampleSource")).to_contain_text("TASK")
@@ -76,7 +76,7 @@ def semantic_regressions(browser):
         assert (review["movement"], review["constraints"], review["relationships"], review["float"]) == (73, 3, 5, 9)
         assert len(review["findings"]) >= 4
         assert any("constraint changes" in row["title"] for row in review["findings"])
-        assert any("relationship signatures" in row["title"] for row in review["findings"])
+        assert any("links between tasks" in row["title"] for row in review["findings"])
         assert any(row["type"] == "Float loss" for row in review["findings"])
     assert any(row["type"] == "Ownership gap" for row in result[0]["findings"])
     assert not any(row["type"] == "Contradiction" for row in result[1]["findings"])

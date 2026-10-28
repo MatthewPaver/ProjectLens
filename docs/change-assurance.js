@@ -63,7 +63,7 @@ function precedentSidecarHint() {
     return `Using configured RAG API · ${PRECEDENT_RAG_URL}`;
   }
   if (IS_PUBLIC_PAGES) {
-    return "This GitHub Pages site is static, so it shows bundled example cards. XER checks still run here. For live Gemini retrieval, run `make precedent-rag` locally or set PROJECTLENS_PRECEDENT_RAG_URL.";
+    return "This GitHub Pages site is static, so it shows bundled example cards. Schedule checks still run here. For live Gemini retrieval, run `make precedent-rag` locally or set PROJECTLENS_PRECEDENT_RAG_URL.";
   }
   return "Static precedent mode. Start `make precedent-rag`, then set window.PROJECTLENS_PRECEDENT_RAG_URL to http://127.0.0.1:8787 to enable live retrieval.";
 }
@@ -122,11 +122,11 @@ function parseXer(text, fileName) {
     }
   });
 
-  if (!tables.PROJECT?.length || !tables.TASK?.length) throw new Error(`${fileName} is not a readable Primavera P6 XER export.`);
+  if (!tables.PROJECT?.length || !tables.TASK?.length) throw new Error(`${fileName} is not a readable Primavera P6 schedule file (XER).`);
   if (tables.PROJECT.length !== 1) throw new Error(`${fileName} contains multiple projects. Export a single project for change assurance, or use the detailed schedule review to inspect first-project scope.`);
 
   const project = tables.PROJECT[0];
-  if (!project.proj_id?.trim()) throw new Error(`${fileName} has no project ID. Export a supported single-project XER and retry.`);
+  if (!project.proj_id?.trim()) throw new Error(`${fileName} has no project ID. Export a single-project schedule file (XER) and retry.`);
   const tasks = tables.TASK.map(row => ({
     code: row.task_code || row.task_id,
     name: row.task_name || row.task_code || row.task_id,
@@ -221,7 +221,7 @@ function analyseReview(previous, current, narrative) {
   if (statedStable && finishMovement >= 7) {
     blockers.push({
       type: "Contradiction",
-      title: `The finish moved ${finishMovement} days. The update needs clarification.`,
+      title: `The finish moved ${finishMovement} days and the update needs clarifying`,
       detail: `${formatDate(previous.project.scheduledFinish)} → ${formatDate(current.project.scheduledFinish)}.`,
     });
   } else if (finishMovement !== null && Math.abs(finishMovement) >= 7) {
@@ -237,15 +237,15 @@ function analyseReview(previous, current, narrative) {
   if (changes.relationChanges) {
     blockers.push({
       type: "Unexplained change",
-      title: `${changes.relationChanges} relationship signatures changed`,
-      detail: "Added or removed predecessor signatures can affect sequencing. Ask which instruction explains the differences; these exports do not establish causation.",
+      title: `${changes.relationChanges} links between tasks changed`,
+      detail: "Added or removed links between tasks (which task waits for which) can change the order of work. Ask which instruction explains the differences; these exports do not establish causation.",
     });
   }
   if (changes.floatErosion) {
     blockers.push({
       type: "Float loss",
-      title: `Float reduced on ${changes.floatErosion} changed activities`,
-      detail: "Reported total float is lower in the current export. Check the underlying fields and planning assumptions; this does not prove a delay or a critical path.",
+      title: `Less spare time before the finish moves (float) on ${changes.floatErosion} changed activities`,
+      detail: "The current schedule shows less total float: these activities can slip less before they delay the finish. Check the underlying fields and planning assumptions; this does not prove a delay or a critical path.",
     });
   }
   const explicitMissingOwnership = /\b(?:no|without|missing|unassigned)\s+(?:named\s+)?(?:owner|due date)\b|\b(?:owner|due date)\s+(?:is\s+)?(?:missing|unassigned|unknown|not set)\b/.test(text);
@@ -316,7 +316,7 @@ function numbersSentence(changes) {
   const activities = changes.changes.length;
   return `Between the two schedules, ${count(activities, "activity has", "activities have")} changed dates, spare time or fixed dates, or ${activities === 1 ? "was" : "were"} added or removed; `
     + `there ${changes.constraintChanges === 1 ? "is" : "are"} ${count(changes.constraintChanges, "constraint change", "constraint changes")} (imposed dates or rules); `
-    + `${count(changes.floatErosion, "activity has", "activities have")} less spare time before delaying the finish (total float erosion); `
+    + `${count(changes.floatErosion, "activity has", "activities have")} less spare time before delaying the finish (total float); `
     + `and ${count(changes.relationChanges, "activity link has", "activity links have")} changed (predecessor, successor, link type or lag).`;
 }
 
@@ -334,7 +334,7 @@ function renderReview(review, restoredContext = null) {
   $("#readinessHeadline").textContent = ready ? "Review the evidence and record a decision" : `${topBlockers.length} findings need your review${review.blockers.length > 3 ? ` · ${review.blockers.length} total` : ""}`;
   $("#readinessExplanation").textContent = ready
     ? "These fixed checks raised no additional questions. Inspect all source facts; this is not an approval or an assurance verdict."
-    : "Select a finding to check its source. Resolve it or record why the decision authority accepts it.";
+    : "Select a finding to check its source. Resolve it, or record why the person or board who approves changes accepts it.";
   $("#blockerList").innerHTML = topBlockers.length ? topBlockers.map((blocker, index) => `
     <article class="blocker">
       <button type="button" class="finding-select" data-finding="${index}" aria-pressed="${index === 0}">
@@ -344,6 +344,7 @@ function renderReview(review, restoredContext = null) {
   if (review.blockers.length > 3) $("#blockerList").insertAdjacentHTML("beforeend", `<details><summary>Additional findings (${review.blockers.length - 3})</summary>${review.blockers.slice(3).map((blocker, index) => `<button class="finding-select" type="button" data-finding="${index + 3}" aria-pressed="false"><span>${escapeHtml(blocker.type)}</span><strong>${escapeHtml(blocker.title)}</strong></button>`).join("")}</details>`);
   assuranceState.selectedFinding = 0;
   renderSelectedFinding(0);
+  setFindingViewed(false);
   $("#requestAnswers").hidden = ready;
   $("#decisionWarning").hidden = ready;
 
@@ -354,9 +355,9 @@ function renderReview(review, restoredContext = null) {
     ["Scheduled finish", review.finishMovement === null ? "Not comparable" : `${review.finishMovement > 0 ? "+" : ""}${review.finishMovement} days`, `${formatDate(review.previous.project.scheduledFinish)} → ${formatDate(review.current.project.scheduledFinish)}`],
     ["Material activities", String(review.changes.changes.length), "Activities with changed dates, spare time, fixed dates, or added or removed activities"],
     ["Constraint changes", String(review.changes.constraintChanges), "Changes to imposed dates or rules (constraints)"],
-    ["Float erosion", String(review.changes.floatErosion), "Activities with less spare time before delaying the finish (total float)"],
-    ["Relationship changes", String(review.changes.relationChanges), "Changed activity links: predecessor, successor, link type or lag"],
-    ["Evidence supplied", "2 XER files", $("#assuranceNarrative").value.trim() ? "Schedule narrative included" : "No narrative supplied"],
+    ["Less spare time (float)", String(review.changes.floatErosion), "Activities with less spare time before delaying the finish (total float)"],
+    ["Task link changes", String(review.changes.relationChanges), "Changed links between tasks: which task comes first, link type or waiting time (lag)"],
+    ["Evidence supplied", "2 schedule files (XER)", $("#assuranceNarrative").value.trim() ? "Schedule narrative included" : "No narrative supplied"],
   ];
   $("#evidenceSummary").innerHTML = facts.map(([label, value, detail]) => `
     <article class="evidence-fact"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong><small>${escapeHtml(detail)}</small></article>`).join("");
@@ -447,11 +448,11 @@ function renderPrecedentPanel({ loading = false, offline = false } = {}) {
         <span>Retrieving ${n}</span>
         <strong>Loading comparable public evidence</strong>
         <p>Asking the RAG sidecar for similar published programme records…</p>
-        <small>XER files stay in this browser</small>
+        <small>Schedule files stay in this browser</small>
       </article>`).join("");
     if (summaryHost) summaryHost.hidden = true;
     if (sectionGate) sectionGate.hidden = true;
-    if (statusHost) statusHost.textContent = "Retrieving similar cases. XER files stay in this browser.";
+    if (statusHost) statusHost.textContent = "Retrieving similar cases. Schedule files stay in this browser.";
     return;
   }
 
@@ -595,10 +596,10 @@ function questionFor(blocker) {
   if (blocker.type === "Contradiction") return "How should the narrative be corrected or evidenced against the finish movement?";
   if (blocker.type === "Schedule movement") return "What source evidence explains the scheduled finish movement?";
   if (blocker.title.includes("constraint")) return "Which instruction or approval explains each constraint change?";
-  if (blocker.title.includes("relationship")) return "What changed in the delivery sequence, and why?";
+  if (blocker.title.includes("links between tasks")) return "What changed in the delivery sequence, and why?";
   if (blocker.type === "Ownership gap") return "Who owns the stated response, and by when must it be complete?";
   if (blocker.type === "Evidence gap") return "What narrative, reason and approval basis supports this submission?";
-  if (blocker.type === "Float loss") return "Which approved change explains the lost float, and does the narrative need correcting?";
+  if (blocker.type === "Float loss") return "Which approved change explains the lost spare time (float), and does the narrative need correcting?";
   return `Which approved change or evidence explains this? ${blocker.title}.`;
 }
 
@@ -615,7 +616,7 @@ async function loadFile(kind, file) {
   label.closest(".assurance-file").classList.add("loaded");
   const ready = Boolean(assuranceState.files.previous && assuranceState.files.current);
   $("#runAssuranceReview").disabled = !ready;
-  $("#intakeMessage").textContent = ready ? "Both files loaded. Ready to check." : "Choose the second XER file to continue.";
+  $("#intakeMessage").textContent = ready ? "Both files loaded. Ready to check." : "Choose the second schedule file to continue.";
 }
 
 async function runReview() {
@@ -634,7 +635,7 @@ async function runReview() {
     showToast("Readiness check complete. Files remained in this browser.");
   } catch (error) {
     console.error(error);
-    showError(error.message || "The evidence could not be checked. Choose two readable single-project XER exports and try again.");
+    showError(error.message || "The evidence could not be checked. Choose two readable schedule files (XER), each holding one project, and try again.");
   } finally {
     button.disabled = false;
     button.innerHTML = "Check decision readiness <span>→</span>";
@@ -894,7 +895,7 @@ function resetReview(options = {}) {
   $("#assuranceCurrentName").textContent = "Choose latest submission";
   $$(".assurance-file").forEach(card => card.classList.remove("loaded"));
   $("#runAssuranceReview").disabled = true;
-  $("#intakeMessage").textContent = "Choose 2 XER files to begin.";
+  $("#intakeMessage").textContent = "Choose both schedule files (XER) to begin.";
   $("#readinessWorkspace").hidden = true;
   $("#packIntake").hidden = landing;
   moveTo(landing ? $("#productTitle") : $("#intakeTitle"));
@@ -926,21 +927,22 @@ function bindEvents() {
     updateDecisionGateState();
     moveTo($("#decisionTitle"));
   });
+  $("#reviewFirstFinding").addEventListener("click", () => openFinding(0, { focus: true }));
   $("#blockerList").addEventListener("click", event => {
     const button = event.target.closest("[data-finding]");
     if (!button) return;
-    renderSelectedFinding(Number(button.dataset.finding));
-    if (matchMedia("(max-width: 760px)").matches) {
-      assuranceState.findingScrollY = window.scrollY;
-      $("#evidenceDesk").classList.add("evidence-open");
-      moveTo($("#findingEvidence"));
-    }
+    openFinding(Number(button.dataset.finding));
   });
   $("#findingEvidence").addEventListener("click", event => {
     if (!event.target.closest("#backToFindings")) return;
     $("#evidenceDesk").classList.remove("evidence-open");
-    $(`[data-finding="${assuranceState.selectedFinding}"]`).focus({ preventScroll: true });
+    const finding = $(`[data-finding="${assuranceState.selectedFinding}"]`);
+    finding.focus({ preventScroll: true });
     window.scrollTo({ top: assuranceState.findingScrollY || 0, behavior: "instant" });
+    // Put the finding back where it was on screen, even if the actions above it changed height.
+    if (assuranceState.findingTop !== null && assuranceState.findingTop !== undefined) {
+      window.scrollBy({ top: finding.getBoundingClientRect().top - assuranceState.findingTop, behavior: "instant" });
+    }
   });
   $("#saveDraft").addEventListener("click", saveDraft);
   $("#resumeDraft").addEventListener("click", resumeDraft);
@@ -982,6 +984,27 @@ function moveTo(element) {
   element.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "start" });
 }
 
+// Until a finding has been opened, reviewing it is the main action. After that, recording the decision is.
+function setFindingViewed(viewed) {
+  assuranceState.findingViewed = viewed;
+  const recordFirst = viewed || !assuranceState.review?.blockers.length;
+  $("#reviewFirstFinding").hidden = recordFirst;
+  $("#showDecisionForm").className = recordFirst ? "assurance-primary" : "product-text-button";
+}
+
+function openFinding(index, { focus = false } = {}) {
+  const narrow = matchMedia("(max-width: 760px)").matches;
+  // Remember where the finding sat on screen, before the main action swaps and the layout above it changes.
+  if (narrow) assuranceState.findingTop = $(`[data-finding="${index}"]`)?.getBoundingClientRect().top ?? null;
+  renderSelectedFinding(index);
+  setFindingViewed(true);
+  if (narrow) {
+    assuranceState.findingScrollY = window.scrollY;
+    $("#evidenceDesk").classList.add("evidence-open");
+  }
+  if (narrow || focus) moveTo($("#findingEvidence"));
+}
+
 function renderSelectedFinding(index) {
   assuranceState.selectedFinding = index;
   const review = assuranceState.review;
@@ -989,7 +1012,7 @@ function renderSelectedFinding(index) {
   $$("[data-finding]").forEach(button => button.setAttribute("aria-pressed", String(Number(button.dataset.finding) === index)));
   const constraintFinding = finding?.title.includes("constraint");
   const floatFinding = finding?.type === "Float loss";
-  const relationshipFinding = finding?.title.includes("relationship");
+  const relationshipFinding = finding?.title.includes("links between tasks");
   const relevant = review.changes.activityEvidence.filter(change => {
     if (constraintFinding) return change.before && change.after && (change.before.constraintType !== change.after.constraintType || change.before.constraintDate !== change.after.constraintDate);
     if (floatFinding) return change.before?.totalFloatHours !== null && change.after?.totalFloatHours !== null && change.before?.totalFloatHours > change.after?.totalFloatHours;
@@ -1005,7 +1028,7 @@ function renderSelectedFinding(index) {
     <div class="review-question"><h4>Next review question</h4><p>${escapeHtml(finding ? questionFor(finding) : "What evidence supports the proposed update?")}</p></div>
     <dl class="source-dates"><div><dt>Previous finish</dt><dd>${escapeHtml(formatDate(review.previous.project.scheduledFinish))}</dd></div><div><dt>Current finish</dt><dd>${escapeHtml(formatDate(review.current.project.scheduledFinish))}</dd></div></dl>
     <details><summary>Inspect source files and fields</summary><p class="source-files">Sources: ${escapeHtml(evidenceVersion(review))} · PROJECT scheduled finish; TASK activity dates, constraints and total float.</p></details>
-    <details ${constraintFinding || floatFinding || relationshipFinding ? "open" : ""}><summary>${relationshipFinding ? `Relationship field evidence (${review.changes.relationEvidence.length})` : `Activity field evidence (${relevant.length})`}</summary><ul>${relationshipFinding ? relationshipRows : activityRows}</ul></details>
+    <details ${constraintFinding || floatFinding || relationshipFinding ? "open" : ""}><summary>${relationshipFinding ? `Task link field evidence (${review.changes.relationEvidence.length})` : `Activity field evidence (${relevant.length})`}</summary><ul>${relationshipFinding ? relationshipRows : activityRows}</ul></details>
     <h4>Narrative under review</h4><blockquote>${escapeHtml(($("#assuranceNarrative").value.split(/\n\s*\n/).find(paragraph => /unchanged|on track|stable|no impact/i.test(paragraph)) || $("#assuranceNarrative").value || "No narrative supplied.").trim())}</blockquote><details><summary>Read full narrative</summary><p>${escapeHtml($("#assuranceNarrative").value || "No narrative supplied.")}</p></details>
     ${assuranceState.originalNarrative !== null && assuranceState.originalNarrative !== $("#assuranceNarrative").value ? `<details class="original-narrative"><summary>Read original narrative from the first check</summary><p>${escapeHtml(assuranceState.originalNarrative || "No narrative was supplied at the first check.")}</p></details>` : ""}
     <p class="source-boundary">Field coverage: ${review.coverage.map(item => `${escapeHtml(item.file)}: ${item.finishDates}/${item.tasks} finishes, ${item.floatValues}/${item.tasks} float values`).join("; ")}. Fixed checks flag conflicts. They do not establish causation, entitlement or contractual approval.</p>`;
@@ -1031,14 +1054,14 @@ function saveDraft() {
   const draft = { inputIdentity: assuranceState.review?.inputIdentity, files: assuranceState.files, narrative: $("#assuranceNarrative").value, originalNarrative: assuranceState.originalNarrative, pendingNarrative: $("#revisedNarrative").value, revisionOpen: $("#narrativeRevision").open, fields, precedents: assuranceState.precedents, selectedFinding: assuranceState.selectedFinding, decisionOpen: !$("#decisionPanel").hidden, savedAt: new Date().toISOString() };
   if (!saveStorage(storageKeys.draft, draft)) return;
   $("#draftNotice").hidden = false;
-  $("#draftStatus").textContent = "Draft saved on this device, including XER contents and decision fields. Save again after further edits. Delete it when finished.";
+  $("#draftStatus").textContent = "Draft saved on this device, including the schedule file contents and decision fields. Save again after further edits. Delete it when finished.";
   showToast("Draft saved on this device. You can resume after reopening.");
 }
 
 async function resumeDraft() {
   try {
     const draft = storage(storageKeys.draft);
-    if (!draft.files?.previous?.text || !draft.files?.current?.text) throw new Error("The saved draft is incomplete. Delete it and reload your two XER files.");
+    if (!draft.files?.previous?.text || !draft.files?.current?.text) throw new Error("The saved draft is incomplete. Delete it and reload your two schedule files.");
     assuranceState.files = draft.files;
     assuranceState.originalNarrative = draft.originalNarrative ?? draft.narrative ?? "";
     $("#assuranceNarrative").value = draft.narrative || "";
