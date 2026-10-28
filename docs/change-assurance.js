@@ -316,7 +316,7 @@ function renderReview(review, restoredContext = null) {
   $("#narrativeRevision").open = false;
   const ready = review.blockers.length === 0;
   const topBlockers = review.blockers.slice(0, 3);
-  $("#reviewName").textContent = review.current.project.name;
+  $("#reviewName").textContent = displayProjectName(review.current.project.name);
   $("#reviewEvidenceVersion").textContent = `${evidenceVersion(review)} · checked ${new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(new Date(review.generatedAt))}`;
   $("#readinessCard").classList.toggle("ready", ready);
   $("#readinessStatus").textContent = ready ? "Human review still required" : "Needs evidence before decision";
@@ -650,10 +650,8 @@ async function loadDemo() {
     $$(".assurance-file").forEach(card => card.classList.add("loaded"));
     $("#runAssuranceReview").disabled = false;
     $("#intakeMessage").textContent = "Northstar demo pack loaded. Checking readiness…";
-    // show step 1 (intake) so the demo path matches the flow diagram, then auto-run
-    $("#packIntake").hidden = false;
-    $("#readinessWorkspace").hidden = true;
-    $("#packIntake").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "start" });
+    // Go straight to the review. Scrolling to the intake first raced the review's own scroll
+    // and left visitors past the summary and the decision button.
     const previous = parseXer(previousText, assuranceState.files.previous.name);
     const current = parseXer(currentText, assuranceState.files.current.name);
     const review = analyseReview(previous, current, narrative);
@@ -956,6 +954,13 @@ function showError(message) {
   error.textContent = message;
   error.hidden = false;
   moveTo(error);
+}
+
+// XER project names are often all capitals. Show those in normal case so the heading reads as a name.
+function displayProjectName(name) {
+  const text = String(name || "");
+  if (/[a-z]/.test(text) || !/[A-Z]/.test(text)) return text;
+  return text.toLowerCase().replace(/\b([a-z])/g, letter => letter.toUpperCase());
 }
 
 function moveTo(element) {

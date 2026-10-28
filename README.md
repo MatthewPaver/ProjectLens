@@ -4,7 +4,7 @@ Compare a project update with its schedules, inspect what changed, and record th
 
 **For:** project managers, project controls reviewers and planners checking a submitted update against two Primavera P6 schedule exports.
 
-**Start here:** [Try ProjectLens](https://matthewpaver.github.io/ProjectLens/change-assurance.html) — no install or account.
+**Start here:** [Try ProjectLens](https://matthewpaver.github.io/ProjectLens/change-assurance.html). No install or account needed.
 
 1. Select **Try the Northstar example**. Its finish moves by 73 days while the update says unchanged.
 2. Inspect the source fields and review questions. Three findings are prioritised; all five remain available.
