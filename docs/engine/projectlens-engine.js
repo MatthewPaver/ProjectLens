@@ -737,13 +737,49 @@ function lastDayOfMonth(year, month) {
 
 function financialYearQuarterEnd(startYearTwoDigitOrFour, quarter) {
   // UK financial year: Apr (Y) → Mar (Y+1). Q4 ends 31 March of the second calendar year.
+  const range = financialYearQuarterRange(startYearTwoDigitOrFour, quarter);
+  return range ? range.end : null;
+}
+
+function financialYearQuarterRange(startYearTwoDigitOrFour, quarter) {
+  // Q1 Apr–Jun, Q2 Jul–Sep, Q3 Oct–Dec, Q4 Jan–Mar of the next calendar year.
   const start = expandTwoDigitYear(startYearTwoDigitOrFour);
   if (!start || quarter < 1 || quarter > 4) return null;
-  const endYear = start + 1;
-  if (quarter === 1) return new Date(Date.UTC(start, 5, 30, 12)); // 30 Jun
-  if (quarter === 2) return new Date(Date.UTC(start, 8, 30, 12)); // 30 Sep
-  if (quarter === 3) return new Date(Date.UTC(start, 11, 31, 12)); // 31 Dec
-  return new Date(Date.UTC(endYear, 2, 31, 12)); // 31 Mar
+  if (quarter === 1) {
+    return {
+      start: new Date(Date.UTC(start, 3, 1, 12)),
+      end: new Date(Date.UTC(start, 5, 30, 12)),
+    };
+  }
+  if (quarter === 2) {
+    return {
+      start: new Date(Date.UTC(start, 6, 1, 12)),
+      end: new Date(Date.UTC(start, 8, 30, 12)),
+    };
+  }
+  if (quarter === 3) {
+    return {
+      start: new Date(Date.UTC(start, 9, 1, 12)),
+      end: new Date(Date.UTC(start, 11, 31, 12)),
+    };
+  }
+  return {
+    start: new Date(Date.UTC(start + 1, 0, 1, 12)),
+    end: new Date(Date.UTC(start + 1, 2, 31, 12)),
+  };
+}
+
+function quarterContainsFinish(entry, currentFinish, graceDays = 14) {
+  // True when currentFinish sits inside the quarter, with a small edge grace.
+  const current = toIsoDay(currentFinish);
+  if (!current || !entry.quarterStart || !entry.quarterEnd) return false;
+  const day = parseDate(current);
+  const start = parseDate(entry.quarterStart);
+  const end = parseDate(entry.quarterEnd);
+  if (!day || !start || !end) return false;
+  const early = new Date(start.getTime() - graceDays * 86400000);
+  const late = new Date(end.getTime() + graceDays * 86400000);
+  return day.getTime() >= early.getTime() && day.getTime() <= late.getTime();
 }
 
 const MONTH_INDEX = {
@@ -755,6 +791,41 @@ const MONTH_INDEX = {
 function normaliseNarrativeText(text) {
   // Paste from Word / PDFs often leaves NBSP and double spaces inside dates.
   return String(text || "").replace(/\u00A0/g, " ").replace(/\s+/g, " ");
+}
+
+function fyContextBefore(text, index) {
+  // Short left window: enough for "compared to financial year" plus a bit of filler.
+  return text.slice(Math.max(0, index - 48), index);
+}
+
+function isReportingPeriodContext(before) {
+  // "Compared to financial year 21/22-Q4" and "end-date at 22/23-Q4" are report labels.
+  return /(?:\bcompared\s+to|\bsince|\bat|\bin|\bas\s+of)(?:\s+financial\s+year)?\s*$/i.test(before);
+}
+
+function isEndDateFinishContext(before) {
+  // Narrative is naming when the project ends, not when the report was filed.
+  return /\b(?:end[\s-]?date|completion|forecast\s+to\s+complete|finish|close)\b/i.test(before);
+}
+
+function pushFyQuarter(dates, text, raw, index, startYear, quarter) {
+  const range = financialYearQuarterRange(startYear, quarter);
+  if (!range) return;
+  const before = fyContextBefore(text, index);
+  if (isReportingPeriodContext(before)) return;
+  if (isEndDateFinishContext(before)) {
+    dates.push({
+      iso: isoDate(range.end),
+      raw,
+      index,
+      precision: "quarter",
+      quarterStart: isoDate(range.start),
+      quarterEnd: isoDate(range.end),
+    });
+    return;
+  }
+  // No clear role: keep the old fyQuarter marker so day-delta mismatch still skips it.
+  dates.push({ iso: isoDate(range.end), raw, index, fyQuarter: true });
 }
 
 function extractNarrativeDates(text) {
@@ -792,20 +863,17 @@ function extractNarrativeDates(text) {
     push(match[0], lastDayOfMonth(year, month), match.index);
   }
 
-  // Q4 2027-28 (financial-year quarter). Mark as fyQuarter so mismatch logic can ignore them.
+  // Q4 2027-28 and Q2 25/26 (financial-year quarters).
   for (const match of text.matchAll(/\bQ([1-4])\s+(\d{4})-(\d{2})\b/gi)) {
-    const quarter = Number(match[1]);
-    const startYear = Number(match[2]);
-    const date = financialYearQuarterEnd(startYear, quarter);
-    if (date) dates.push({ iso: isoDate(date), raw: match[0], index: match.index, fyQuarter: true });
+    pushFyQuarter(dates, text, match[0], match.index, Number(match[2]), Number(match[1]));
+  }
+  for (const match of text.matchAll(/\bQ([1-4])\s+(\d{2})\/(\d{2})\b/gi)) {
+    pushFyQuarter(dates, text, match[0], match.index, expandTwoDigitYear(match[2]), Number(match[1]));
   }
 
   // 25/26-Q4
   for (const match of text.matchAll(/\b(\d{2})\/(\d{2})-Q([1-4])\b/gi)) {
-    const startYear = expandTwoDigitYear(match[1]);
-    const quarter = Number(match[3]);
-    const date = financialYearQuarterEnd(startYear, quarter);
-    if (date) dates.push({ iso: isoDate(date), raw: match[0], index: match.index, fyQuarter: true });
+    pushFyQuarter(dates, text, match[0], match.index, expandTwoDigitYear(match[1]), Number(match[3]));
   }
 
   // 23-Jan-2031 (P6 / GMPP style)
@@ -892,13 +960,29 @@ function detectScheduleClaims(text, { currentFinish = null, previousFinish = nul
   const covered = moveCoversCurrent(movesStated, currentFinish, dates);
 
   let contradiction = null;
+  const current = toIsoDay(currentFinish);
+
+  // Quarter-precision finish claim: narrative says the end falls in that FY quarter.
+  // No stability phrase required — naming the end quarter is itself the claim.
+  if (!covered && current) {
+    const mismatchedQuarter = dates.find(d => {
+      if (d.precision !== "quarter") return false;
+      return !quarterContainsFinish(d, current, 14);
+    });
+    if (mismatchedQuarter) {
+      contradiction = {
+        kind: "date-mismatch",
+        detail: `Narrative names ${mismatchedQuarter.raw} (${mismatchedQuarter.quarterStart}–${mismatchedQuarter.quarterEnd}) but the current finish is ${current}.`,
+      };
+    }
+  }
 
   // Date mismatch: stability wording quotes a finish that disagrees with currentFinish
-  // by more than 14 days. Skip FY-quarter labels. A stated move suppresses this.
-  if (!covered && currentFinish && stableHits.length && movesStated.length === 0) {
-    const current = toIsoDay(currentFinish);
+  // by more than 14 days. Skip bare FY-quarter labels. A stated move suppresses this.
+  if (!contradiction && !covered && current && stableHits.length && movesStated.length === 0) {
     const mismatched = dates.find(d => {
       if (d.fyQuarter) return false;
+      if (d.precision === "quarter") return !quarterContainsFinish(d, current, 14);
       const delta = dayDeltaIso(d.iso, current);
       return delta !== null && Math.abs(delta) > 14;
     });

@@ -141,4 +141,50 @@ describe("detectScheduleClaims", () => {
       `expected 2026-08-31 in ${JSON.stringify(result.dates)}`,
     );
   });
+
+  // Round 2 N2: reporting periods are not finish dates; quarter finishes are.
+  it("ignores financial-year reporting periods after 'compared to'", () => {
+    const result = engine.detectScheduleClaims(
+      "Compared to financial year 21/22-Q4, the end date remained 31/03/2027.",
+      { currentFinish: "2027-03-31", previousFinish: "2027-03-31" },
+    );
+    assert.equal(result.contradiction, null);
+    assert.deepEqual(
+      result.dates.map(d => d.iso),
+      ["2027-03-31"],
+    );
+  });
+
+  it("treats an end-date FY quarter as a finish claim when current is inside it", () => {
+    // Plan wrote Q2 25/26 with 2026-06-15; under UK FY that quarter is Jul–Sep 2025.
+    // Q1 26/27 is Apr–Jun 2026, which is the range those dates actually test.
+    const sentence = "The current forecast end date is Q1 26/27 following re-planning.";
+    const inside = engine.detectScheduleClaims(sentence, {
+      currentFinish: "2026-06-15",
+      previousFinish: "2026-06-15",
+    });
+    assert.equal(inside.contradiction, null);
+    assert.ok(inside.dates.some(d => d.precision === "quarter"));
+
+    const outside = engine.detectScheduleClaims(sentence, {
+      currentFinish: "2026-12-20",
+      previousFinish: "2026-12-20",
+    });
+    assert.equal(outside.contradiction?.kind, "date-mismatch");
+  });
+
+  it("also accepts the plan's Q2 25/26 wording against a date inside that quarter", () => {
+    const sentence = "The current forecast end date is Q2 25/26 following re-planning.";
+    const inside = engine.detectScheduleClaims(sentence, {
+      currentFinish: "2025-08-15",
+      previousFinish: "2025-08-15",
+    });
+    assert.equal(inside.contradiction, null);
+
+    const outside = engine.detectScheduleClaims(sentence, {
+      currentFinish: "2026-12-20",
+      previousFinish: "2026-12-20",
+    });
+    assert.equal(outside.contradiction?.kind, "date-mismatch");
+  });
 });
