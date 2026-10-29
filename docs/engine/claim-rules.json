@@ -27,7 +27,11 @@
     "no movement",
     "unaltered",
     "remained constant",
-    "remains constant"
+    "remains constant",
+    "unaffected",
+    "not affected",
+    "has not slipped",
+    "not slipped"
   ],
   "movePhrases": [
     "increased from",
@@ -47,7 +51,10 @@
     "re-baselined",
     "correction of published position",
     "delayed to",
-    "now forecast"
+    "now forecast",
+    "lengthened by",
+    "shortened by",
+    "has changed since"
   ],
   "negations": [
     "not",

@@ -70,3 +70,26 @@ def test_stated_move_must_land_on_published_finish():
     earlier = detect_schedule_claims(extended, "2027-07-05", "2027-10-03", rules)
     assert earlier["contradiction"] is not None
     assert earlier["contradiction"]["kind"] == "date-mismatch"
+
+
+def test_end_date_scope_for_moves_and_stability():
+    # Round 3 D2: contract-start moves and "unaffected" end-date claims mirror the JS engine.
+    rules = load_claim_rules()
+    narrative = (
+        "The contract start date has moved back by four weeks. "
+        "The overall programme end date is unaffected."
+    )
+    stable = detect_schedule_claims(narrative, "2028-06-30", "2028-06-30", rules)
+    assert stable["contradiction"] is None
+
+    moved = detect_schedule_claims(narrative, "2028-10-28", "2028-06-30", rules)
+    assert moved["contradiction"] is not None
+    assert moved["contradiction"]["kind"] == "says-unchanged"
+
+    lengthened = detect_schedule_claims(
+        "The end date has lengthened by 200 days.",
+        "2027-07-19",
+        "2026-12-31",
+        rules,
+    )
+    assert lengthened["contradiction"] is None

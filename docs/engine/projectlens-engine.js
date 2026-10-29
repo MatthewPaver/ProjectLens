@@ -22,12 +22,13 @@ const EMBEDDED_CLAIM_RULES = {
     "as planned", "no material change", "no impact",
     "remained static", "remains static", "has not changed", "have not changed", "not changed",
     "no movement", "unaltered", "remained constant", "remains constant",
+    "unaffected", "not affected", "has not slipped", "not slipped",
   ],
   movePhrases: [
     "increased from", "increased to", "decreased from", "changed from", "moved from", "moved to",
     "has moved to", "has been moved", "has been extended", "was extended", "extended to", "slipped from",
     "revised from", "revised to", "re-baselined", "correction of published position", "delayed to",
-    "now forecast",
+    "now forecast", "lengthened by", "shortened by", "has changed since",
   ],
   negations: ["not", "never", "no longer"],
 };
@@ -994,11 +995,43 @@ function findPhraseHits(text, phrases) {
   return hits.sort((a, b) => a.index - b.index);
 }
 
+function clauseAround(text, index) {
+  // One sentence either side of the hit is enough to see what the phrase is about.
+  const leftBreak = Math.max(
+    text.lastIndexOf(".", index - 1),
+    text.lastIndexOf(";", index - 1),
+    text.lastIndexOf("!", index - 1),
+    text.lastIndexOf("?", index - 1),
+  );
+  const start = leftBreak === -1 ? Math.max(0, index - 140) : leftBreak + 1;
+  let end = text.length;
+  for (const mark of [".", ";", "!", "?"]) {
+    const at = text.indexOf(mark, index);
+    if (at !== -1) end = Math.min(end, at + 1);
+  }
+  end = Math.min(end, index + 140);
+  return text.slice(start, end);
+}
+
+function phraseAboutEndDate(text, index) {
+  // Moves of a contract start / tender / milestone do not count as end-date claims.
+  const clause = clauseAround(text, index);
+  const aboutEnd = /\b(?:end[\s-]?date|completion|finish|programme\s+end|project\s+end|scheduled\s+baseline|baseline\s+project\s+end|overall\s+programme)\b/i.test(clause);
+  const aboutOther = /\b(?:contract\s+start|tender|procurement|go-?live|milestone)\b/i.test(clause);
+  if (aboutOther && !aboutEnd) return false;
+  return aboutEnd;
+}
+
 function isNegatedAt(text, index, negations) {
   // Look a short way left of the match for "not / never / no longer".
   const start = Math.max(0, index - 48);
   const window = text.slice(start, index).toLowerCase();
   return negations.some(negation => new RegExp(`\\b${escapeRegExp(negation.toLowerCase())}\\s+(?:\\w+\\s+){0,3}$`).test(window));
+}
+
+function movePhraseTakesLandingDates(phrase) {
+  // "lengthened by" / "was extended" are direction-only; "increased from X to Y" lands on dates.
+  return /\b(from|to)\b/i.test(phrase) || /\bnow\s+forecast\b/i.test(phrase);
 }
 
 function extractMoveStatements(text, movePhrases, dates) {
@@ -1008,9 +1041,16 @@ function extractMoveStatements(text, movePhrases, dates) {
     const pattern = new RegExp(`\\b${escapeRegExp(phrase.toLowerCase()).replace(/\s+/g, "\\s+")}\\b`, "gi");
     for (const match of lower.matchAll(pattern)) {
       const index = match.index;
+      // Only end-date / completion / finish moves count.
+      if (!phraseAboutEndDate(text, index)) continue;
+      if (!movePhraseTakesLandingDates(phrase)) {
+        moves.push({ from: null, to: null, index, phrase });
+        continue;
+      }
       // Take dates that sit near this move phrase (same clause / next ~120 chars).
       const nearby = dates.filter(d => {
         if (d.fyQuarter || d.precision === "quarter") return false;
+        if (d.role === "reporting") return false;
         return d.index >= index - 10 && d.index <= index + 140;
       });
       let from = null;
@@ -1030,10 +1070,10 @@ function extractMoveStatements(text, movePhrases, dates) {
 function statedMoveDirection(phrase) {
   const text = String(phrase || "").toLowerCase();
   // "earlier" cues first so "not extended" style phrases do not matter here.
-  if (/\b(decreased|brought\s+forward|pulled\s+(?:forward|in)|advanced|earlier|accelerated)\b/.test(text)) {
+  if (/\b(decreased|shortened|brought\s+forward|pulled\s+(?:forward|in)|advanced|earlier|accelerated)\b/.test(text)) {
     return "earlier";
   }
-  if (/\b(extended|increased|slipped|delayed|pushed|moved|changed|revised|re-baselined|correction|now\s+forecast)\b/.test(text)) {
+  if (/\b(extended|lengthened|increased|slipped|delayed|pushed|moved|changed|revised|re-baselined|correction|now\s+forecast)\b/.test(text)) {
     return "later";
   }
   return null;
@@ -1045,22 +1085,32 @@ function actualMoveDirection(currentFinish, previousFinish) {
   return delta > 0 ? "later" : "earlier";
 }
 
-function moveCoversCurrent(moves, currentFinish, previousFinish = null) {
-  // A stated move only explains the published finish when it lands on it (or
-  // when a direction-only phrase agrees with the actual slide).
+function moveLandsOnCurrent(moves, currentFinish) {
   const current = toIsoDay(currentFinish);
   if (!current || !moves.length) return false;
-  for (const move of moves) {
-    if (move.to) {
-      const delta = dayDeltaIso(move.to, current);
-      if (delta !== null && Math.abs(delta) <= 14) return true;
-      continue;
-    }
+  return moves.some(move => {
+    if (!move.to) return false;
+    const delta = dayDeltaIso(move.to, current);
+    return delta !== null && Math.abs(delta) <= 14;
+  });
+}
+
+function moveDirectionCovers(moves, currentFinish, previousFinish = null) {
+  // Direction-only phrase that agrees with the actual slide (no landing date).
+  if (!moves.length) return false;
+  const actual = actualMoveDirection(currentFinish, previousFinish);
+  if (!actual) return false;
+  return moves.some(move => {
+    if (move.to) return false;
     const stated = statedMoveDirection(move.phrase);
-    const actual = actualMoveDirection(currentFinish, previousFinish);
-    if (stated && actual && stated === actual) return true;
-  }
-  return false;
+    return stated && stated === actual;
+  });
+}
+
+function moveCoversCurrent(moves, currentFinish, previousFinish = null) {
+  // Kept for callers / tests: landing date or agreeing direction-only phrase.
+  return moveLandsOnCurrent(moves, currentFinish)
+    || moveDirectionCovers(moves, currentFinish, previousFinish);
 }
 
 function mistargetedMoveContradiction(moves, currentFinish) {
@@ -1093,47 +1143,47 @@ function detectScheduleClaims(text, { currentFinish = null, previousFinish = nul
   const source = normaliseNarrativeText(text);
   const dates = extractNarrativeDates(source);
   const stableHits = findPhraseHits(source, rules.stablePhrases)
-    .filter(hit => !isNegatedAt(source, hit.index, rules.negations));
+    .filter(hit => !isNegatedAt(source, hit.index, rules.negations))
+    .filter(hit => phraseAboutEndDate(source, hit.index));
   const movesStated = extractMoveStatements(source, rules.movePhrases, dates);
   const finishMoved = (() => {
     const delta = dayDeltaIso(currentFinish, previousFinish);
     return delta !== null && delta !== 0;
   })();
-  const covered = moveCoversCurrent(movesStated, currentFinish, previousFinish);
+  const landed = moveLandsOnCurrent(movesStated, currentFinish);
+  const directionCovered = moveDirectionCovers(movesStated, currentFinish, previousFinish);
+  const covered = landed || directionCovered;
 
   let contradiction = null;
   const current = toIsoDay(currentFinish);
   // Only dates the narrative presents as the *current* finish drive mismatch.
   const currentFinishDates = dates.filter(d => d.role === "current-finish");
 
-  // Stated move that does not land on the published finish is itself a mismatch.
-  if (!covered && movesStated.length && current) {
-    contradiction = mistargetedMoveContradiction(movesStated, current);
-  }
-
-  // Quarter-precision finish claim: narrative says the end falls in that FY quarter.
-  if (!contradiction && !covered && current) {
-    const mismatchedQuarter = currentFinishDates.find(d => {
+  function mismatchedCurrentFinish() {
+    if (!current) return null;
+    const quarterHit = currentFinishDates.find(d => {
       if (d.precision !== "quarter") return false;
       return !quarterContainsFinish(d, current, 14);
     });
-    if (mismatchedQuarter) {
-      contradiction = {
-        kind: "date-mismatch",
-        detail: `Narrative names ${mismatchedQuarter.raw} (${mismatchedQuarter.quarterStart}–${mismatchedQuarter.quarterEnd}) but the current finish is ${current}.`,
-      };
-    }
-  }
-
-  // Day-precision current-finish that disagrees with the published finish (>14 days).
-  if (!contradiction && !covered && current && movesStated.length === 0) {
-    const mismatched = currentFinishDates.find(d => {
+    if (quarterHit) return quarterHit;
+    return currentFinishDates.find(d => {
       if (d.fyQuarter) return false;
-      if (d.precision === "quarter") return !quarterContainsFinish(d, current, 14);
+      if (d.precision === "quarter") return false;
       const delta = dayDeltaIso(d.iso, current);
       return delta !== null && Math.abs(delta) > 14;
-    });
-    if (mismatched) {
+    }) || null;
+  }
+
+  // Named current-finish that disagrees with the published finish wins over a
+  // direction-only "lengthened" cover — only a landing date clears it.
+  const mismatched = mismatchedCurrentFinish();
+  if (!landed && mismatched) {
+    if (mismatched.precision === "quarter") {
+      contradiction = {
+        kind: "date-mismatch",
+        detail: `Narrative names ${mismatched.raw} (${mismatched.quarterStart}–${mismatched.quarterEnd}) but the current finish is ${current}.`,
+      };
+    } else {
       contradiction = {
         kind: "date-mismatch",
         detail: `Narrative names ${mismatched.raw} (${mismatched.iso}) but the current finish is ${current}.`,
@@ -1141,7 +1191,21 @@ function detectScheduleClaims(text, { currentFinish = null, previousFinish = nul
     }
   }
 
-  // Otherwise: stability wording while the finish moved, and no move is stated at all.
+  // Stated move with a 'to' date that misses the published finish.
+  if (!contradiction && !landed && movesStated.length && current) {
+    const mistarget = movesStated.find(move => {
+      if (!move.to) return false;
+      const delta = dayDeltaIso(move.to, current);
+      return delta === null || Math.abs(delta) > 14;
+    });
+    if (mistarget) {
+      contradiction = mistargetedMoveContradiction(movesStated, current);
+    } else if (!directionCovered && movesStated.some(move => !move.to) && !mismatched) {
+      contradiction = mistargetedMoveContradiction(movesStated, current);
+    }
+  }
+
+  // Stability wording while the finish moved, and no move explains it.
   if (!contradiction && finishMoved && stableHits.length && !covered && movesStated.length === 0) {
     contradiction = {
       kind: "says-unchanged",
@@ -1149,8 +1213,8 @@ function detectScheduleClaims(text, { currentFinish = null, previousFinish = nul
     };
   }
 
-  // A stated move that lands on the current finish suppresses any contradiction.
-  if (covered) contradiction = null;
+  // A move that lands on the published finish clears any contradiction.
+  if (landed) contradiction = null;
 
   // A previous-finish that disagrees with previousFinish is a note, not a contradiction.
   let previousDateNote = null;

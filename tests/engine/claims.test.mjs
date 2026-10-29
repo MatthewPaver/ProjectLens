@@ -294,4 +294,30 @@ describe("detectScheduleClaims", () => {
     );
     assert.equal(result.contradiction, null);
   });
+
+  // Round 3 D2: move / stable phrases only count when about the end date.
+  it("ignores a contract-start move when the programme end is unaffected", () => {
+    const narrative =
+      "The contract start date has moved back by four weeks. The overall programme end date is unaffected.";
+    const stable = engine.detectScheduleClaims(narrative, {
+      currentFinish: "2028-06-30",
+      previousFinish: "2028-06-30",
+    });
+    assert.equal(stable.contradiction, null);
+
+    const moved = engine.detectScheduleClaims(narrative, {
+      currentFinish: "2028-10-28",
+      previousFinish: "2028-06-30",
+    });
+    assert.equal(moved.contradiction?.kind, "says-unchanged");
+  });
+
+  it("accepts 'has lengthened by' when the finish moved by that amount", () => {
+    const result = engine.detectScheduleClaims(
+      "The end date has lengthened by 200 days.",
+      { currentFinish: "2027-07-19", previousFinish: "2026-12-31" },
+    );
+    assert.equal(result.contradiction, null);
+    assert.ok(result.movesStated.some(m => /lengthened by/i.test(m.phrase)));
+  });
 });

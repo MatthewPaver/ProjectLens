@@ -365,6 +365,40 @@ def _is_negated(text: str, index: int, negations: list[str]) -> bool:
     return any(re.search(rf"\b{re.escape(neg.lower())}\s+(?:\w+\s+){{0,3}}$", window) for neg in negations)
 
 
+def _clause_around(text: str, index: int) -> str:
+    # One sentence either side of the hit — same idea as the JS engine.
+    left_candidates = [text.rfind(mark, 0, index) for mark in (".", ";", "!", "?")]
+    left_break = max(left_candidates)
+    start = 0 if left_break < 0 else left_break + 1
+    start = max(start, index - 140)
+    end = len(text)
+    for mark in (".", ";", "!", "?"):
+        at = text.find(mark, index)
+        if at != -1:
+            end = min(end, at + 1)
+    end = min(end, index + 140)
+    return text[start:end]
+
+
+def _phrase_about_end_date(text: str, index: int) -> bool:
+    # Contract-start / tender / milestone moves do not count as end-date claims.
+    clause = _clause_around(text, index)
+    about_end = bool(
+        re.search(
+            r"\b(?:end[\s-]?date|completion|finish|programme\s+end|project\s+end|"
+            r"scheduled\s+baseline|baseline\s+project\s+end|overall\s+programme)\b",
+            clause,
+            re.I,
+        )
+    )
+    about_other = bool(
+        re.search(r"\b(?:contract\s+start|tender|procurement|go-?live|milestone)\b", clause, re.I)
+    )
+    if about_other and not about_end:
+        return False
+    return about_end
+
+
 def _normalise_narrative(text: str) -> str:
     # Same cleanup as the browser engine: NBSP and messy whitespace.
     return re.sub(r"\s+", " ", (text or "").replace("\u00a0", " "))
@@ -463,6 +497,11 @@ def _extract_dates(text: str) -> list[dict[str, Any]]:
     return dates
 
 
+def _move_phrase_takes_landing_dates(phrase: str) -> bool:
+    # Direction-only phrases must not steal a nearby previous-finish as their "to" date.
+    return bool(re.search(r"\b(from|to)\b", phrase, re.I) or re.search(r"\bnow\s+forecast\b", phrase, re.I))
+
+
 def _extract_moves(text: str, move_phrases: list[str], dates: list[dict[str, Any]]) -> list[dict[str, Any]]:
     moves: list[dict[str, Any]] = []
     lower = text.lower()
@@ -470,9 +509,15 @@ def _extract_moves(text: str, move_phrases: list[str], dates: list[dict[str, Any
         pattern = re.compile(rf"\b{re.escape(phrase.lower()).replace(r'\ ', r'\s+')}\b", re.I)
         for match in pattern.finditer(lower):
             index = match.start()
+            if not _phrase_about_end_date(text, index):
+                continue
+            if not _move_phrase_takes_landing_dates(phrase):
+                moves.append({"from": None, "to": None, "index": index, "phrase": phrase})
+                continue
             nearby = [
                 item for item in dates
                 if not item.get("fyQuarter") and item.get("precision") != "quarter"
+                and item.get("role") != "reporting"
                 and index - 10 <= item["index"] <= index + 140
             ]
             from_iso = nearby[0]["iso"] if len(nearby) >= 2 else None
@@ -483,9 +528,9 @@ def _extract_moves(text: str, move_phrases: list[str], dates: list[dict[str, Any
 
 def _stated_direction(phrase: str) -> str | None:
     text = (phrase or "").lower()
-    if re.search(r"\b(decreased|brought\s+forward|pulled\s+(?:forward|in)|advanced|earlier|accelerated)\b", text):
+    if re.search(r"\b(decreased|shortened|brought\s+forward|pulled\s+(?:forward|in)|advanced|earlier|accelerated)\b", text):
         return "earlier"
-    if re.search(r"\b(extended|increased|slipped|delayed|pushed|moved|changed|revised|re-baselined|correction|now\s+forecast)\b", text):
+    if re.search(r"\b(extended|lengthened|increased|slipped|delayed|pushed|moved|changed|revised|re-baselined|correction|now\s+forecast)\b", text):
         return "later"
     return None
 
@@ -530,6 +575,7 @@ def detect_schedule_claims(
     stable = [
         hit for hit in _phrase_hits(source, rules["stablePhrases"])
         if not _is_negated(source, hit["index"], rules["negations"])
+        and _phrase_about_end_date(source, hit["index"])
     ]
     moves = _extract_moves(source, rules["movePhrases"], dates)
     finish_moved = bool(current_finish and previous_finish and current_finish != previous_finish)
