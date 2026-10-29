@@ -26,6 +26,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 RAW_DIR = ROOT / "Data" / "public" / "raw"
 OUTPUT_PATH = ROOT / "docs" / "data" / "gmpp.json"
+CLAIM_RULES_PATH = ROOT / "docs" / "engine" / "claim-rules.json"
 
 SOURCES = {
     2020: {
@@ -344,6 +345,124 @@ def day_delta(current: str | None, previous: str | None) -> int | None:
     return (datetime.fromisoformat(current) - datetime.fromisoformat(previous)).days
 
 
+def load_claim_rules() -> dict[str, list[str]]:
+    # Same JSON file the browser engine reads — keep the phrases in one place.
+    return json.loads(CLAIM_RULES_PATH.read_text(encoding="utf-8"))
+
+
+def _phrase_hits(text: str, phrases: list[str]) -> list[dict[str, Any]]:
+    hits = []
+    lower = text.lower()
+    for phrase in phrases:
+        pattern = re.compile(rf"\b{re.escape(phrase.lower()).replace(r'\ ', r'\s+')}\b", re.I)
+        for match in pattern.finditer(lower):
+            hits.append({"phrase": phrase, "index": match.start()})
+    return sorted(hits, key=lambda item: item["index"])
+
+
+def _is_negated(text: str, index: int, negations: list[str]) -> bool:
+    window = text[max(0, index - 48):index].lower()
+    return any(re.search(rf"\b{re.escape(neg.lower())}\s+(?:\w+\s+){{0,3}}$", window) for neg in negations)
+
+
+def _extract_dates(text: str) -> list[dict[str, Any]]:
+    dates: list[dict[str, Any]] = []
+    month_index = {
+        "jan": 1, "january": 1, "feb": 2, "february": 2, "mar": 3, "march": 3,
+        "apr": 4, "april": 4, "may": 5, "jun": 6, "june": 6, "jul": 7, "july": 7,
+        "aug": 8, "august": 8, "sep": 9, "sept": 9, "september": 9,
+        "oct": 10, "october": 10, "nov": 11, "november": 11, "dec": 12, "december": 12,
+    }
+
+    def expand_year(raw: str) -> int:
+        year = int(raw)
+        return year + 2000 if year < 100 else year
+
+    def push(raw: str, year: int, month: int, day: int, index: int, fy_quarter: bool = False) -> None:
+        try:
+            iso = f"{year:04d}-{month:02d}-{day:02d}"
+            datetime.fromisoformat(iso)
+        except ValueError:
+            return
+        dates.append({"iso": iso, "raw": raw, "index": index, "fyQuarter": fy_quarter})
+
+    for match in re.finditer(r"\b(\d{4}-\d{2}-\d{2})\b", text):
+        push(match.group(1), int(match.group(1)[0:4]), int(match.group(1)[5:7]), int(match.group(1)[8:10]), match.start())
+    for match in re.finditer(r"\b(\d{1,2})/(\d{1,2})/(\d{2,4})\b", text):
+        push(match.group(0), expand_year(match.group(3)), int(match.group(2)), int(match.group(1)), match.start())
+    for match in re.finditer(
+        r"\b(\d{1,2})\s+(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+(\d{2,4})\b",
+        text,
+        re.I,
+    ):
+        push(match.group(0), expand_year(match.group(3)), month_index[match.group(2).lower()], int(match.group(1)), match.start())
+    return dates
+
+
+def detect_schedule_claims(
+    text: str,
+    current_finish: str | None,
+    previous_finish: str | None,
+    rules: dict[str, list[str]] | None = None,
+) -> dict[str, Any]:
+    """Mirror docs/engine detectScheduleClaims for the GMPP flag."""
+    rules = rules or load_claim_rules()
+    source = text or ""
+    dates = _extract_dates(source)
+    stable = [
+        hit for hit in _phrase_hits(source, rules["stablePhrases"])
+        if not _is_negated(source, hit["index"], rules["negations"])
+    ]
+    moves = _phrase_hits(source, rules["movePhrases"])
+    finish_moved = bool(current_finish and previous_finish and current_finish != previous_finish)
+    covered = False
+    if moves and current_finish:
+        # A move phrase plus the current finish date in the narrative counts as covered.
+        covered = any(item["iso"] == current_finish and not item.get("fyQuarter") for item in dates)
+
+    contradiction = None
+    if not covered and finish_moved and stable and not moves:
+        mismatched = None
+        for item in dates:
+            if item.get("fyQuarter"):
+                continue
+            if current_finish and abs(day_delta(item["iso"], current_finish) or 0) > 14:
+                mismatched = item
+                break
+        if mismatched:
+            contradiction = {
+                "kind": "date-mismatch",
+                "detail": f"Narrative names {mismatched['raw']} but the current finish is {current_finish}.",
+            }
+        else:
+            contradiction = {
+                "kind": "says-unchanged",
+                "detail": f"Narrative claims stability ({stable[0]['phrase']}) while the finish moved.",
+            }
+    return {
+        "stable": stable,
+        "movesStated": moves,
+        "dates": dates,
+        "contradiction": contradiction,
+    }
+
+
+def annotate_history_claims(history: list[dict[str, Any]], rules: dict[str, list[str]]) -> None:
+    for index, record in enumerate(history):
+        previous = history[index - 1] if index else None
+        claims = detect_schedule_claims(
+            record.get("scheduleNarrative") or "",
+            record.get("endDate"),
+            previous.get("endDate") if previous else None,
+            rules,
+        )
+        record["narrativeSaysUnchangedButMoved"] = claims["contradiction"] is not None
+        record["narrativeExcerpt"] = record.get("scheduleNarrative") or ""
+        record["narrativeClaimKind"] = (
+            claims["contradiction"]["kind"] if claims["contradiction"] else None
+        )
+
+
 def rating_delta(current: str | None, previous: str | None) -> int | None:
     current_key = current.upper() if current else None
     previous_key = previous.upper() if previous else None
@@ -396,8 +515,10 @@ def build_payload(records: list[dict[str, Any]]) -> dict[str, Any]:
     by_id: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for record in records:
         by_id[record["id"]].append(record)
+    claim_rules = load_claim_rules()
     for history in by_id.values():
         history.sort(key=lambda item: item["year"])
+        annotate_history_claims(history, claim_rules)
 
     projects = []
     transitions = Counter()
@@ -415,6 +536,12 @@ def build_payload(records: list[dict[str, Any]]) -> dict[str, Any]:
         transitions[status] += 1
         theme_counts.update(current["themes"])
         score, reasons = attention_score(current, previous)
+        if current.get("narrativeSaysUnchangedButMoved"):
+            reasons = [
+                "Published commentary says the end date is unchanged while the published date moved",
+                *reasons,
+            ][:4]
+            score = min(100, score + 12)
         projects.append(
             {
                 **current,
@@ -427,6 +554,8 @@ def build_payload(records: list[dict[str, Any]]) -> dict[str, Any]:
                 ),
                 "attentionScore": score,
                 "attentionReasons": reasons,
+                "narrativeSaysUnchangedButMoved": bool(current.get("narrativeSaysUnchangedButMoved")),
+                "narrativeExcerpt": current.get("narrativeExcerpt") or current.get("scheduleNarrative") or "",
             }
         )
 

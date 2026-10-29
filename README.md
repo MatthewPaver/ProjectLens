@@ -44,7 +44,16 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory docs
 
 Expected result: the evidence desk shows three prioritised findings and five total questions, including the 73-day finish movement, with source dates beside the selected finding. Stop the server with Ctrl+C.
 
-**Your own schedules.** Export two single-project XER files from Primavera P6 (**File → Export → Primavera XER**): the comparison point and the latest submission. Select **Use your own schedules**, choose both files and paste the narrative. Files are parsed in the browser and never uploaded. If you have no XER to hand, use the synthetic [Northstar](https://matthewpaver.github.io/ProjectLens/demo/northstar-previous.xer) ([current](https://matthewpaver.github.io/ProjectLens/demo/northstar-current.xer)) or [Riverside](https://matthewpaver.github.io/ProjectLens/demo/riverside-previous.xer) ([current](https://matthewpaver.github.io/ProjectLens/demo/riverside-current.xer), [narrative](https://matthewpaver.github.io/ProjectLens/demo/riverside-narrative.txt)) pairs.
+**Your own schedules.** See [`docs/USE_ON_YOUR_OWN_SCHEDULES.md`](docs/USE_ON_YOUR_OWN_SCHEDULES.md) for browser, CLI and monthly batch routes (XER, P6 XML, MS Project XML, and `.txt` / `.md` / `.docx` narratives). Files stay local. If you have no schedule to hand, use the synthetic [Northstar](https://matthewpaver.github.io/ProjectLens/demo/northstar-previous.xer) ([current](https://matthewpaver.github.io/ProjectLens/demo/northstar-current.xer)) or [Riverside](https://matthewpaver.github.io/ProjectLens/demo/riverside-previous.xer) ([current](https://matthewpaver.github.io/ProjectLens/demo/riverside-current.xer), [narrative](https://matthewpaver.github.io/ProjectLens/demo/riverside-narrative.txt)) pairs.
+
+```bash
+node bin/projectlens.mjs compare \
+  --previous docs/demo/northstar-previous.xer \
+  --current docs/demo/northstar-current.xer \
+  --narrative docs/demo/northstar-narrative.txt \
+  --format json
+# exit 1: 73-day contradiction
+```
 
 ## Guided review
 
