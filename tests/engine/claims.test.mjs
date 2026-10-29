@@ -161,9 +161,14 @@ describe("detectScheduleClaims", () => {
       { currentFinish: "2027-03-31", previousFinish: "2027-03-31" },
     );
     assert.equal(result.contradiction, null);
+    // Reporting FY labels may sit in dates with role reporting; only current-finish counts.
+    const finishDates = result.dates.filter(d => d.role === "current-finish");
     assert.deepEqual(
-      result.dates.map(d => d.iso),
+      finishDates.map(d => d.iso),
       ["2027-03-31"],
+    );
+    assert.ok(
+      result.dates.every(d => d.role !== "current-finish" || d.iso === "2027-03-31"),
     );
   });
 
@@ -233,5 +238,60 @@ describe("detectScheduleClaims", () => {
       previousFinish: "2027-10-03",
     });
     assert.equal(earlier.contradiction?.kind, "date-mismatch");
+  });
+
+  // Round 3 D1: each date gets a role; only current-finish drives date-mismatch.
+  it("classifies the standard GMPP template dates and stays quiet when they match", () => {
+    const narrative =
+      "The scheduled baseline project end date at Q2 2021 (30th September 2020) is 31/12/22, " +
+      "has not changed since last year's Q2 1920 date of 31/12/22, due to supplier phasing.";
+    const result = engine.detectScheduleClaims(narrative, {
+      currentFinish: "2022-12-31",
+      previousFinish: "2022-12-31",
+    });
+    assert.equal(result.contradiction, null);
+    const roles = result.dates.map(d => d.role);
+    assert.ok(roles.includes("reporting"), `roles=${JSON.stringify(roles)}`);
+    assert.ok(roles.includes("current-finish"), `roles=${JSON.stringify(roles)}`);
+    assert.ok(roles.includes("previous-finish"), `roles=${JSON.stringify(roles)}`);
+  });
+
+  it("uses only the current-finish date for date-mismatch on a lengthened-end sentence", () => {
+    const narrative =
+      "The scheduled baseline project end date at Q2 2021 (30th September 2020) is 30/06/25, " +
+      "has lengthened by 365 days since last year's Q2 1920 date of 30/06/24 due to scope.";
+    const match = engine.detectScheduleClaims(narrative, {
+      currentFinish: "2025-06-30",
+      previousFinish: "2024-06-30",
+    });
+    assert.equal(match.contradiction, null);
+
+    const miss = engine.detectScheduleClaims(narrative, {
+      currentFinish: "2026-03-31",
+      previousFinish: "2024-06-30",
+    });
+    assert.equal(miss.contradiction?.kind, "date-mismatch");
+    assert.match(miss.contradiction.detail, /30\/06\/25|2025-06-30/);
+  });
+
+  it("treats milestone dates as other and does not flag an on-track list", () => {
+    const result = engine.detectScheduleClaims(
+      "Milestones remain on track: Phase 1 go-live Apr 2021, Phase 2 Mar 2023.",
+      { currentFinish: "2025-12-31", previousFinish: "2025-12-31" },
+    );
+    assert.equal(result.contradiction, null);
+    const milestoneDates = result.dates.filter(d =>
+      /apr\s*2021|mar\s*2023/i.test(d.raw),
+    );
+    assert.equal(milestoneDates.length, 2);
+    assert.ok(milestoneDates.every(d => d.role === "other"));
+  });
+
+  it("ignores a review-month date when delivery is on track and the finish did not move", () => {
+    const result = engine.detectScheduleClaims(
+      "The March 2022 review confirmed delivery was on track.",
+      { currentFinish: "2027-06-30", previousFinish: "2027-06-30" },
+    );
+    assert.equal(result.contradiction, null);
   });
 });

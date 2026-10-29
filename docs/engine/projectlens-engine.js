@@ -808,11 +808,84 @@ function isEndDateFinishContext(before) {
   return /\b(?:end[\s-]?date|completion|forecast\s+to\s+complete|finish|close)\b/i.test(before);
 }
 
+function leftWindow(text, index, size = 90) {
+  return text.slice(Math.max(0, index - size), index);
+}
+
+function rightWindow(text, index, raw, size = 40) {
+  const start = index + String(raw || "").length;
+  return text.slice(start, Math.min(text.length, start + size));
+}
+
+function classifyDateRole(text, item) {
+  // Bind each date to what the sentence is talking about, not just that a date exists.
+  const before = leftWindow(text, item.index);
+  const after = rightWindow(text, item.index, item.raw);
+  const beforeLower = before.toLowerCase();
+  const afterLower = after.toLowerCase();
+
+  // Previous finish first: "since last year's … date of X".
+  if (
+    /last\s+year'?s?.{0,48}date\s+of\s*$/i.test(before)
+    || /(?:previously|originally)\s*$/i.test(before)
+    || /\b(?:was|from)\s*$/i.test(before)
+  ) {
+    return "previous-finish";
+  }
+
+  // Milestone-style labels: "Phase 2 go-live Mar 2023".
+  if (/\b(?:go-?live|milestone|phase\s+\d+|gate\s+\d+)\b/i.test(beforeLower)
+    || /\b(?:go-?live|milestone)\b/i.test(afterLower)) {
+    return "other";
+  }
+
+  // Current finish: end/completion clause, or "remained the same at <date>".
+  const endSubject = /\b(?:end[\s-]?date|project\s+end|baseline\s+project\s+end|completion(?:\s+date)?|finish(?:\s+date)?|programme\s+end|scheduled\s+to\s+finish|forecast\s+end|current\s+forecast\s+end)\b/i.test(before);
+  const stableAtDate = /(?:remained\s+the\s+same|remains\s+the\s+same|remained\s+static|remains\s+static|remained\s+constant|remains\s+constant|remained\s+at|remains\s+at|unchanged)\s+at\s*$/i.test(before);
+  const currentCue = /(?:\bis\b|\bof\b|\bto\s+complete\s+by\b|\bextended\s+to\b|\brevised\s+to\b|\bscheduled\s+to\s+finish\s+on\b|\bremained\s+at\b|\bremains\s+at\b)\s*$/i.test(before);
+  if (stableAtDate || (endSubject && (currentCue || /\b(?:is|remained|remains)\b/i.test(before.slice(-40))))) {
+    return "current-finish";
+  }
+  if (/\b(?:finish|completion|end[\s-]?date)\s+(?:is|of|at|remained|remains)\s*$/i.test(before)) {
+    return "current-finish";
+  }
+  if (item.precision === "quarter" && endSubject) {
+    return "current-finish";
+  }
+
+  // Reporting: period labels, review/report words — not bare "at <calendar date>".
+  const reportingBefore =
+    /(?:\bcompared\s+to|\bas\s+at|\bas\s+of)(?:\s+financial\s+year)?\s*$/i.test(before)
+    || /\b(?:at|in)\s+(?:financial\s+year\s+)?$/i.test(before) && /^(?:q[1-4]\b|\d{2}\/\d{2})/i.test(item.raw)
+    || /\b(?:review|report|reporting\s+period)\s*$/i.test(before);
+  const reportingAfter = /^\s*(?:review|report)\b/i.test(after);
+  // Parenthetical date sitting straight after "at Q2 2021" / compared-to cue.
+  const parenAfterReporting =
+    /\(\s*$/.test(before)
+    && /(?:\bcompared\s+to|\bas\s+at|\bas\s+of|\bat|\bin)\b.{0,48}$/i.test(before.slice(0, -1));
+  if (reportingBefore || reportingAfter || parenAfterReporting) {
+    return "reporting";
+  }
+
+  return "other";
+}
+
 function pushFyQuarter(dates, text, raw, index, startYear, quarter) {
   const range = financialYearQuarterRange(startYear, quarter);
   if (!range) return;
   const before = fyContextBefore(text, index);
-  if (isReportingPeriodContext(before)) return;
+  if (isReportingPeriodContext(before)) {
+    // Keep the label so role classification can mark it reporting, but skip
+    // day-delta mismatch via the reporting role rather than dropping it entirely.
+    dates.push({
+      iso: isoDate(range.end),
+      raw,
+      index,
+      fyQuarter: true,
+      roleHint: "reporting",
+    });
+    return;
+  }
   if (isEndDateFinishContext(before)) {
     dates.push({
       iso: isoDate(range.end),
@@ -821,11 +894,12 @@ function pushFyQuarter(dates, text, raw, index, startYear, quarter) {
       precision: "quarter",
       quarterStart: isoDate(range.start),
       quarterEnd: isoDate(range.end),
+      roleHint: "current-finish",
     });
     return;
   }
   // No clear role: keep the old fyQuarter marker so day-delta mismatch still skips it.
-  dates.push({ iso: isoDate(range.end), raw, index, fyQuarter: true });
+  dates.push({ iso: isoDate(range.end), raw, index, fyQuarter: true, roleHint: "other" });
 }
 
 function extractNarrativeDates(text) {
@@ -848,8 +922,11 @@ function extractNarrativeDates(text) {
     push(match[0], new Date(Date.UTC(year, month - 1, day, 12)), match.index);
   }
 
-  // 31 December 2027 / 31 Dec 27 / 30 June 26
-  for (const match of text.matchAll(/\b(\d{1,2})\s+(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+(\d{2,4})\b/gi)) {
+  // 31 December 2027 / 30th September 2020 / 31 Dec 27 / 30 June 26
+  for (const match of text.matchAll(/\b(\d{1,2})(?:st|nd|rd|th)?\s+(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+(\d{2,4})\b/gi)) {
+    // "Phase 2 Mar 2023" looks like a day-month date; skip when a phase/gate label owns the digit.
+    const ahead = text.slice(Math.max(0, match.index - 12), match.index);
+    if (/\b(?:phase|gate|stage|step)\s*$/i.test(ahead)) continue;
     const day = Number(match[1]);
     const month = MONTH_INDEX[match[2].toLowerCase()];
     const year = expandTwoDigitYear(match[3]);
@@ -858,6 +935,12 @@ function extractNarrativeDates(text) {
 
   // December 2027 (month + year only → last day of that month)
   for (const match of text.matchAll(/\b(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+(\d{4})\b/gi)) {
+    // Skip month+year spans already covered by a day-month match that embeds them.
+    const covered = dates.some(d =>
+      d.index <= match.index
+      && d.index + d.raw.length >= match.index + match[0].length
+    );
+    if (covered) continue;
     const month = MONTH_INDEX[match[1].toLowerCase()];
     const year = Number(match[2]);
     push(match[0], lastDayOfMonth(year, month), match.index);
@@ -884,13 +967,18 @@ function extractNarrativeDates(text) {
     push(match[0], new Date(Date.UTC(year, month - 1, day, 12)), match.index);
   }
 
-  // De-duplicate identical iso+index hits from overlapping patterns.
+  // De-duplicate identical iso+index hits from overlapping patterns, then bind roles.
   const seen = new Set();
-  return dates.filter(item => {
+  const unique = dates.filter(item => {
     const key = `${item.iso}@${item.index}@${item.raw}`;
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
+  });
+  return unique.map(item => {
+    const role = item.roleHint || classifyDateRole(text, item);
+    const { roleHint, ...rest } = item;
+    return { ...rest, role };
   });
 }
 
@@ -1015,6 +1103,8 @@ function detectScheduleClaims(text, { currentFinish = null, previousFinish = nul
 
   let contradiction = null;
   const current = toIsoDay(currentFinish);
+  // Only dates the narrative presents as the *current* finish drive mismatch.
+  const currentFinishDates = dates.filter(d => d.role === "current-finish");
 
   // Stated move that does not land on the published finish is itself a mismatch.
   if (!covered && movesStated.length && current) {
@@ -1022,9 +1112,8 @@ function detectScheduleClaims(text, { currentFinish = null, previousFinish = nul
   }
 
   // Quarter-precision finish claim: narrative says the end falls in that FY quarter.
-  // No stability phrase required — naming the end quarter is itself the claim.
   if (!contradiction && !covered && current) {
-    const mismatchedQuarter = dates.find(d => {
+    const mismatchedQuarter = currentFinishDates.find(d => {
       if (d.precision !== "quarter") return false;
       return !quarterContainsFinish(d, current, 14);
     });
@@ -1036,10 +1125,9 @@ function detectScheduleClaims(text, { currentFinish = null, previousFinish = nul
     }
   }
 
-  // Date mismatch: stability wording quotes a finish that disagrees with currentFinish
-  // by more than 14 days. Skip bare FY-quarter labels. A stated move suppresses this.
-  if (!contradiction && !covered && current && stableHits.length && movesStated.length === 0) {
-    const mismatched = dates.find(d => {
+  // Day-precision current-finish that disagrees with the published finish (>14 days).
+  if (!contradiction && !covered && current && movesStated.length === 0) {
+    const mismatched = currentFinishDates.find(d => {
       if (d.fyQuarter) return false;
       if (d.precision === "quarter") return !quarterContainsFinish(d, current, 14);
       const delta = dayDeltaIso(d.iso, current);
@@ -1064,11 +1152,29 @@ function detectScheduleClaims(text, { currentFinish = null, previousFinish = nul
   // A stated move that lands on the current finish suppresses any contradiction.
   if (covered) contradiction = null;
 
+  // A previous-finish that disagrees with previousFinish is a note, not a contradiction.
+  let previousDateNote = null;
+  const previous = toIsoDay(previousFinish);
+  if (previous) {
+    const prevHit = dates.find(d => d.role === "previous-finish");
+    if (prevHit) {
+      const delta = dayDeltaIso(prevHit.iso, previous);
+      if (delta !== null && Math.abs(delta) > 14) {
+        previousDateNote = {
+          narrativeDate: prevHit.iso,
+          previousFinish: previous,
+          detail: `The narrative gives last year's end date as ${prevHit.raw}; the published previous end date is ${previous}.`,
+        };
+      }
+    }
+  }
+
   return {
     stable: stableHits,
     movesStated,
     dates,
     contradiction,
+    previousDateNote,
   };
 }
 
