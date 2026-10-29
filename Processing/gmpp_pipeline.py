@@ -365,6 +365,11 @@ def _is_negated(text: str, index: int, negations: list[str]) -> bool:
     return any(re.search(rf"\b{re.escape(neg.lower())}\s+(?:\w+\s+){{0,3}}$", window) for neg in negations)
 
 
+def _normalise_narrative(text: str) -> str:
+    # Same cleanup as the browser engine: NBSP and messy whitespace.
+    return re.sub(r"\s+", " ", (text or "").replace("\u00a0", " "))
+
+
 def _extract_dates(text: str) -> list[dict[str, Any]]:
     dates: list[dict[str, Any]] = []
     month_index = {
@@ -378,13 +383,65 @@ def _extract_dates(text: str) -> list[dict[str, Any]]:
         year = int(raw)
         return year + 2000 if year < 100 else year
 
-    def push(raw: str, year: int, month: int, day: int, index: int, fy_quarter: bool = False) -> None:
+    def push(raw: str, year: int, month: int, day: int, index: int, **extra: Any) -> None:
         try:
             iso = f"{year:04d}-{month:02d}-{day:02d}"
             datetime.fromisoformat(iso)
         except ValueError:
             return
-        dates.append({"iso": iso, "raw": raw, "index": index, "fyQuarter": fy_quarter})
+        item = {"iso": iso, "raw": raw, "index": index}
+        item.update(extra)
+        dates.append(item)
+
+    def fy_context_before(index: int) -> str:
+        return text[max(0, index - 48):index]
+
+    def is_reporting(before: str) -> bool:
+        return bool(
+            re.search(
+                r"(?:\bcompared\s+to|\bsince|\bat|\bin|\bas\s+of)(?:\s+financial\s+year)?\s*$",
+                before,
+                re.I,
+            )
+        )
+
+    def is_end_date(before: str) -> bool:
+        return bool(
+            re.search(
+                r"\b(?:end[\s-]?date|completion|forecast\s+to\s+complete|finish|close)\b",
+                before,
+                re.I,
+            )
+        )
+
+    def push_fy_quarter(raw: str, index: int, start_year: int, quarter: int) -> None:
+        # UK FY: Q1 Apr–Jun … Q4 Jan–Mar of the following calendar year.
+        if quarter == 1:
+            start, end = (start_year, 4, 1), (start_year, 6, 30)
+        elif quarter == 2:
+            start, end = (start_year, 7, 1), (start_year, 9, 30)
+        elif quarter == 3:
+            start, end = (start_year, 10, 1), (start_year, 12, 31)
+        elif quarter == 4:
+            start, end = (start_year + 1, 1, 1), (start_year + 1, 3, 31)
+        else:
+            return
+        before = fy_context_before(index)
+        if is_reporting(before):
+            return
+        end_iso = f"{end[0]:04d}-{end[1]:02d}-{end[2]:02d}"
+        start_iso = f"{start[0]:04d}-{start[1]:02d}-{start[2]:02d}"
+        if is_end_date(before):
+            dates.append({
+                "iso": end_iso,
+                "raw": raw,
+                "index": index,
+                "precision": "quarter",
+                "quarterStart": start_iso,
+                "quarterEnd": end_iso,
+            })
+            return
+        dates.append({"iso": end_iso, "raw": raw, "index": index, "fyQuarter": True})
 
     for match in re.finditer(r"\b(\d{4}-\d{2}-\d{2})\b", text):
         push(match.group(1), int(match.group(1)[0:4]), int(match.group(1)[5:7]), int(match.group(1)[8:10]), match.start())
@@ -396,7 +453,68 @@ def _extract_dates(text: str) -> list[dict[str, Any]]:
         re.I,
     ):
         push(match.group(0), expand_year(match.group(3)), month_index[match.group(2).lower()], int(match.group(1)), match.start())
+
+    for match in re.finditer(r"\bQ([1-4])\s+(\d{4})-(\d{2})\b", text, re.I):
+        push_fy_quarter(match.group(0), match.start(), int(match.group(2)), int(match.group(1)))
+    for match in re.finditer(r"\bQ([1-4])\s+(\d{2})/(\d{2})\b", text, re.I):
+        push_fy_quarter(match.group(0), match.start(), expand_year(match.group(2)), int(match.group(1)))
+    for match in re.finditer(r"\b(\d{2})/(\d{2})-Q([1-4])\b", text, re.I):
+        push_fy_quarter(match.group(0), match.start(), expand_year(match.group(1)), int(match.group(3)))
     return dates
+
+
+def _extract_moves(text: str, move_phrases: list[str], dates: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    moves: list[dict[str, Any]] = []
+    lower = text.lower()
+    for phrase in move_phrases:
+        pattern = re.compile(rf"\b{re.escape(phrase.lower()).replace(r'\ ', r'\s+')}\b", re.I)
+        for match in pattern.finditer(lower):
+            index = match.start()
+            nearby = [
+                item for item in dates
+                if not item.get("fyQuarter") and item.get("precision") != "quarter"
+                and index - 10 <= item["index"] <= index + 140
+            ]
+            from_iso = nearby[0]["iso"] if len(nearby) >= 2 else None
+            to_iso = nearby[1]["iso"] if len(nearby) >= 2 else (nearby[0]["iso"] if len(nearby) == 1 else None)
+            moves.append({"from": from_iso, "to": to_iso, "index": index, "phrase": phrase})
+    return moves
+
+
+def _stated_direction(phrase: str) -> str | None:
+    text = (phrase or "").lower()
+    if re.search(r"\b(decreased|brought\s+forward|pulled\s+(?:forward|in)|advanced|earlier|accelerated)\b", text):
+        return "earlier"
+    if re.search(r"\b(extended|increased|slipped|delayed|pushed|moved|changed|revised|re-baselined|correction|now\s+forecast)\b", text):
+        return "later"
+    return None
+
+
+def _actual_direction(current_finish: str | None, previous_finish: str | None) -> str | None:
+    delta = day_delta(current_finish, previous_finish)
+    if delta is None or delta == 0:
+        return None
+    return "later" if delta > 0 else "earlier"
+
+
+def _move_covers(
+    moves: list[dict[str, Any]],
+    current_finish: str | None,
+    previous_finish: str | None,
+) -> bool:
+    if not moves or not current_finish:
+        return False
+    for move in moves:
+        if move.get("to"):
+            delta = day_delta(move["to"], current_finish)
+            if delta is not None and abs(delta) <= 14:
+                return True
+            continue
+        stated = _stated_direction(move.get("phrase") or "")
+        actual = _actual_direction(current_finish, previous_finish)
+        if stated and actual and stated == actual:
+            return True
+    return False
 
 
 def detect_schedule_claims(
@@ -407,24 +525,48 @@ def detect_schedule_claims(
 ) -> dict[str, Any]:
     """Mirror docs/engine detectScheduleClaims for the GMPP flag."""
     rules = rules or load_claim_rules()
-    source = text or ""
+    source = _normalise_narrative(text)
     dates = _extract_dates(source)
     stable = [
         hit for hit in _phrase_hits(source, rules["stablePhrases"])
         if not _is_negated(source, hit["index"], rules["negations"])
     ]
-    moves = _phrase_hits(source, rules["movePhrases"])
+    moves = _extract_moves(source, rules["movePhrases"], dates)
     finish_moved = bool(current_finish and previous_finish and current_finish != previous_finish)
-    covered = False
-    if moves and current_finish:
-        # A move phrase plus the current finish date in the narrative counts as covered.
-        covered = any(item["iso"] == current_finish and not item.get("fyQuarter") for item in dates)
+    covered = _move_covers(moves, current_finish, previous_finish)
 
     contradiction = None
-    if not covered and finish_moved and stable and not moves:
+    if not covered and moves and current_finish:
+        mistarget = next(
+            (
+                move for move in moves
+                if move.get("to") and abs(day_delta(move["to"], current_finish) or 999) > 14
+            ),
+            None,
+        )
+        if mistarget:
+            contradiction = {
+                "kind": "date-mismatch",
+                "detail": (
+                    f"The narrative says the end date moved to {mistarget['to']}, "
+                    f"but the published end date is {current_finish}."
+                ),
+            }
+        elif any(not move.get("to") for move in moves):
+            contradiction = {
+                "kind": "date-mismatch",
+                "detail": (
+                    f"The narrative says the end date moved, "
+                    f"but the published end date is {current_finish}."
+                ),
+            }
+
+    if not contradiction and not covered and finish_moved and stable and not moves:
         mismatched = None
         for item in dates:
             if item.get("fyQuarter"):
+                continue
+            if item.get("precision") == "quarter":
                 continue
             if current_finish and abs(day_delta(item["iso"], current_finish) or 0) > 14:
                 mismatched = item
@@ -439,6 +581,8 @@ def detect_schedule_claims(
                 "kind": "says-unchanged",
                 "detail": f"Narrative claims stability ({stable[0]['phrase']}) while the finish moved.",
             }
+    if covered:
+        contradiction = None
     return {
         "stable": stable,
         "movesStated": moves,

@@ -25,7 +25,7 @@ const EMBEDDED_CLAIM_RULES = {
   ],
   movePhrases: [
     "increased from", "increased to", "decreased from", "changed from", "moved from", "moved to",
-    "has moved to", "has been moved", "has been extended", "extended to", "slipped from",
+    "has moved to", "has been moved", "has been extended", "was extended", "extended to", "slipped from",
     "revised from", "revised to", "re-baselined", "correction of published position", "delayed to",
     "now forecast",
   ],
@@ -921,7 +921,10 @@ function extractMoveStatements(text, movePhrases, dates) {
     for (const match of lower.matchAll(pattern)) {
       const index = match.index;
       // Take dates that sit near this move phrase (same clause / next ~120 chars).
-      const nearby = dates.filter(d => d.index >= index - 10 && d.index <= index + 140);
+      const nearby = dates.filter(d => {
+        if (d.fyQuarter || d.precision === "quarter") return false;
+        return d.index >= index - 10 && d.index <= index + 140;
+      });
       let from = null;
       let to = null;
       if (nearby.length >= 2) {
@@ -930,19 +933,70 @@ function extractMoveStatements(text, movePhrases, dates) {
       } else if (nearby.length === 1) {
         to = nearby[0].iso;
       }
-      moves.push({ from, to, index });
+      moves.push({ from, to, index, phrase });
     }
   }
   return moves;
 }
 
-function moveCoversCurrent(moves, currentFinish, dates = []) {
+function statedMoveDirection(phrase) {
+  const text = String(phrase || "").toLowerCase();
+  // "earlier" cues first so "not extended" style phrases do not matter here.
+  if (/\b(decreased|brought\s+forward|pulled\s+(?:forward|in)|advanced|earlier|accelerated)\b/.test(text)) {
+    return "earlier";
+  }
+  if (/\b(extended|increased|slipped|delayed|pushed|moved|changed|revised|re-baselined|correction|now\s+forecast)\b/.test(text)) {
+    return "later";
+  }
+  return null;
+}
+
+function actualMoveDirection(currentFinish, previousFinish) {
+  const delta = dayDeltaIso(currentFinish, previousFinish);
+  if (delta === null || delta === 0) return null;
+  return delta > 0 ? "later" : "earlier";
+}
+
+function moveCoversCurrent(moves, currentFinish, previousFinish = null) {
+  // A stated move only explains the published finish when it lands on it (or
+  // when a direction-only phrase agrees with the actual slide).
   const current = toIsoDay(currentFinish);
-  if (!current) return false;
-  if (moves.some(move => move.to === current)) return true;
-  // Some GMPP lines say "increased to <date>" with only one nearby date.
-  if (moves.length && dates.some(d => !d.fyQuarter && d.iso === current)) return true;
+  if (!current || !moves.length) return false;
+  for (const move of moves) {
+    if (move.to) {
+      const delta = dayDeltaIso(move.to, current);
+      if (delta !== null && Math.abs(delta) <= 14) return true;
+      continue;
+    }
+    const stated = statedMoveDirection(move.phrase);
+    const actual = actualMoveDirection(currentFinish, previousFinish);
+    if (stated && actual && stated === actual) return true;
+  }
   return false;
+}
+
+function mistargetedMoveContradiction(moves, currentFinish) {
+  const current = toIsoDay(currentFinish);
+  if (!current || !moves.length) return null;
+  const withTo = moves.find(move => {
+    if (!move.to) return false;
+    const delta = dayDeltaIso(move.to, current);
+    return delta === null || Math.abs(delta) > 14;
+  });
+  if (withTo) {
+    return {
+      kind: "date-mismatch",
+      detail: `The narrative says the end date moved to ${withTo.to}, but the published end date is ${current}.`,
+    };
+  }
+  // Direction-only phrase that does not agree with the actual move.
+  if (moves.some(move => !move.to)) {
+    return {
+      kind: "date-mismatch",
+      detail: `The narrative says the end date moved, but the published end date is ${current}.`,
+    };
+  }
+  return null;
 }
 
 function detectScheduleClaims(text, { currentFinish = null, previousFinish = null } = {}) {
@@ -957,14 +1011,19 @@ function detectScheduleClaims(text, { currentFinish = null, previousFinish = nul
     const delta = dayDeltaIso(currentFinish, previousFinish);
     return delta !== null && delta !== 0;
   })();
-  const covered = moveCoversCurrent(movesStated, currentFinish, dates);
+  const covered = moveCoversCurrent(movesStated, currentFinish, previousFinish);
 
   let contradiction = null;
   const current = toIsoDay(currentFinish);
 
+  // Stated move that does not land on the published finish is itself a mismatch.
+  if (!covered && movesStated.length && current) {
+    contradiction = mistargetedMoveContradiction(movesStated, current);
+  }
+
   // Quarter-precision finish claim: narrative says the end falls in that FY quarter.
   // No stability phrase required — naming the end quarter is itself the claim.
-  if (!covered && current) {
+  if (!contradiction && !covered && current) {
     const mismatchedQuarter = dates.find(d => {
       if (d.precision !== "quarter") return false;
       return !quarterContainsFinish(d, current, 14);

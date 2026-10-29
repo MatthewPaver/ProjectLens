@@ -87,21 +87,33 @@ describe("detectScheduleClaims", () => {
     }
   });
 
-  it("gives no contradiction for every explained GMPP pair", () => {
-    // Spec: stated corrections and narratives that name the move should not flag.
-    const explained = pairs.filter(p => Math.abs(p.deltaDays) >= 7 && (p.explainsCorrection || (p.mentionsMove && !p.claimsSame)));
-    assert.ok(explained.length > 0);
-    for (const p of explained) {
+  it("gives no contradiction when a stated move lands on the published finish", () => {
+    // Round 2 N3: a move only suppresses when it lands on currentFinish (within 14 days).
+    const candidates = pairs.filter(p => Math.abs(p.deltaDays) >= 7 && (p.explainsCorrection || (p.mentionsMove && !p.claimsSame)));
+    assert.ok(candidates.length > 0);
+    let checked = 0;
+    for (const p of candidates) {
       const result = engine.detectScheduleClaims(p.narrative, {
         currentFinish: p.curEnd,
         previousFinish: p.prevEnd,
       });
+      const lands = result.movesStated.some(move => {
+        if (!move.to) return false;
+        const delta = engine.dayDifference(
+          engine.parseDate(move.to),
+          engine.parseDate(p.curEnd),
+        );
+        return delta !== null && Math.abs(delta) <= 14;
+      });
+      if (!lands) continue;
+      checked += 1;
       assert.equal(
         result.contradiction,
         null,
         `${p.name} ${p.prevYear}->${p.year}: ${JSON.stringify(result.contradiction)} :: ${p.narrative.slice(0, 120)}`,
       );
     }
+    assert.ok(checked > 0, "expected at least one landing move case");
   });
 
   // Round 2 N1: more "unchanged" wording and whitespace / NBSP normalisation.
@@ -186,5 +198,40 @@ describe("detectScheduleClaims", () => {
       previousFinish: "2026-12-20",
     });
     assert.equal(outside.contradiction?.kind, "date-mismatch");
+  });
+
+  // Round 2 N3: a stated move only explains the published date it lands on.
+  it("flags a stated move whose 'to' date misses the published finish", () => {
+    const sentence = "the end date changed from 01/04/2027 to 30/09/2027 due to supplier delays";
+    const miss = engine.detectScheduleClaims(sentence, {
+      currentFinish: "2028-03-31",
+      previousFinish: "2027-04-01",
+    });
+    assert.equal(miss.contradiction?.kind, "date-mismatch");
+    assert.match(
+      miss.contradiction.detail,
+      /moved to 2027-09-30.*published end date is 2028-03-31/i,
+    );
+
+    const near = engine.detectScheduleClaims(sentence, {
+      currentFinish: "2027-10-05",
+      previousFinish: "2027-04-01",
+    });
+    assert.equal(near.contradiction, null);
+  });
+
+  it("accepts a direction-only extension only when the finish moved later", () => {
+    const sentence = "the end date was extended following re-planning";
+    const later = engine.detectScheduleClaims(sentence, {
+      currentFinish: "2028-01-01",
+      previousFinish: "2027-10-03",
+    });
+    assert.equal(later.contradiction, null);
+
+    const earlier = engine.detectScheduleClaims(sentence, {
+      currentFinish: "2027-07-05",
+      previousFinish: "2027-10-03",
+    });
+    assert.equal(earlier.contradiction?.kind, "date-mismatch");
   });
 });

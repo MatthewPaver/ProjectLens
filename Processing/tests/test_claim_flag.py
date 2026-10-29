@@ -50,3 +50,23 @@ def test_detect_schedule_claims_matches_tuning_cases():
         rules,
     )
     assert correction["contradiction"] is None
+
+
+def test_stated_move_must_land_on_published_finish():
+    # Round 2 N3: same answers as the JS engine for a mistargeted move and a direction-only one.
+    rules = load_claim_rules()
+    sentence = "the end date changed from 01/04/2027 to 30/09/2027 due to supplier delays"
+    miss = detect_schedule_claims(sentence, "2028-03-31", "2027-04-01", rules)
+    assert miss["contradiction"] is not None
+    assert miss["contradiction"]["kind"] == "date-mismatch"
+
+    near = detect_schedule_claims(sentence, "2027-10-05", "2027-04-01", rules)
+    assert near["contradiction"] is None
+
+    extended = "the end date was extended following re-planning"
+    later = detect_schedule_claims(extended, "2028-01-01", "2027-10-03", rules)
+    assert later["contradiction"] is None
+
+    earlier = detect_schedule_claims(extended, "2027-07-05", "2027-10-03", rules)
+    assert earlier["contradiction"] is not None
+    assert earlier["contradiction"]["kind"] == "date-mismatch"
