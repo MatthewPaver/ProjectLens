@@ -78,12 +78,25 @@ function updateFileCard(kind) {
 
 async function loadFile(kind, file) {
   if (!file) return;
-  if (!/\.xer$/i.test(file.name)) {
-    showToast("Choose a Primavera P6 .xer file.");
+  if (/\.mpp$/i.test(file.name)) {
+    showToast("Export this schedule from MS Project as XML (File > Save As > XML) and load that");
     return;
   }
-  const decoded = ProjectLensEngine.decodeXerBytes(new Uint8Array(await file.arrayBuffer()));
-  reviewState.files[kind] = { name: file.name, size: file.size, text: decoded.text, encoding: decoded.encoding, projectId: null };
+  if (!/\.(xer|xml)$/i.test(file.name)) {
+    showToast("Choose a Primavera P6 .xer/.xml or MS Project XML file.");
+    return;
+  }
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  let text;
+  let encoding = "utf-8";
+  if (/\.xml$/i.test(file.name)) {
+    text = new TextDecoder("utf-8").decode(bytes);
+  } else {
+    const decoded = ProjectLensEngine.decodeXerBytes(bytes);
+    text = decoded.text;
+    encoding = decoded.encoding;
+  }
+  reviewState.files[kind] = { name: file.name, size: file.size, text, encoding, projectId: null };
   updateFileCard(kind);
 }
 

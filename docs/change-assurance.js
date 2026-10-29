@@ -421,13 +421,25 @@ function questionFor(blocker) {
 
 async function loadFile(kind, file) {
   if (!file) return;
-  if (!/\.xer$/i.test(file.name)) {
-    showError("Choose a Primavera P6 .xer file, then run the check again.");
+  if (/\.mpp$/i.test(file.name)) {
+    showError("Export this schedule from MS Project as XML (File > Save As > XML) and load that");
+    return;
+  }
+  if (!/\.(xer|xml)$/i.test(file.name)) {
+    showError("Choose a Primavera P6 .xer/.xml or MS Project XML file, then run the check again.");
     return;
   }
   const bytes = new Uint8Array(await file.arrayBuffer());
-  const decoded = ProjectLensEngine.decodeXerBytes(bytes);
-  assuranceState.files[kind] = { name: file.name, text: decoded.text, encoding: decoded.encoding, projectId: null };
+  let text;
+  let encoding = "utf-8";
+  if (/\.xml$/i.test(file.name)) {
+    text = new TextDecoder("utf-8").decode(bytes);
+  } else {
+    const decoded = ProjectLensEngine.decodeXerBytes(bytes);
+    text = decoded.text;
+    encoding = decoded.encoding;
+  }
+  assuranceState.files[kind] = { name: file.name, text, encoding, projectId: null };
   assuranceState.originalNarrative = null;
   const label = kind === "previous" ? $("#assurancePreviousName") : $("#assuranceCurrentName");
   label.textContent = file.name;
@@ -449,6 +461,13 @@ async function parseWithProjectPicker(kind) {
     if (!projects[index]) throw new Error("That project number is not in the list.");
     projectId = projects[index].projId;
     file.projectId = projectId;
+  }
+  if (/\.xml$/i.test(file.name)) {
+    const xml = file.text;
+    if (/<APIBusinessObjects|<Project[\s\S]*<Activity/i.test(xml)) {
+      return ProjectLensEngine.parseP6Xml(xml, file.name);
+    }
+    return ProjectLensEngine.parseMspdiXml(xml, file.name);
   }
   return parseXer(file.text, file.name, projectId ? { projectId } : {});
 }
