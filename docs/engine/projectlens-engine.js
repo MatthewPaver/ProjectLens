@@ -843,8 +843,8 @@ function classifyDateRole(text, item) {
   // Current finish: end/completion clause, or "remained the same at <date>".
   const endSubject = /\b(?:end[\s-]?date|project\s+end|baseline\s+project\s+end|completion(?:\s+date)?|finish(?:\s+date)?|programme\s+end|scheduled\s+to\s+finish|forecast\s+end|current\s+forecast\s+end)\b/i.test(before);
   const stableAtDate = /(?:remained\s+the\s+same|remains\s+the\s+same|remained\s+static|remains\s+static|remained\s+constant|remains\s+constant|remained\s+at|remains\s+at|unchanged)\s+at\s*$/i.test(before);
-  const currentCue = /(?:\bis\b|\bof\b|\bto\s+complete\s+by\b|\bextended\s+to\b|\brevised\s+to\b|\bscheduled\s+to\s+finish\s+on\b|\bremained\s+at\b|\bremains\s+at\b)\s*$/i.test(before);
-  if (stableAtDate || (endSubject && (currentCue || /\b(?:is|remained|remains)\b/i.test(before.slice(-40))))) {
+  const currentCue = /(?:\bis(?:\s+now)?\b|\bof\b|\bnow\b|\bto\s+complete\s+by\b|\bextended\s+to\b|\brevised\s+to\b|\bscheduled\s+to\s+finish\s+on\b|\bremained\s+at\b|\bremains\s+at\b)\s*$/i.test(before);
+  if (stableAtDate || (endSubject && (currentCue || /\b(?:is|remained|remains|now)\b/i.test(before.slice(-40))))) {
     return "current-finish";
   }
   if (/\b(?:finish|completion|end[\s-]?date)\s+(?:is|of|at|remained|remains)\s*$/i.test(before)) {
@@ -1177,8 +1177,20 @@ function detectScheduleClaims(text, { currentFinish = null, previousFinish = nul
   // Named current-finish that disagrees with the published finish wins over a
   // direction-only "lengthened" cover — only a landing date clears it.
   const mismatched = mismatchedCurrentFinish();
+  // Populated when the finish did not move but the narrative names a different end date.
+  let publishedDateCheck = null;
   if (!landed && mismatched) {
-    if (mismatched.precision === "quarter") {
+    const narrativeDate = mismatched.precision === "quarter"
+      ? mismatched.quarterEnd
+      : mismatched.iso;
+    if (!finishMoved) {
+      // Finish did not move: ask the reader to check which date is current.
+      publishedDateCheck = {
+        narrativeDate,
+        publishedDate: current,
+        detail: `The narrative gives the end date as ${narrativeDate}; the published end date is ${current}. Check which is current.`,
+      };
+    } else if (mismatched.precision === "quarter") {
       contradiction = {
         kind: "date-mismatch",
         detail: `Narrative names ${mismatched.raw} (${mismatched.quarterStart}–${mismatched.quarterEnd}) but the current finish is ${current}.`,
@@ -1239,6 +1251,7 @@ function detectScheduleClaims(text, { currentFinish = null, previousFinish = nul
     dates,
     contradiction,
     previousDateNote,
+    publishedDateCheck,
   };
 }
 

@@ -126,11 +126,13 @@ describe("detectScheduleClaims", () => {
   });
 
   it("flags 'remains constant' when the named date mismatches", () => {
+    // Finish did not move: Round 3 D3 turns this into a published-date check, not a contradiction.
     const result = engine.detectScheduleClaims(
       "Delivery remains constant at 30/09/2028.",
       { currentFinish: "2029-06-30", previousFinish: "2029-06-30" },
     );
-    assert.equal(result.contradiction?.kind, "date-mismatch");
+    assert.equal(result.contradiction, null);
+    assert.equal(result.publishedDateCheck?.narrativeDate, "2028-09-30");
   });
 
   it("accepts a true unchanged claim with matching date", () => {
@@ -183,11 +185,20 @@ describe("detectScheduleClaims", () => {
     assert.equal(inside.contradiction, null);
     assert.ok(inside.dates.some(d => d.precision === "quarter"));
 
+    // No move + outside the quarter → publishedDateCheck (Round 3 D3).
     const outside = engine.detectScheduleClaims(sentence, {
       currentFinish: "2026-12-20",
       previousFinish: "2026-12-20",
     });
-    assert.equal(outside.contradiction?.kind, "date-mismatch");
+    assert.equal(outside.contradiction, null);
+    assert.ok(outside.publishedDateCheck);
+
+    // Finish moved + outside the quarter → still a date-mismatch contradiction.
+    const movedOutside = engine.detectScheduleClaims(sentence, {
+      currentFinish: "2026-12-20",
+      previousFinish: "2026-06-15",
+    });
+    assert.equal(movedOutside.contradiction?.kind, "date-mismatch");
   });
 
   it("also accepts the plan's Q2 25/26 wording against a date inside that quarter", () => {
@@ -202,7 +213,14 @@ describe("detectScheduleClaims", () => {
       currentFinish: "2026-12-20",
       previousFinish: "2026-12-20",
     });
-    assert.equal(outside.contradiction?.kind, "date-mismatch");
+    assert.equal(outside.contradiction, null);
+    assert.ok(outside.publishedDateCheck);
+
+    const movedOutside = engine.detectScheduleClaims(sentence, {
+      currentFinish: "2026-12-20",
+      previousFinish: "2025-08-15",
+    });
+    assert.equal(movedOutside.contradiction?.kind, "date-mismatch");
   });
 
   // Round 2 N3: a stated move only explains the published date it lands on.
@@ -319,5 +337,20 @@ describe("detectScheduleClaims", () => {
     );
     assert.equal(result.contradiction, null);
     assert.ok(result.movesStated.some(m => /lengthened by/i.test(m.phrase)));
+  });
+
+  // Round 3 D3: no-move + mismatched current-finish → check, not contradiction.
+  it("returns publishedDateCheck when the finish did not move but the narrative date differs", () => {
+    const result = engine.detectScheduleClaims(
+      "The end date has changed since last year and is now 31/03/2027.",
+      { currentFinish: "2026-03-31", previousFinish: "2026-03-31" },
+    );
+    assert.equal(result.contradiction, null);
+    assert.equal(result.publishedDateCheck?.narrativeDate, "2027-03-31");
+    assert.equal(result.publishedDateCheck?.publishedDate, "2026-03-31");
+    assert.match(
+      result.publishedDateCheck.detail,
+      /narrative gives the end date as .*published end date is/i,
+    );
   });
 });

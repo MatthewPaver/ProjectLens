@@ -107,14 +107,18 @@ function formatResult(result, format) {
     return `${header}\n${row}\n`;
   }
   if (format === "md") {
-    return [
+    const lines = [
       `# ${result.project}`,
       "",
       `- Finish movement: ${result.finishMovement} days (${result.finishPrevious} → ${result.finishCurrent})`,
       `- Contradiction: ${result.contradiction ? "yes" : "no"}`,
       `- Narrative claim: ${result.narrativeClaim || "none"}`,
-      "",
-    ].join("\n");
+    ];
+    if (result.claims?.publishedDateCheck) {
+      lines.push(`- Check: ${result.claims.publishedDateCheck.detail}`);
+    }
+    lines.push("");
+    return lines.join("\n");
   }
   // text
   const lines = [
@@ -123,6 +127,9 @@ function formatResult(result, format) {
     `Contradiction: ${result.contradiction ? "yes" : "no"}`,
   ];
   if (result.narrativeClaim) lines.push(`Narrative claim: ${result.narrativeClaim}`);
+  if (result.claims?.publishedDateCheck) {
+    lines.push(`Check: ${result.claims.publishedDateCheck.detail}`);
+  }
   for (const blocker of result.blockers || []) lines.push(`- ${blocker.type}: ${blocker.title}`);
   return `${lines.join("\n")}\n`;
 }

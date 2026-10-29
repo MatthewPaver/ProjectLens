@@ -629,11 +629,36 @@ def detect_schedule_claims(
             }
     if covered:
         contradiction = None
+
+    published_date_check = None
+    # Mirror the JS engine: no-move + mismatched current-finish → check, not contradiction.
+    # Only when dates carry a role (JS path); Python extract does not classify yet.
+    if not finish_moved and current_finish and not covered:
+        for item in dates:
+            if item.get("role") != "current-finish":
+                continue
+            if item.get("fyQuarter"):
+                continue
+            if item.get("precision") == "quarter":
+                continue
+            if abs(day_delta(item["iso"], current_finish) or 0) > 14:
+                published_date_check = {
+                    "narrativeDate": item["iso"],
+                    "publishedDate": current_finish,
+                    "detail": (
+                        f"The narrative gives the end date as {item['iso']}; "
+                        f"the published end date is {current_finish}. Check which is current."
+                    ),
+                }
+                contradiction = None
+                break
+
     return {
         "stable": stable,
         "movesStated": moves,
         "dates": dates,
         "contradiction": contradiction,
+        "publishedDateCheck": published_date_check,
     }
 
 
@@ -651,6 +676,8 @@ def annotate_history_claims(history: list[dict[str, Any]], rules: dict[str, list
         record["narrativeClaimKind"] = (
             claims["contradiction"]["kind"] if claims["contradiction"] else None
         )
+        # Quieter "check the published date" note when the finish did not move.
+        record["publishedDateCheck"] = claims.get("publishedDateCheck")
 
 
 def rating_delta(current: str | None, previous: str | None) -> int | None:
@@ -746,6 +773,7 @@ def build_payload(records: list[dict[str, Any]]) -> dict[str, Any]:
                 "attentionReasons": reasons,
                 "narrativeSaysUnchangedButMoved": bool(current.get("narrativeSaysUnchangedButMoved")),
                 "narrativeExcerpt": current.get("narrativeExcerpt") or current.get("scheduleNarrative") or "",
+                "publishedDateCheck": current.get("publishedDateCheck"),
             }
         )
 

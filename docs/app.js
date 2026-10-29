@@ -271,10 +271,14 @@ function openProject(projectId) {
   const claimFlag = project.narrativeSaysUnchangedButMoved
     ? `<p class="claim-flag"><strong>Narrative says unchanged, published date moved.</strong> The schedule commentary and the published end date disagree for this release.</p>`
     : "";
+  // Quieter than a contradiction: narrative end date and published end date disagree, but the finish did not move.
+  const dateCheck = project.publishedDateCheck
+    ? `<p class="claim-check">${escapeHtml(project.publishedDateCheck.detail || "The narrative end date and the published end date disagree. Check which is current.")}</p>`
+    : "";
   const narrativeDetails = project.narrativeExcerpt || project.scheduleNarrative
     ? `<details class="narrative-full"><summary>Full schedule narrative</summary><p>${escapeHtml(project.narrativeExcerpt || project.scheduleNarrative)}</p></details>`
     : "";
-  $("#detailEvidence").innerHTML = `${claimFlag}<p>${escapeHtml(project.evidenceExcerpt || "No public narrative was available for this record.")}</p>${narrativeDetails}`;
+  $("#detailEvidence").innerHTML = `${claimFlag}${dateCheck}<p>${escapeHtml(project.evidenceExcerpt || "No public narrative was available for this record.")}</p>${narrativeDetails}`;
   $("#detailSource").href = project.sourceUrl;
   $("#detailTimeline").innerHTML = project.history.map(record => `
     <article>
