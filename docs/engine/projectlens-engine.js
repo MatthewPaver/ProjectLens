@@ -47,6 +47,62 @@ function numberValue(value) {
   return Number.isFinite(number) ? number : null;
 }
 
+function decodeXerBytes(bytes) {
+  // Try strict UTF-8 first (what File.text() often does), then honour ERMHDR hints.
+  const arr = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
+  try {
+    const text = new TextDecoder("utf-8", { fatal: true }).decode(arr);
+    return { text, encoding: "utf-8" };
+  } catch (error) {
+    // Not valid UTF-8 — fall through to a Windows code page.
+  }
+  const head = new TextDecoder("windows-1252").decode(arr.subarray(0, Math.min(arr.length, 240)));
+  if (/1256|arabic/i.test(head)) {
+    return { text: new TextDecoder("windows-1256").decode(arr), encoding: "windows-1256" };
+  }
+  return { text: new TextDecoder("windows-1252").decode(arr), encoding: "windows-1252" };
+}
+
+function parseXerTables(text) {
+  const tables = {};
+  let tableName = null;
+  let fields = [];
+  const lines = String(text || "").replace(/^\uFEFF/, "").replace(/\r\n?/g, "\n").split("\n");
+  for (const line of lines) {
+    if (!line) continue;
+    const cells = line.split("\t");
+    const marker = cells[0].trim();
+    if (marker === "%T") {
+      tableName = (cells[1] || "").trim().toUpperCase();
+      if (tableName) tables[tableName] ||= [];
+      fields = [];
+    } else if (marker === "%F" && tableName) {
+      fields = cells.slice(1).map(field => field.trim());
+    } else if (marker === "%R" && tableName && fields.length) {
+      const record = {};
+      fields.forEach((field, index) => { record[field] = cells[index + 1] ?? ""; });
+      tables[tableName].push(record);
+    }
+  }
+  return tables;
+}
+
+function listProjects(text) {
+  const tables = parseXerTables(text);
+  const projects = tables.PROJECT || [];
+  const tasks = tables.TASK || [];
+  return projects.map(project => {
+    const projId = project.proj_id || "";
+    const activityCount = tasks.filter(row => !projId || row.proj_id === projId).length;
+    return {
+      projId,
+      shortName: project.proj_short_name || project.proj_name || "Unnamed project",
+      name: project.proj_name || project.proj_short_name || "Unnamed project",
+      activityCount,
+    };
+  });
+}
+
 function parseDate(value) {
   if (!value) return null;
   const clean = String(value).trim();
@@ -104,35 +160,17 @@ function parseEvidenceText(text, kind) {
   return { lines, header, activityCodes, decisions, riskRows, characterCount: String(text || "").length };
 }
 
-function parseXerReview(text, fileName = "schedule.xer") {
+function parseXerReview(text, fileName = "schedule.xer", options = {}) {
   if (!text || !text.trim()) throw new Error(`${fileName} is empty.`);
-  const tables = {};
-  let tableName = null;
-  let fields = [];
-  const lines = text.replace(/^\uFEFF/, "").replace(/\r\n?/g, "\n").split("\n");
-
-  for (const line of lines) {
-    if (!line) continue;
-    const cells = line.split("\t");
-    const marker = cells[0].trim();
-    if (marker === "%T") {
-      tableName = (cells[1] || "").trim().toUpperCase();
-      if (tableName) tables[tableName] ||= [];
-      fields = [];
-    } else if (marker === "%F" && tableName) {
-      fields = cells.slice(1).map(field => field.trim());
-    } else if (marker === "%R" && tableName && fields.length) {
-      const record = {};
-      fields.forEach((field, index) => { record[field] = cells[index + 1] ?? ""; });
-      tables[tableName].push(record);
-    }
-  }
+  const tables = parseXerTables(text);
 
   if (!tables.TASK?.length) throw new Error(`${fileName} does not contain a readable TASK table.`);
   if (!tables.PROJECT?.length) throw new Error(`${fileName} does not contain a readable PROJECT table.`);
 
   const wbsById = new Map((tables.PROJWBS || []).map(row => [row.wbs_id, row]));
-  const projectRow = tables.PROJECT[0];
+  const projectRow = options.projectId
+    ? (tables.PROJECT.find(row => row.proj_id === options.projectId) || tables.PROJECT[0])
+    : tables.PROJECT[0];
   const taskRows = tables.TASK.filter(row => !projectRow.proj_id || row.proj_id === projectRow.proj_id);
   const tasks = taskRows.map(row => {
     const duration = numberValue(row.target_drtn_hr_cnt ?? row.orig_drtn_hr_cnt);
@@ -464,11 +502,14 @@ function compareBaseline(baseline, current) {
 function selectPriorityChanges(materialChanges, limit) {
   const selected = [];
   const perWbs = new Map();
+  const wbsNames = new Set(materialChanges.map(change => change.wbsName));
+  // Flat WBS schedules used to shrink the executive queue to 2 items; skip that cap then.
+  const applyWbsCap = wbsNames.size > 1;
   const mustSee = materialChanges.filter(change => change.isMilestone || change.businessCritical);
   for (const change of [...mustSee, ...materialChanges]) {
     if (selected.some(item => item.id === change.id)) continue;
     const count = perWbs.get(change.wbsName) || 0;
-    if (count >= 2 && !change.isMilestone && !change.businessCritical) continue;
+    if (applyWbsCap && count >= 2 && !change.isMilestone && !change.businessCritical) continue;
     selected.push(change);
     perWbs.set(change.wbsName, count + 1);
     if (selected.length >= limit) break;
@@ -577,45 +618,34 @@ function buildReview(previous, current, narrative, rules, evidence = {}, baselin
 }
 
 
-function parseXerAssurance(text, fileName) {
+function parseXerAssurance(text, fileName, options = {}) {
   if (!text?.trim()) throw new Error(`${fileName} is empty.`);
-  const tables = {};
-  let tableName = "";
-  let fields = [];
-
-  text.replace(/^\uFEFF/, "").replace(/\r\n?/g, "\n").split("\n").forEach(line => {
-    if (!line) return;
-    const cells = line.split("\t");
-    const marker = cells[0].trim();
-    if (marker === "%T") {
-      tableName = (cells[1] || "").trim().toUpperCase();
-      if (tableName) tables[tableName] ||= [];
-      fields = [];
-    } else if (marker === "%F" && tableName) {
-      fields = cells.slice(1).map(field => field.trim());
-    } else if (marker === "%R" && tableName && fields.length) {
-      const record = {};
-      fields.forEach((field, index) => { record[field] = cells[index + 1] ?? ""; });
-      tables[tableName].push(record);
-    }
-  });
+  const tables = parseXerTables(text);
 
   if (!tables.PROJECT?.length || !tables.TASK?.length) throw new Error(`${fileName} is not a readable Primavera P6 schedule file (XER).`);
-  if (tables.PROJECT.length !== 1) throw new Error(`${fileName} contains multiple projects. Export a single project for change assurance, or use the detailed schedule review to inspect first-project scope.`);
+  if (tables.PROJECT.length !== 1 && !options.projectId) {
+    throw new Error(`${fileName} contains multiple projects. Export a single project for change assurance, or use the detailed schedule review to inspect first-project scope.`);
+  }
 
-  const project = tables.PROJECT[0];
+  const project = options.projectId
+    ? (tables.PROJECT.find(row => row.proj_id === options.projectId) || null)
+    : tables.PROJECT[0];
+  if (!project) throw new Error(`${fileName} has no project matching the selected project ID.`);
   if (!project.proj_id?.trim()) throw new Error(`${fileName} has no project ID. Export a single-project schedule file (XER) and retry.`);
-  const tasks = tables.TASK.map(row => ({
+  const taskRows = tables.TASK.filter(row => !project.proj_id || row.proj_id === project.proj_id);
+  const tasks = taskRows.map(row => ({
     code: row.task_code || row.task_id,
     name: row.task_name || row.task_code || row.task_id,
     finish: parseDate(row.early_end_date || row.target_end_date || row.act_end_date),
     float: numberValue(row.total_float_hr_cnt),
     constraint: row.constraint_type || row.cstr_type || "",
     constraintDate: parseDate(row.cstr_date || row.constraint_date),
+    status: row.status_code || "",
+    type: row.task_type || "",
   }));
   if (tasks.some(task => !task.code) || new Set(tasks.map(task => task.code)).size !== tasks.length) throw new Error(`${fileName} needs unique, non-empty activity codes for comparison.`);
   if (!parseDate(project.scd_end_date || project.plan_end_date)) throw new Error(`${fileName} has no supported project scheduled finish. Export a calculated single-project schedule and retry.`);
-  const codeById = new Map((tables.TASK || []).map(row => [row.task_id, row.task_code || row.task_id]));
+  const codeById = new Map(taskRows.map(row => [row.task_id, row.task_code || row.task_id]));
   const relations = (tables.TASKPRED || []).map(row => JSON.stringify([codeById.get(row.pred_task_id) || row.pred_task_id, codeById.get(row.task_id) || row.task_id, row.pred_type || "Not supplied", numberValue(row.lag_hr_cnt)]));
 
   return {
@@ -941,8 +971,29 @@ function analyseReview(previous, current, narrative, options = {}) {
     previousFinish: previous.project.scheduledFinish,
   });
   const blockers = [];
-  const coverage = [previous, current].map(schedule => ({ file: schedule.fileName, tasks: schedule.tasks.length, finishDates: schedule.tasks.filter(task => task.finish !== null).length, floatValues: schedule.tasks.filter(task => task.float !== null).length }));
-  if (coverage.some(item => item.finishDates !== item.tasks || item.floatValues !== item.tasks)) blockers.push({ type: "Evidence gap", title: "Some activity finish dates or float values could not be compared", detail: coverage.map(item => `${item.file}: ${item.finishDates}/${item.tasks} finishes and ${item.floatValues}/${item.tasks} float values`).join("; ") });
+  // Blank float on completed / WBS / LOE / finish-milestone rows is normal in P6 exports.
+  const floatComparable = task => {
+    if (/TK_Complete/i.test(task.status || "")) return false;
+    if (/TT_WBS|TT_LOE|TT_FinMile/i.test(task.type || "")) return false;
+    return true;
+  };
+  const coverage = [previous, current].map(schedule => {
+    const comparable = schedule.tasks.filter(floatComparable);
+    return {
+      file: schedule.fileName,
+      tasks: schedule.tasks.length,
+      finishDates: schedule.tasks.filter(task => task.finish !== null).length,
+      floatValues: comparable.filter(task => task.float !== null).length,
+      floatExpected: comparable.length,
+    };
+  });
+  if (coverage.some(item => item.finishDates !== item.tasks || item.floatValues !== item.floatExpected)) {
+    blockers.push({
+      type: "Evidence gap",
+      title: "Some activity finish dates or float values could not be compared",
+      detail: coverage.map(item => `${item.file}: ${item.finishDates}/${item.tasks} finishes and ${item.floatValues}/${item.floatExpected} comparable float values`).join("; "),
+    });
+  }
 
   if (!narrative.trim()) {
     blockers.push({
@@ -1014,6 +1065,8 @@ function analyseReview(previous, current, narrative, options = {}) {
     parseEvidenceText,
     detectScheduleClaims,
     matchProjects,
+    decodeXerBytes,
+    listProjects,
     loadClaimRules,
     assessCompleteness,
     pathCandidates,

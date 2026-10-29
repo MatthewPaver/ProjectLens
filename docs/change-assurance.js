@@ -76,7 +76,7 @@ function escapeHtml(value) {
 
 
 // Engine bindings: schedule parsing and review live in ProjectLensEngine.
-const parseXer = (text, fileName) => ProjectLensEngine.parseXerAssurance(text, fileName);
+const parseXer = (text, fileName, options) => ProjectLensEngine.parseXerAssurance(text, fileName, options);
 const taskChanges = (...args) => ProjectLensEngine.taskChanges(...args);
 const analyseReview = (...args) => ProjectLensEngine.analyseReview(...args);
 const numberValue = (...args) => ProjectLensEngine.numberValue(...args);
@@ -425,7 +425,9 @@ async function loadFile(kind, file) {
     showError("Choose a Primavera P6 .xer file, then run the check again.");
     return;
   }
-  assuranceState.files[kind] = { name: file.name, text: await file.text() };
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  const decoded = ProjectLensEngine.decodeXerBytes(bytes);
+  assuranceState.files[kind] = { name: file.name, text: decoded.text, encoding: decoded.encoding, projectId: null };
   assuranceState.originalNarrative = null;
   const label = kind === "previous" ? $("#assurancePreviousName") : $("#assuranceCurrentName");
   label.textContent = file.name;
@@ -435,6 +437,22 @@ async function loadFile(kind, file) {
   $("#intakeMessage").textContent = ready ? "Both files loaded. Ready to check." : "Choose the second schedule file to continue.";
 }
 
+async function parseWithProjectPicker(kind) {
+  const file = assuranceState.files[kind];
+  const projects = ProjectLensEngine.listProjects(file.text);
+  let projectId = file.projectId;
+  if (projects.length > 1 && !projectId) {
+    const listing = projects.map((p, i) => `${i + 1}. ${p.shortName} (${p.projId}, ${p.activityCount} activities)`).join("\n");
+    const choice = window.prompt(`This file contains ${projects.length} projects. Enter the number to use:\n\n${listing}`, "1");
+    if (!choice) throw new Error("Choose a project in the multi-project export before comparing.");
+    const index = Number(choice) - 1;
+    if (!projects[index]) throw new Error("That project number is not in the list.");
+    projectId = projects[index].projId;
+    file.projectId = projectId;
+  }
+  return parseXer(file.text, file.name, projectId ? { projectId } : {});
+}
+
 async function runReview(options = {}) {
   if (!assuranceState.files.previous || !assuranceState.files.current) return;
   $("#workspaceError").hidden = true;
@@ -442,8 +460,8 @@ async function runReview(options = {}) {
   button.disabled = true;
   button.innerHTML = "Checking evidence…";
   try {
-    const previous = parseXer(assuranceState.files.previous.text, assuranceState.files.previous.name);
-    const current = parseXer(assuranceState.files.current.text, assuranceState.files.current.name);
+    const previous = await parseWithProjectPicker("previous");
+    const current = await parseWithProjectPicker("current");
     let review;
     try {
       review = analyseReview(previous, current, $("#assuranceNarrative").value.trim(), {

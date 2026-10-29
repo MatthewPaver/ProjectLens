@@ -25,7 +25,7 @@ function showToast(message) {
 
 
 // Engine bindings: schedule parsing and review live in ProjectLensEngine.
-const parseXer = (text, fileName) => ProjectLensEngine.parseXer(text, fileName);
+const parseXer = (text, fileName, options) => ProjectLensEngine.parseXer(text, fileName, options);
 const parseEvidenceText = (...args) => ProjectLensEngine.parseEvidenceText(...args);
 const compareSchedules = (...args) => ProjectLensEngine.compareSchedules(...args);
 const buildReview = (...args) => ProjectLensEngine.buildReview(...args);
@@ -82,9 +82,24 @@ async function loadFile(kind, file) {
     showToast("Choose a Primavera P6 .xer file.");
     return;
   }
-  const text = await file.text();
-  reviewState.files[kind] = { name: file.name, size: file.size, text };
+  const decoded = ProjectLensEngine.decodeXerBytes(new Uint8Array(await file.arrayBuffer()));
+  reviewState.files[kind] = { name: file.name, size: file.size, text: decoded.text, encoding: decoded.encoding, projectId: null };
   updateFileCard(kind);
+}
+
+function parseReviewFile(file) {
+  const projects = ProjectLensEngine.listProjects(file.text);
+  let projectId = file.projectId;
+  if (projects.length > 1 && !projectId) {
+    const listing = projects.map((p, i) => `${i + 1}. ${p.shortName} (${p.projId}, ${p.activityCount} activities)`).join("\n");
+    const choice = window.prompt(`This file contains ${projects.length} projects. Enter the number to use:\n\n${listing}`, "1");
+    if (!choice) throw new Error("Choose a project in the multi-project export before comparing.");
+    const index = Number(choice) - 1;
+    if (!projects[index]) throw new Error("That project number is not in the list.");
+    projectId = projects[index].projId;
+    file.projectId = projectId;
+  }
+  return parseXer(file.text, file.name, projectId ? { projectId } : {});
 }
 
 function updateEvidenceCard(kind) {
@@ -368,9 +383,9 @@ async function runReview() {
       $("#loaderStep").textContent = detail;
       await new Promise(resolve => setTimeout(resolve, 260));
     }
-    const previous = parseXer(reviewState.files.previous.text, reviewState.files.previous.name);
-    const current = parseXer(reviewState.files.current.text, reviewState.files.current.name);
-    const baseline = reviewState.files.baseline ? parseXer(reviewState.files.baseline.text, reviewState.files.baseline.name) : null;
+    const previous = parseReviewFile(reviewState.files.previous);
+    const current = parseReviewFile(reviewState.files.current);
+    const baseline = reviewState.files.baseline ? parseReviewFile(reviewState.files.baseline) : null;
     const evidence = {
       risk: reviewState.files.risk ? parseEvidenceText(reviewState.files.risk.text, "risk") : null,
       basis: reviewState.files.basis ? parseEvidenceText(reviewState.files.basis.text, "basis") : null,
