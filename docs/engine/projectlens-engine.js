@@ -20,6 +20,8 @@ const EMBEDDED_CLAIM_RULES = {
     "remained scheduled", "remains on track", "on track", "on-track", "on target", "on schedule",
     "no slippage", "no change", "not moved", "still forecast", "still expected",
     "as planned", "no material change", "no impact",
+    "remained static", "remains static", "has not changed", "have not changed", "not changed",
+    "no movement", "unaltered", "remained constant", "remains constant",
   ],
   movePhrases: [
     "increased from", "increased to", "decreased from", "changed from", "moved from", "moved to",
@@ -750,6 +752,11 @@ const MONTH_INDEX = {
   oct: 10, october: 10, nov: 11, november: 11, dec: 12, december: 12,
 };
 
+function normaliseNarrativeText(text) {
+  // Paste from Word / PDFs often leaves NBSP and double spaces inside dates.
+  return String(text || "").replace(/\u00A0/g, " ").replace(/\s+/g, " ");
+}
+
 function extractNarrativeDates(text) {
   const dates = [];
   const push = (raw, date, index) => {
@@ -872,7 +879,8 @@ function moveCoversCurrent(moves, currentFinish, dates = []) {
 
 function detectScheduleClaims(text, { currentFinish = null, previousFinish = null } = {}) {
   const rules = loadClaimRules();
-  const source = String(text || "");
+  // Normalise before phrase / date matching so NBSP and double spaces do not hide hits.
+  const source = normaliseNarrativeText(text);
   const dates = extractNarrativeDates(source);
   const stableHits = findPhraseHits(source, rules.stablePhrases)
     .filter(hit => !isNegatedAt(source, hit.index, rules.negations));

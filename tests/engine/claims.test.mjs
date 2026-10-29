@@ -103,4 +103,42 @@ describe("detectScheduleClaims", () => {
       );
     }
   });
+
+  // Round 2 N1: more "unchanged" wording and whitespace / NBSP normalisation.
+  it("flags 'has remained static' when the finish moved", () => {
+    const result = engine.detectScheduleClaims(
+      "The completion date has remained static since the last report.",
+      { currentFinish: "2028-01-01", previousFinish: "2027-06-15" },
+    );
+    assert.equal(result.contradiction?.kind, "says-unchanged");
+  });
+
+  it("flags 'remains constant' when the named date mismatches", () => {
+    const result = engine.detectScheduleClaims(
+      "Delivery remains constant at 30/09/2028.",
+      { currentFinish: "2029-06-30", previousFinish: "2029-06-30" },
+    );
+    assert.equal(result.contradiction?.kind, "date-mismatch");
+  });
+
+  it("accepts a true unchanged claim with matching date", () => {
+    const result = engine.detectScheduleClaims(
+      "The baseline end date remains 31/08/26 and has not changed.",
+      { currentFinish: "2026-08-31", previousFinish: "2026-08-31" },
+    );
+    assert.equal(result.contradiction, null);
+  });
+
+  it("parses a date that contains a non-breaking space", () => {
+    // U+00A0 sits between August and the year in real GMPP paste-outs.
+    const narrative = "Finish is 31 August\u00A02026.";
+    const result = engine.detectScheduleClaims(narrative, {
+      currentFinish: "2026-08-31",
+      previousFinish: "2026-08-31",
+    });
+    assert.ok(
+      result.dates.some(d => d.iso === "2026-08-31"),
+      `expected 2026-08-31 in ${JSON.stringify(result.dates)}`,
+    );
+  });
 });
