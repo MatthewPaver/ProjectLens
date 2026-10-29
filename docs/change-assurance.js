@@ -435,7 +435,7 @@ async function loadFile(kind, file) {
   $("#intakeMessage").textContent = ready ? "Both files loaded. Ready to check." : "Choose the second schedule file to continue.";
 }
 
-async function runReview() {
+async function runReview(options = {}) {
   if (!assuranceState.files.previous || !assuranceState.files.current) return;
   $("#workspaceError").hidden = true;
   const button = $("#runAssuranceReview");
@@ -444,7 +444,24 @@ async function runReview() {
   try {
     const previous = parseXer(assuranceState.files.previous.text, assuranceState.files.previous.name);
     const current = parseXer(assuranceState.files.current.text, assuranceState.files.current.name);
-    const review = analyseReview(previous, current, $("#assuranceNarrative").value.trim());
+    let review;
+    try {
+      review = analyseReview(previous, current, $("#assuranceNarrative").value.trim(), {
+        confirmedMatch: Boolean(options.confirmedMatch),
+      });
+    } catch (error) {
+      // Overlapping activity codes but different names/IDs: ask before comparing.
+      if (error.code === "CONFIRM_PROJECT_MATCH") {
+        const ok = window.confirm(`${error.message}\n\nCompare them?`);
+        if (!ok) {
+          showError("Comparison cancelled. Choose matching exports, or confirm when the codes overlap.");
+          return;
+        }
+        review = analyseReview(previous, current, $("#assuranceNarrative").value.trim(), { confirmedMatch: true });
+      } else {
+        throw error;
+      }
+    }
     assuranceState.originalNarrative ??= $("#assuranceNarrative").value;
     review.inputIdentity = await inputIdentity();
     renderReview(review);

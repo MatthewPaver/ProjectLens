@@ -891,9 +891,46 @@ function detectScheduleClaims(text, { currentFinish = null, previousFinish = nul
   };
 }
 
-function analyseReview(previous, current, narrative) {
-  if (previous.project.name !== current.project.name) throw new Error("The project names differ. Choose previous and current exports of the same project before comparing.");
-  if (previous.project.id !== current.project.id) throw new Error("The project IDs differ. Choose exports of the same source project; re-imported projects with new IDs are not supported by this comparison.");
+function taskCodeSet(parsed) {
+  // Works for both assurance and review parse shapes.
+  if (parsed.taskByCode instanceof Map) return new Set(parsed.taskByCode.keys());
+  return new Set((parsed.tasks || []).map(task => task.code).filter(Boolean));
+}
+
+function matchProjects(previousParsed, currentParsed) {
+  const previousCodes = taskCodeSet(previousParsed);
+  const currentCodes = taskCodeSet(currentParsed);
+  let shared = 0;
+  previousCodes.forEach(code => {
+    if (currentCodes.has(code)) shared += 1;
+  });
+  const union = previousCodes.size + currentCodes.size - shared;
+  const score = union === 0 ? 0 : shared / union;
+  let decision = "different";
+  if (score >= 0.8) decision = "same";
+  else if (score >= 0.5) decision = "confirm";
+  return { score, shared, decision };
+}
+
+function analyseReview(previous, current, narrative, options = {}) {
+  const identityMismatch = previous.project.name !== current.project.name || previous.project.id !== current.project.id;
+  if (identityMismatch) {
+    const match = matchProjects(previous, current);
+    if (match.decision === "different") {
+      // Keep the familiar wording when codes do not overlap, so reviewers still see why.
+      if (previous.project.name !== current.project.name) {
+        throw new Error("The project names differ. Choose previous and current exports of the same project before comparing.");
+      }
+      throw new Error("The project IDs differ. Choose exports of the same source project; re-imported projects with new IDs are not supported by this comparison.");
+    }
+    if (!options.confirmedMatch) {
+      const pct = Math.round(match.score * 100);
+      const err = new Error(`These look like the same project (${pct}% of activity codes match). Compare them?`);
+      err.code = "CONFIRM_PROJECT_MATCH";
+      err.match = match;
+      throw err;
+    }
+  }
   if (previous.sourceText === current.sourceText) throw new Error("These exports contain identical evidence. Choose a previous and a current schedule, then retry.");
   if (!previous.project.dataDate || !current.project.dataDate) throw new Error("Both exports need a supported project data date before comparison.");
   if (current.project.dataDate < previous.project.dataDate) throw new Error("The current data date precedes the previous export. Swap the files and retry.");
@@ -976,6 +1013,7 @@ function analyseReview(previous, current, narrative) {
     buildReview,
     parseEvidenceText,
     detectScheduleClaims,
+    matchProjects,
     loadClaimRules,
     assessCompleteness,
     pathCandidates,
