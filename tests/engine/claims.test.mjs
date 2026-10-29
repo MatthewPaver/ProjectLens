@@ -1,0 +1,106 @@
+// Narrative claim and UK date detection for detectScheduleClaims.
+import assert from "node:assert/strict";
+import { createRequire } from "node:module";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { describe, it } from "node:test";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const REPO = path.resolve(__dirname, "../..");
+const RESEARCH = path.resolve(REPO, "../research_notes/Real case tests/projectlens-inputs");
+const require = createRequire(import.meta.url);
+const engine = require(path.join(REPO, "docs/engine/projectlens-engine.js"));
+
+const pairs = JSON.parse(fs.readFileSync(path.join(RESEARCH, "gmpp_pairs.json"), "utf8"));
+
+function pair(nameRe, prevYear, year) {
+  const hit = pairs.find(p => nameRe.test(p.name) && p.prevYear === prevYear && p.year === year);
+  assert.ok(hit, `missing pair ${nameRe} ${prevYear}->${year}`);
+  return hit;
+}
+
+describe("detectScheduleClaims", () => {
+  it("exports detectScheduleClaims and claim rules", () => {
+    assert.equal(typeof engine.detectScheduleClaims, "function");
+    const rules = JSON.parse(fs.readFileSync(path.join(REPO, "docs/engine/claim-rules.json"), "utf8"));
+    assert.ok(rules.stablePhrases.includes("remained the same"));
+    assert.ok(rules.movePhrases.includes("correction of published position"));
+  });
+
+  it("Land ISTAR 2025→2026: date in narrative mismatches current finish", () => {
+    const p = pair(/ISTAR/i, 2025, 2026);
+    const result = engine.detectScheduleClaims(p.narrative, {
+      currentFinish: p.curEnd,
+      previousFinish: p.prevEnd,
+    });
+    assert.equal(result.contradiction?.kind, "date-mismatch");
+  });
+
+  it("E7 Wedgetail 2025→2026: contradiction while finish moved", () => {
+    const p = pair(/Wedgetail/i, 2025, 2026);
+    const result = engine.detectScheduleClaims(p.narrative, {
+      currentFinish: p.curEnd,
+      previousFinish: p.prevEnd,
+    });
+    assert.ok(result.contradiction, "expected a contradiction");
+    assert.ok(["says-unchanged", "date-mismatch"].includes(result.contradiction.kind));
+  });
+
+  it("E7 Wedgetail 2021→2022: stated move suppresses contradiction", () => {
+    const p = pair(/Wedgetail/i, 2021, 2022);
+    const result = engine.detectScheduleClaims(p.narrative, {
+      currentFinish: p.curEnd,
+      previousFinish: p.prevEnd,
+    });
+    assert.equal(result.contradiction, null);
+  });
+
+  it("does not treat 'not on track' as a stable claim", () => {
+    const result = engine.detectScheduleClaims("The programme is not on track for the original finish.", {
+      currentFinish: "2030-01-01",
+      previousFinish: "2027-01-01",
+    });
+    assert.equal(result.stable.length, 0);
+    assert.equal(result.contradiction, null);
+  });
+
+  it("parses every Review Focus 1 UK date form to the right ISO date", () => {
+    const cases = [
+      ["31/12/2027", "2027-12-31"],
+      ["31 December 2027", "2027-12-31"],
+      ["31 Dec 27", "2027-12-31"],
+      ["30 June 26", "2026-06-30"],
+      ["December 2027", "2027-12-31"],
+      ["2027-12-31", "2027-12-31"],
+      ["Q4 2027-28", "2028-03-31"],
+      ["25/26-Q4", "2026-03-31"],
+    ];
+    for (const [raw, iso] of cases) {
+      const result = engine.detectScheduleClaims(`Finish is ${raw}.`, {
+        currentFinish: iso,
+        previousFinish: iso,
+      });
+      assert.ok(result.dates.some(d => d.iso === iso && d.raw.includes(raw.split(" ")[0])), `failed for ${raw}: ${JSON.stringify(result.dates)}`);
+      const hit = result.dates.find(d => d.iso === iso);
+      assert.equal(hit.iso, iso, raw);
+    }
+  });
+
+  it("gives no contradiction for every explained GMPP pair", () => {
+    // Spec: stated corrections and narratives that name the move should not flag.
+    const explained = pairs.filter(p => Math.abs(p.deltaDays) >= 7 && (p.explainsCorrection || (p.mentionsMove && !p.claimsSame)));
+    assert.ok(explained.length > 0);
+    for (const p of explained) {
+      const result = engine.detectScheduleClaims(p.narrative, {
+        currentFinish: p.curEnd,
+        previousFinish: p.prevEnd,
+      });
+      assert.equal(
+        result.contradiction,
+        null,
+        `${p.name} ${p.prevYear}->${p.year}: ${JSON.stringify(result.contradiction)} :: ${p.narrative.slice(0, 120)}`,
+      );
+    }
+  });
+});

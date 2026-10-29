@@ -1,0 +1,47 @@
+{
+  "stablePhrases": [
+    "unchanged",
+    "remained the same",
+    "remains the same",
+    "remained at",
+    "remains at",
+    "remained scheduled",
+    "remains on track",
+    "on track",
+    "on-track",
+    "on target",
+    "on schedule",
+    "no slippage",
+    "no change",
+    "not moved",
+    "still forecast",
+    "still expected",
+    "as planned",
+    "no material change",
+    "no impact"
+  ],
+  "movePhrases": [
+    "increased from",
+    "increased to",
+    "decreased from",
+    "changed from",
+    "moved from",
+    "moved to",
+    "has moved to",
+    "has been moved",
+    "has been extended",
+    "extended to",
+    "slipped from",
+    "revised from",
+    "revised to",
+    "re-baselined",
+    "correction of published position",
+    "delayed to",
+    "now forecast"
+  ],
+  "negations": [
+    "not",
+    "never",
+    "no longer"
+  ]
+}

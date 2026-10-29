@@ -6,12 +6,40 @@
  */
 (function (root, factory) {
   if (typeof module === "object" && module.exports) {
-    module.exports = factory();
+    module.exports = factory(typeof require === "function" ? require : null);
   } else {
-    root.ProjectLensEngine = factory();
+    root.ProjectLensEngine = factory(null);
   }
-}(typeof self !== "undefined" ? self : this, function () {
+}(typeof self !== "undefined" ? self : this, function (nodeRequire) {
 "use strict";
+
+// Keep in sync with claim-rules.json (Node loads the JSON file; browser uses this copy).
+const EMBEDDED_CLAIM_RULES = {
+  stablePhrases: [
+    "unchanged", "remained the same", "remains the same", "remained at", "remains at",
+    "remained scheduled", "remains on track", "on track", "on-track", "on target", "on schedule",
+    "no slippage", "no change", "not moved", "still forecast", "still expected",
+    "as planned", "no material change", "no impact",
+  ],
+  movePhrases: [
+    "increased from", "increased to", "decreased from", "changed from", "moved from", "moved to",
+    "has moved to", "has been moved", "has been extended", "extended to", "slipped from",
+    "revised from", "revised to", "re-baselined", "correction of published position", "delayed to",
+    "now forecast",
+  ],
+  negations: ["not", "never", "no longer"],
+};
+
+function loadClaimRules() {
+  if (nodeRequire) {
+    try {
+      return nodeRequire("./claim-rules.json");
+    } catch (error) {
+      // Fall through to the embedded copy when the JSON path is unavailable.
+    }
+  }
+  return EMBEDDED_CLAIM_RULES;
+}
 
 function numberValue(value) {
   if (value === null || value === undefined || value === "") return null;
@@ -471,18 +499,30 @@ function narrativeAssessment(narrative, changes, finishMovement) {
   const relationshipChanges = changes.filter(change => change.types.includes("logic"));
   const constraintChanges = changes.filter(change => change.types.includes("constraint"));
   const floatErosion = changes.filter(change => change.evidence.some(item => item.label === "Total float" && /\(-/.test(item.value)));
-  const statedStable = /\b(unchanged|no material change|on track|as planned|remains stable|no impact)\b/.test(text);
+  const claims = detectScheduleClaims(narrative, {
+    currentFinish: finishMovement.after,
+    previousFinish: finishMovement.before,
+  });
+  const statedStable = claims.stable.length > 0 && !claims.movesStated.some(move => move.to === toIsoDay(finishMovement.after));
   const finishSlip = finishMovement.days || 0;
 
   if (!narrative.trim()) {
     conflicts.push({ type: "Evidence gap", title: "No schedule narrative was supplied", detail: "The XER can show what changed, but not the planner's stated reason or approval basis." });
     return conflicts;
   }
-  if (statedStable && finishSlip >= 7) conflicts.push({ type: "Direct contradiction", title: `The narrative presents stability while the scheduled finish moved ${finishSlip} days`, detail: `${finishMovement.label}: ${formatDate(finishMovement.before)} → ${formatDate(finishMovement.after)}.` });
+  if (claims.contradiction && Math.abs(finishSlip) > 0) {
+    conflicts.push({
+      type: "Direct contradiction",
+      title: `The narrative presents stability while the scheduled finish moved ${finishSlip} days`,
+      detail: `${finishMovement.label}: ${formatDate(finishMovement.before)} → ${formatDate(finishMovement.after)}. ${claims.contradiction.detail}`,
+    });
+  }
   if (statedStable && floatErosion.some(change => change.score >= 30)) conflicts.push({ type: "Hidden pressure", title: "The narrative presents stability while material float was consumed", detail: `${floatErosion.length} changed activities show float erosion that may reduce schedule resilience.` });
   if (relationshipChanges.length && !/\b(logic|relationship|predecessor|successor|resequence|sequence)\b/.test(text)) conflicts.push({ type: "Unexplained change", title: `${relationshipChanges.length} logic changes are not addressed in the narrative`, detail: "Changed predecessor logic can alter the driving path even when headline dates appear stable." });
   if (constraintChanges.length && !/\bconstraint|mandatory|must finish|must start|fixed date\b/.test(text)) conflicts.push({ type: "Unexplained change", title: `${constraintChanges.length} constraint changes are not addressed in the narrative`, detail: "A dated constraint can influence float and the apparent critical path." });
-  if (finishSlip >= 7 && !/\b(delay|slip|later|movement|forecast|completion|finish)\b/.test(text)) conflicts.push({ type: "Narrative omission", title: "Material finish movement is not described", detail: `${finishMovement.label} moved ${finishSlip} days later between submissions.` });
+  if (finishSlip >= 7 && !claims.contradiction && !claims.movesStated.length && !/\b(delay|slip|later|movement|forecast|completion|finish)\b/.test(text)) {
+    conflicts.push({ type: "Narrative omission", title: "Material finish movement is not described", detail: `${finishMovement.label} moved ${finishSlip} days later between submissions.` });
+  }
   return conflicts;
 }
 
@@ -632,6 +672,225 @@ function taskChanges(previous, current) {
   return { changes, activityEvidence, relationEvidence, constraintChanges, floatErosion, relationChanges };
 }
 
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function toIsoDay(value) {
+  if (!value) return null;
+  if (value instanceof Date) return isoDate(value);
+  const clean = String(value).trim();
+  if (/^\d{4}-\d{2}-\d{2}/.test(clean)) return clean.slice(0, 10);
+  const parsed = parseDate(clean);
+  return parsed ? isoDate(parsed) : null;
+}
+
+function dayDeltaIso(a, b) {
+  const left = toIsoDay(a);
+  const right = toIsoDay(b);
+  if (!left || !right) return null;
+  return dayDifference(parseDate(left), parseDate(right));
+}
+
+function expandTwoDigitYear(year) {
+  const n = Number(year);
+  if (!Number.isFinite(n)) return null;
+  return n < 100 ? 2000 + n : n;
+}
+
+function lastDayOfMonth(year, month) {
+  // month is 1-12; Date.UTC day 0 of next month is the last day of this one
+  return new Date(Date.UTC(year, month, 0, 12, 0, 0));
+}
+
+function financialYearQuarterEnd(startYearTwoDigitOrFour, quarter) {
+  // UK financial year: Apr (Y) → Mar (Y+1). Q4 ends 31 March of the second calendar year.
+  const start = expandTwoDigitYear(startYearTwoDigitOrFour);
+  if (!start || quarter < 1 || quarter > 4) return null;
+  const endYear = start + 1;
+  if (quarter === 1) return new Date(Date.UTC(start, 5, 30, 12)); // 30 Jun
+  if (quarter === 2) return new Date(Date.UTC(start, 8, 30, 12)); // 30 Sep
+  if (quarter === 3) return new Date(Date.UTC(start, 11, 31, 12)); // 31 Dec
+  return new Date(Date.UTC(endYear, 2, 31, 12)); // 31 Mar
+}
+
+const MONTH_INDEX = {
+  jan: 1, january: 1, feb: 2, february: 2, mar: 3, march: 3, apr: 4, april: 4,
+  may: 5, jun: 6, june: 6, jul: 7, july: 7, aug: 8, august: 8, sep: 9, sept: 9, september: 9,
+  oct: 10, october: 10, nov: 11, november: 11, dec: 12, december: 12,
+};
+
+function extractNarrativeDates(text) {
+  const dates = [];
+  const push = (raw, date, index) => {
+    if (!date || Number.isNaN(date.getTime())) return;
+    dates.push({ iso: isoDate(date), raw, index });
+  };
+
+  // ISO first so later patterns do not re-hit the same span awkwardly.
+  for (const match of text.matchAll(/\b(\d{4}-\d{2}-\d{2})\b/g)) {
+    push(match[1], parseDate(match[1]), match.index);
+  }
+
+  // 31/12/2027 or 31/12/27
+  for (const match of text.matchAll(/\b(\d{1,2})\/(\d{1,2})\/(\d{2,4})\b/g)) {
+    const day = Number(match[1]);
+    const month = Number(match[2]);
+    const year = expandTwoDigitYear(match[3]);
+    push(match[0], new Date(Date.UTC(year, month - 1, day, 12)), match.index);
+  }
+
+  // 31 December 2027 / 31 Dec 27 / 30 June 26
+  for (const match of text.matchAll(/\b(\d{1,2})\s+(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+(\d{2,4})\b/gi)) {
+    const day = Number(match[1]);
+    const month = MONTH_INDEX[match[2].toLowerCase()];
+    const year = expandTwoDigitYear(match[3]);
+    push(match[0], new Date(Date.UTC(year, month - 1, day, 12)), match.index);
+  }
+
+  // December 2027 (month + year only → last day of that month)
+  for (const match of text.matchAll(/\b(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+(\d{4})\b/gi)) {
+    const month = MONTH_INDEX[match[1].toLowerCase()];
+    const year = Number(match[2]);
+    push(match[0], lastDayOfMonth(year, month), match.index);
+  }
+
+  // Q4 2027-28 (financial-year quarter). Mark as fyQuarter so mismatch logic can ignore them.
+  for (const match of text.matchAll(/\bQ([1-4])\s+(\d{4})-(\d{2})\b/gi)) {
+    const quarter = Number(match[1]);
+    const startYear = Number(match[2]);
+    const date = financialYearQuarterEnd(startYear, quarter);
+    if (date) dates.push({ iso: isoDate(date), raw: match[0], index: match.index, fyQuarter: true });
+  }
+
+  // 25/26-Q4
+  for (const match of text.matchAll(/\b(\d{2})\/(\d{2})-Q([1-4])\b/gi)) {
+    const startYear = expandTwoDigitYear(match[1]);
+    const quarter = Number(match[3]);
+    const date = financialYearQuarterEnd(startYear, quarter);
+    if (date) dates.push({ iso: isoDate(date), raw: match[0], index: match.index, fyQuarter: true });
+  }
+
+  // 23-Jan-2031 (P6 / GMPP style)
+  for (const match of text.matchAll(/\b(\d{1,2})-(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)-(\d{4})\b/gi)) {
+    const day = Number(match[1]);
+    const month = MONTH_INDEX[match[2].toLowerCase()];
+    const year = Number(match[3]);
+    push(match[0], new Date(Date.UTC(year, month - 1, day, 12)), match.index);
+  }
+
+  // De-duplicate identical iso+index hits from overlapping patterns.
+  const seen = new Set();
+  return dates.filter(item => {
+    const key = `${item.iso}@${item.index}@${item.raw}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function findPhraseHits(text, phrases) {
+  const hits = [];
+  const lower = text.toLowerCase();
+  for (const phrase of phrases) {
+    const pattern = new RegExp(`\\b${escapeRegExp(phrase.toLowerCase()).replace(/\s+/g, "\\s+")}\\b`, "gi");
+    for (const match of lower.matchAll(pattern)) {
+      hits.push({ phrase, index: match.index });
+    }
+  }
+  return hits.sort((a, b) => a.index - b.index);
+}
+
+function isNegatedAt(text, index, negations) {
+  // Look a short way left of the match for "not / never / no longer".
+  const start = Math.max(0, index - 48);
+  const window = text.slice(start, index).toLowerCase();
+  return negations.some(negation => new RegExp(`\\b${escapeRegExp(negation.toLowerCase())}\\s+(?:\\w+\\s+){0,3}$`).test(window));
+}
+
+function extractMoveStatements(text, movePhrases, dates) {
+  const moves = [];
+  const lower = text.toLowerCase();
+  for (const phrase of movePhrases) {
+    const pattern = new RegExp(`\\b${escapeRegExp(phrase.toLowerCase()).replace(/\s+/g, "\\s+")}\\b`, "gi");
+    for (const match of lower.matchAll(pattern)) {
+      const index = match.index;
+      // Take dates that sit near this move phrase (same clause / next ~120 chars).
+      const nearby = dates.filter(d => d.index >= index - 10 && d.index <= index + 140);
+      let from = null;
+      let to = null;
+      if (nearby.length >= 2) {
+        from = nearby[0].iso;
+        to = nearby[1].iso;
+      } else if (nearby.length === 1) {
+        to = nearby[0].iso;
+      }
+      moves.push({ from, to, index });
+    }
+  }
+  return moves;
+}
+
+function moveCoversCurrent(moves, currentFinish, dates = []) {
+  const current = toIsoDay(currentFinish);
+  if (!current) return false;
+  if (moves.some(move => move.to === current)) return true;
+  // Some GMPP lines say "increased to <date>" with only one nearby date.
+  if (moves.length && dates.some(d => !d.fyQuarter && d.iso === current)) return true;
+  return false;
+}
+
+function detectScheduleClaims(text, { currentFinish = null, previousFinish = null } = {}) {
+  const rules = loadClaimRules();
+  const source = String(text || "");
+  const dates = extractNarrativeDates(source);
+  const stableHits = findPhraseHits(source, rules.stablePhrases)
+    .filter(hit => !isNegatedAt(source, hit.index, rules.negations));
+  const movesStated = extractMoveStatements(source, rules.movePhrases, dates);
+  const finishMoved = (() => {
+    const delta = dayDeltaIso(currentFinish, previousFinish);
+    return delta !== null && delta !== 0;
+  })();
+  const covered = moveCoversCurrent(movesStated, currentFinish, dates);
+
+  let contradiction = null;
+
+  // Date mismatch: stability wording quotes a finish that disagrees with currentFinish
+  // by more than 14 days. Skip FY-quarter labels. A stated move suppresses this.
+  if (!covered && currentFinish && stableHits.length && movesStated.length === 0) {
+    const current = toIsoDay(currentFinish);
+    const mismatched = dates.find(d => {
+      if (d.fyQuarter) return false;
+      const delta = dayDeltaIso(d.iso, current);
+      return delta !== null && Math.abs(delta) > 14;
+    });
+    if (mismatched) {
+      contradiction = {
+        kind: "date-mismatch",
+        detail: `Narrative names ${mismatched.raw} (${mismatched.iso}) but the current finish is ${current}.`,
+      };
+    }
+  }
+
+  // Otherwise: stability wording while the finish moved, and no move is stated at all.
+  if (!contradiction && finishMoved && stableHits.length && !covered && movesStated.length === 0) {
+    contradiction = {
+      kind: "says-unchanged",
+      detail: `Narrative claims stability (${stableHits[0].phrase}) while the finish moved from ${toIsoDay(previousFinish)} to ${toIsoDay(currentFinish)}.`,
+    };
+  }
+
+  // A stated move that lands on the current finish suppresses any contradiction.
+  if (covered) contradiction = null;
+
+  return {
+    stable: stableHits,
+    movesStated,
+    dates,
+    contradiction,
+  };
+}
+
 function analyseReview(previous, current, narrative) {
   if (previous.project.name !== current.project.name) throw new Error("The project names differ. Choose previous and current exports of the same project before comparing.");
   if (previous.project.id !== current.project.id) throw new Error("The project IDs differ. Choose exports of the same source project; re-imported projects with new IDs are not supported by this comparison.");
@@ -640,11 +899,10 @@ function analyseReview(previous, current, narrative) {
   if (current.project.dataDate < previous.project.dataDate) throw new Error("The current data date precedes the previous export. Swap the files and retry.");
   const finishMovement = dayDifference(current.project.scheduledFinish, previous.project.scheduledFinish);
   const changes = taskChanges(previous, current);
-  const text = narrative.toLowerCase();
-  // These are bounded text prompts, not a judgement that a claim is true.
-  // Exclude explicit local negations such as "not on track" before matching.
-  const stabilityText = text.replace(/\b(?:not|never|no longer)\s+(?:\w+\s+){0,3}(?:on track|unchanged|as planned|stable)\b/g, "");
-  const statedStable = /\b(unchanged|no material change|on track|as planned|remains stable|no impact)\b/.test(stabilityText);
+  const claims = detectScheduleClaims(narrative, {
+    currentFinish: current.project.scheduledFinish,
+    previousFinish: previous.project.scheduledFinish,
+  });
   const blockers = [];
   const coverage = [previous, current].map(schedule => ({ file: schedule.fileName, tasks: schedule.tasks.length, finishDates: schedule.tasks.filter(task => task.finish !== null).length, floatValues: schedule.tasks.filter(task => task.float !== null).length }));
   if (coverage.some(item => item.finishDates !== item.tasks || item.floatValues !== item.tasks)) blockers.push({ type: "Evidence gap", title: "Some activity finish dates or float values could not be compared", detail: coverage.map(item => `${item.file}: ${item.finishDates}/${item.tasks} finishes and ${item.floatValues}/${item.tasks} float values`).join("; ") });
@@ -656,11 +914,11 @@ function analyseReview(previous, current, narrative) {
       detail: "The schedules can show movement, but not the stated reason, mitigation or approval basis.",
     });
   }
-  if (statedStable && finishMovement >= 7) {
+  if (claims.contradiction && finishMovement !== null && Math.abs(finishMovement) > 0) {
     blockers.push({
       type: "Contradiction",
       title: `The finish moved ${finishMovement} days and the update needs clarifying`,
-      detail: `${formatDate(previous.project.scheduledFinish)} → ${formatDate(current.project.scheduledFinish)}.`,
+      detail: `${formatDate(previous.project.scheduledFinish)} → ${formatDate(current.project.scheduledFinish)}. ${claims.contradiction.detail}`,
     });
   } else if (finishMovement !== null && Math.abs(finishMovement) >= 7) {
     blockers.push({ type: "Schedule movement", title: `The scheduled finish moved ${finishMovement > 0 ? "+" : ""}${finishMovement} days`, detail: "Check the reason and supporting evidence. Mentioning the movement does not verify its cause." });
@@ -686,6 +944,7 @@ function analyseReview(previous, current, narrative) {
       detail: "The current schedule shows less total float: these activities can slip less before they delay the finish. Check the underlying fields and planning assumptions; this does not prove a delay or a critical path.",
     });
   }
+  const text = String(narrative || "").toLowerCase();
   const explicitMissingOwnership = /\b(?:no|without|missing|unassigned)\s+(?:named\s+)?(?:owner|due date)\b|\b(?:owner|due date)\s+(?:is\s+)?(?:missing|unassigned|unknown|not set)\b/.test(text);
   if (explicitMissingOwnership || (/\b(manage\w*|mitigat\w*|governance|action)\b/.test(text) && !/\b(owner|responsible|accountable|due|by \d{1,2})\b/.test(text))) {
     blockers.push({
@@ -716,6 +975,8 @@ function analyseReview(previous, current, narrative) {
     compareSchedules,
     buildReview,
     parseEvidenceText,
+    detectScheduleClaims,
+    loadClaimRules,
     assessCompleteness,
     pathCandidates,
     reconcileDecisions,
