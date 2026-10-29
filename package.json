@@ -1,0 +1,13 @@
+{
+  "name": "projectlens",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Browser-local and CLI change assurance for project controls schedules",
+  "scripts": {
+    "test": "node --test ./tests/**/*.test.mjs",
+    "cli": "node bin/projectlens.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
