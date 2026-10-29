@@ -112,6 +112,13 @@ function parseReviewFile(file) {
     projectId = projects[index].projId;
     file.projectId = projectId;
   }
+  if (/\.xml$/i.test(file.name)) {
+    const xml = file.text;
+    if (/<APIBusinessObjects|<Project[\s\S]*<Activity/i.test(xml)) {
+      return ProjectLensEngine.parseP6Xml(xml, file.name);
+    }
+    return ProjectLensEngine.parseMspdiXml(xml, file.name);
+  }
   return parseXer(file.text, file.name, projectId ? { projectId } : {});
 }
 
@@ -467,7 +474,12 @@ function bindEvents() {
   $("#runReview").addEventListener("click", runReview);
   $("#narrativeFile").addEventListener("change", async event => {
     const file = event.target.files[0];
-    if (file) $("#narrativeText").value = await file.text();
+    if (!file) return;
+    try {
+      $("#narrativeText").value = await ProjectLensNarrative.readNarrativeFile(file);
+    } catch (error) {
+      showToast(error.message || "The narrative file could not be read.");
+    }
   });
   $$('[data-mode-switch]').forEach(button => button.addEventListener("click", () => {
     document.body.dataset.mode = button.dataset.modeSwitch;
