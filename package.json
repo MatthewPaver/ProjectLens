@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "description": "Browser-local and CLI change assurance for project controls schedules",
   "scripts": {
-    "test": "node --test ./tests/**/*.test.mjs",
+    "test": "node --test \"tests/**/*.test.mjs\"",
     "cli": "node bin/projectlens.mjs",
     "bench": "node bench/real-cases/run.mjs"
   },
