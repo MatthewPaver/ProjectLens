@@ -90,16 +90,6 @@
     return findAll(node, selector)[0] || null;
   }
 
-  function textOf(node, tag) {
-    if (!node) return "";
-    if (typeof node.querySelector === "function" && node.documentElement) {
-      const hit = node.querySelector(tag) || (node.documentElement && findOne(node.documentElement, tag));
-      return hit ? (hit.textContent || hit.text || "").trim() : "";
-    }
-    const hit = findOne(node, tag);
-    return hit ? (hit.textContent || hit.text || "").trim() : "";
-  }
-
   function childText(parent, tag) {
     if (!parent) return "";
     if (parent.getElementsByTagName) {

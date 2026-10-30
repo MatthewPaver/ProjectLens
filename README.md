@@ -168,7 +168,7 @@ make browser-test  # Playwright journeys on desktop and mobile layouts
 make public-data   # rebuild docs/data/gmpp.json from Data/public/raw/
 ```
 
-Both suites run in [`deploy-pages.yml`](.github/workflows/deploy-pages.yml) before every deploy. Python 3.11. Browser tests need only `requirements-browser.txt`; screenshots go to `/tmp/projectlens-browser` unless `PROJECTLENS_SCREENSHOT_DIR` is set.
+Both suites run in [`deploy-pages.yml`](.github/workflows/deploy-pages.yml) before every deploy. Python 3.11 and Node.js 18 or later. The GMPP pipeline uses the shared JavaScript claim engine; Node is required for `make public-data` and the Python claim tests. Browser tests need only `requirements-browser.txt`; screenshots go to `/tmp/projectlens-browser` unless `PROJECTLENS_SCREENSHOT_DIR` is set.
 
 ## Licence
 

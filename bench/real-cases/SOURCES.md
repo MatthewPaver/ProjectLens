@@ -322,3 +322,241 @@ The pre-2019-20 files are transposed and Windows-1252 encoded. I downloaded them
 - **Published-date-check B30–B35:** each names a later closure or end date than the column.
   - B31's first date (June 2013) is close to the column; its formal closure (Oct 2014) is the one that differs.
   - In four of the six (B30–B33), the published date was already past at the release date.
+
+
+---
+
+# Held-out set 4: sources and provenance
+
+## Completion status
+
+PolicyLens: 15 cases completed (5 real, 10 modelled); 6 pass, 3 review, 6 stop. Five real cases have an expected pass. No tool or benchmark was run, and no implementation, test or engine files were read.
+
+ProjectLens: complete. `projectlens-heldout4.json` contains 30 real year-on-year pairs across 30 distinct projects: 8 contradiction, 9 explained, 11 no-move and 2 published-date-check. On 30 October 2026 the user explicitly authorised older release years while retaining project-level exclusions. All 60 published date cells and all 30 verbatim current schedule cells were independently checked. No product or benchmark was run.
+
+## PolicyLens method and label rules
+
+Real cases contain the unchanged PolicyVersion.Document from pinned MAMIP snapshots. IAMTrail is the renamed zoph-io/MAMIP repository. Every selected pair has different AWS VersionId values. A version change with an identical Document is a genuine no-permission-change control; an archive-only formatting change is not selected. AWSCodeCommitReadOnly v12–v13 and AmazonEC2ReadOnlyAccess v3–v4 are such controls.
+
+Modelled cases are explicitly reconstructed counterfactuals. They are not historical policies, deployed resources or incidents. AWS examples retain their example identifiers. Each case identifies exactly which example fields were changed. Rhino documents describe attack permission combinations rather than complete historical policies; those four JSON pairs use explicitly declared modelling choices and prerequisites. The account 123456789012 and role name role_i_can_assume are placeholders, not claims about an actual account.
+
+Expected statuses are independent human labels, assigned without running either tool. Pass means no material increase in the reviewed security risk (including ordinary read-only service functionality). Review means a bounded permission or control change needing contextual owner approval. Stop means a newly public grant, removed data boundary, or a documented escalation path. These are change-risk judgements, not full AWS effective-permission evaluations. External SCPs, boundaries, trust and service configuration can constrain the resulting access.
+
+Context-dependent labels: PLH4-A08 (removing an HTTPS subscription constraint for one existing account), PLH4-A09 (reading logs in one named group), and PLH4-A10 (retention management in one named group) are review rather than stop. Local confidentiality or retention requirements could justify stop. PLH4-A05 is pass because AWS classifies streaming speech synthesis as Read; ordinary service consumption can still incur charges. Rhino stop cases identify potential escalation, with prerequisites stated in each case, rather than asserting exploitability in an unknown account.
+
+## Exclusions and verification
+
+Only permitted held-out JSON and original input case data were used for exclusion. No commands from either product were run. Case pairs were compared against all 45 prior PolicyLens held-out cases and the original before/after/candidate policy documents. There are no exact duplicate pairs. The selected MAMIP policy names and Rhino methods 9, 12, 19 and 21 are absent from the prior selected cases and original input scenarios. AWS modelled changes use different operations/control changes from the earlier cases.
+
+Project exclusions were compared by GMPP identity and normalised project name across all three held-out sets and the original gmpp_pairs.json. Raw evidence, scripts, candidate records and validation results remain under evidence/. Research files do not constitute additional final fixtures. All writes are confined to this folder.
+
+## Licences
+
+- UK Government data and narratives: contains public sector information licensed under the Open Government Licence v3.0. Attribution: the publishing departments, Major Projects Authority / Infrastructure and Projects Authority / National Infrastructure and Service Transformation Authority. Licence: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/ .
+- MAMIP / IAMTrail repository: GNU General Public License version 3. The full upstream licence is preserved in evidence/source-mamiplicense.html (plain licence text despite the extension). The pinned snapshots retain upstream provenance. No separate broader licence is asserted for the underlying AWS-authored policy documents.
+- AWS documentation: © Amazon Web Services, Inc. or its affiliates. The website links to AWS Site Terms. No blanket open licence for the downloaded HTML was established. These fixtures use documented policy examples and expressly labelled transformations; do not describe the entire source corpus as openly licensed. AWS Site Terms: https://aws.amazon.com/terms/ .
+- Rhino Security Labs: copyrighted source article; no explicit open reuse licence established. The fixtures paraphrase the permission combinations and do not reproduce the article prose. Terms: https://rhinosecuritylabs.com/terms-and-conditions/ .
+- This source inventory grants no additional rights. Local exclusion material is used only for duplicate prevention, not as new source data.
+
+## URL inventory
+
+The following inventory includes final-case sources and downloaded research sources, including candidates that were not selected. GitHub blob links identify human-readable provenance; raw links identify downloaded JSON. Failed/noncanonical AWS service-reference URLs are retained as research history; final classifications use list_dynamodb.html and list_polly.html.
+
+### Rhino Security Labs
+
+- https://rhinosecuritylabs.com/aws/aws-privilege-escalation-methods-mitigation/
+- https://rhinosecuritylabs.com/terms-and-conditions/
+
+### MAMIP / IAMTrail
+
+- https://api.github.com/repos/zoph-io/IAMTrail/commits?path=policies/AWSCodeCommitReadOnly&per_page=6
+- https://api.github.com/repos/zoph-io/IAMTrail/commits?path=policies/AWSCompromisedKeyQuarantine&per_page=6
+- https://api.github.com/repos/zoph-io/IAMTrail/commits?path=policies/AWSCompromisedKeyQuarantineV3&per_page=6
+- https://api.github.com/repos/zoph-io/IAMTrail/commits?path=policies/AWSLambda_ReadOnlyAccess&per_page=6
+- https://api.github.com/repos/zoph-io/IAMTrail/commits?path=policies/AmazonDynamoDBReadOnlyAccess&per_page=6
+- https://api.github.com/repos/zoph-io/IAMTrail/commits?path=policies/AmazonEC2ReadOnlyAccess&per_page=10
+- https://api.github.com/repos/zoph-io/IAMTrail/commits?path=policies/AmazonEC2ReadOnlyAccess&per_page=6
+- https://api.github.com/repos/zoph-io/IAMTrail/commits?path=policies/AmazonPollyReadOnlyAccess&per_page=6
+- https://api.github.com/repos/zoph-io/IAMTrail/commits?path=policies/AmazonS3ReadOnlyAccess&per_page=6
+- https://api.github.com/repos/zoph-io/IAMTrail/commits?path=policies/ReadOnlyAccess&per_page=5
+- https://github.com/zoph-io/IAMTrail/blob/112c77ac4335dc09943d4aab47bdcd612861a09e/policies/AWSCompromisedKeyQuarantineV3
+- https://github.com/zoph-io/IAMTrail/blob/1a1f31327d0e8ae08a72c335ad8f332093640862/policies/AmazonPollyReadOnlyAccess
+- https://github.com/zoph-io/IAMTrail/blob/421c58eb060fec5117481e9a125a2ec859a24f8e/policies/AmazonEC2ReadOnlyAccess
+- https://github.com/zoph-io/IAMTrail/blob/51c001c08a091628ef24d503539c806ae0529ced/policies/AWSCodeCommitReadOnly
+- https://github.com/zoph-io/IAMTrail/blob/574fe81f0b4eeaf3b7e40adaa1789044375a2783/policies/AWSCodeCommitReadOnly
+- https://github.com/zoph-io/IAMTrail/blob/792b24e0b678ad40dd6083557cd72d0d7cdcce27/policies/AmazonDynamoDBReadOnlyAccess
+- https://github.com/zoph-io/IAMTrail/blob/9d479f79b4fd32488764788bb84221e1f8791ff6/policies/AWSCompromisedKeyQuarantineV3
+- https://github.com/zoph-io/IAMTrail/blob/aafbae9e6087b732577df3a0556f8677e5d4c79b/policies/AmazonDynamoDBReadOnlyAccess
+- https://github.com/zoph-io/IAMTrail/blob/c6b62c2e77b27e0efa35ac0f5dec14ade89360cd/policies/AmazonEC2ReadOnlyAccess
+- https://github.com/zoph-io/IAMTrail/blob/f86339e42d7d7331bee51d24aff6f8690be5258f/policies/AmazonPollyReadOnlyAccess
+- https://github.com/zoph-io/MAMIP
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/01407009f178b79563b98779c290037496d7b6c0/policies/AWSCompromisedKeyQuarantineV3
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/112c77ac4335dc09943d4aab47bdcd612861a09e/policies/AWSCompromisedKeyQuarantineV3
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/115f98b799ed9a88dc6e9e05a9604133a2efbabe/policies/AWSCompromisedKeyQuarantine
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/152e183c64331fedec31b4a41456541126ca0fa9/policies/AWSCodeCommitReadOnly
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/1a1f31327d0e8ae08a72c335ad8f332093640862/policies/AmazonPollyReadOnlyAccess
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/1b36617981d5e8905ceb82b8dcbd892340a023ba/policies/AWSCompromisedKeyQuarantine
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/1b36617981d5e8905ceb82b8dcbd892340a023ba/policies/AmazonDynamoDBReadOnlyAccess
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/1b36617981d5e8905ceb82b8dcbd892340a023ba/policies/AmazonPollyReadOnlyAccess
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/1b36617981d5e8905ceb82b8dcbd892340a023ba/policies/AmazonS3ReadOnlyAccess
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/2aba338d8f83d36cb6613929dac76de09d575ced/policies/AWSLambda_ReadOnlyAccess
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/421c58eb060fec5117481e9a125a2ec859a24f8e/policies/AmazonEC2ReadOnlyAccess
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/496930bc8ce9ad6d76be814e9e45883fefbdc6ba/policies/AWSCompromisedKeyQuarantine
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/51c001c08a091628ef24d503539c806ae0529ced/policies/AWSCodeCommitReadOnly
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/574fe81f0b4eeaf3b7e40adaa1789044375a2783/policies/AWSCodeCommitReadOnly
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/69642b9f2c33c34a6fbc88e518588451a5c06c24/policies/AmazonS3ReadOnlyAccess
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/792b24e0b678ad40dd6083557cd72d0d7cdcce27/policies/AmazonDynamoDBReadOnlyAccess
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/9621e9a579c0d6bd77a8266b4bc92a623d5b99a2/policies/AWSCompromisedKeyQuarantineV3
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/984d0f98da74b5b839df2191e70f629fb8963bf3/policies/AWSLambda_ReadOnlyAccess
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/9d479f79b4fd32488764788bb84221e1f8791ff6/policies/AWSCompromisedKeyQuarantineV3
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/9f5aa4e02369222a9af4b9320d80db12ac649a60/policies/AWSLambda_ReadOnlyAccess
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/a965aa7b3fd39e371dc6f29355654f9511d91bdf/policies/AmazonDynamoDBReadOnlyAccess
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/aafbae9e6087b732577df3a0556f8677e5d4c79b/policies/AWSCompromisedKeyQuarantine
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/aafbae9e6087b732577df3a0556f8677e5d4c79b/policies/AmazonDynamoDBReadOnlyAccess
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/aafbae9e6087b732577df3a0556f8677e5d4c79b/policies/AmazonPollyReadOnlyAccess
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/aafbae9e6087b732577df3a0556f8677e5d4c79b/policies/AmazonS3ReadOnlyAccess
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/aba4b375edbeca4782035568c78ba1d23a17a886/policies/AmazonEC2ReadOnlyAccess
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/b7ce2f2f36b921494ee79f19f3d6285c8767a7c0/policies/AWSLambda_ReadOnlyAccess
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/b8eeeb47c959fa988e517ee33ea4d505f7bb207c/policies/AmazonEC2ReadOnlyAccess
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/c6b62c2e77b27e0efa35ac0f5dec14ade89360cd/policies/AmazonEC2ReadOnlyAccess
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/cada7478f3261103db996436a683127f125584e4/policies/AWSCodeCommitReadOnly
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/cf1e4413c77fc0810114b72e35162510bce97756/policies/AmazonS3ReadOnlyAccess
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/f86339e42d7d7331bee51d24aff6f8690be5258f/policies/AmazonPollyReadOnlyAccess
+- https://raw.githubusercontent.com/zoph-io/IAMTrail/main/LICENSE
+
+### GMPP and UK Government
+
+- https://assets.publishing.service.gov.uk/media/5a74b963ed915d502d6ca79b/gmpp-data-DWP-q2-2012-13.csv
+- https://assets.publishing.service.gov.uk/media/5a74f283ed915d502d6cc473/gmpp-data-HMT-q2-2012-13_ELPS.csv
+- https://assets.publishing.service.gov.uk/media/5a74f33c40f0b6399b2af792/HO_Major_projects.csv
+- https://assets.publishing.service.gov.uk/media/5a7b88a5ed915d4147620fed/gmpp-data-MoJ-q2-2012-13.csv
+- https://assets.publishing.service.gov.uk/media/5a7b93c1e5274a7318b8f913/gmpp-data-DfID-q2-2012-13a.csv
+- https://assets.publishing.service.gov.uk/media/5a7bffe7ed915d01ba1ca7f4/gmpp-data-DCMS-q2-2012-13.csv
+- https://assets.publishing.service.gov.uk/media/5a7c1f1fe5274a1f5cc75ebc/gmpp-data-cabinet-office-q2-2012-13.csv
+- https://assets.publishing.service.gov.uk/media/5a7c324a40f0b67d0b11f801/BIS-_gmpp-data-q2-2012-13.csv
+- https://assets.publishing.service.gov.uk/media/5a7c35bbed915d76e2ebbd13/20130524_mod_gmpp_data.csv
+- https://assets.publishing.service.gov.uk/media/5a7c47ede5274a1b00422b52/gmpp-data-DfE-q2-2012-13.csv
+- https://assets.publishing.service.gov.uk/media/5a7c83a7e5274a2674eab2c6/gmpp-data-DCLG-q2-2012-13.csv
+- https://assets.publishing.service.gov.uk/media/5a7c8ce3ed915d48c2410849/gmpp-data-FCO-q2-2012-13.csv
+- https://assets.publishing.service.gov.uk/media/5a7c96c1ed915d6969f45f1d/gmpp-data-HMRC-q2-2012-13.csv
+- https://assets.publishing.service.gov.uk/media/5a7cab85ed915d6969f46841/gmpp-data-DH-q2-2012-13.csv
+- https://assets.publishing.service.gov.uk/media/5a7ce3d7ed915d36e95f0481/gmpp-data-DECC-q2-2012-13.csv
+- https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv
+- https://assets.publishing.service.gov.uk/media/5a7f0962ed915d74e33f3fb5/gmpp-data-dft-q2-2012-13.csv
+- https://assets.publishing.service.gov.uk/media/6895fbb63080e72710b2e2ef/nista_annual_report_data_2425.csv
+- https://assets.publishing.service.gov.uk/media/6a4fb28da6586e258d371bfd/NISTA_Major_Projects_Annual_Report_2025-2026_Data.csv
+- https://www.gov.uk/government/collections/major-projects-data
+- https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-bis-2013
+- https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-cabinet-office-2013
+- https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-dclg-2013
+- https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-dcms-2013
+- https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-decc-2013
+- https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-department-of-health-2013--2
+- https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-dfid-2013
+- https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-dft-2013
+- https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-dwp-2013
+- https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-hm-treasury-2013
+- https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-hmrc-2013
+- https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-mod-2013
+- https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-moj-2013--2
+- https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-the-department-for-education-2013--2
+- https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-the-foreign-and-commonwealth-office-2013
+- https://www.gov.uk/government/publications/home-office-major-projects-portfolio-data-2013
+- https://www.gov.uk/government/publications/major-projects-authority-annual-report-2013
+- https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014
+- https://www.gov.uk/government/publications/nista-major-projects-annual-report-2025-26
+- https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+
+### AWS documentation
+
+- https://aws.amazon.com/documentation-overview/
+- https://aws.amazon.com/terms/
+- https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/iam-identity-based-access-control-cwl.html
+- https://docs.aws.amazon.com/AmazonS3/latest/userguide/tagging-and-policies.html
+- https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html
+- https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_iam_mfa-selfmanage.html
+- https://docs.aws.amazon.com/service-authorization/latest/reference/list_amazondynamodb.html
+- https://docs.aws.amazon.com/service-authorization/latest/reference/list_amazonpolly.html
+- https://docs.aws.amazon.com/service-authorization/latest/reference/list_dynamodb.html
+- https://docs.aws.amazon.com/service-authorization/latest/reference/list_polly.html
+- https://docs.aws.amazon.com/sns/latest/dg/sns-access-policy-use-cases.html
+
+## ProjectLens set 4: final selection and checks
+
+The current fixture contains only real official GMPP schedule cells. The narrative is the complete current-release schedule narrative, not a summary or a concatenation of other commentary. Original spelling, punctuation, whitespace and embedded line endings are retained. The `why` field is the independent label rationale.
+
+Pairs use consecutive annual-report release years. Year N means the release published in N, labelled (N-1)-N; it does not mean the snapshot was taken in calendar year N. The 2013 departmental baselines report Q2 2012–13. Subsequent selected releases report data as at 30 September of the preceding calendar year. Dates are converted to ISO 8601, and movement is the exact signed calendar-day difference. BIS's 2013 baseline uses US month/day/year; the other selected sources use day/month/year. No date was silently corrected, rounded or replaced by a narrative date.
+
+Selected releases do not publish GMPP IDs. No IDs were invented or inferred from the project name. Project identities were checked against all `*heldout*.json` files in both tool repositories, the identity fields in every original ProjectLens input JSON, and project names in original XER PROJECT tables. A further name-to-ID crosswalk across the public 2020–2026 raw releases checks renamed projects against seen IDs and their observed names. The Fraud, Error and Debt Programme also appears as DWP_0016_1213-Q2 in later releases; that identity is absent from the exclusion pool. Conservative aliases exclude Crossrail, HS2, Thameslink, IEP, the Priority School Building Programme, Broadband Delivery/Project Gigabit, and other renamed programme families. Similar words alone do not make distinct programmes identical.
+
+The selected previous and current project names match uniquely after case and punctuation normalisation. All 30 selected projects are distinct. This checks project identities, rather than merely excluding previously used year-pairs. Neither implementation, tests, engines nor executable tools were read or run. Source CSV processing and fixture validation use independent scripts under `evidence/`.
+
+Checks: 30 unique case IDs; 30 distinct projects; 60 source date checks; 30 exact current narrative comparisons; 30 signed date-difference checks; no excluded normalised names or GMPP ID matches. Evidence: `evidence/projectlens-validation.json`, `evidence/project-exclusion-index.json`, `evidence/project-identity-audit.json` and `evidence/projectlens-selection.json`. This is a provenance check, not a product score.
+
+### Label interpretation and doubtful labels
+
+Explained means the narrative explicitly acknowledges a revision, extension, delay or acceleration; an exact numerical reconciliation is not required. An acknowledged move takes precedence over an on-track claim. No-move and published-date-check require exactly equal published date cells. Month-only narrative dates are treated at their stated precision. Both selected published-date-check cases exceed 14 days even at the nearest boundary.
+
+These findings describe the published commentary and the published end-date fields. They do not establish wrongdoing, project delivery failure, or that the same milestones underlie every field.
+
+Four contradiction labels are sensitive to scope or precision, and are deliberately disclosed:
+
+- **PLH4-B01, Enterprise Zones Programme:** 2015 changes to 2038, while the complete narrative says “On schedule”. A changed reporting horizon could explain the difference; the source does not establish that explanation.
+- **PLH4-B02, Submarine Enterprise Performance Programme:** 1 March changes to 31 March, while the programme is described as on track. The source may be using different month-boundary precision.
+- **PLH4-B03, Broadmoor Redevelopment Programme:** the commentary says all activities are on or ahead of programme but discusses construction activities. The overall end-date field may include later commissioning or closure.
+- **PLH4-B06, New Employment Model:** the programme remains “on track” by 2021 despite a 28-day change within October 2021. The statement remains compatible at year precision. The supplied on-track labelling rule determines the label.
+
+Additional source caveats do not change the labels: **B10** acknowledges a later BIS Shared Services date but gives a correction differing from the column; **B11** explains Benefit Cap's extension but gives actual closure later than the column; **B16** explicitly acknowledges an Integrated Delivery Programme end-date revision while describing later operational milestones; **B30** explicitly distinguishes Procurement Transformation go-live from programme closure, which can explain the published-date-check. These caveats are also retained in fixture metadata.
+
+### Final ProjectLens source URLs
+
+All following official UK Government CSVs and their schedule narratives contain public sector information licensed under the [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/). Attribution: the publishing departments and the Major Projects Authority / Infrastructure and Projects Authority. Local snapshots are preserved in `evidence/`; `evidence/sha256.json` records their hashes.
+
+- **2013 release:** [publication](https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-bis-2013); [original CSV](https://assets.publishing.service.gov.uk/media/5a7c324a40f0b67d0b11f801/BIS-_gmpp-data-q2-2012-13.csv).
+- **2013 release:** [publication](https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-dclg-2013); [original CSV](https://assets.publishing.service.gov.uk/media/5a7c83a7e5274a2674eab2c6/gmpp-data-DCLG-q2-2012-13.csv).
+- **2013 release:** [publication](https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-department-of-health-2013--2); [original CSV](https://assets.publishing.service.gov.uk/media/5a7cab85ed915d6969f46841/gmpp-data-DH-q2-2012-13.csv).
+- **2013 release:** [publication](https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-dwp-2013); [original CSV](https://assets.publishing.service.gov.uk/media/5a74b963ed915d502d6ca79b/gmpp-data-DWP-q2-2012-13.csv).
+- **2013 release:** [publication](https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-mod-2013); [original CSV](https://assets.publishing.service.gov.uk/media/5a7c35bbed915d76e2ebbd13/20130524_mod_gmpp_data.csv).
+- **2013 release:** [publication](https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-moj-2013--2); [original CSV](https://assets.publishing.service.gov.uk/media/5a7b88a5ed915d4147620fed/gmpp-data-MoJ-q2-2012-13.csv).
+- **2013 release:** [publication](https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-the-foreign-and-commonwealth-office-2013); [original CSV](https://assets.publishing.service.gov.uk/media/5a7c8ce3ed915d48c2410849/gmpp-data-FCO-q2-2012-13.csv).
+- **2014 release:** [publication](https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014); [original CSV](https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv).
+- **2015 release:** [publication](https://www.gov.uk/government/publications/major-projects-authority-annual-report-2015); [original CSV](https://assets.publishing.service.gov.uk/media/5a801db6ed915d74e33f88a0/GMPP_data_september_2014.csv).
+- **2016 release:** [publication](https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2016); [original CSV](https://assets.publishing.service.gov.uk/media/5a80a49ce5274a2e8ab51547/government_major_projects_portfolio_data_september_2015.csv).
+- **2017 release:** [publication](https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2017); [original CSV](https://assets.publishing.service.gov.uk/media/5a821ed6e5274a2e8ab57995/Annual_Report_-_consolidated_data_and_narratives.csv).
+- **2018 release:** [publication](https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018); [original CSV](https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv).
+- **2019 release:** [publication](https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019); [original CSV](https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv).
+
+### Final ProjectLens case inventory
+
+| Case | Project | Releases | Label |
+|---|---|---|---|
+| PLH4-B01 | Enterprise Zones Programme | 2013–2014 | contradiction |
+| PLH4-B02 | Submarine Enterprise Performance Programme | 2013–2014 | contradiction |
+| PLH4-B03 | Broadmoor Redevelopment Programme | 2014–2015 | contradiction |
+| PLH4-B04 | Health Visitor Programme | 2014–2015 | contradiction |
+| PLH4-B05 | Harmondsworth and Colnbrook Retender | 2014–2015 | contradiction |
+| PLH4-B06 | New Employment Model | 2014–2015 | contradiction |
+| PLH4-B07 | 2011 Census | 2014–2015 | contradiction |
+| PLH4-B08 | CAP Delivery Programme | 2016–2017 | contradiction |
+| PLH4-B09 | FE Capital Investment Programme | 2013–2014 | explained |
+| PLH4-B10 | BIS Shared Services | 2013–2014 | explained |
+| PLH4-B11 | Benefit Cap | 2013–2014 | explained |
+| PLH4-B12 | Puma Helicopter Life Extension Programme | 2013–2014 | explained |
+| PLH4-B13 | Type 45 Destroyers | 2013–2014 | explained |
+| PLH4-B14 | Fraud, Error and Debt Programme | 2014–2015 | explained |
+| PLH4-B15 | Next Generation Estates Contracts | 2014–2015 | explained |
+| PLH4-B16 | Integrated Delivery Programme | 2014–2015 | explained |
+| PLH4-B17 | 100000 Genomes Project | 2017–2018 | explained |
+| PLH4-B18 | Health and Care Modernisation Transition Programme | 2013–2014 | no-move |
+| PLH4-B19 | Summary Care Record (SCR) | 2013–2014 | no-move |
+| PLH4-B20 | Southern Programme for IT | 2013–2014 | no-move |
+| PLH4-B21 | N3 Extension | 2013–2014 | no-move |
+| PLH4-B22 | CAB Variation | 2013–2014 | no-move |
+| PLH4-B23 | UKERP | 2013–2014 | no-move |
+| PLH4-B24 | Logistics Commodities Services Transformation | 2013–2014 | no-move |
+| PLH4-B25 | Court Estates Reform | 2013–2014 | no-move |
+| PLH4-B26 | National Offender Management Information Systems (NOMIS) Programme | 2013–2014 | no-move |
+| PLH4-B27 | Further Education 24+ Learning Loans Programme | 2014–2015 | no-move |
+| PLH4-B28 | National Cyber Security Programme | 2014–2015 | no-move |
+| PLH4-B29 | Central Payment System | 2013–2014 | published-date-check |
+| PLH4-B30 | Procurement Transformation Programme | 2018–2019 | published-date-check |

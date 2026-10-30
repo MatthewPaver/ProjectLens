@@ -743,12 +743,6 @@ function lastDayOfMonth(year, month) {
   return new Date(Date.UTC(year, month, 0, 12, 0, 0));
 }
 
-function financialYearQuarterEnd(startYearTwoDigitOrFour, quarter) {
-  // UK financial year: Apr (Y) → Mar (Y+1). Q4 ends 31 March of the second calendar year.
-  const range = financialYearQuarterRange(startYearTwoDigitOrFour, quarter);
-  return range ? range.end : null;
-}
-
 function financialYearQuarterRange(startYearTwoDigitOrFour, quarter) {
   // Q1 Apr–Jun, Q2 Jul–Sep, Q3 Oct–Dec, Q4 Jan–Mar of the next calendar year.
   const start = expandTwoDigitYear(startYearTwoDigitOrFour);

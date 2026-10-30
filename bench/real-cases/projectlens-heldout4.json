@@ -1,0 +1,783 @@
+{
+  "meta": {
+    "description": "Fourth independent held-out GMPP set: 30 real year-on-year pairs across 30 distinct projects. Do not tune on this set.",
+    "yearConvention": "Year N denotes the annual-report release published in N and labelled (N-1)-N. The 2013 departmental baselines report Q2 2012-13; the 2014 through 2019 consolidated releases report data as at 30 September of the preceding calendar year.",
+    "authorisation": "On 30 October 2026 the user authorised any release years, including older years, provided every project is absent from sets 1–3 in both repositories and the original ProjectLens inputs.",
+    "labelRules": {
+      "contradiction": "The published end date moved and the narrative says unchanged/on track/on schedule, or names a current end date more than 14 days from the published one, without stating the move.",
+      "explained": "The published end date moved and the narrative states the move, revision, extension, delay or acceleration. This takes precedence over an on-track claim in the same narrative.",
+      "no-move": "The published end date is identical and the narrative does not name a different current end date.",
+      "published-date-check": "The published end date is identical but the narrative names a different current end date."
+    },
+    "matching": "Pairs use unique exact project names after case and punctuation normalisation. The selected releases do not publish GMPP IDs, so gmppId is omitted rather than invented. Exclusions use both names and available GMPP IDs, plus conservative aliases.",
+    "narrativeVerbatim": "Complete current-release departmental schedule cell, retaining spelling, whitespace, punctuation and embedded line endings. No other narrative fields are appended.",
+    "dates": "ISO 8601 conversion of published end-date cells. BIS 2013 uses month/day/year; other selected 2013 sources and subsequent releases use day/month/year. daysMoved = curEnd minus prevEnd in calendar days; negative means earlier.",
+    "interpretation": "These labels describe disagreement between published schedule cells and commentary under the supplied rules. They do not establish project performance or wrongdoing. Dates can refer to different planning horizons or stages.",
+    "doubtfulLabels": {
+      "PLH4-B01": "Enterprise Zones moves from a 2015 end date to a 2038 horizon. The data do not establish whether the reporting horizon changed; the literal on-schedule rule gives contradiction.",
+      "PLH4-B02": "The 30-day change is 1 March to 31 March. This may reflect month-boundary precision rather than a substantive delay; published cells are retained exactly.",
+      "PLH4-B03": "Broadmoor commentary discusses construction activities. Programme closure may use a different scope, although the schedule cell says all activities are on or ahead of programme.",
+      "PLH4-B06": "New Employment Model says on track by 2021, which remains true at year precision despite a 28-day change within October. The supplied on-track rule gives contradiction."
+    },
+    "additionalSourceCaveats": {
+      "PLH4-B10": "BIS explicitly acknowledges a later date but also gives a corrected date that differs from the column; explained takes precedence.",
+      "PLH4-B11": "Benefit Cap explains remaining beyond the initial plan but reports an actual closure later than the current column.",
+      "PLH4-B16": "Integrated Delivery acknowledges an end-date revision; its narrative also describes operational milestones later than the column.",
+      "PLH4-B30": "Procurement Transformation explicitly distinguishes key-change go-live from programme closure. The label requests a published-date check; the scope distinction may explain it."
+    },
+    "licence": "Contains public sector information licensed under the Open Government Licence v3.0.",
+    "validation": "No implementation, test or engine files were read and neither product nor benchmark was run. Independent fixture checks are recorded in evidence/projectlens-validation.json."
+  },
+  "cases": [
+    {
+      "id": "PLH4-B01",
+      "project": "Enterprise Zones Programme",
+      "department": "DCLG",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2015-03-31",
+      "curEnd": "2038-03-31",
+      "daysMoved": 8401,
+      "narrative": "On schedule",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-dclg-2013",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7c83a7e5274a2674eab2c6/gmpp-data-DCLG-q2-2012-13.csv",
+          "release": "2012-13 annual-report release (published 2013)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        }
+      },
+      "label": "contradiction",
+      "why": "The published end date moves from 31 March 2015 to 31 March 2038. The entire schedule narrative says \"On schedule\" and states no change."
+    },
+    {
+      "id": "PLH4-B02",
+      "project": "Submarine Enterprise Performance Programme",
+      "department": "MOD",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2014-03-01",
+      "curEnd": "2014-03-31",
+      "daysMoved": 30,
+      "narrative": "The programme is on track with benefit identification and benefit delivery underway in both financial and non-financial benefits.  Identification of enduring benefits has now commenced. The signing of the Rolls-Royce and BAES foundation contracts have been achieved (February 2013 and July 2013 respectively), with the remaining foundation contract with Babcock (the MSDF) due in Spring 2014.  The programme is still on track to transition to business as usual following signature of MSDF.",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-mod-2013",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7c35bbed915d76e2ebbd13/20130524_mod_gmpp_data.csv",
+          "release": "2012-13 annual-report release (published 2013)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        }
+      },
+      "label": "contradiction",
+      "why": "The published end date moves 30 days later. The narrative twice says the programme is on track, including its transition to business as usual, and states no change to the end date."
+    },
+    {
+      "id": "PLH4-B03",
+      "project": "Broadmoor Redevelopment Programme",
+      "department": "DoH Capital",
+      "prevYear": 2014,
+      "year": 2015,
+      "prevEnd": "2018-11-01",
+      "curEnd": "2020-02-11",
+      "daysMoved": 467,
+      "narrative": "As at 30th September 2014 all activities were on programme - the site generator had been relocated; the old PMVA building and the boiler house chimneys had been demolished; the top soil had been stripped; the foundations had been removed.  During the period 1st October 2014 - 31st March 2015 the following (will) have taken place - water main for new Hospital; cut and fill continues; foundation piling (1 x ward block, central building and new entrance building); pre-cast concrete frame installation; off-site construction (concrete and windows); delivery of off site manufactured service riser modules to serve the bedrooms; further development of operational commissioning and transition planning programme (separate from construction programme) has been ramped up and is progressing well.  All activities are on or slightly ahead of programme.\n",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2015",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a801db6ed915d74e33f88a0/GMPP_data_september_2014.csv",
+          "release": "2014-15 annual-report release (published 2015)"
+        }
+      },
+      "label": "contradiction",
+      "why": "The published end date moves 467 days later. The narrative says all activities were on programme and are on or slightly ahead of programme, without stating a schedule change."
+    },
+    {
+      "id": "PLH4-B04",
+      "project": "Health Visitor Programme",
+      "department": "DoH Non Capital",
+      "prevYear": 2014,
+      "year": 2015,
+      "prevEnd": "2015-06-30",
+      "curEnd": "2015-12-31",
+      "daysMoved": 184,
+      "narrative": "The programme is on-track with no significant changes to dates of deliverables and key milestones.\n\nWorkforce expansion: at the time of preparing this report, the most recent management information (November 2014) published by NHS England estimates an indicative count of 11,290 FTE health visitors; 3,198 more than the May 2010 baseline, representing an increase of 40%. At the time of preparing this report, the latest official figures  (September 2014) show there were 10,800 full time equivalent health visitors; 2,708 more than in May 2010. Since 2010 around 7,500 health visitor training places have been commissioned, with the annual total growing from around 550 to around 2,700 in 2013, representing a five-fold increase in the number of health visitor trainees starting their training.  This investment in training has delivered most of the expansion in health visitor workforce we are now seeing.  In addition, there are a further 1,200 training places being commissioned in 2014/15 - this will ensure that the workforce growth is sustained beyond the end of the programme.\n\nService transformation: at the time of preparing this report, the new service model has been tested in early implementer  sites and case study material published. These sites saw increases in the numbers of children receiving the 2-2½ year review almost double.  We have six published priorities for demonstrating success and building sustainable services. Data collection and reporting is in place so that delivery of service transformation can be demonstrated.\n\nTransfer of health visitor commissioning to Local Authorities: at the time of preparing this report, the Baseline Agreement Exercise has been issued to support the issuing of allocations to Local Authorities in February 2015 and the draft regulations to mandate key checks have been published.",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2015",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a801db6ed915d74e33f88a0/GMPP_data_september_2014.csv",
+          "release": "2014-15 annual-report release (published 2015)"
+        }
+      },
+      "label": "contradiction",
+      "why": "The published end date moves 184 days later. The narrative says the programme is on-track with no significant changes to deliverable dates and key milestones, without stating the move."
+    },
+    {
+      "id": "PLH4-B05",
+      "project": "Harmondsworth and Colnbrook Retender",
+      "department": "HO",
+      "prevYear": 2014,
+      "year": 2015,
+      "prevEnd": "2014-08-31",
+      "curEnd": "2015-06-01",
+      "daysMoved": 274,
+      "narrative": "Project ran to agreed schedule.",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2015",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a801db6ed915d74e33f88a0/GMPP_data_september_2014.csv",
+          "release": "2014-15 annual-report release (published 2015)"
+        }
+      },
+      "label": "contradiction",
+      "why": "The published end date moves 274 days later. The complete schedule narrative says \"Project ran to agreed schedule.\" and states no change."
+    },
+    {
+      "id": "PLH4-B06",
+      "project": "New Employment Model",
+      "department": "MoD",
+      "prevYear": 2014,
+      "year": 2015,
+      "prevEnd": "2021-10-01",
+      "curEnd": "2021-10-29",
+      "daysMoved": 28,
+      "narrative": "The NEM programme remains on track to deliver its agreed remit by 2021; the transition plans for pay reform and accommodation charging will have completed by then. Forces Help To Buy (FHTB) interest-free loan pilot was successfully launched in April 2014. The next milestone is harmonisation of Engagement Structures which will take effect from April 2015. Further change is anticipated in 2016 when a new pay model and accommodation charging system are planned to go-live.",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2015",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a801db6ed915d74e33f88a0/GMPP_data_september_2014.csv",
+          "release": "2014-15 annual-report release (published 2015)"
+        }
+      },
+      "label": "contradiction",
+      "why": "The published end date moves 28 days later. The narrative says the programme remains on track to deliver its agreed remit by 2021, without stating a change to programme completion."
+    },
+    {
+      "id": "PLH4-B07",
+      "project": "2011 Census",
+      "department": "ONS",
+      "prevYear": 2014,
+      "year": 2015,
+      "prevEnd": "2014-03-31",
+      "curEnd": "2014-09-30",
+      "daysMoved": 183,
+      "narrative": "The Programme continued as scheduled and formally closed on 1st October 2014, exiting GMPP.",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2015",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a801db6ed915d74e33f88a0/GMPP_data_september_2014.csv",
+          "release": "2014-15 annual-report release (published 2015)"
+        }
+      },
+      "label": "contradiction",
+      "why": "The published end date moves 183 days later. The narrative says the programme continued as scheduled and gives its actual closure date, without saying the schedule changed. The stated 1 October closure is one day after the current published end date."
+    },
+    {
+      "id": "PLH4-B08",
+      "project": "CAP Delivery Programme",
+      "department": "DEFRA",
+      "prevYear": 2016,
+      "year": 2017,
+      "prevEnd": "2016-03-31",
+      "curEnd": "2017-03-31",
+      "daysMoved": 365,
+      "narrative": "The Programme remained on schedule and formally closed on 31 March 2017, having developed nearly all the functionality required for the Minimum Viable Service and the Minimum Credible Service, the remainder of which will be delivered through business as usual activities.  ",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2016",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a80a49ce5274a2e8ab51547/government_major_projects_portfolio_data_september_2015.csv",
+          "release": "2015-16 annual-report release (published 2016)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2017",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a821ed6e5274a2e8ab57995/Annual_Report_-_consolidated_data_and_narratives.csv",
+          "release": "2016-17 annual-report release (published 2017)"
+        }
+      },
+      "label": "contradiction",
+      "why": "The published end date moves 365 days later. The narrative says the programme remained on schedule and formally closed on the current published date, without stating a move from the previous date."
+    },
+    {
+      "id": "PLH4-B09",
+      "project": "FE Capital Investment Programme",
+      "department": "BIS",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2015-03-31",
+      "curEnd": "2015-09-01",
+      "daysMoved": 154,
+      "narrative": "The first MPA Annual Report in May 2013 stated the project end date as the end of the financial year for which funding is available. The end date shown this year 01/09/15 is the date by which the last of the programme funded projects will become operational",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-bis-2013",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7c324a40f0b67d0b11f801/BIS-_gmpp-data-q2-2012-13.csv",
+          "release": "2012-13 annual-report release (published 2013)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        }
+      },
+      "label": "explained",
+      "why": "The narrative explicitly contrasts the end date in the first annual report with the date shown this year and explains the change from the funding horizon to when the last funded projects become operational."
+    },
+    {
+      "id": "PLH4-B10",
+      "project": "BIS Shared Services",
+      "department": "BIS",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2013-04-30",
+      "curEnd": "2014-04-01",
+      "daysMoved": 336,
+      "narrative": "The project end date should read 01/04/15 (as per the Q2 2012/13 GMPP report).\n\n\n\nAdditional scope was incorporated into the programme in 2012, in line with the objectives of the Civil Service Reform programme.  The later project end date is an indicative date reflecting the enlarged scope of the programme.  Given that work is being progressed under business cases dedicated to individual organisations, the end date cannot be finalised until all business cases have been completed.\n",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-bis-2013",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7c324a40f0b67d0b11f801/BIS-_gmpp-data-q2-2012-13.csv",
+          "release": "2012-13 annual-report release (published 2013)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        }
+      },
+      "label": "explained",
+      "why": "The narrative explicitly refers to a later project end date and explains enlarged programme scope. It also says the date should read 1 April 2015, which differs from the published 1 April 2014; the stated later-date explanation determines this label."
+    },
+    {
+      "id": "PLH4-B11",
+      "project": "Benefit Cap",
+      "department": "DWP",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2013-07-31",
+      "curEnd": "2013-12-19",
+      "daysMoved": 141,
+      "narrative": "The project closed on 20 February 2014.  While implementation had taken place successfully, a reduced project remained in place beyond the initial planning date to ensure a smooth handover into business as usual occurred.",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-dwp-2013",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a74b963ed915d502d6ca79b/gmpp-data-DWP-q2-2012-13.csv",
+          "release": "2012-13 annual-report release (published 2013)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        }
+      },
+      "label": "explained",
+      "why": "The narrative states that a reduced project remained in place beyond the initial planning date to ensure handover to business as usual. Its stated actual closure, 20 February 2014, is later still than the current published date."
+    },
+    {
+      "id": "PLH4-B12",
+      "project": "Puma Helicopter Life Extension Programme",
+      "department": "MOD",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2014-10-31",
+      "curEnd": "2015-12-31",
+      "daysMoved": 426,
+      "narrative": "There are a number of contributing factors to the schedule deviation including: greater than originally expected volumes of remedial work that disrupted both development and production activity; delays in sourcing some critical Government Furnished Equipment; and delays to the development programme caused by technical issues and the loss of key contractor flight test personnel in an unrelated fatal helicopter accident. The Review Note, approved in April 2013, forecast Initial Operating Capability (IOC) for March 2015 and Full Operating Capability for December 2015. ",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-mod-2013",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7c35bbed915d76e2ebbd13/20130524_mod_gmpp_data.csv",
+          "release": "2012-13 annual-report release (published 2013)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        }
+      },
+      "label": "explained",
+      "why": "The narrative explicitly describes a schedule deviation, identifies the causes of delay and gives Full Operating Capability in December 2015, consistent with the new published end date."
+    },
+    {
+      "id": "PLH4-B13",
+      "project": "Type 45 Destroyers",
+      "department": "MOD",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2014-07-31",
+      "curEnd": "2014-03-31",
+      "daysMoved": -122,
+      "narrative": "The 6th T45 was released to service ahead of schedule in common with the remainder of the Class.  The support solution in place had the flexibility to deal with all early arrivals and the RN benefitted by having operational assets available sooner than programmed.",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-mod-2013",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7c35bbed915d76e2ebbd13/20130524_mod_gmpp_data.csv",
+          "release": "2012-13 annual-report release (published 2013)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        }
+      },
+      "label": "explained",
+      "why": "The published end date moves 122 days earlier. The narrative explicitly states release to service ahead of schedule and operational assets available sooner than programmed."
+    },
+    {
+      "id": "PLH4-B14",
+      "project": "Fraud, Error and Debt Programme",
+      "department": "DWP",
+      "prevYear": 2014,
+      "year": 2015,
+      "prevEnd": "2015-03-31",
+      "curEnd": "2017-03-31",
+      "daysMoved": 731,
+      "narrative": "A number of new initiatives have been added to the Programme. This change in scope, along with dependencies with other programmes, has resulted in a change to the delivery schedule, including moving the end date of the Programme to 2017. These new initiatives will deliver further fraud, error and debt savings for the taxpayer.",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2015",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a801db6ed915d74e33f88a0/GMPP_data_september_2014.csv",
+          "release": "2014-15 annual-report release (published 2015)"
+        }
+      },
+      "label": "explained",
+      "why": "The narrative explicitly says the change in scope and programme dependencies changed the delivery schedule, including moving the end date to 2017."
+    },
+    {
+      "id": "PLH4-B15",
+      "project": "Next Generation Estates Contracts",
+      "department": "MoD",
+      "prevYear": 2014,
+      "year": 2015,
+      "prevEnd": "2014-04-01",
+      "curEnd": "2015-03-20",
+      "daysMoved": 353,
+      "narrative": "Tranche 1 In Service Date (ISD) took place in Q3 2014/15 and is now in Steady State running, NHP's ISD took place in Q3 14/15 and is now in Steady State.\nTranche 2 ISD is scheduled for Q4 14/15.  Regional Frameworks for Scotland - Successful Bidders letters issued Q3 2014/15. Regional Framework for South West and South East - Contract Award Q4 2015/16. NGEC Programme delay of one year was caused through a combination of delays to approvals, limited number of subject matter experts, the integration of a new Integrated Management System (IMS), the Enhanced Operating Model and the integration of other programmes into NGEC.",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2015",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a801db6ed915d74e33f88a0/GMPP_data_september_2014.csv",
+          "release": "2014-15 annual-report release (published 2015)"
+        }
+      },
+      "label": "explained",
+      "why": "The published end date moves 353 days later. The narrative explicitly states a programme delay of one year and describes the contributing causes."
+    },
+    {
+      "id": "PLH4-B16",
+      "project": "Integrated Delivery Programme",
+      "department": "MoJ",
+      "prevYear": 2014,
+      "year": 2015,
+      "prevEnd": "2014-03-01",
+      "curEnd": "2014-09-01",
+      "daysMoved": 184,
+      "narrative": "Client and Cost Management System (CCMS) is the online system through which providers can submit civil legal aid applications. National rollout of voluntary usage of CCMS commenced on 31st March 2014 and was completed on 29th September.  Contractual Notices outlining the timeline to mandatory use of the system were issued to providers on 26th January 2015. This will mandate the use of CCMS for new legal aid applications from 1st October 2015. The 8 month lead in time is to provide firms with sufficient time to train their staff and integrate the system into their businesses. There has been a steady increase in usage with approximately two-thirds of providers using the system to process applications, equating to c.50% of applications being processed digitally.\nThe project end date has consequently been revised accordingly.",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2015",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a801db6ed915d74e33f88a0/GMPP_data_september_2014.csv",
+          "release": "2014-15 annual-report release (published 2015)"
+        }
+      },
+      "label": "explained",
+      "why": "The narrative explains the rollout and lead-in period, then explicitly states that the project end date has consequently been revised accordingly. This acknowledges a revision even though its later operational milestones extend beyond the current published date."
+    },
+    {
+      "id": "PLH4-B17",
+      "project": "100000 Genomes Project",
+      "department": "DHSC",
+      "prevYear": 2017,
+      "year": 2018,
+      "prevEnd": "2017-12-31",
+      "curEnd": "2018-12-31",
+      "daysMoved": 365,
+      "narrative": "To fulfil the vision of the Project, we are always working at the edge of known science.  We have made good progress, but as with all scientific research, it takes time to get it right.  This is why Genomics England, the Department of Health and NHS England have all agreed that the project will be extended from 2017 until the end of 2018.\rGenomics England and NHS England report that recruitment of the rare disease element of the project is going well. Delivery of the cancer element of the project remains challenging but is improving.  \rCancer Accelerator sites and a fast turnaround of cancer reports and additional  resources should improve recruitment. The option is being explored as a contingency to open the sequencing to other research cohorts if necessary for cancer recruitment to ensure the target is met.",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2017",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a821ed6e5274a2e8ab57995/Annual_Report_-_consolidated_data_and_narratives.csv",
+          "release": "2016-17 annual-report release (published 2017)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+          "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv",
+          "release": "2017-18 annual-report release (published 2018)"
+        }
+      },
+      "label": "explained",
+      "why": "The narrative explicitly states that the project will be extended from 2017 until the end of 2018, matching the published change."
+    },
+    {
+      "id": "PLH4-B18",
+      "project": "Health and Care Modernisation Transition Programme",
+      "department": "DoH",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2013-04-01",
+      "curEnd": "2013-04-01",
+      "daysMoved": 0,
+      "narrative": "The Transition Programme closed when it delivered the health and care reforms on 1 April 2013. ",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-department-of-health-2013--2",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7cab85ed915d6969f46841/gmpp-data-DH-q2-2012-13.csv",
+          "release": "2012-13 annual-report release (published 2013)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        }
+      },
+      "label": "no-move",
+      "why": "Both releases publish 1 April 2013. The narrative states that the programme closed on that date and names no different current end date."
+    },
+    {
+      "id": "PLH4-B19",
+      "project": "Summary Care Record (SCR)",
+      "department": "DoH",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2016-03-31",
+      "curEnd": "2016-03-31",
+      "daysMoved": 0,
+      "narrative": "There has been no change in any of the critical milestones and the project remains due to complete for the end of March 2016",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-department-of-health-2013--2",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7cab85ed915d6969f46841/gmpp-data-DH-q2-2012-13.csv",
+          "release": "2012-13 annual-report release (published 2013)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        }
+      },
+      "label": "no-move",
+      "why": "Both releases publish 31 March 2016. The narrative says there has been no change and completion remains due at the end of March 2016."
+    },
+    {
+      "id": "PLH4-B20",
+      "project": "Southern Programme for IT",
+      "department": "DoH",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2015-10-31",
+      "curEnd": "2015-10-31",
+      "daysMoved": 0,
+      "narrative": "Upgrades and additional Clinical functionality continue to be deployed to schedule, such as the upgrades to the RiO electronic patient record system in Community and Mental Health care settings.",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-department-of-health-2013--2",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7cab85ed915d6969f46841/gmpp-data-DH-q2-2012-13.csv",
+          "release": "2012-13 annual-report release (published 2013)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        }
+      },
+      "label": "no-move",
+      "why": "The published end date is identical. The narrative says additional clinical functionality continues to deploy to schedule and names no different current end date."
+    },
+    {
+      "id": "PLH4-B21",
+      "project": "N3 Extension",
+      "department": "DoH",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2014-03-31",
+      "curEnd": "2014-03-31",
+      "daysMoved": 0,
+      "narrative": "Programme is on schedule to end as per the current approved business case.",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-department-of-health-2013--2",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7cab85ed915d6969f46841/gmpp-data-DH-q2-2012-13.csv",
+          "release": "2012-13 annual-report release (published 2013)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        }
+      },
+      "label": "no-move",
+      "why": "The published end date is identical. The narrative says the programme is on schedule to end under the approved business case and names no different current end date."
+    },
+    {
+      "id": "PLH4-B22",
+      "project": "CAB Variation",
+      "department": "DoH",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2013-12-15",
+      "curEnd": "2013-12-15",
+      "daysMoved": 0,
+      "narrative": "The project was delivered on schedule on 15 December 2013.",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-department-of-health-2013--2",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7cab85ed915d6969f46841/gmpp-data-DH-q2-2012-13.csv",
+          "release": "2012-13 annual-report release (published 2013)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        }
+      },
+      "label": "no-move",
+      "why": "Both releases publish 15 December 2013. The narrative states that delivery occurred on that date."
+    },
+    {
+      "id": "PLH4-B23",
+      "project": "UKERP",
+      "department": "FCO",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2016-08-01",
+      "curEnd": "2016-08-01",
+      "daysMoved": 0,
+      "narrative": "No change",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-the-foreign-and-commonwealth-office-2013",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7c8ce3ed915d48c2410849/gmpp-data-FCO-q2-2012-13.csv",
+          "release": "2012-13 annual-report release (published 2013)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        }
+      },
+      "label": "no-move",
+      "why": "The published end date is identical. The complete schedule narrative says \"No change\" and names no different current end date."
+    },
+    {
+      "id": "PLH4-B24",
+      "project": "Logistics Commodities Services Transformation",
+      "department": "MOD",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2018-02-01",
+      "curEnd": "2018-02-01",
+      "daysMoved": 0,
+      "narrative": "No change",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-mod-2013",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7c35bbed915d76e2ebbd13/20130524_mod_gmpp_data.csv",
+          "release": "2012-13 annual-report release (published 2013)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        }
+      },
+      "label": "no-move",
+      "why": "The published end date is identical. The complete schedule narrative says \"No change\" and names no different current end date."
+    },
+    {
+      "id": "PLH4-B25",
+      "project": "Court Estates Reform",
+      "department": "MOJ",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2014-09-30",
+      "curEnd": "2014-09-30",
+      "daysMoved": 0,
+      "narrative": "There are two closures remaining before the programme closes in September 2014. ",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-moj-2013--2",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7b88a5ed915d4147620fed/gmpp-data-MoJ-q2-2012-13.csv",
+          "release": "2012-13 annual-report release (published 2013)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        }
+      },
+      "label": "no-move",
+      "why": "Both releases publish 30 September 2014. The narrative says the programme closes in September 2014, consistent with that date at month precision."
+    },
+    {
+      "id": "PLH4-B26",
+      "project": "National Offender Management Information Systems (NOMIS) Programme",
+      "department": "MoJ",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2013-10-31",
+      "curEnd": "2013-10-31",
+      "daysMoved": 0,
+      "narrative": "Delivered on schedule",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-moj-2013--2",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7b88a5ed915d4147620fed/gmpp-data-MoJ-q2-2012-13.csv",
+          "release": "2012-13 annual-report release (published 2013)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        }
+      },
+      "label": "no-move",
+      "why": "The published end date is identical. The narrative says \"Delivered on schedule\" and names no different current end date."
+    },
+    {
+      "id": "PLH4-B27",
+      "project": "Further Education 24+ Learning Loans Programme",
+      "department": "BIS",
+      "prevYear": 2014,
+      "year": 2015,
+      "prevEnd": "2013-10-31",
+      "curEnd": "2013-10-31",
+      "daysMoved": 0,
+      "narrative": "The project was closed in October 2013 as planned and is now in Business as Usual running and a Gate 5 review is being planned.",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2015",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a801db6ed915d74e33f88a0/GMPP_data_september_2014.csv",
+          "release": "2014-15 annual-report release (published 2015)"
+        }
+      },
+      "label": "no-move",
+      "why": "Both releases publish 31 October 2013. The narrative says the project closed in October 2013 as planned, consistent with that date at month precision."
+    },
+    {
+      "id": "PLH4-B28",
+      "project": "National Cyber Security Programme",
+      "department": "CO",
+      "prevYear": 2014,
+      "year": 2015,
+      "prevEnd": "2016-04-01",
+      "curEnd": "2016-04-01",
+      "daysMoved": 0,
+      "narrative": "The Programme is still scheduled to complete on 01/04/2016",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2015",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a801db6ed915d74e33f88a0/GMPP_data_september_2014.csv",
+          "release": "2014-15 annual-report release (published 2015)"
+        }
+      },
+      "label": "no-move",
+      "why": "Both releases publish 1 April 2016. The narrative explicitly says the programme is still scheduled to complete on that date."
+    },
+    {
+      "id": "PLH4-B29",
+      "project": "Central Payment System",
+      "department": "DWP",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2012-06-21",
+      "curEnd": "2012-06-21",
+      "daysMoved": 0,
+      "narrative": "Final Programme closure took place in August 2012 following a full and effective handover to DWP Finance teams responsible for managing the system in a “business as usual” environment.",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-dwp-2013",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a74b963ed915d502d6ca79b/gmpp-data-DWP-q2-2012-13.csv",
+          "release": "2012-13 annual-report release (published 2013)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "release": "2013-14 annual-report release (published 2014)"
+        }
+      },
+      "label": "published-date-check",
+      "why": "Both releases publish 21 June 2012. The narrative explicitly places final programme closure in August 2012; even 1 August is 41 days later than the published date."
+    },
+    {
+      "id": "PLH4-B30",
+      "project": "Procurement Transformation Programme",
+      "department": "DHSC",
+      "prevYear": 2018,
+      "year": 2019,
+      "prevEnd": "2019-03-31",
+      "curEnd": "2019-03-31",
+      "daysMoved": 0,
+      "narrative": "While the date of 31/03/2019 represents the date the key changes went live, since Q2 it has been agreed that the programme will not close down until 20/12/2019. This is due to remaining risks which will need to be actively managed due to EU exit preparation work and operational freeze periods as well as in-year financial pressures which resulted in some non-critical elements of the planned work to be delayed into FY 19/20. These will need to be put into place to fully realise  NHS Supply Chain",
+      "source": {
+        "previous": {
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+          "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv",
+          "release": "2017-18 annual-report release (published 2018)"
+        },
+        "current": {
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+          "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv",
+          "release": "2018-19 annual-report release (published 2019)"
+        }
+      },
+      "label": "published-date-check",
+      "why": "Both releases publish 31 March 2019. The narrative explicitly distinguishes that go-live date from programme closure on 20 December 2019, 264 days later."
+    }
+  ]
+}
