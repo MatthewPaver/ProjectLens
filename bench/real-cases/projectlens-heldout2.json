@@ -1,0 +1,1182 @@
+{
+ "meta": {
+  "description": "Second held-out GMPP set for ProjectLens (2016-17 -> 2017-18, 2017-18 -> 2018-19, 2018-19 -> 2019-20). Not for tuning.",
+  "yearConvention": "year N = the release labelled (N-1)-N; these releases report data as at 30 September of year N-1.",
+  "labelRules": {
+   "contradiction": "end date moved >14 days and the narrative says unchanged/the same/on track or on schedule, or names a current end date >14 days from the published one, without stating the actual move",
+   "explained": "end date moved >14 days and the narrative states the change (or the delay that caused it)",
+   "no-move": "published end date identical in both releases (daysMoved = 0)"
+  },
+  "contradictionTypes": {
+   "claims-unchanged": "narrative says unchanged / remained / stable",
+   "claims-on-track": "narrative presents stability as 'on track' / 'on schedule' / 'on time' with no move stated (tuning treated these paraphrases as stability claims)",
+   "names-different-date": "narrative names a current end date >14 days from the published one"
+  },
+  "matching": "These releases publish no stable GMPP ID before 2019-20. Pairs are joined on the exact project name after lower-casing and stripping punctuation, and only when the name is unique in both releases. Departments match (allowing renames, e.g. DH -> DHSC).",
+  "narrativeVerbatim": "Exact cell text from the current-release CSV (Windows-1252 decoded), including line breaks.",
+  "licence": "Contains public sector information licensed under the Open Government Licence v3.0."
+ },
+ "cases": [
+  {
+   "id": "PLH2-B01",
+   "gmppId": "BIS_0014_1415-Q3",
+   "gmppIdSource": "from the 2019-20 release, same project name",
+   "project": "New Polar Research Vessel",
+   "department": "BEIS",
+   "prevYear": 2017,
+   "year": 2018,
+   "prevRelease": "2016-17",
+   "release": "2017-18",
+   "prevEnd": "2020-07-01",
+   "curEnd": "2022-12-31",
+   "prevEndAsPublished": "01/07/2020",
+   "curEndAsPublished": "31/12/22",
+   "daysMoved": 913,
+   "narrative": "Programme is on track to deliver to its agreed schedule.",
+   "label": "contradiction",
+   "why": "End date moved 913 days later (1 Jul 2020 -> 31 Dec 2022). The whole narrative is 'Programme is on track to deliver to its agreed schedule.' It states no move.",
+   "contradictionType": "claims-on-track",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2016-17 (data as at 30 Sep 2016)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2017",
+     "csv": "https://assets.publishing.service.gov.uk/media/5a821ed6e5274a2e8ab57995/Annual_Report_-_consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B02",
+   "gmppId": null,
+   "gmppIdSource": null,
+   "project": "Automatic Enrolment Programme",
+   "department": "DWP",
+   "prevYear": 2017,
+   "year": 2018,
+   "prevRelease": "2016-17",
+   "release": "2017-18",
+   "prevEnd": "2018-11-30",
+   "curEnd": "2019-11-30",
+   "prevEndAsPublished": "30/11/2018",
+   "curEndAsPublished": "30/11/19",
+   "daysMoved": 365,
+   "narrative": "The Programme went live on time. The implementation approach has been designed to accommodate the significant increase in volumes over the 2015-2018 period, the Programme is on track to deliver this to timetable.",
+   "label": "contradiction",
+   "why": "End date moved 365 days later (30 Nov 2018 -> 30 Nov 2019). The narrative says the programme 'went live on time' and 'is on track to deliver this to timetable'. It states no move.",
+   "contradictionType": "claims-on-track",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2016-17 (data as at 30 Sep 2016)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2017",
+     "csv": "https://assets.publishing.service.gov.uk/media/5a821ed6e5274a2e8ab57995/Annual_Report_-_consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B03",
+   "gmppId": "MOD_0105_1617-Q1",
+   "gmppIdSource": "from the 2019-20 release, same project name",
+   "project": "Land Environment Tactical Communication  and  Information Systems",
+   "department": "MOD",
+   "prevYear": 2017,
+   "year": 2018,
+   "prevRelease": "2016-17",
+   "release": "2017-18",
+   "prevEnd": "2035-12-01",
+   "curEnd": "2035-12-31",
+   "prevEndAsPublished": "01/12/2035",
+   "curEndAsPublished": "31/12/35",
+   "daysMoved": 30,
+   "narrative": "The programme has refined its long-term design this year and split into 2 tranches - the first to undertake technical and business transformation to enable open architecture and open competition - effectively achieve a baseline for future evolution - and the second tranche to spirally evolve capability over time.  The programme is on schedule as planned.",
+   "label": "contradiction",
+   "why": "End date moved 30 days later (1 Dec 2035 -> 31 Dec 2035). The narrative ends 'The programme is on schedule as planned.' It describes a redesign into two tranches but states no date change.",
+   "contradictionType": "claims-on-track",
+   "doubt": "A small move. The tranche redesign could be read as context for it.",
+   "prevDepartment": "MoD",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2016-17 (data as at 30 Sep 2016)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2017",
+     "csv": "https://assets.publishing.service.gov.uk/media/5a821ed6e5274a2e8ab57995/Annual_Report_-_consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B04",
+   "gmppId": "MOD_0078_1213-Q1",
+   "gmppIdSource": "from the 2019-20 release, same project name",
+   "project": "Core Production Capability",
+   "department": "MOD",
+   "prevYear": 2017,
+   "year": 2018,
+   "prevRelease": "2016-17",
+   "release": "2017-18",
+   "prevEnd": "2028-05-15",
+   "curEnd": "2028-04-30",
+   "prevEndAsPublished": "15/05/2028",
+   "curEndAsPublished": "30/04/28",
+   "daysMoved": -15,
+   "narrative": "The CPC schedule has remained stable throughout 2017. Delivery of cores to the Refuel and Submarine Build programmes remains on track to meet Required in Yard Dates. \r",
+   "label": "contradiction",
+   "why": "End date moved 15 days earlier (15 May 2028 -> 30 Apr 2028). The narrative says 'The CPC schedule has remained stable throughout 2017.'",
+   "contradictionType": "claims-unchanged",
+   "doubt": "A 15-day move, one day over the 14-day threshold. This tests the boundary; a 14-day tolerance on the move itself would make it no-move.",
+   "prevDepartment": "MoD",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2016-17 (data as at 30 Sep 2016)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2017",
+     "csv": "https://assets.publishing.service.gov.uk/media/5a821ed6e5274a2e8ab57995/Annual_Report_-_consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B05",
+   "gmppId": "DH_0041_1314-Q2",
+   "gmppIdSource": "from the 2019-20 release, same project name",
+   "project": "Health & Social Care Network",
+   "department": "DHSC",
+   "prevYear": 2017,
+   "year": 2018,
+   "prevRelease": "2016-17",
+   "release": "2017-18",
+   "prevEnd": "2020-04-01",
+   "curEnd": "2021-03-31",
+   "prevEndAsPublished": "01/04/2020",
+   "curEndAsPublished": "31/03/21",
+   "daysMoved": 364,
+   "narrative": "The HSCN programme remains on track to complete the remaining major objectives of completing the migration of circa 14,000 customers from legacy infrastructure to HSCN by August 2020, and making 35% savings on the cost of access connectivity, although it is recognised that due to the highly distributed and locally owned nature of the migration there are significant risks that are being carefully managed by the programme team.  ",
+   "label": "contradiction",
+   "why": "End date moved 364 days later (1 Apr 2020 -> 31 Mar 2021). The narrative says the programme 'remains on track to complete the remaining major objectives ... by August 2020'. It states no move, and August 2020 is more than 14 days from the published 31 Mar 2021.",
+   "contradictionType": "claims-on-track",
+   "doubt": "August 2020 is the migration objective, not explicitly the end date.",
+   "prevDepartment": "DH",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2016-17 (data as at 30 Sep 2016)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2017",
+     "csv": "https://assets.publishing.service.gov.uk/media/5a821ed6e5274a2e8ab57995/Annual_Report_-_consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B06",
+   "gmppId": "CO_0019_1617-Q4",
+   "gmppIdSource": "from the 2019-20 release, same project name",
+   "project": "Government as a Platform",
+   "department": "CO",
+   "prevYear": 2018,
+   "year": 2019,
+   "prevRelease": "2017-18",
+   "release": "2018-19",
+   "prevEnd": "2021-03-31",
+   "curEnd": "2020-03-31",
+   "prevEndAsPublished": "31/03/21",
+   "curEndAsPublished": "31/03/2020",
+   "daysMoved": -365,
+   "narrative": "The project remains on track to complete to the current schedule ",
+   "label": "contradiction",
+   "why": "End date moved 365 days earlier (31 Mar 2021 -> 31 Mar 2020). The whole narrative is 'The project remains on track to complete to the current schedule'. It states no move.",
+   "contradictionType": "claims-on-track",
+   "doubt": "'Current schedule' could mean the new date, but nothing says the date changed.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B07",
+   "gmppId": null,
+   "gmppIdSource": null,
+   "project": "Prison Estate Transformation Programme (PETP)",
+   "department": "MOJ",
+   "prevYear": 2018,
+   "year": 2019,
+   "prevRelease": "2017-18",
+   "release": "2018-19",
+   "prevEnd": "2021-12-31",
+   "curEnd": "2026-05-07",
+   "prevEndAsPublished": "31/12/21",
+   "curEndAsPublished": "07/05/2026",
+   "daysMoved": 1588,
+   "narrative": "The programme remains on schedule in line with agreed business case and budgetary approvals",
+   "label": "contradiction",
+   "why": "End date moved 1,588 days later (31 Dec 2021 -> 7 May 2026). The whole narrative is 'The programme remains on schedule in line with agreed business case and budgetary approvals'. It states no move.",
+   "contradictionType": "claims-on-track",
+   "prevDepartment": "MoJ",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B08",
+   "gmppId": "DEFRA_0006_1516-Q1",
+   "gmppIdSource": "from the 2019-20 release, same project name",
+   "project": "DEFRA UNITY PROGRAMME",
+   "department": "DEFRA",
+   "prevYear": 2018,
+   "year": 2019,
+   "prevRelease": "2017-18",
+   "release": "2018-19",
+   "prevEnd": "2018-10-31",
+   "curEnd": "2020-04-30",
+   "prevEndAsPublished": "31/10/2018",
+   "curEndAsPublished": "30/04/2020",
+   "daysMoved": 547,
+   "narrative": "The high level plan for UnITy  continues to make significant progress with successfully completing all key service procurements to schedule. In Q2 the programme entered into Implementation phase on all of its service contracts with focus on ensuring technical integration between all services and suppliers  happens as smoothly as possible. Since Q2 all services have transitioned on schedule to new suppliers with focus moving to service transformation plnanning and deployment. ",
+   "label": "contradiction",
+   "why": "End date moved 547 days later (31 Oct 2018 -> 30 Apr 2020). The narrative reports procurements completed 'to schedule' and services 'transitioned on schedule'. It states no move.",
+   "contradictionType": "claims-on-track",
+   "doubt": "The 'on schedule' claims are about procurements and transitions, not explicitly the end date.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B09",
+   "gmppId": "DWP_0009_1112-Q1",
+   "gmppIdSource": "from the 2019-20 release, same project name",
+   "project": "Universal Credit Programme",
+   "department": "DWP",
+   "prevYear": 2018,
+   "year": 2019,
+   "prevRelease": "2017-18",
+   "release": "2018-19",
+   "prevEnd": "2022-06-30",
+   "curEnd": "2023-06-30",
+   "prevEndAsPublished": "30/06/22",
+   "curEndAsPublished": "30/06/2023",
+   "daysMoved": 365,
+   "narrative": "All critical delivery milestones continue to be delivered on time.  The Programme has successfully completed national rollout of the Full Service with rollout to all 637 offices and the move of claimants from legacy benefits to UC is scheduled to commence in July 2019 (initially with a pilot of up to 10,000 claims to ensure that the process works well) and complete in December 2023.",
+   "label": "contradiction",
+   "why": "End date moved 365 days later (30 Jun 2022 -> 30 Jun 2023). The narrative says 'All critical delivery milestones continue to be delivered on time' and that migration will 'complete in December 2023'. That is 183 days after the published end date. It states no move.",
+   "contradictionType": "claims-on-track",
+   "doubt": "December 2023 is the migration milestone, not explicitly the programme end date.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B10",
+   "gmppId": "DH_0061_1617-Q3",
+   "gmppIdSource": "from the 2019-20 release, same project name",
+   "project": "IT Infrastructure Sourcing Programme",
+   "department": "DHSC",
+   "prevYear": 2018,
+   "year": 2019,
+   "prevRelease": "2017-18",
+   "release": "2018-19",
+   "prevEnd": "2019-06-30",
+   "curEnd": "2019-12-31",
+   "prevEndAsPublished": "30/06/19",
+   "curEndAsPublished": "31/12/2019",
+   "daysMoved": 184,
+   "narrative": "In house services are on track. Suppliers are in mobilisation and detailed planning will follow in Quarter 3. At this point there is no contra-indicators to achieving our scheduled closure",
+   "label": "contradiction",
+   "why": "End date moved 184 days later (30 Jun 2019 -> 31 Dec 2019). The narrative says in-house services are 'on track' and there are 'no contra-indicators to achieving our scheduled closure'. It states no move.",
+   "contradictionType": "claims-on-track",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B11",
+   "gmppId": "MOD_0118_1718-Q3",
+   "gmppIdSource": "published in this release",
+   "project": "Clyde Infrastructure",
+   "department": "MOD",
+   "prevYear": 2019,
+   "year": 2020,
+   "prevRelease": "2018-19",
+   "release": "2019-20",
+   "prevEnd": "2024-03-29",
+   "curEnd": "2032-03-30",
+   "prevEndAsPublished": "29/03/2024",
+   "curEndAsPublished": "30/03/2032",
+   "daysMoved": 2923,
+   "narrative": "The scheduled project end date at Q2 1920 (30th September 2019) is 30/03/32, due primarily to the following factors;\n\n - 2032 is the end date agreed when the programme was rebalanced during 2017, based on the forecast completion date of all projects within the programme. This date remains extant at this time.\n - The primary drivers for the completion date of the projects include the DREADNOUGHT Class in service date and achieving the endorsed ambition of a Single Integrated Operating  Base. The volume of concurrent activity that can be commissioned simultaneously across the site is limited by the need to maintain operations and deconflict activity in a geographically constrained highly secure environment. \n\n Since the Q2 1920 (30th September 2019) baseline project end date of 30/03/32, the following primary project actions have impacted the original Q2 baseline project end date;\n\n - The long term impact of COVID19 on specific projects and the available industrial base is being assessed to understand the impact on the programme completion date. \n - Analysis of the volume of work required to remediate key facilities across the Programme, may require some re-prioritisation of the work against the original 2017 baseline. A Capability Audit has been commissioned to review the Portfolio Definition which could impact on the programme completion date. \n",
+   "label": "contradiction",
+   "why": "End date moved 2,923 days later (29 Mar 2024 -> 30 Mar 2032). The narrative says '2032 is the end date agreed when the programme was rebalanced during 2017 ... This date remains extant'. That claims the date has not changed since 2017, yet the previous release published 29 Mar 2024. It states no move.",
+   "contradictionType": "claims-unchanged",
+   "doubt": "It explains where the 2032 date comes from, which a lenient reader might count as an explanation.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2020",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B12",
+   "gmppId": "MOD_0064_1112-Q2",
+   "gmppIdSource": "published in this release",
+   "project": "Carrier Enabled Power Projection",
+   "department": "MOD",
+   "prevYear": 2019,
+   "year": 2020,
+   "prevRelease": "2018-19",
+   "release": "2019-20",
+   "prevEnd": "2030-12-01",
+   "curEnd": "2030-12-31",
+   "prevEndAsPublished": "01/12/2030",
+   "curEndAsPublished": "31/12/2030",
+   "daysMoved": 30,
+   "narrative": "The scheduled baseline project end date at Q2 1920 (30th September 2019) is 01/12/26, has shortened by 1461 days since last year's Q2 1819 date of 01/12/30, due primarily to the following factors;\n\n - CEPP is on track to deliver IOC(CS) by 31 Dec 20, FOC(CS) by 31 Dec 23 and FOC (CEPP) by 1 Apr 26 as per the mandate.\n\n Since the Q2 1920 (30th September 2019) baseline project end date of 01/12/26, the following non-project operating environment activities have impacted the original Q2 baseline project end date;\n\n - Covid-19 may well have an impact on IOC(CS) on 31 Dec 20, but all SROs are working hard to mitigate any affects.  The programme is still on track.\n\n Since the Q2 1920 (30th September 2019) baseline project end date of 01/12/26, the following primary project actions have impacted the original Q2 baseline project end date;\n\n - A regular process of review has been instigated to monitor/mitigate the effects of Covid-19.\n",
+   "label": "contradiction",
+   "why": "End date moved 30 days later (1 Dec 2030 -> 31 Dec 2030). The template sentence says the end date 'is 01/12/26, has shortened by 1461 days'. That names a current end date 4 years before the published one, in the opposite direction.",
+   "contradictionType": "names-different-date",
+   "doubt": "It states a change, but not the published one.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2020",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B13",
+   "gmppId": "DFE_0006_1415-Q3",
+   "gmppIdSource": "published in this release",
+   "project": "Priority School Building Programme 2",
+   "department": "DFE",
+   "prevYear": 2019,
+   "year": 2020,
+   "prevRelease": "2018-19",
+   "release": "2019-20",
+   "prevEnd": "2022-12-31",
+   "curEnd": "2025-02-25",
+   "prevEndAsPublished": "31/12/2022",
+   "curEndAsPublished": "25/02/2025",
+   "daysMoved": 787,
+   "narrative": "At Q2 19-20 (30th September 2019) we forecasted the programme to be completed by Q1 24-25, with 90% of projects now scheduled to hand over by the end of 2021.\n\n90% of projects are either complete, or construction is scheduled for completion in line with the baseline projection for the programme end date of December 2021 (allowing for a standard 12 months of defects liability period on the relevant construction works). The small percentage of cases (10%) which will be completed after December 2021 all have confirmed programmes for delivery, and just 5 projects are scheduled to complete after December 2022.",
+   "label": "contradiction",
+   "why": "End date moved 787 days later (31 Dec 2022 -> 25 Feb 2025). The narrative forecasts completion 'by Q1 24-25' (by 30 Jun 2024, about 240 days before the published date). It also cites 'the baseline projection for the programme end date of December 2021'. It states no move.",
+   "contradictionType": "names-different-date",
+   "doubt": "'Forecast' vs the column's 'latest approved' date; the Q1 vs Q4 24-25 gap may reflect defects-liability time.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2020",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B14",
+   "gmppId": "HMRC_0012_1415-Q1",
+   "gmppIdSource": "from the 2019-20 release, same project name",
+   "project": "Tax-Free Childcare",
+   "department": "HMRC",
+   "prevYear": 2017,
+   "year": 2018,
+   "prevRelease": "2016-17",
+   "release": "2017-18",
+   "prevEnd": "2018-06-30",
+   "curEnd": "2018-09-30",
+   "prevEndAsPublished": "30/06/2018",
+   "curEndAsPublished": "30/09/18",
+   "daysMoved": 92,
+   "narrative": "The programme had a public commitment to start its phased, age based rollout of TFC from early 2017. The programme started a Trial of the childcare service in November 2016 and decided to extend the Trial through to April 2017 in order to deliver and test new functionality as part of the Trial. This pushed the planned go live date back slightly and moved the programme end date out by 3 months.",
+   "label": "explained",
+   "why": "Moved 92 days later. The narrative says extending the trial 'moved the programme end date out by 3 months'.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2016-17 (data as at 30 Sep 2016)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2017",
+     "csv": "https://assets.publishing.service.gov.uk/media/5a821ed6e5274a2e8ab57995/Annual_Report_-_consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B15",
+   "gmppId": null,
+   "gmppIdSource": null,
+   "project": "30 Hrs Free Childcare Project",
+   "department": "DfE",
+   "prevYear": 2017,
+   "year": 2018,
+   "prevRelease": "2016-17",
+   "release": "2017-18",
+   "prevEnd": "2020-03-31",
+   "curEnd": "2018-09-30",
+   "prevEndAsPublished": "31/03/2020",
+   "curEndAsPublished": "30/09/18",
+   "daysMoved": -548,
+   "narrative": "The project remains on schedule, with 30 hours childcare places being delivered nationwide from September 2017.\rThe project closure date has been extended to 30 September 2018 to enable the project to effectively monitor and manage a full year of delivery before moving to a business as usual state, rather than as a result of any delay to national rollout.\r",
+   "label": "explained",
+   "why": "Moved 548 days earlier (31 Mar 2020 -> 30 Sep 2018). The narrative says 'The project closure date has been extended to 30 September 2018', which names the published new date and states the change.",
+   "doubt": "It says 'extended', but the published date moved earlier. The opening 'remains on schedule' refers to delivery.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2016-17 (data as at 30 Sep 2016)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2017",
+     "csv": "https://assets.publishing.service.gov.uk/media/5a821ed6e5274a2e8ab57995/Annual_Report_-_consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B16",
+   "gmppId": "MOD_0036_1112-Q1",
+   "gmppIdSource": "from the 2019-20 release, same project name",
+   "project": "Maritime Sustainment Programme",
+   "department": "MOD",
+   "prevYear": 2017,
+   "year": 2018,
+   "prevRelease": "2016-17",
+   "release": "2017-18",
+   "prevEnd": "2018-04-30",
+   "curEnd": "2019-02-28",
+   "prevEndAsPublished": "30/04/2018",
+   "curEndAsPublished": "28/02/19",
+   "daysMoved": 304,
+   "narrative": "Ship 1 ( Tide spring ) has now achieved In-Service Date (ISD) with Ship 2 now completing its UK Customisation. Ship 3 has begun its delivery voyage to the UK and Ship 4 has completed her Build Trials (CSTs) . Delays experienced on Ship 1  have been managed during the build and customisation of  Ships 2 to 4, reducing the impact of the delay during  Ship 1 Build. The Project Team is currently working with the Customer to finalise Full Operating Capability (FOC).",
+   "label": "explained",
+   "why": "Moved 304 days later. The narrative states the 'Delays experienced on Ship 1' and how they were managed.",
+   "doubt": "It states a delay, not explicitly the end-date change.",
+   "prevDepartment": "MoD",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2016-17 (data as at 30 Sep 2016)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2017",
+     "csv": "https://assets.publishing.service.gov.uk/media/5a821ed6e5274a2e8ab57995/Annual_Report_-_consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B17",
+   "gmppId": "MOD_0076_1213-Q1",
+   "gmppIdSource": "from the 2019-20 release, same project name",
+   "project": "Astute Boats 1-7",
+   "department": "MOD",
+   "prevYear": 2018,
+   "year": 2019,
+   "prevRelease": "2017-18",
+   "release": "2018-19",
+   "prevEnd": "2024-03-31",
+   "curEnd": "2025-04-30",
+   "prevEndAsPublished": "31/03/24",
+   "curEndAsPublished": "30/04/2025",
+   "daysMoved": 395,
+   "narrative": "Boat 4 is scheduled to enter sea trials this year.  This is behind schedule, and a reapproval is being sought..  Forecast delivery of Boats 5-7 remain inside their respective approvals.",
+   "label": "explained",
+   "why": "Moved 395 days later. The narrative says Boat 4 'is behind schedule, and a reapproval is being sought'.",
+   "doubt": "It states a slip and a reapproval, not the new end date.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B18",
+   "gmppId": "MOD_0101_1516-Q1",
+   "gmppIdSource": "from the 2019-20 release, same project name",
+   "project": "New Style of Information Technology (Base)",
+   "department": "MOD",
+   "prevYear": 2018,
+   "year": 2019,
+   "prevRelease": "2017-18",
+   "release": "2018-19",
+   "prevEnd": "2018-03-05",
+   "curEnd": "2020-03-31",
+   "prevEndAsPublished": "05/03/18",
+   "curEndAsPublished": "31/03/2020",
+   "daysMoved": 757,
+   "narrative": "New Office 365 capabilities have been paused to release resources to priority projects. Defect remediation of Secret post testing has not progressed as planned and is delaying Secret United Kingdom project delivery, this is also adding further delay to the MODNet Secret Overseas delivery.",
+   "label": "explained",
+   "why": "Moved 757 days later. The narrative says capabilities were paused and remediation 'is delaying' delivery, 'adding further delay'.",
+   "doubt": "It states delays, not the new end date.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B19",
+   "gmppId": "DECC_0010_1112-Q1",
+   "gmppIdSource": "published in this release",
+   "project": "Smart Metering Implementation Programme",
+   "department": "BEIS",
+   "prevYear": 2019,
+   "year": 2020,
+   "prevRelease": "2018-19",
+   "release": "2019-20",
+   "prevEnd": "2020-12-31",
+   "curEnd": "2024-12-31",
+   "prevEndAsPublished": "31/12/2020",
+   "curEndAsPublished": "31/12/2024",
+   "daysMoved": 1461,
+   "narrative": "The scheduled baseline project end date at Q2 1920 (30th September 2019) is 31/12/24, has lengthened by 1461 days since last year's Q2 1819 date of 31/12/20, due primarily to the following factors;\n\n - The Programme is on schedule to meet the commitment for every home and small business to be offered a Smart Meter by the end of 2020. \n - The updated 2019 Cost-Benefit Analysis includes an extended appraisal period so the Programme has consulted on the introduction of a new regulatory framework for energy suppliers that supports market-wide rollout of smart meters as soon as practicable.\n\n Since the Q2 1920 (30th September 2019) baseline project end date of 31/12/24, the following primary project actions have impacted the original Q2 baseline project end date;\n\n - A thorough evaluation of the new regulatory framework consultation responses has been conducted.\n - The impact of COVID-19 is being considered with key stakeholders and assessed by the Programme.\n",
+   "label": "explained",
+   "why": "Moved 1,461 days later. The narrative says the end date 'is 31/12/24, has lengthened by 1461 days since last year's ... date of 31/12/20'. Both dates match the column. 'On schedule' refers to the 2020 offer commitment.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2020",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B20",
+   "gmppId": "DfT_0023_1516-Q3",
+   "gmppIdSource": "published in this release",
+   "project": "Heathrow Expansion Programme",
+   "department": "DFT",
+   "prevYear": 2019,
+   "year": 2020,
+   "prevRelease": "2018-19",
+   "release": "2019-20",
+   "prevEnd": "2029-12-31",
+   "curEnd": "2050-12-31",
+   "prevEndAsPublished": "31/12/2029",
+   "curEndAsPublished": "31/12/2050",
+   "daysMoved": 7670,
+   "narrative": "The scheduled baseline project end date at Q2 1920 (30th September 2019) is 31/12/50, has lengthened by 7670 days since last year's Q2 1819 date of 31/12/29, due primarily to the following factors;\n\n - The Project End Date baseline was updated to reflect Heathrow’s decision to phase terminal capacity expansion and other development works over a longer time period (up to 2050) to manage costs and build terminal capacity in line with demand growth.\n - The ANPS stated there was a need for Heathrow to deliver new airport capacity (an operational runway) by 2030. The actual delivery date will be dependent on Heathrow's timescales (the target date as of Jan 2020 for an operational runway was 2028/29, although it was recognised that this was becoming increasingly challenging to deliver the runway to this timescale given the scale and  complexity of the project.\n\n Since the Q2 1920 (30th September 2019) baseline project end date of 31/12/50, the following non-project operating environment activities have impacted the original Q2 baseline project end date;\n\n - On 27th February 2020 the Court of Appeal ruled that when designating the Airports National Policy Statement (ANPS), the previous Government did not take account of the Paris Agreement, non-CO2 emissions and emissions post-2050. The ANPS has no legal effect until reviewed by the Government under the Planning Act 2008.\n - All reporting on the programme was paused and has not changed since the Court of Appeal's ruling of the ANPS on 27th February 2020.\n\n Since the Q2 1920 (30th September 2019) baseline project end date of 31/12/50, the following primary project actions have impacted the original Q2 baseline project end date;\n\n - There have been no further change to the rebaselined project end date.\n - Following the publication of the CAA position on Cat C costs, Heathrow confirmed in January 2020 that their schedule for the opening of the runway had been delayed for 2 years to 2028-29. This was to reflect the need to phase the costs over a longer period. HEP were awaiting further clarification of Heathrow's detailed schedule.\n - All reporting on the programme was paused and has not changed since the Court of Appeal's ruling of the ANPS on 27th February 2020.",
+   "label": "explained",
+   "why": "Moved 7,670 days later. The narrative says 'has lengthened by 7670 days' to 31/12/50 and gives the reason (phased expansion to 2050).",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2020",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B21",
+   "gmppId": "DFT_0005_1112-Q1",
+   "gmppIdSource": "published in this release",
+   "project": "Intercity Express Programme",
+   "department": "DFT",
+   "prevYear": 2019,
+   "year": 2020,
+   "prevRelease": "2018-19",
+   "release": "2019-20",
+   "prevEnd": "2020-02-06",
+   "curEnd": "2020-06-04",
+   "prevEndAsPublished": "06/02/2020",
+   "curEndAsPublished": "04/06/2020",
+   "daysMoved": 119,
+   "narrative": "The scheduled baseline project end date at Q2 1920 (30th September 2019) is 04/06/20, has lengthened by 119 days since last year's Q2 1819 date of 06/02/20, due primarily to the following factors;\n\n - The Department entered a new agreement with the Train Service Provider setting a new project end date of June 2020 to provide time to resolve electromagnetic interference issues and to facilitate later entry into service of the East Coast fleet.\n\n Since the Q2 1920 (30th September 2019) baseline project end date of 04/06/20, the following non-project operating environment activities have impacted the original Q2 baseline project end date;\n\n - COVID-19 and related social distancing measures have impacted the planned roll out of the remaining 9 trains.\n\n Since the Q2 1920 (30th September 2019) baseline project end date of 04/06/20, the following primary project actions have impacted the original Q2 baseline project end date;\n\n - Lockdown and implementation of social distancing measures have impacted manufacturing productivity, the Department is working closely with stakeholders to mitigate the effects on the programme. Challenges remain around benefits realisation including the need to improve train performance and completing the full roll-out of the fleet on the East Coast expected in Autumn 2020.\n",
+   "label": "explained",
+   "why": "Moved 119 days later. The narrative says 'has lengthened by 119 days' and that a new agreement set 'a new project end date of June 2020'.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2020",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B22",
+   "gmppId": "HO_0016_1213-Q1",
+   "gmppIdSource": "published in this release",
+   "project": "Emergency Services Mobile Communications Programme (ESMCP)",
+   "department": "HO",
+   "prevYear": 2019,
+   "year": 2020,
+   "prevRelease": "2018-19",
+   "release": "2019-20",
+   "prevEnd": "2020-12-31",
+   "curEnd": "2022-12-31",
+   "prevEndAsPublished": "31/12/2020",
+   "curEndAsPublished": "31/12/2022",
+   "daysMoved": 730,
+   "narrative": "The scheduled baseline project end date at Q2 1920 (30th September 2019) is 31/12/22, has lengthened by 730 days since last year's Q2 1819 date of 31/12/20, due primarily to the following factors;\n\n - The programme under went an extensive review and an incremental delivery of ESN was introduced. The review also included work to assess the length of time users needed to transition from the current Airwave service to ESN. \n\n Since the Q2 1920 (30th September 2019) baseline project end date of 31/12/22, the following non-project operating environment activities have impacted the original Q2 baseline project end date;\n\n - With regards to COVID-19, roll out of ESN in the underground and remote site mast builds are being impacted. However, the programme is working to preserve the critical path as far as possible. \n\n\n Since the Q2 1920 (30th September 2019) baseline project end date of 31/12/22, the following primary project actions have impacted the original Q2 baseline project end date;\n\n - An updated Programme Business Case is planned for Q2 2020 to reflect the revised programme delivery plans and provide greater certainty around the National Shutdown date for Airwave of 31 December 2022.\n - The programme has worked to align the plan to the budget available from the 20-21 top slice, with a view to phasing spend but hold to the programme's critical path. \n",
+   "label": "explained",
+   "why": "Moved 730 days later. The narrative says 'has lengthened by 730 days' to 31/12/22 after an extensive review.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2020",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B23",
+   "gmppId": "MOD_0001_1112-Q1",
+   "gmppIdSource": "published in this release",
+   "project": "A400M",
+   "department": "MOD",
+   "prevYear": 2019,
+   "year": 2020,
+   "prevRelease": "2018-19",
+   "release": "2019-20",
+   "prevEnd": "2023-03-31",
+   "curEnd": "2024-03-31",
+   "prevEndAsPublished": "31/03/2023",
+   "curEndAsPublished": "31/03/2024",
+   "daysMoved": 366,
+   "narrative": "The scheduled baseline project end date at Q2 1920 (30th September 2019) is 31/03/24, has lengthened by 366 days since last year's Q2 1819 date of 31/03/23, due primarily to the following factors;\n\n - The ongoing Global Re-Baselining of the international Programme had undermined our ability to accurately judge the baseline project end date.\n - The date of 31 Mar 2024 account for this, and is in-line with the Mandate, which was revised post-Global Rebaselining.\n\n Since the Q2 1920 (30th September 2019) baseline project end date of 31/03/24, the following primary project actions have impacted the original Q2 baseline project end date;\n\n - The graduation criteria for a number of capabilities have been agreed in the last 6-months.  This will have a positive impact and an expansion of the A400M's tactical capabilities on the front line. \n - Recognising the challenges posed by aircraft availability, the trials and evaluation community has been flexible in their approach to gathering the evidence required to support capability enhancements. As a result, the evidence to support the transfer of a natural surface landing strip capability to front line crews is planned for 2020.\n",
+   "label": "explained",
+   "why": "Moved 366 days later. The narrative says 'has lengthened by 366 days' to 31/03/24 because of the Global Re-Baselining.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2020",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B24",
+   "gmppId": "MOJ_0042_1819-Q2",
+   "gmppIdSource": "published in this release",
+   "project": "Probation Programme",
+   "department": "MoJ",
+   "prevYear": 2019,
+   "year": 2020,
+   "prevRelease": "2018-19",
+   "release": "2019-20",
+   "prevEnd": "2020-03-01",
+   "curEnd": "2021-04-01",
+   "prevEndAsPublished": "01/03/2020",
+   "curEndAsPublished": "01/04/2021",
+   "daysMoved": 396,
+   "narrative": "The scheduled baseline project end date at Q2 1920 (30th September 2019) is 01/04/21, has lengthened by 396 days since last year's Q2 1819 date of 01/03/20, due primarily to the following factors;\n\n - Previous business cases considered alternative options to the Unified Model including a full inhouse option, a re-procurement of CRC contracts and an option that adopted the UM in Wales, and a re-procurement option in England, but these have since been ruled out. The baseline end date has been re-assessed based on the preferred option of a Unified Model  \n -  Extension of the current Community Rehabilitation Companies (CRCs) \n - To ensure adequate time to complete competition to put in place new CRC providers; to subsequently ensure a safe and effective mobilisation to new provider; and to provide contingency to ensure effective transition to the new Target Operating Model. \n\n Since the Q2 1920 (30th September 2019) baseline project end date of 01/04/21, the following non-project operating environment activities have impacted the original Q2 baseline project end date;\n\n - The numbers are heavily based on assumptions until a more detailed model has been available. Numbers are still to be finalised hence the baseline is still subject to SR negotiations but forecast has been raised as pressure risk to HMPPS.\n\n Since the Q2 1920 (30th September 2019) baseline project end date of 01/04/21, the following primary project actions have impacted the original Q2 baseline project end date;\n\n - Decision to extend current CRC contracts.\n",
+   "label": "explained",
+   "why": "Moved 396 days later. The narrative says 'has lengthened by 396 days' and that the baseline end date was re-assessed.",
+   "prevDepartment": "MOJ",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2020",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B25",
+   "gmppId": "MOD_0085_1314-Q2",
+   "gmppIdSource": "published in this release",
+   "project": "Army Basing Programme",
+   "department": "MOD",
+   "prevYear": 2019,
+   "year": 2020,
+   "prevRelease": "2018-19",
+   "release": "2019-20",
+   "prevEnd": "2021-11-26",
+   "curEnd": "2021-03-31",
+   "prevEndAsPublished": "26/11/2021",
+   "curEndAsPublished": "31/03/2021",
+   "daysMoved": -240,
+   "narrative": "The scheduled baseline project end date at Q2 1920 (30th September 2019) is 31/03/21, has shortened by 240 days since last year's Q2 1819 date of 26/11/21, due primarily to the following factors;\n\n - This reflected the agreement of an updated mandate for the Programme, reflecting the impact on the Programme of the Better Defence Estate strategy, and subsequently Army 2020 Refine.\n - These factors had a material impact on the Programme, either by affecting the long-term future of sites the Army Basing Programme had planned to invest in, or by changing the Unit laydown on retained sites.\n - The updated Mandate affirmed the Senior Responsible Owner's intention of graduating the Programme in Mar 21, accepting that a small number of Army Basing Programme projects would continue to deliver improved infrastructure for units in situ beyond this date.\n\n Since the Q2 1920 (30th September 2019) baseline project end date of 31/03/21, the following non-project operating environment activities have impacted the original Q2 baseline project end date;\n\n - The recent COVID19 outbreak has impacted on the Programme.  While this will not have a material bearing on the Army Basing Programme’s strategic goals, it has affected the schedule and costs of the remaining projects, though as at Apr 20, it is too early to quantify the extent of this impact.\n\n Since the Q2 1920 (30th September 2019) baseline project end date of 31/03/21, the following primary project actions have impacted the original Q2 baseline project end date;\n\n - The Infrastructure and Projects Authority Review, conducted in Feb 20, provided a GREEN Confidence Assessment and recommended the Senior Responsible Owner explore early graduation from the Government Major Projects Portfolio. The Senior Responsible Owner accepted this recommendation subject to the development of a realistic and achievable graduation plan. \n - As a result, the Programme is planning to graduate from the Defence Major Programmes Portfolio in Autumn 2020, and a plan to achieve this is being developed.\n - The Senior Responsible Owner is clear the final decision to graduate will be condition based, with a final judgement to invoke an Infrastructure and Projects Authority Exit Review to be made in Summer 2020, based on satisfactory progress against the Graduation Plan.",
+   "label": "explained",
+   "why": "Moved 240 days earlier. The narrative says 'has shortened by 240 days' to 31/03/21 under an updated mandate.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2020",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B26",
+   "gmppId": "MOJ_0032_1617-Q2",
+   "gmppIdSource": "from the 2019-20 release, same project name",
+   "project": "MoJ Future FM",
+   "department": "MoJ",
+   "prevYear": 2017,
+   "year": 2018,
+   "prevRelease": "2016-17",
+   "release": "2017-18",
+   "prevEnd": "2018-04-01",
+   "curEnd": "2018-04-01",
+   "prevEndAsPublished": "01/04/2018",
+   "curEndAsPublished": "01/04/18",
+   "daysMoved": 0,
+   "narrative": "The new contract commencement date has been moved back by four weeks due to an extension of time being awarded to bidders during the tender period.  \r\rThe overall start and end dates of the programme are unaffected by the extension of tender time.\r\rTenders have been successfully received and the initial evaluation and moderation of the qualitative bids has been completed to time.  The programme is on target to complete evaluation and commence the FBC approvals by early April 2017.",
+   "label": "no-move",
+   "why": "Published end date unchanged (1 Apr 2018). The narrative says the contract start 'has been moved back by four weeks' but 'The overall start and end dates of the programme are unaffected'.",
+   "doubt": "False-positive test: move words about a milestone.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2016-17 (data as at 30 Sep 2016)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2017",
+     "csv": "https://assets.publishing.service.gov.uk/media/5a821ed6e5274a2e8ab57995/Annual_Report_-_consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B27",
+   "gmppId": "DFE_0009_1617-Q2",
+   "gmppIdSource": "from the 2019-20 release, same project name",
+   "project": "Apprenticeships Reform Programme",
+   "department": "DfE",
+   "prevYear": 2017,
+   "year": 2018,
+   "prevRelease": "2016-17",
+   "release": "2017-18",
+   "prevEnd": "2021-04-01",
+   "curEnd": "2021-04-01",
+   "prevEndAsPublished": "01/04/2021",
+   "curEndAsPublished": "01/04/21",
+   "daysMoved": 0,
+   "narrative": "Critical milestones and schedule remain on track.  Transfers minimum viable service Apr 2018, Non-Levy Beta Apr 2018, Frameworks to standards shift complete Mar 2020.",
+   "label": "no-move",
+   "why": "Published end date unchanged (1 Apr 2021). The narrative says 'Critical milestones and schedule remain on track.'",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2016-17 (data as at 30 Sep 2016)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2017",
+     "csv": "https://assets.publishing.service.gov.uk/media/5a821ed6e5274a2e8ab57995/Annual_Report_-_consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B28",
+   "gmppId": "DCMS_0009_1516-Q4",
+   "gmppIdSource": "from the 2019-20 release, same project name",
+   "project": "700 MHz Clearance Programme",
+   "department": "DCMS",
+   "prevYear": 2017,
+   "year": 2018,
+   "prevRelease": "2016-17",
+   "release": "2017-18",
+   "prevEnd": "2022-01-01",
+   "curEnd": "2022-01-01",
+   "prevEndAsPublished": "01/01/2022",
+   "curEndAsPublished": "1/1/2022",
+   "daysMoved": 0,
+   "narrative": "The September 2017 review confirmed that delivery was on track and that remained the case at the end of 2017. Clearance events continue to take place in 2018. ",
+   "label": "no-move",
+   "why": "Published end date unchanged (1 Jan 2022; written 01/01/2022 and 1/1/2022). The narrative says delivery was on track.",
+   "doubt": "Tests date-format normalisation.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2016-17 (data as at 30 Sep 2016)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2017",
+     "csv": "https://assets.publishing.service.gov.uk/media/5a821ed6e5274a2e8ab57995/Annual_Report_-_consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B29",
+   "gmppId": "DFT_0028_1617-Q1",
+   "gmppIdSource": "from the 2019-20 release, same project name",
+   "project": "North of England Programme",
+   "department": "DFT",
+   "prevYear": 2018,
+   "year": 2019,
+   "prevRelease": "2017-18",
+   "release": "2018-19",
+   "prevEnd": "2022-12-31",
+   "curEnd": "2022-12-31",
+   "prevEndAsPublished": "31/12/22",
+   "curEndAsPublished": "31/12/2022",
+   "daysMoved": 0,
+   "narrative": "Following the two-year delay to the Manchester – Preston upgrade, caused by difficult ground conditions and Carillion’s failure, electric trains started operating on the route in February 2019. We continue to work with NR on infrastructure improvements across the north including platform extensions which are being progressively rolled out to enable the deployment of longer trains in the May and December 2019 timetable changes. The NoE programme is expected to be completed by 2022. The TRU programme is in early stages of development.",
+   "label": "no-move",
+   "why": "Published end date unchanged (31 Dec 2022). The narrative describes 'the two-year delay to the Manchester – Preston upgrade' but says the programme 'is expected to be completed by 2022'.",
+   "doubt": "False-positive test: a sub-project delay.",
+   "prevDepartment": "DfT",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B30",
+   "gmppId": "CO_0015_1516-Q2",
+   "gmppIdSource": "from the 2019-20 release, same project name",
+   "project": "GOV UK Verify",
+   "department": "CO",
+   "prevYear": 2018,
+   "year": 2019,
+   "prevRelease": "2017-18",
+   "release": "2018-19",
+   "prevEnd": "2020-03-31",
+   "curEnd": "2020-03-31",
+   "prevEndAsPublished": "31/03/20",
+   "curEndAsPublished": "31/03/2020",
+   "daysMoved": 0,
+   "narrative": "The programme has revised plans to deliver on schedule which are being validated with HMT/IPA.",
+   "label": "no-move",
+   "why": "Published end date unchanged (31 Mar 2020). The narrative says the programme 'has revised plans to deliver on schedule'.",
+   "prevProject": "Gov UK Verify",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B31",
+   "gmppId": "HO_0030_1415-Q1",
+   "gmppIdSource": "from the 2019-20 release, same project name",
+   "project": "Metis Programme",
+   "department": "HO",
+   "prevYear": 2018,
+   "year": 2019,
+   "prevRelease": "2017-18",
+   "release": "2018-19",
+   "prevEnd": "2019-06-01",
+   "curEnd": "2019-06-01",
+   "prevEndAsPublished": "01/06/19",
+   "curEndAsPublished": "01/06/2019",
+   "daysMoved": 0,
+   "narrative": "The programme successfully completed design work for Phase 1 and completed testing of the solution. As a result of defects that surfaced in testing the programme extended the testing phase which impacted Phase 1 go-live. For Phase 2 activity design workshops are underway.  Subsequently the Programme successfully delivered Phase 1 to the Department in December 2018.\n",
+   "label": "no-move",
+   "why": "Published end date unchanged (1 Jun 2019). The narrative says testing was extended, which 'impacted Phase 1 go-live'.",
+   "doubt": "False-positive test: a phase delay.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2017-18 (data as at 30 Sep 2017)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+     "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B32",
+   "gmppId": "DFT_0020_1314-Q2",
+   "gmppIdSource": "published in this release",
+   "project": "A14 Cambridge to Huntingdon Improvement Scheme",
+   "department": "DFT",
+   "prevYear": 2019,
+   "year": 2020,
+   "prevRelease": "2018-19",
+   "release": "2019-20",
+   "prevEnd": "2021-09-30",
+   "curEnd": "2021-09-30",
+   "prevEndAsPublished": "30/09/2021",
+   "curEndAsPublished": "30/09/2021",
+   "daysMoved": 0,
+   "narrative": "The scheduled baseline project end date at Q2 1920 (30th September 2019) is 30/09/21, has not changed since last year's Q2 1819 date of 30/09/21, due primarily to the following factors;\n\n - The completion date has not slipped due to the project being able to accurately re-sequence activities to mitigate delays, to drive improvements and to maximise productivity where opportunities have been presented.\n - Innovative ways of working to drive improvements have been actively promoted on the project including: locating site batching plants on-site; collaborative and production based work scheduling; and project dedicated resources to promote productivity and lean initiatives.\n\n Since the Q2 1920 (30th September 2019) baseline project end date of 30/09/21, the following primary project actions have impacted the original Q2 baseline project end date;\n\n - There has been no change to the baseline project end date; despite some weather events in 19/20 the project has been able to maintain its programme. This is due to the continuous reviews of programme and critical path analysis. The project has applied mitigation measures and the use of collaboration and lean methodology adding confidence to the achieve the projects forecasted end date.\n - The project successfully opened for traffic ahead of schedule in May 2020 with the works to Huntingdon town centre progressing well, adding confidence to the achieve the project's end date.\n",
+   "label": "no-move",
+   "why": "Published end date unchanged (30 Sep 2021). The narrative says it 'has not changed' and 'The completion date has not slipped'.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2020",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B33",
+   "gmppId": "DCMS_0011_1718-Q3",
+   "gmppIdSource": "published in this release",
+   "project": "5G Testbeds & Trials",
+   "department": "DCMS",
+   "prevYear": 2019,
+   "year": 2020,
+   "prevRelease": "2018-19",
+   "release": "2019-20",
+   "prevEnd": "2021-03-31",
+   "curEnd": "2021-03-31",
+   "prevEndAsPublished": "31/03/2021",
+   "curEndAsPublished": "31/03/2021",
+   "daysMoved": 0,
+   "narrative": "The scheduled baseline project end date at Q2 1920 (30th September 2019) is 31/03/22, has changed since last year’s Q2 1819 date of 31/03/2021, due primarily to the following factors; \n\n - The programme has been extended until 31 March 2022 - funding has been confirmed by HM Treasury and Business Case updated. This will allow for further trial time for the projects. \n\n Since the Q2 1920 (30th September 2019) baseline project end date of 31/03/2022, the following non-project operating environment activities have impacted the original Q2 baseline project end date; \n\n - Programme end date of 2022 allowing for further benefits realisation within the Programme life cycle. This can help to provide a more informed decision for any further Government involvement in 5G activity/development. \n - The impacts of COVID-19 on the programme and its projects timelines, scope of work, and budgets is being regularly assessed and mitigations being put in place.\n\n Since the Q2 1920 (30th September 2019) baseline project end date of 31/03/2022, the following primary project actions have impacted the original Q2 baseline project end date; \n\n - Programme extended to allow further time for project trials. Slower initiation than anticipated has been a trend across the majority of projects; in some cases, this is due to equipment availability/cost savings.\n",
+   "label": "no-move",
+   "why": "Published end date unchanged (31 Mar 2021 in both releases). The narrative says the end date 'is 31/03/22, has changed since last year' and the programme 'has been extended until 31 March 2022'.",
+   "doubt": "The narrative states a move that the published dates do not show, so the column and the narrative disagree. The finish did not move, so this is no-move under ProjectLens's rule. The next release does show 31 Mar 2022.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2020",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B34",
+   "gmppId": "MOJ_0038_1718-Q4",
+   "gmppIdSource": "published in this release",
+   "project": "HMCTS Facilities Management Reprocurement Project (FMRP)",
+   "department": "MoJ",
+   "prevYear": 2019,
+   "year": 2020,
+   "prevRelease": "2018-19",
+   "release": "2019-20",
+   "prevEnd": "2019-12-31",
+   "curEnd": "2019-12-31",
+   "prevEndAsPublished": "31/12/2019",
+   "curEndAsPublished": "31/12/2019",
+   "daysMoved": 0,
+   "narrative": "The scheduled baseline project end date at Q2 1920 (30th September 2019) is 31/12/19, has not changed since last year's Q2 1819 date of 31/12/19, due primarily to the following factors;\n\n - The Project end was revised to 30th May 2020 in September 2019 however due to the timing of the reporting cycle this was not reflected in the return. The end date for the project is now July 2020.\n - The Procurement stage of the Project took longer than planned resulting in the requirement to revised the Project end date.\n\n Since the Q2 1920 (30th September 2019) baseline project end date of 31/12/19, the following primary project actions have impacted the original Q2 baseline project end date;\n\n - The Procurement stage of the Project took longer than planned resulting in the requirement to revised the Project end date.\n",
+   "label": "no-move",
+   "why": "Published end date unchanged (31 Dec 2019). The template says it 'has not changed', but the text says the end was revised to 30 May 2020 and 'is now July 2020'.",
+   "doubt": "As above: the narrative states a later date than the column.",
+   "prevDepartment": "MOJ",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2020",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    }
+   }
+  },
+  {
+   "id": "PLH2-B35",
+   "gmppId": "BIS_0015_1516-Q1",
+   "gmppIdSource": "published in this release",
+   "project": "Local Land Charges (LLC) Programme",
+   "department": "BEIS",
+   "prevYear": 2019,
+   "year": 2020,
+   "prevRelease": "2018-19",
+   "release": "2019-20",
+   "prevEnd": "2023-11-17",
+   "curEnd": "2023-11-17",
+   "prevEndAsPublished": "17/11/2023",
+   "curEndAsPublished": "17/11/2023",
+   "daysMoved": 0,
+   "narrative": "The scheduled baseline project end date at Q2 1920 (30th September 2019) is 17/11/23, has not changed since last year's Q2 1819 date of 17/11/23, due primarily to the following factors;\n\n - The current business case proposes extending Phase 1 for another year to put in place and test the delivery model. This will enable a more informed business case and delivery timeline to be developed. \n - The Programme is dependent on local authorities signing up for data analysis and migration.  The refreshed pre-migration and early engagement strategies are designed to bring more LAs forward quicker.\n - Given the significant time to migrate an individual LA and the number of LAs, this Programme is likely to be a multi-year programme.\n\n Since the Q2 1920 (30th September 2019) baseline project end date of 17/11/23, the following non-project operating environment activities have impacted the original Q2 baseline project end date;\n\n - There is a reliance on local authorities (and/or their software suppliers) to be engaged and able to extract data from their current system, to feed into the early data analysis work.\n - This programme has a significant dependency on the LAs existing software suppliers to extract the data and transfer it to HMLR systems for analysis.  As approval for the Programme is currently on an annual basis, suppliers are reluctant to investment in their systems to create more strategic and streamlined solutions.\n\n Since the Q2 1920 (30th September 2019) baseline project end date of 17/11/23, the following primary project actions have impacted the original Q2 baseline project end date;\n\n - Machine learning analytic tools, such as the Migration Helper, is already proving to reduce migration timelines, particularly for improving spatial data.\n - New delivery models have been designed to enable several local authorities to migrate concurrently and with more appropriate support.  The engagement strategy, commercial strategy and internal team capabilities have been redesigned to align with this and speed up delivery.\n",
+   "label": "no-move",
+   "why": "Published end date unchanged (17 Nov 2023). The narrative says it 'has not changed' while the business case proposes extending Phase 1.",
+   "matchedBy": "exact project name (case and punctuation normalised), unique in both releases",
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2020",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2018-19 (data as at 30 Sep 2018)",
+     "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+     "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv"
+    }
+   }
+  }
+ ]
+}
