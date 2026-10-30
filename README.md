@@ -1,16 +1,34 @@
 # ProjectLens
 
-Compare a project update with its schedules, inspect what changed, and record the human review decision.
+Give ProjectLens two schedule exports and the written progress update. It compares the finish dates with what the update says.
 
-**For:** project managers, project controls reviewers and planners checking a submitted update against two Primavera P6 schedule exports.
+**Input:** previous and current Primavera P6 XER or XML, or MS Project XML, plus an update pasted into a text file.
 
-**Start here:** [Try ProjectLens](https://matthewpaver.github.io/ProjectLens/change-assurance.html). No install or account needed.
+**Output:** finish movement, the exact sentence and highlighted phrase behind a finding, and both schedule dates. Findings prompt human review; they do not establish cause, entitlement or approval. Files stay local.
 
-1. Select **Try the example project** (Northstar Grid Connection, a made-up project). Its finish moves by 73 days while the update says unchanged.
-2. Inspect the source fields and review questions. Three findings are prioritised; all five remain available.
-3. Record a decision with its owner and rationale, then download the evidence-linked record.
+## Quick start
 
-Northstar is synthetic. Checks cover supported schedule fields and narrative keywords; they do not establish cause, entitlement or approval.
+With Node.js 18 or later, try the bundled synthetic Northstar exports and this example update:
+
+```bash
+git clone https://github.com/MatthewPaver/ProjectLens.git
+cd ProjectLens
+cat > /tmp/projectlens-update.txt <<'TEXT'
+The programme remains on track.
+TEXT
+node bin/projectlens.mjs compare \
+  --previous examples/monthly/northstar-previous.xer \
+  --current examples/monthly/northstar-current.xer \
+  --narrative /tmp/projectlens-update.txt \
+  --format text
+# Exit 1: a 73-day finish move contradicts the update.
+```
+
+Replace the export paths and pasted text with your own files. [The guide](docs/USE_ON_YOUR_OWN_SCHEDULES.md) covers formats, batch comparisons and exit codes.
+
+**Accuracy:** set 4 is **28/30, seen**. Set 5's independent score is **pending**; no set 5 file is available here. Reproduce set 4 with `npm run bench` and inspect [the cases and source links](bench/real-cases/). Sets 1–4 informed these rules and do not measure unseen accuracy.
+
+**Browser:** [Try ProjectLens](https://matthewpaver.github.io/ProjectLens/change-assurance.html), then select **Try the example project** or use your own schedules. No install or account needed. The browser also records a human decision and its conditions.
 
 **Case study:** [The problem, review journey and before-and-after design](https://matthewpaver.github.io/work/projectlens/).
 
@@ -31,13 +49,11 @@ ProjectLens gives the reviewer:
 - **A review tied to source facts.** Three prioritised questions, additional findings retained, and an explicit human decision. Rewording a narrative never removes factual constraint, relationship or float changes.
 - **A record of the decision.** The decision, its owner, rationale and conditions are kept; each condition stays open until it is marked closed.
 
-## Quickstart
+## Run the browser locally
 
 The browser tool is static HTML and JavaScript. Python's built-in server is enough: no packages, no API keys.
 
 ```bash
-git clone https://github.com/MatthewPaver/ProjectLens.git
-cd ProjectLens
 python3 -m http.server 8000 --bind 127.0.0.1 --directory docs
 # open http://127.0.0.1:8000/change-assurance.html and select "Try the example project"
 ```
@@ -45,15 +61,6 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory docs
 Expected result: the evidence desk shows three prioritised findings and five total questions, including the 73-day finish movement, with source dates beside the selected finding. Stop the server with Ctrl+C.
 
 **Your own schedules.** See [`docs/USE_ON_YOUR_OWN_SCHEDULES.md`](docs/USE_ON_YOUR_OWN_SCHEDULES.md) for browser, CLI and monthly batch routes (XER, P6 XML, MS Project XML, and `.txt` / `.md` / `.docx` narratives). Files stay local. If you have no schedule to hand, use the synthetic [Northstar](https://matthewpaver.github.io/ProjectLens/demo/northstar-previous.xer) ([current](https://matthewpaver.github.io/ProjectLens/demo/northstar-current.xer)) or [Riverside](https://matthewpaver.github.io/ProjectLens/demo/riverside-previous.xer) ([current](https://matthewpaver.github.io/ProjectLens/demo/riverside-current.xer), [narrative](https://matthewpaver.github.io/ProjectLens/demo/riverside-narrative.txt)) pairs.
-
-```bash
-node bin/projectlens.mjs compare \
-  --previous docs/demo/northstar-previous.xer \
-  --current docs/demo/northstar-current.xer \
-  --narrative docs/demo/northstar-narrative.txt \
-  --format json
-# exit 1: 73-day contradiction
-```
 
 ## Guided review
 
@@ -92,7 +99,7 @@ The evidence desk puts three prioritised findings (with any additional findings 
 
 **Save draft on this device** deliberately stores both XER contents, narrative and decision fields in browser storage. Save again after further edits; use **Resume saved draft** after reopening, and **Delete saved draft** when finished. Anyone with access to this browser profile may access that stored data. Normal review processing uploads nothing. Browser storage is not a shared or tamper-proof audit system.
 
-Project names and source IDs must match. Identical evidence and reversed data dates are rejected. Missing activity finish or float fields produce an evidence gap. Renamed or re-imported projects need exports with consistent identity before comparison. The narrative checks are bounded keyword heuristics with local negation handling, not semantic understanding; factual changes persist independently of narrative wording; this is not critical-path, causation, entitlement or contractual approval analysis. Validate on representative real exports before operational use.
+Identical evidence and reversed data dates are rejected. Missing activity finish or float fields produce an evidence gap. The browser asks for confirmation when renamed projects share activity codes; the CLI assumes the supplied pair is intended. The narrative checks use deterministic phrase and date rules with local negation handling, not semantic understanding. Factual changes persist independently of narrative wording. Validate on representative real exports before operational use.
 
 ## Results
 
@@ -121,7 +128,7 @@ What it does not show: 8 author-written queries are a smoke test, not a benchmar
 ## Design decisions and trade-offs
 
 - **Browser-local comparison, not a hosted platform.** Schedule submissions are commercially sensitive, so XER files, decisions and conditions never leave the machine, and a reviewer can try it on a real pack with no install, account or data-sharing approval. The cost: records live in one browser's local storage, with no multi-user working, permissions or organisational audit log.
-- **Deterministic rules for schedule findings, not a language model reading the schedule.** Finish movement against the narrative, constraint, logic and float changes, and responses with no owner are calculated in code, so the same pack always gives the same blockers and each one traces to a field. The cost: it finds only what the rules encode, and it reads XER and CSV only.
+- **Deterministic rules for schedule findings, not a language model reading the schedule.** Finish movement against the narrative, constraint, logic and float changes, and responses with no owner are calculated in code, so the same pack always gives the same blockers and each one traces to a field. The cost: it finds only what the rules encode and needs a supported export format.
 - **Retrieval is an opt-in sidecar with no localhost probe.** The static site never tries to reach a local server, so the default page makes no failed requests and needs no key. The cost: live precedent retrieval needs a local setup step and an explicit URL.
 - **Generated text fails closed and the human decides.** A brief with an invalid or missing citation, or one that recommends approving or rejecting, is dropped rather than shown with a warning. Each precedent still needs **Use** or **Ignore** before the decision register. The cost: some useful briefs are discarded.
 - **A reproducible offline eval alongside the live one.** The hashing-embedder baseline runs in CI with no key and cannot drift silently. The alternative, publishing only a Gemini number, could not be reproduced by a reader without a key. The cost: the published number is a lexical floor, not the production path.
@@ -130,7 +137,7 @@ What it does not show: 8 author-written queries are a smoke test, not a benchmar
 
 - Findings prompt human verification. ProjectLens does not establish contractual entitlement, delay causation or a probability of failure, and it does not reproduce Primavera scheduling calculations.
 - It does not make the decision. The workflow ends by recording a human decision with its rationale and conditions.
-- It reads Primavera P6 XER and CSV only, not Microsoft Project or PDF. Change assurance rejects multi-project XER files; schedule review analyses the first project and says so.
+- It reads Primavera P6 XER/XML and MS Project XML, not binary `.mpp` files or PDF narratives. The CLI accepts `.txt` and `.md` updates; the browser schedule-review page also reads `.docx`. The browser asks which project to use in a multi-project XER; the CLI needs `--project <id>`.
 - XER does not reliably carry baseline data (see Oracle's [XER export notes](https://docs.oracle.com/cd/E75426_01/English/User_Guides/p6_pro_user/export_projects_to_an_xer_file.htm)), so baseline assurance needs a separately supplied baseline. Risk and decision links use explicit activity-code matching.
 - GMPP delivery-confidence ratings are point-in-time judgements, not outcomes. Annual data cannot support activity-level forecasting, and a project's absence from a later release does not show whether it delivered.
 - Precedent relevance is a ranking signal, not a confidence or outcome claim. Public records show status, not which intervention worked.

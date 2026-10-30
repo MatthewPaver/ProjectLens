@@ -891,6 +891,10 @@ function renderSelectedFinding(index) {
   const value = item => !item ? "Activity absent" : constraintFinding ? `${item.constraintType} · ${item.constraintDate}` : floatFinding ? `${item.totalFloatHours ?? "Not supplied"} hours total float` : item.finish;
   const activityRows = relevant.map(change => `<li><code>${escapeHtml(change.code)}</code> ${escapeHtml(change.name)}<br><span>Previous: ${escapeHtml(value(change.before))}<br>Current: ${escapeHtml(value(change.after))}</span></li>`).join("") || "<li>No supporting activity changes found.</li>";
   const relationshipRows = review.changes.relationEvidence.map(relation => `<li>${escapeHtml(relation.change)}: <code>${escapeHtml(relation.predecessor)}</code> → <code>${escapeHtml(relation.successor)}</code><br><span>Type: ${escapeHtml(relation.type)} · lag: ${relation.lagHours === null ? "Not supplied" : `${escapeHtml(relation.lagHours)} hours`}</span></li>`).join("");
+  const evidence = review.claims.evidence;
+  const quotation = evidence
+    ? evidence.sentence.split(evidence.phrase).map(escapeHtml).join(`<mark>${escapeHtml(evidence.phrase)}</mark>`)
+    : escapeHtml($("#assuranceNarrative").value || "No narrative supplied.");
   $("#findingEvidence").innerHTML = `
     <button id="backToFindings" type="button">Back to findings</button>
     <h3>${escapeHtml(finding?.title || "Schedule evidence")}</h3>
@@ -900,7 +904,7 @@ function renderSelectedFinding(index) {
     <details><summary>Inspect source files and fields</summary><p class="source-files">Sources: ${escapeHtml(evidenceVersion(review))} · PROJECT scheduled finish; TASK activity dates, constraints and total float.</p></details>
     <details ${constraintFinding || floatFinding || relationshipFinding ? "open" : ""}><summary>${relationshipFinding ? `Task link field evidence (${review.changes.relationEvidence.length})` : `Activity field evidence (${relevant.length})`}</summary><ul>${relationshipFinding ? relationshipRows : activityRows}</ul></details>
     ${review.claim ? `<p class="claim-finding">${escapeHtml(review.claim)}</p>` : ""}
-    <h4>Narrative under review</h4><blockquote>${escapeHtml(($("#assuranceNarrative").value.split(/\n\s*\n/).find(paragraph => /unchanged|on track|stable|no impact/i.test(paragraph)) || $("#assuranceNarrative").value || "No narrative supplied.").trim())}</blockquote><details><summary>Read full narrative</summary><p>${escapeHtml($("#assuranceNarrative").value || "No narrative supplied.")}</p></details>
+    <h4>Narrative under review</h4><blockquote>${quotation}</blockquote><details><summary>Read full narrative</summary><p>${escapeHtml($("#assuranceNarrative").value || "No narrative supplied.")}</p></details>
     ${assuranceState.originalNarrative !== null && assuranceState.originalNarrative !== $("#assuranceNarrative").value ? `<details class="original-narrative"><summary>Read original narrative from the first check</summary><p>${escapeHtml(assuranceState.originalNarrative || "No narrative was supplied at the first check.")}</p></details>` : ""}
     <p class="source-boundary">Field coverage: ${review.coverage.map(item => `${escapeHtml(item.file)}: ${item.finishDates}/${item.tasks} finishes, ${item.floatValues}/${item.tasks} float values`).join("; ")}. Fixed checks flag conflicts. They do not establish causation, entitlement or contractual approval.</p>`;
 }

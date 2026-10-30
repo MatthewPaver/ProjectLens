@@ -69,7 +69,7 @@ describe("Round 4 plain findings", () => {
   const args = ["compare", "--previous", "examples/monthly/northstar-previous.xer",
     "--current", "examples/monthly/northstar-current.xer",
     "--narrative", "examples/monthly/northstar-narrative.txt"];
-  const sentence = "The update says the end date is unchanged, but the schedule's finish moved 73 days.";
+  const sentence = "The update says 'remains on track'. The schedule's finish moved from 15 Dec 2027 to 26 Feb 2028 (73 days).";
   it("prints the shared contradiction sentence", () => {
     const result = run([...args, "--format", "text"]);
     assert.equal(result.status, 1);
@@ -81,5 +81,16 @@ describe("Round 4 plain findings", () => {
     assert.equal(payload.claim, sentence);
     assert.equal(payload.contradiction, true);
     assert.equal(payload.publishedDateCheck, null);
+    assert.equal(payload.claims.evidence.phrase, "remains on track");
+    assert.equal(payload.claims.evidence.previousFinish, "2027-12-15");
+    assert.equal(payload.claims.evidence.currentFinish, "2028-02-26");
   });
+  for (const format of ["text", "md"]) {
+    it(`quotes the exact sentence and marks the matched phrase in ${format}`, () => {
+      const result = run([...args, "--format", format]);
+      assert.equal(result.status, 1);
+      assert.match(result.stdout, /Northstar Grid Connection \*\*remains on track\*\* and the key completion date is unchanged\./);
+      assert.ok(result.stdout.includes(sentence), result.stdout);
+    });
+  }
 });

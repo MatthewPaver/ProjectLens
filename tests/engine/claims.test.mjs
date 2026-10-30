@@ -585,3 +585,129 @@ describe("whole-programme stability predicates", () => {
     it(sentence, () => assert.equal(engine.detectScheduleClaims(sentence, {previousFinish:"2026-06-30",currentFinish:"2027-03-31"}).contradiction?.kind, "says-unchanged"));
   }
 });
+
+// Authored narrative sentences for miss categories in the seen public-record sets.
+describe("Round 5 schedule claims and finish formats", () => {
+  const moved = { previousFinish: "2028-09-18", currentFinish: "2029-02-12" };
+  for (const sentence of [
+    "On schedule.",
+    "No deviation from the agreed schedule.",
+    "The delivery schedule has remained stable during this review.",
+    "The programme is on-track with no changes to the dates of key milestones.",
+    "The project ran to agreed schedule.",
+    "The programme continued as scheduled.",
+    "The construction phase was extended. This will not impact on the project end date.",
+  ]) {
+    it(`flags stability: ${sentence}`, () => {
+      assert.equal(engine.detectScheduleClaims(sentence, moved).contradiction?.kind, "says-unchanged");
+    });
+  }
+  for (const sentence of [
+    "The project will complete in 2028.",
+    "The programme will start migration in July 2028 and complete in November 2028.",
+    "The end date is estimated as 2028-Q4.",
+    "An extension was approved to extend the end date to 18/09/2028.",
+    "Closed as planned in November 2028.",
+    "Final programme closure took place in November 2028.",
+    "The programme will not close down until 18 September 2028.",
+  ]) {
+    it(`checks a named finish: ${sentence}`, () => {
+      const result = engine.detectScheduleClaims(sentence, {
+        previousFinish: "2027-04-01", currentFinish: "2027-04-01",
+      });
+      assert.equal(result.contradiction, null);
+      assert.ok(result.publishedDateCheck, JSON.stringify(result.dates));
+    });
+  }
+  for (const sentence of [
+    "The project will complete in 2029.",
+    "The end date remains 2029-Q1.",
+  ]) {
+    it(`respects date precision: ${sentence}`, () => {
+      const result = engine.detectScheduleClaims(sentence, moved);
+      assert.equal(result.contradiction, null);
+      assert.equal(result.publishedDateCheck, null);
+    });
+  }
+  for (const sentence of [
+    "The phase is on schedule.",
+    "The programme remains on track for its procurement milestones.",
+    "The programme is not on schedule.",
+    "The review took place in November 2028.",
+    "The contract closed as planned in November 2028.",
+    "The programme remains on track. The end date moved to 12 February 2029.",
+  ]) {
+    it(`keeps scope or explanation: ${sentence}`, () => {
+      const result = engine.detectScheduleClaims(sentence, moved);
+      assert.equal(result.contradiction, null);
+      assert.equal(result.publishedDateCheck, null);
+    });
+  }
+  it("keeps an actual closure separate from a forecast finish after a stated overrun", () => {
+    const result = engine.detectScheduleClaims(
+      "The project closed on 25 March 2029. Handover continued beyond the original plan.", moved,
+    );
+    assert.equal(result.dates[0].role, "actual-finish");
+    assert.equal(result.contradiction, null);
+  });
+  it("an actual closure date does not qualify an earlier on-schedule claim", () => {
+    const result = engine.detectScheduleClaims(
+      "The programme remained on schedule and formally closed on 12 February 2029.", moved,
+    );
+    assert.equal(result.contradiction?.kind, "says-unchanged");
+  });
+});
+
+describe("Round 5 finding evidence", () => {
+  const dates = { previousFinish: "2027-12-15", currentFinish: "2028-02-26" };
+  it("returns the exact sentence and phrase despite normalised spacing", () => {
+    const sentence = "The programme REMAINS\u00a0 on\ntrack; all checks continue.";
+    const result = engine.detectScheduleClaims(`An earlier review took place. ${sentence} More information follows.`, dates);
+    assert.deepEqual(result.evidence, {
+      sentence, phrase: "REMAINS\u00a0 on\ntrack", ...dates,
+    });
+    assert.equal(engine.findingSentence(result, dates),
+      "The update says 'REMAINS on track'. The schedule's finish moved from 15 Dec 2027 to 26 Feb 2028 (73 days).");
+  });
+  it("returns evidence for a published-date check", () => {
+    const sentence = "The end date remains 18/09/2028.";
+    const result = engine.detectScheduleClaims(`The review finished. ${sentence}`, {
+      previousFinish: "2028-04-01", currentFinish: "2028-04-01",
+    });
+    assert.deepEqual(result.evidence, {
+      sentence, phrase: "18/09/2028", narrativeDate: "2028-09-18",
+      previousFinish: "2028-04-01", currentFinish: "2028-04-01",
+    });
+  });
+  it("keeps the whole sentence rather than a bounded clause", () => {
+    const sentence = `The programme remains on schedule, ${"with review work continuing, ".repeat(8)}and the review is complete.`;
+    assert.equal(engine.detectScheduleClaims(sentence, dates).evidence?.sentence, sentence);
+  });
+  it("returns the mismatched date as evidence", () => {
+    const sentence = "The project will complete by 15 December 2027.";
+    const evidence = engine.detectScheduleClaims(sentence, dates).evidence;
+    assert.equal(evidence?.sentence, sentence);
+    assert.equal(evidence?.phrase, "15 December 2027");
+    assert.equal(evidence?.narrativeDate, dates.previousFinish);
+  });
+  it("returns direction-only evidence when the stated direction disagrees", () => {
+    const sentence = "The end date was extended following review.";
+    const result = engine.detectScheduleClaims(sentence, {
+      previousFinish: "2028-02-26", currentFinish: "2027-12-15",
+    });
+    assert.equal(result.evidence?.sentence, sentence);
+    assert.equal(result.evidence?.phrase, "was extended");
+  });
+  it("returns no finding evidence for an explained move", () => {
+    assert.equal(engine.detectScheduleClaims("The end date moved to 26 February 2028.", dates).evidence, null);
+  });
+  for (const date of ["2029", "2029-Q1"]) {
+    it(`keeps the stated precision in the finding for ${date}`, () => {
+      const options = { previousFinish: "2027-12-15", currentFinish: "2027-12-15" };
+      const result = engine.detectScheduleClaims(`The end date remains ${date}.`, options);
+      assert.equal(engine.findingSentence(result, options),
+        `The narrative gives the end date as ${date}; the published end date is 15 Dec 2027. Check which is current.`);
+      assert.equal(result.publishedDateCheck.detail, engine.findingSentence(result, options));
+    });
+  }
+});

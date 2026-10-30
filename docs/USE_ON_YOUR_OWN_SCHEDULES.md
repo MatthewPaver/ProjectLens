@@ -1,8 +1,33 @@
 # Use ProjectLens on your own schedules
 
-Three routes. Files stay on your machine. No account and no upload.
+Give ProjectLens two exports of the same schedule, one previous and one current, plus the written progress update. Use Primavera P6 XER/XML or MS Project XML.
 
-## 1. Browser
+You get the finish movement, the exact sentence and highlighted phrase behind a finding, and both dates. An explained move stays a review of the schedule facts. A mismatch without a finish move asks you to check the published date. These are review prompts, not proof of cause or approval.
+
+Files stay on your machine. No account or upload is needed.
+
+## 1. Quickest route: command line
+
+From the repository root, with Node.js 18 or later, paste your update into a text file and supply two exports:
+
+```bash
+cat > /tmp/projectlens-update.txt <<'TEXT'
+Paste your written progress update here.
+TEXT
+node bin/projectlens.mjs compare \
+  --previous path/to/previous.xer \
+  --current path/to/current.xer \
+  --narrative /tmp/projectlens-update.txt \
+  --format text
+```
+
+For a working synthetic example, use `examples/monthly/northstar-previous.xer` and `examples/monthly/northstar-current.xer`, and paste `The programme remains on track.` The same command reports a 73-day finish movement, quotes the sentence, marks `**remains on track**`, and exits 1.
+
+Formats: `text`, `json`, `csv`, `md`. Text and Markdown show the quote; JSON includes structured `claims.evidence`. CSV keeps its history columns. Use `--project <id>` for multi-project XERs. CLI narrative files must be `.txt` or `.md`; convert Word text first.
+
+**Accuracy:** set 4 is **28/30, seen**, reproduced with `npm run bench`. Set 5's independent score is **pending** because no set 5 file is available here. [Cases, labels and sources](../bench/real-cases/) are public. Sets 1–4 informed the rules; do not treat them as unseen accuracy.
+
+## 2. Browser
 
 1. Open [change assurance](change-assurance.html) (or serve `docs/` locally).
 2. Export two schedules from Primavera P6 as **XER** or **XML**, or from MS Project as **XML** (File → Save As → XML). Do not load `.mpp` directly.
@@ -15,18 +40,6 @@ Local server:
 python3 -m http.server 8000 --bind 127.0.0.1 --directory docs
 # open http://127.0.0.1:8000/change-assurance.html
 ```
-
-## 2. Command line
-
-```bash
-node bin/projectlens.mjs compare \
-  --previous path/to/previous.xer \
-  --current path/to/current.xer \
-  --narrative path/to/narrative.txt \
-  --format json
-```
-
-Formats: `text`, `json`, `csv`, `md`. Optional `--project <id>` for multi-project XERs.
 
 ## 3. Monthly batch
 
@@ -59,7 +72,7 @@ Files are grouped by activity-code overlap, ordered by data date, and each conse
 
 - Cause, entitlement or contractual approval
 - A recalculated critical path (it uses exported float only)
-- Whether a published government commentary is “wrong” — mismatches are stated as commentary and date disagreeing
+- Whether published government commentary is “wrong”; a mismatch says the published commentary and date disagree
 
 ## Privacy
 

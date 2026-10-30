@@ -111,6 +111,8 @@ function formatResult(result, format) {
     ].join(",");
     return `${header}\n${row}\n`;
   }
+  const evidence = result.claims.evidence;
+  const quotation = evidence ? `Update: ${evidence.sentence.replace(evidence.phrase, phrase => `**${phrase}**`)}` : null;
   if (format === "md") {
     const lines = [
       `# ${result.project}`,
@@ -120,6 +122,7 @@ function formatResult(result, format) {
       `- Narrative claim: ${result.narrativeClaim || "none"}`,
     ];
     if (result.claim) lines.push(`- ${result.claim}`);
+    if (quotation) lines.push("", quotation);
     lines.push("");
     return lines.join("\n");
   }
@@ -131,6 +134,7 @@ function formatResult(result, format) {
   ];
   if (result.narrativeClaim) lines.push(`Narrative claim: ${result.narrativeClaim}`);
   if (result.claim) lines.push(result.claim);
+  if (quotation) lines.push(quotation);
   for (const blocker of (result.blockers || []).filter(item => item.title !== result.claim)) lines.push(`- ${blocker.type}: ${blocker.title}`);
   return `${lines.join("\n")}\n`;
 }

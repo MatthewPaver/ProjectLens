@@ -278,10 +278,14 @@ function openProject(projectId) {
   const dateCheck = claims.publishedDateCheck
     ? `<p class="claim-check">${escapeHtml(sentence)}</p>`
     : "";
+  const evidence = claims.evidence;
+  const claimEvidence = evidence
+    ? `<blockquote>${evidence.sentence.split(evidence.phrase).map(escapeHtml).join(`<mark>${escapeHtml(evidence.phrase)}</mark>`)}</blockquote><p>Previous finish: ${escapeHtml(formatDate(evidence.previousFinish))}. Current finish: ${escapeHtml(formatDate(evidence.currentFinish))}.</p>`
+    : "";
   const narrativeDetails = project.narrativeExcerpt || project.scheduleNarrative
     ? `<details class="narrative-full"><summary>Full schedule narrative</summary><p>${escapeHtml(project.narrativeExcerpt || project.scheduleNarrative)}</p></details>`
     : "";
-  $("#detailEvidence").innerHTML = `${claimFlag}${dateCheck}<p>${escapeHtml(project.evidenceExcerpt || "No public narrative was available for this record.")}</p>${narrativeDetails}`;
+  $("#detailEvidence").innerHTML = `${claimFlag}${dateCheck}${claimEvidence}<p>${escapeHtml(project.evidenceExcerpt || "No public narrative was available for this record.")}</p>${narrativeDetails}`;
   $("#detailSource").href = project.sourceUrl;
   $("#detailTimeline").innerHTML = project.history.map(record => `
     <article>

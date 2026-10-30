@@ -35,7 +35,11 @@
     "progressing to plan",
     "on course",
     "in line with plan",
-    "no deviation"
+    "no deviation",
+    "remained stable",
+    "ran to agreed schedule",
+    "as scheduled",
+    "not impact"
   ],
   "movePhrases": [
     "increased from",

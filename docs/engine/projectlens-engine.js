@@ -23,7 +23,7 @@ const EMBEDDED_CLAIM_RULES = {
     "remains static", "has not changed", "have not changed", "not changed", "no movement",
     "unaltered", "remained constant", "remains constant", "unaffected", "not affected",
     "has not slipped", "not slipped", "progressing to plan", "on course", "in line with plan",
-    "no deviation",
+    "no deviation", "remained stable", "ran to agreed schedule", "as scheduled", "not impact",
   ],
   movePhrases: [
     "increased from", "increased to", "decreased from", "changed from", "moved from",
@@ -836,17 +836,19 @@ function classifyDateRole(text, item) {
   }
 
   // Milestone-style labels: "Phase 2 go-live Mar 2023".
-  if (/\b(?:go-?live|milestone|phase\s+\d+|gate\s+\d+)\b/i.test(beforeLower)
+  if (/\b(?:go-?live|milestone|phase\s+\d+|gate\s+\d+|contract)\b/i.test(beforeLower)
     || /\b(?:go-?live|milestone)\b/i.test(afterLower)) {
     return "other";
   }
 
   // Current finish: end/completion clause, or "remained the same at <date>".
+  if (/\b(?:closed\s+(?:as\s+(?:per\s+)?plan(?:ned)?\s+)?(?:in|on)|closure\s+took\s+place\s+in)\s*$/i.test(before)) return "actual-finish";
   const endSubject = /\b(?:end[\s-]?date|project\s+end|baseline\s+project\s+end|complet(?:ion(?:\s+date)?|e)|closure|finish(?:\s+date)?|programme\s+end|scheduled\s+to\s+finish|forecast\s+end|current\s+forecast\s+end)\b/i.test(before);
   if (/\b(?:completion|finish|closure|end[ -]?date)(?:\s+date)?\s*(?:(?:in|by|on|for)\s+|:)\s*$/i.test(before)) return "current-finish";
   if (/\b(?:completion|finish|closure|end[ -]?date)(?:\s+date)?\s*$/i.test(before)) return "current-finish";
   if (/\b(?:complete(?:d)?|finish(?:ed)?|delivered|end)\s+(?:in|by|on)\s*$/i.test(before)
     && /\b(?:programme|project|will|expected|scheduled|forecast|due)\b/i.test(before)) return "current-finish";
+  if (/\b(?:and\s+complete\s+(?:in|by|on)|close(?:\s+down)?\s+until|end\s+date\s+to|end\s+date\s+estimated\s+as)\s*$/i.test(before)) return "current-finish";
   const stableAtDate = /(?:remained\s+the\s+same|remains\s+the\s+same|remained\s+static|remains\s+static|remained\s+constant|remains\s+constant|remained\s+at|remains\s+at|unchanged)\s+at\s*$/i.test(before);
   const currentCue = /(?:\bis(?:\s+now)?\b|\bof\b|\bnow\b|\bto\s+complete\s+by\b|\bextended\s+to\b|\brevised\s+to\b|\bscheduled\s+to\s+finish\s+on\b|\bremained\s+at\b|\bremains\s+at\b)\s*$/i.test(before);
   if (/\b(?:expected|scheduled|forecast|due|will)\s+(?:to\s+)?complete\s+(?:in|by|on)\s*$/i.test(before)) return "current-finish";
@@ -975,6 +977,15 @@ function extractNarrativeDates(text) {
     push(match[0], new Date(Date.UTC(year, month - 1, day, 12)), match.index);
   }
 
+  // Calendar quarters and year-only finishes retain their full range.
+  for (const match of text.matchAll(/\b(20\d{2})(?:-Q([1-4]))?\b/gi)) {
+    if (dates.some(d => d.index <= match.index && d.index + d.raw.length >= match.index + match[0].length)) continue;
+    const year = Number(match[1]);
+    const quarter = Number(match[2]);
+    dates.push({ iso: isoDate(lastDayOfMonth(year, quarter ? quarter * 3 : 12)), raw: match[0], index: match.index,
+      precision: quarter ? "quarter" : "year", quarterStart: `${year}-${quarter ? String(quarter * 3 - 2).padStart(2, "0") : "01"}-01`,
+      quarterEnd: isoDate(lastDayOfMonth(year, quarter ? quarter * 3 : 12)) });
+  }
   // De-duplicate identical iso+index hits from overlapping patterns, then bind roles.
   const seen = new Set();
   const unique = dates.filter(item => {
@@ -1041,8 +1052,9 @@ function programmeStability(text, index) {
   // Whole-programme subjects only; a programme's phase is still a phase.
   if (/\b(?:phase|workstream|contract|procurement|milestones?|go-?live|tender|gate|(?:initial|full) operat(?:ing|ional) capability|in[ -]service(?: date)?)\b/i.test(clause)) return false;
   const target = clauseAround(text, index).slice(clause.length);
-  if (/\b(?:to|for)\b[^.;!?]*\b(?:phase|workstream|contract|procurement|milestones?|go-?live|tender|gate|(?:initial|full) operat(?:ing|ional) capability|in[ -]service(?: date)?)\b/i.test(target)) return false;
-  return /\b(?:programme|program|project|delivery|schedule)\s+(?:(?:is|was|has|been|still|overall|delivery|schedule|baseline|continues?|to|be|running|remains?|remained|progressing|firmly|currently|shows|encountered|experienced|suffered|facing)\s+)*$/i.test(clause);
+  if (/^(?:remains?\s+)?(?:on[ -](?:track|schedule|course|target)|progressing to plan)\s+(?:to|for)\b[^.;!?]*\b(?:phase|workstream|contract|procurement|milestones?|go-?live|tender|gate|(?:initial|full) operat(?:ing|ional) capability|in[ -]service(?: date)?)\b/i.test(target)) return false;
+  if (/^\s*$/i.test(clause) && /^(?:on[ -]schedule|no deviation)\b/i.test(text.slice(index))) return true;
+  return /\b(?:programme|program|project|delivery|schedule)\s+(?:(?:is|was|has|been|still|overall|delivery|schedule|baseline|continues?|continued|to|be|running|remains?|remained|progressing|firmly|currently|shows|encountered|experienced|suffered|facing)\s+)*$/i.test(clause);
 }
 
 function isNegatedAt(text, index, negations) {
@@ -1173,7 +1185,7 @@ function detectScheduleClaims(text, { currentFinish = null, previousFinish = nul
       // Being on track for a stated new finish is not a claim that it stayed unchanged.
       if (!/on[ -](?:track|schedule|course|target)|progressing to plan/i.test(hit.phrase)) return true;
       return !dates.some(d => d.role === "current-finish"
-        && Math.abs(dayDeltaIso(d.iso, currentFinish) ?? Infinity) <= 14);
+        && (d.quarterStart ? quarterContainsFinish(d, currentFinish) : Math.abs(dayDeltaIso(d.iso, currentFinish) ?? Infinity) <= 14));
     });
   const movesStated = extractMoveStatements(source, rules.movePhrases, dates);
   const finishMoved = (() => {
@@ -1187,18 +1199,19 @@ function detectScheduleClaims(text, { currentFinish = null, previousFinish = nul
   let contradiction = null;
   const current = toIsoDay(currentFinish);
   // Only dates the narrative presents as the *current* finish drive mismatch.
-  const currentFinishDates = dates.filter(d => d.role === "current-finish");
+  // An actual closure also prompts a date check when the published finish is unchanged.
+  const currentFinishDates = dates.filter(d => d.role === "current-finish" || (!finishMoved && d.role === "actual-finish"));
 
   function mismatchedCurrentFinish() {
     if (!current) return null;
     const quarterHit = currentFinishDates.find(d => {
-      if (d.precision !== "quarter") return false;
+      if (d.precision !== "quarter" && d.precision !== "year") return false;
       return !quarterContainsFinish(d, current, 14);
     });
     if (quarterHit) return quarterHit;
     return currentFinishDates.find(d => {
       if (d.fyQuarter) return false;
-      if (d.precision === "quarter") return false;
+      if (d.precision === "quarter" || d.precision === "year") return false;
       const delta = dayDeltaIso(d.iso, current);
       return delta !== null && Math.abs(delta) > 14;
     }) || null;
@@ -1275,8 +1288,26 @@ function detectScheduleClaims(text, { currentFinish = null, previousFinish = nul
     }
   }
 
+  let evidence = null;
+  if (contradiction || publishedDateCheck) {
+    const hit = mismatched || (contradiction?.kind === "says-unchanged" ? stableHits[0] : movesStated[0]);
+    const original = String(text || "");
+    // Map normalised character positions back to the submitted text, preserving its wording and spacing.
+    const tokens = [...original.matchAll(/\s+|\S/g)];
+    const index = tokens[hit.index].index;
+    const end = tokens[hit.index + (hit.raw || hit.phrase).length]?.index ?? original.length;
+    const breaks = [...original.matchAll(/[.!?](?=\s|$)/g)];
+    const sentenceStart = (breaks.filter(mark => mark.index < index).at(-1)?.index ?? -1) + 1;
+    const sentenceEnd = breaks.find(mark => mark.index >= end)?.index;
+    evidence = {
+      sentence: original.slice(sentenceStart, sentenceEnd === undefined ? original.length : sentenceEnd + 1).trim(),
+      phrase: original.slice(index, end),
+      ...(mismatched ? { narrativeDate: mismatched.iso } : {}),
+      previousFinish: toIsoDay(previousFinish), currentFinish: current,
+    };
+  }
   if (publishedDateCheck) {
-    publishedDateCheck.detail = findingSentence({ publishedDateCheck }, { currentFinish, previousFinish });
+    publishedDateCheck.detail = findingSentence({ publishedDateCheck, evidence, dates }, { currentFinish, previousFinish });
   }
 
   return {
@@ -1286,21 +1317,22 @@ function detectScheduleClaims(text, { currentFinish = null, previousFinish = nul
     contradiction,
     previousDateNote,
     publishedDateCheck,
+    evidence,
   };
 }
 
 function findingSentence(claims, { currentFinish = null, previousFinish = null } = {}) {
+  const date = claims.dates?.find(d => d.iso === claims.evidence?.narrativeDate);
+  const narrativeDate = date?.precision ? date.raw : formatDate(parseDate(claims.evidence?.narrativeDate || claims.publishedDateCheck?.narrativeDate));
   if (claims.publishedDateCheck) {
     const check = claims.publishedDateCheck;
-    return `The narrative gives the end date as ${formatDate(parseDate(check.narrativeDate))}; the published end date is ${formatDate(parseDate(check.publishedDate))}. Check which is current.`;
+    return `The narrative gives the end date as ${narrativeDate}; the published end date is ${formatDate(parseDate(check.publishedDate))}. Check which is current.`;
   }
   if (claims.contradiction?.kind === "says-unchanged") {
-    return `The update says the end date is unchanged, but the schedule's finish moved ${dayDeltaIso(currentFinish, previousFinish)} days.`;
+    return `The update says '${normaliseNarrativeText(claims.evidence.phrase)}'. The schedule's finish moved from ${formatDate(parseDate(previousFinish))} to ${formatDate(parseDate(currentFinish))} (${dayDeltaIso(currentFinish, previousFinish)} days).`;
   }
   if (claims.contradiction) {
-    const date = claims.dates.find(d => d.role === "current-finish"
-      && Math.abs(dayDeltaIso(d.iso, currentFinish) ?? 0) > 14);
-    if (date) return `The narrative gives the end date as ${formatDate(parseDate(date.iso))}; the published end date is ${formatDate(parseDate(currentFinish))}. Check which is current.`;
+    if (claims.evidence.narrativeDate) return `The narrative gives the end date as ${narrativeDate}; the published end date is ${formatDate(parseDate(currentFinish))}. Check which is current.`;
     return claims.contradiction.detail;
   }
   if (dayDeltaIso(currentFinish, previousFinish) && moveCoversCurrent(claims.movesStated, currentFinish, previousFinish)) return "The narrative explains the move.";
