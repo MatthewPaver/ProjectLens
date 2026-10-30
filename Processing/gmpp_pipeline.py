@@ -14,6 +14,7 @@ import hashlib
 import json
 import math
 import re
+import subprocess
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 from datetime import datetime
@@ -344,6 +345,57 @@ def day_delta(current: str | None, previous: str | None) -> int | None:
     return (datetime.fromisoformat(current) - datetime.fromisoformat(previous)).days
 
 
+def _detect_claims_batch(inputs: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Use the browser/CLI engine, with one Node process for the whole dataset."""
+    script = """
+const fs = require("node:fs");
+const engine = require(process.argv[1]);
+const inputs = JSON.parse(fs.readFileSync(0, "utf8"));
+process.stdout.write(JSON.stringify(inputs.map(({ text, ...options }) =>
+    engine.detectScheduleClaims(text, options))));
+"""
+    result = subprocess.run(
+        ["node", "-e", script, str(ROOT / "docs/engine/projectlens-engine.js")],
+        input=json.dumps(inputs), capture_output=True, text=True, check=True, timeout=60,
+    )
+    return json.loads(result.stdout)
+
+
+def detect_schedule_claims(
+    text: str,
+    current_finish: str | None,
+    previous_finish: str | None,
+) -> dict[str, Any]:
+    """Evaluate a single narrative through the shared schedule engine."""
+    return _detect_claims_batch([{
+        "text": text, "currentFinish": current_finish, "previousFinish": previous_finish,
+    }])[0]
+
+
+def annotate_history_claims(histories: list[list[dict[str, Any]]]) -> None:
+    records = []
+    inputs = []
+    for history in histories:
+        for index, record in enumerate(history):
+            previous = history[index - 1] if index else None
+            records.append(record)
+            inputs.append({
+                "text": record.get("scheduleNarrative") or "",
+                "currentFinish": record.get("endDate"),
+                "previousFinish": previous.get("endDate") if previous else None,
+            })
+    if not inputs:
+        return
+    for record, claims in zip(records, _detect_claims_batch(inputs), strict=True):
+        record["narrativeSaysUnchangedButMoved"] = claims["contradiction"] is not None
+        record["narrativeExcerpt"] = record.get("scheduleNarrative") or ""
+        record["narrativeClaimKind"] = (
+            claims["contradiction"]["kind"] if claims["contradiction"] else None
+        )
+        # Quieter "check the published date" note when the finish did not move.
+        record["publishedDateCheck"] = claims.get("publishedDateCheck")
+
+
 def rating_delta(current: str | None, previous: str | None) -> int | None:
     current_key = current.upper() if current else None
     previous_key = previous.upper() if previous else None
@@ -398,6 +450,7 @@ def build_payload(records: list[dict[str, Any]]) -> dict[str, Any]:
         by_id[record["id"]].append(record)
     for history in by_id.values():
         history.sort(key=lambda item: item["year"])
+    annotate_history_claims(list(by_id.values()))
 
     projects = []
     transitions = Counter()
@@ -415,6 +468,12 @@ def build_payload(records: list[dict[str, Any]]) -> dict[str, Any]:
         transitions[status] += 1
         theme_counts.update(current["themes"])
         score, reasons = attention_score(current, previous)
+        if current.get("narrativeSaysUnchangedButMoved"):
+            reasons = [
+                "Published commentary says the end date is unchanged while the published date moved",
+                *reasons,
+            ][:4]
+            score = min(100, score + 12)
         projects.append(
             {
                 **current,
@@ -427,6 +486,9 @@ def build_payload(records: list[dict[str, Any]]) -> dict[str, Any]:
                 ),
                 "attentionScore": score,
                 "attentionReasons": reasons,
+                "narrativeSaysUnchangedButMoved": bool(current.get("narrativeSaysUnchangedButMoved")),
+                "narrativeExcerpt": current.get("narrativeExcerpt") or current.get("scheduleNarrative") or "",
+                "publishedDateCheck": current.get("publishedDateCheck"),
             }
         )
 

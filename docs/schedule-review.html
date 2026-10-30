@@ -73,14 +73,14 @@
 
       <div class="intake-grid">
         <label class="file-drop" id="previousDrop" for="previousFile">
-          <input id="previousFile" type="file" accept=".xer,text/plain">
+          <input id="previousFile" type="file" accept=".xer,.xml,text/xml,text/plain">
           <span>Previous submission</span>
           <strong id="previousFileName">Drop previous XER</strong>
           <small id="previousFileMeta">Required · comparison point</small>
           <i>01</i>
         </label>
         <label class="file-drop current" id="currentDrop" for="currentFile">
-          <input id="currentFile" type="file" accept=".xer,text/plain">
+          <input id="currentFile" type="file" accept=".xer,.xml,text/xml,text/plain">
           <span>Current submission</span>
           <strong id="currentFileName">Drop current XER</strong>
           <small id="currentFileMeta">Required · latest update</small>
@@ -89,7 +89,7 @@
         <div class="narrative-input">
           <label for="narrativeText"><span>Submission narrative</span><small>Optional, but required for contradiction checks</small></label>
           <textarea id="narrativeText" rows="8" placeholder="Paste the planner or contractor's explanation of progress, delay and material schedule changes..."></textarea>
-          <label class="compact-upload" for="narrativeFile"><input id="narrativeFile" type="file" accept=".txt,.md,.csv,text/plain,text/csv">Load TXT, MD or CSV narrative</label>
+          <label class="compact-upload" for="narrativeFile"><input id="narrativeFile" type="file" accept=".txt,.md,.csv,.docx,text/plain,text/csv,application/vnd.openxmlformats-officedocument.wordprocessingml.document">Load TXT, MD, CSV or DOCX narrative</label>
         </div>
       </div>
 
@@ -100,7 +100,7 @@
         </div>
         <div class="evidence-kit-grid">
           <label class="evidence-file" id="baselineDrop" for="baselineFile">
-            <input id="baselineFile" type="file" accept=".xer,text/plain">
+            <input id="baselineFile" type="file" accept=".xer,.xml,text/xml,text/plain">
             <span>Baseline schedule</span><strong id="baselineFileName">Not supplied</strong><small id="baselineFileMeta" data-default="XER or separately exported baseline">XER or separately exported baseline</small>
           </label>
           <label class="evidence-file" id="riskDrop" for="riskFile">
@@ -290,6 +290,10 @@
     <small id="loaderStep">Reading activities, logic and calendars</small>
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="vendor/jszip.min.js"></script>
+  <script src="engine/projectlens-engine.js"></script>
+  <script src="engine/xml-schedules.js"></script>
+  <script src="engine/narrative-files.js"></script>
   <script src="xer-review.js"></script>
 </body>
 </html>

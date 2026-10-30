@@ -268,13 +268,30 @@ function openProject(projectId) {
   $("#detailReasons").innerHTML = project.attentionReasons.length
     ? project.attentionReasons.map(reason => `<li>${escapeHtml(reason)}</li>`).join("")
     : "<li>No elevated scoring signal. Open the evidence for context.</li>";
-  $("#detailEvidence").textContent = project.evidenceExcerpt || "No public narrative was available for this record.";
+  const claimDates = { currentFinish: project.endDate, previousFinish: project.previous?.endDate };
+  const claims = ProjectLensEngine.detectScheduleClaims(project.scheduleNarrative || project.narrativeExcerpt || "", claimDates);
+  const sentence = ProjectLensEngine.findingSentence(claims, claimDates);
+  const claimFlag = sentence && !claims.publishedDateCheck
+    ? `<p class="claim-flag">${escapeHtml(sentence)}</p>`
+    : "";
+  // Quieter than a contradiction: narrative end date and published end date disagree, but the finish did not move.
+  const dateCheck = claims.publishedDateCheck
+    ? `<p class="claim-check">${escapeHtml(sentence)}</p>`
+    : "";
+  const evidence = claims.evidence;
+  const claimEvidence = evidence
+    ? `<blockquote>${evidence.sentence.split(evidence.phrase).map(escapeHtml).join(`<mark>${escapeHtml(evidence.phrase)}</mark>`)}</blockquote><p>Previous finish: ${escapeHtml(formatDate(evidence.previousFinish))}. Current finish: ${escapeHtml(formatDate(evidence.currentFinish))}.</p>`
+    : "";
+  const narrativeDetails = project.narrativeExcerpt || project.scheduleNarrative
+    ? `<details class="narrative-full"><summary>Full schedule narrative</summary><p>${escapeHtml(project.narrativeExcerpt || project.scheduleNarrative)}</p></details>`
+    : "";
+  $("#detailEvidence").innerHTML = `${claimFlag}${dateCheck}${claimEvidence}<p>${escapeHtml(project.evidenceExcerpt || "No public narrative was available for this record.")}</p>${narrativeDetails}`;
   $("#detailSource").href = project.sourceUrl;
   $("#detailTimeline").innerHTML = project.history.map(record => `
     <article>
       <time>${record.year - 1}–${String(record.year).slice(-2)}</time>
       <i class="${ratingClass(record.deliveryConfidence)}"></i>
-      <div><strong>${escapeHtml(record.deliveryConfidence || "Not published")}</strong><span>${escapeHtml(record.deliveryConfidenceSource || "No rating source")} · ${escapeHtml(formatDate(record.endDate))}</span><p>${escapeHtml(record.evidenceExcerpt || "No narrative published.")}</p><a href="${escapeHtml(record.sourceUrl)}" target="_blank" rel="noreferrer">Source ↗</a></div>
+      <div><strong>${escapeHtml(record.deliveryConfidence || "Not published")}</strong><span>${escapeHtml(record.deliveryConfidenceSource || "No rating source")} · ${escapeHtml(formatDate(record.endDate))}${record.narrativeSaysUnchangedButMoved ? " · narrative/date conflict" : ""}</span><p>${escapeHtml(record.evidenceExcerpt || "No narrative published.")}</p>${record.narrativeExcerpt ? `<details><summary>Full schedule narrative</summary><p>${escapeHtml(record.narrativeExcerpt)}</p></details>` : ""}<a href="${escapeHtml(record.sourceUrl)}" target="_blank" rel="noreferrer">Source ↗</a></div>
     </article>`).join("");
   $("#detailThemes").innerHTML = project.themes.map(theme => `<span>${escapeHtml(theme)}</span>`).join("") || "<span>No theme signal</span>";
   const dialog = $("#projectDialog");
