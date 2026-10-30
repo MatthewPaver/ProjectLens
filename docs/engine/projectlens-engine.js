@@ -17,20 +17,27 @@
 const EMBEDDED_CLAIM_RULES = {
   stablePhrases: [
     "unchanged", "remained the same", "remains the same", "remained at", "remains at",
-    "remained scheduled", "remains on track", "on track", "on-track", "on target", "on schedule",
-    "no slippage", "no change", "not moved", "still forecast", "still expected",
-    "as planned", "no material change", "no impact",
-    "remained static", "remains static", "has not changed", "have not changed", "not changed",
-    "no movement", "unaltered", "remained constant", "remains constant",
-    "unaffected", "not affected", "has not slipped", "not slipped",
+    "remained scheduled", "remains on track", "on track", "on-track", "on target",
+    "on schedule", "no slippage", "no change", "not moved", "still forecast",
+    "still expected", "as planned", "no material change", "no impact", "remained static",
+    "remains static", "has not changed", "have not changed", "not changed", "no movement",
+    "unaltered", "remained constant", "remains constant", "unaffected", "not affected",
+    "has not slipped", "not slipped", "progressing to plan", "on course", "in line with plan",
+    "no deviation",
   ],
   movePhrases: [
-    "increased from", "increased to", "decreased from", "changed from", "moved from", "moved to",
-    "has moved to", "has been moved", "has been extended", "was extended", "extended to", "slipped from",
-    "revised from", "revised to", "re-baselined", "correction of published position", "delayed to",
-    "now forecast", "lengthened by", "shortened by", "has changed since",
+    "increased from", "increased to", "decreased from", "changed from", "moved from",
+    "moved to", "has moved to", "has been moved", "has been extended", "was extended",
+    "extended to", "slipped from", "revised from", "revised to", "re-baselined",
+    "correction of published position", "delayed to", "now forecast", "lengthened by", "shortened by",
+    "has changed since", "has been delayed", "has slipped", "has been brought forward", "has been pushed back",
+    "has been replanned", "delays", "delayed", "slippage", "earlier",
+    "later", "brought forward", "reduced", "extended", "delay",
+    "slip",
   ],
-  negations: ["not", "never", "no longer"],
+  negations: [
+    "not", "never", "no longer",
+  ],
 };
 
 function loadClaimRules() {
@@ -820,7 +827,7 @@ function rightWindow(text, index, raw, size = 40) {
 
 function classifyDateRole(text, item) {
   // Bind each date to what the sentence is talking about, not just that a date exists.
-  const before = leftWindow(text, item.index);
+  const before = leftWindow(text, item.index).split(/[.;!?]/).pop();
   const after = rightWindow(text, item.index, item.raw);
   const beforeLower = before.toLowerCase();
   const afterLower = after.toLowerCase();
@@ -828,7 +835,7 @@ function classifyDateRole(text, item) {
   // Previous finish first: "since last year's … date of X".
   if (
     /last\s+year'?s?.{0,48}date\s+of\s*$/i.test(before)
-    || /(?:previously|originally)\s*$/i.test(before)
+    || /(?:previously|originally)(?:\s+(?:scheduled|expected|forecast|due)\s+to\s+(?:complete|finish|end)\s+(?:in|by|on))?\s*$/i.test(before)
     || /\b(?:was|from)\s*$/i.test(before)
   ) {
     return "previous-finish";
@@ -841,9 +848,15 @@ function classifyDateRole(text, item) {
   }
 
   // Current finish: end/completion clause, or "remained the same at <date>".
-  const endSubject = /\b(?:end[\s-]?date|project\s+end|baseline\s+project\s+end|completion(?:\s+date)?|finish(?:\s+date)?|programme\s+end|scheduled\s+to\s+finish|forecast\s+end|current\s+forecast\s+end)\b/i.test(before);
+  const endSubject = /\b(?:end[\s-]?date|project\s+end|baseline\s+project\s+end|complet(?:ion(?:\s+date)?|e)|closure|finish(?:\s+date)?|programme\s+end|scheduled\s+to\s+finish|forecast\s+end|current\s+forecast\s+end)\b/i.test(before);
+  if (/\b(?:completion|finish|closure|end[ -]?date)(?:\s+date)?\s*(?:(?:in|by|on|for)\s+|:)\s*$/i.test(before)) return "current-finish";
+  if (/\b(?:completion|finish|closure|end[ -]?date)(?:\s+date)?\s*$/i.test(before)) return "current-finish";
+  if (/\b(?:complete(?:d)?|finish(?:ed)?|delivered|end)\s+(?:in|by|on)\s*$/i.test(before)
+    && /\b(?:programme|project|will|expected|scheduled|forecast|due)\b/i.test(before)) return "current-finish";
   const stableAtDate = /(?:remained\s+the\s+same|remains\s+the\s+same|remained\s+static|remains\s+static|remained\s+constant|remains\s+constant|remained\s+at|remains\s+at|unchanged)\s+at\s*$/i.test(before);
   const currentCue = /(?:\bis(?:\s+now)?\b|\bof\b|\bnow\b|\bto\s+complete\s+by\b|\bextended\s+to\b|\brevised\s+to\b|\bscheduled\s+to\s+finish\s+on\b|\bremained\s+at\b|\bremains\s+at\b)\s*$/i.test(before);
+  if (/\b(?:expected|scheduled|forecast|due|will)\s+(?:to\s+)?complete\s+(?:in|by|on)\s*$/i.test(before)) return "current-finish";
+  if (endSubject && /(?:\b(?:will\s+be|set\s+for|expected\s+(?:in|by|on)|scheduled\s+for|due\s+(?:in|by|on)|forecast\s+for)|:)\s*$/i.test(before)) return "current-finish";
   if (stableAtDate || (endSubject && (currentCue || /\b(?:is|remained|remains|now)\b/i.test(before.slice(-40))))) {
     return "current-finish";
   }
@@ -948,7 +961,7 @@ function extractNarrativeDates(text) {
   }
 
   // Q4 2027-28 and Q2 25/26 (financial-year quarters).
-  for (const match of text.matchAll(/\bQ([1-4])\s+(\d{4})-(\d{2})\b/gi)) {
+  for (const match of text.matchAll(/\bQ([1-4])\s+(\d{4})[-/](\d{2})\b/gi)) {
     pushFyQuarter(dates, text, match[0], match.index, Number(match[2]), Number(match[1]));
   }
   for (const match of text.matchAll(/\bQ([1-4])\s+(\d{2})\/(\d{2})\b/gi)) {
@@ -964,7 +977,7 @@ function extractNarrativeDates(text) {
   for (const match of text.matchAll(/\b(\d{1,2})-(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)-(\d{4})\b/gi)) {
     const day = Number(match[1]);
     const month = MONTH_INDEX[match[2].toLowerCase()];
-    const year = Number(match[3]);
+    const year = expandTwoDigitYear(match[3]);
     push(match[0], new Date(Date.UTC(year, month - 1, day, 12)), match.index);
   }
 
@@ -1022,6 +1035,22 @@ function phraseAboutEndDate(text, index) {
   return aboutEnd;
 }
 
+function stableSubjectIsWhole(text, index) {
+  const prefix = clauseAround(text.slice(0, index), index);
+  const subjects = [...prefix.matchAll(/\b(programme|program|project|delivery|phase|workstream|contract|procurement|milestones?|go-?live|tender|gate)\b/gi)];
+  const nearest = subjects.at(-1)?.[1];
+  return !nearest || /^(?:programme|program|project|delivery|schedule)$/i.test(nearest);
+}
+
+function programmeStability(text, index) {
+  const clause = clauseAround(text.slice(0, index), index);
+  // Whole-programme subjects only; a programme's phase is still a phase.
+  if (/\b(?:phase|workstream|contract|procurement|milestones?|go-?live|tender|gate|(?:initial|full) operat(?:ing|ional) capability|in[ -]service(?: date)?)\b/i.test(clause)) return false;
+  const target = clauseAround(text, index).slice(clause.length);
+  if (/\b(?:to|for)\b[^.;!?]*\b(?:phase|workstream|contract|procurement|milestones?|go-?live|tender|gate|(?:initial|full) operat(?:ing|ional) capability|in[ -]service(?: date)?)\b/i.test(target)) return false;
+  return /\b(?:programme|program|project|delivery|schedule)\s+(?:(?:is|was|has|been|still|overall|delivery|schedule|baseline|continues?|to|be|running|remains?|remained|progressing|firmly|currently|shows|encountered|experienced|suffered|facing)\s+)*$/i.test(clause);
+}
+
 function isNegatedAt(text, index, negations) {
   // Look a short way left of the match for "not / never / no longer".
   const start = Math.max(0, index - 48);
@@ -1042,7 +1071,7 @@ function extractMoveStatements(text, movePhrases, dates) {
     for (const match of lower.matchAll(pattern)) {
       const index = match.index;
       // Only end-date / completion / finish moves count.
-      if (!phraseAboutEndDate(text, index)) continue;
+      if (!phraseAboutEndDate(text, index) && !programmeStability(text, index)) continue;
       if (!movePhraseTakesLandingDates(phrase)) {
         moves.push({ from: null, to: null, index, phrase });
         continue;
@@ -1070,10 +1099,10 @@ function extractMoveStatements(text, movePhrases, dates) {
 function statedMoveDirection(phrase) {
   const text = String(phrase || "").toLowerCase();
   // "earlier" cues first so "not extended" style phrases do not matter here.
-  if (/\b(decreased|shortened|brought\s+forward|pulled\s+(?:forward|in)|advanced|earlier|accelerated)\b/.test(text)) {
+  if (/\b(decreased|reduced|shortened|brought\s+forward|pulled\s+(?:forward|in)|advanced|earlier|accelerated)\b/.test(text)) {
     return "earlier";
   }
-  if (/\b(extended|lengthened|increased|slipped|delayed|pushed|moved|changed|revised|re-baselined|correction|now\s+forecast)\b/.test(text)) {
+  if (/\b(extended|lengthened|increased|slip|slipped|slippage|delay|delays|delayed|later|pushed|moved|changed|revised|re-baselined|correction|now\s+forecast)\b/.test(text)) {
     return "later";
   }
   return null;
@@ -1144,7 +1173,14 @@ function detectScheduleClaims(text, { currentFinish = null, previousFinish = nul
   const dates = extractNarrativeDates(source);
   const stableHits = findPhraseHits(source, rules.stablePhrases)
     .filter(hit => !isNegatedAt(source, hit.index, rules.negations))
-    .filter(hit => phraseAboutEndDate(source, hit.index));
+    .filter(hit => stableSubjectIsWhole(source, hit.index))
+    .filter(hit => phraseAboutEndDate(source, hit.index) || programmeStability(source, hit.index))
+    .filter(hit => {
+      // Being on track for a stated new finish is not a claim that it stayed unchanged.
+      if (!/on[ -](?:track|schedule|course|target)|progressing to plan/i.test(hit.phrase)) return true;
+      return !dates.some(d => d.role === "current-finish"
+        && Math.abs(dayDeltaIso(d.iso, currentFinish) ?? Infinity) <= 14);
+    });
   const movesStated = extractMoveStatements(source, rules.movePhrases, dates);
   const finishMoved = (() => {
     const delta = dayDeltaIso(currentFinish, previousFinish);
@@ -1204,7 +1240,7 @@ function detectScheduleClaims(text, { currentFinish = null, previousFinish = nul
   }
 
   // Stated move with a 'to' date that misses the published finish.
-  if (!contradiction && !landed && movesStated.length && current) {
+  if (finishMoved && !contradiction && !landed && movesStated.length && current) {
     const mistarget = movesStated.find(move => {
       if (!move.to) return false;
       const delta = dayDeltaIso(move.to, current);
@@ -1245,6 +1281,10 @@ function detectScheduleClaims(text, { currentFinish = null, previousFinish = nul
     }
   }
 
+  if (publishedDateCheck) {
+    publishedDateCheck.detail = findingSentence({ publishedDateCheck }, { currentFinish, previousFinish });
+  }
+
   return {
     stable: stableHits,
     movesStated,
@@ -1253,6 +1293,24 @@ function detectScheduleClaims(text, { currentFinish = null, previousFinish = nul
     previousDateNote,
     publishedDateCheck,
   };
+}
+
+function findingSentence(claims, { currentFinish = null, previousFinish = null } = {}) {
+  if (claims.publishedDateCheck) {
+    const check = claims.publishedDateCheck;
+    return `The narrative gives the end date as ${formatDate(parseDate(check.narrativeDate))}; the published end date is ${formatDate(parseDate(check.publishedDate))}. Check which is current.`;
+  }
+  if (claims.contradiction?.kind === "says-unchanged") {
+    return `The update says the end date is unchanged, but the schedule's finish moved ${dayDeltaIso(currentFinish, previousFinish)} days.`;
+  }
+  if (claims.contradiction) {
+    const date = claims.dates.find(d => d.role === "current-finish"
+      && Math.abs(dayDeltaIso(d.iso, currentFinish) ?? 0) > 14);
+    if (date) return `The narrative gives the end date as ${formatDate(parseDate(date.iso))}; the published end date is ${formatDate(parseDate(currentFinish))}. Check which is current.`;
+    return claims.contradiction.detail;
+  }
+  if (dayDeltaIso(currentFinish, previousFinish) && moveCoversCurrent(claims.movesStated, currentFinish, previousFinish)) return "The narrative explains the move.";
+  return null;
 }
 
 function taskCodeSet(parsed) {
@@ -1304,6 +1362,10 @@ function analyseReview(previous, current, narrative, options = {}) {
     currentFinish: current.project.scheduledFinish,
     previousFinish: previous.project.scheduledFinish,
   });
+  const claim = findingSentence(claims, {
+    currentFinish: current.project.scheduledFinish,
+    previousFinish: previous.project.scheduledFinish,
+  });
   const blockers = [];
   // Blank float on completed / WBS / LOE / finish-milestone rows is normal in P6 exports.
   const floatComparable = task => {
@@ -1339,7 +1401,7 @@ function analyseReview(previous, current, narrative, options = {}) {
   if (claims.contradiction && finishMovement !== null && Math.abs(finishMovement) > 0) {
     blockers.push({
       type: "Contradiction",
-      title: `The finish moved ${finishMovement} days and the update needs clarifying`,
+      title: claim,
       detail: `${formatDate(previous.project.scheduledFinish)} → ${formatDate(current.project.scheduledFinish)}. ${claims.contradiction.detail}`,
     });
   } else if (finishMovement !== null && Math.abs(finishMovement) >= 7) {
@@ -1381,6 +1443,8 @@ function analyseReview(previous, current, narrative, options = {}) {
     current,
     finishMovement,
     changes,
+    claims,
+    claim,
     blockers,
     coverage,
     generatedAt: new Date().toISOString(),
@@ -1398,6 +1462,7 @@ function analyseReview(previous, current, narrative, options = {}) {
     buildReview,
     parseEvidenceText,
     detectScheduleClaims,
+    findingSentence,
     matchProjects,
     decodeXerBytes,
     listProjects,

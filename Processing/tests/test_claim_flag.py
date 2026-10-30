@@ -9,6 +9,20 @@ ROOT = Path(__file__).resolve().parents[2]
 RAW = ROOT / "Data" / "public" / "raw"
 
 
+def test_capability_targets_do_not_claim_programme_closure_is_unchanged():
+    for capability in [
+        "initial operating capability", "initial operational capability",
+        "full operating capability", "full operational capability",
+    ]:
+        result = detect_schedule_claims(
+            f"The programme remains on track to deliver its {capability} in October 2028.",
+            "2030-04-30", "2032-04-30",
+        )
+        assert result["stable"] == []
+        assert result["contradiction"] is None
+        assert result["publishedDateCheck"] is None
+
+
 def public_payload():
     records = []
     for year, source in SOURCES.items():
@@ -93,3 +107,31 @@ def test_end_date_scope_for_moves_and_stability():
         rules,
     )
     assert lengthened["contradiction"] is None
+
+
+def test_round4_programme_stability():
+    for sentence in [
+        "The programme remains on track.", "Compared to last year, the programme remains on track.",
+        "The project delivery remains on schedule.", "Delivery is on schedule.",
+        "The project is progressing to plan.", "The programme remains on course.",
+        "The project is on target to complete.",
+    ]:
+        result = detect_schedule_claims(sentence, "2026-12-27", "2026-06-30")
+        assert result["contradiction"]["kind"] == "says-unchanged"
+    for sentence in [
+        "Phase 2 remains on track; the programme end date has moved to 31/03/2027.",
+        "The programme is not on track.", "The procurement is on schedule.",
+        "The programme's Phase 2 remains on track.",
+        "Milestones remain on track: Phase 1 March 2027, Phase 2 June 2027.",
+    ]:
+        assert detect_schedule_claims(sentence, "2027-03-31", "2026-06-30")["contradiction"] is None
+    assert detect_schedule_claims("Delivery is on schedule.", "2026-06-30", "2026-06-30")["contradiction"] is None
+
+
+def test_stability_keeps_the_nearest_subject():
+    for sentence in [
+        "Phase 2 completion remains on track.",
+        "The programme's procurement completion is on schedule.",
+        "The contract end date is unchanged.",
+    ]:
+        assert detect_schedule_claims(sentence, "2027-03-31", "2026-06-30")["contradiction"] is None

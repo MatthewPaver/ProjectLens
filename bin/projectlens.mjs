@@ -85,6 +85,11 @@ function comparePair(previous, current, narrative, { confirmedMatch = true } = {
     dataDateCurrent: iso(current.project.dataDate),
     contradiction: Boolean(claims.contradiction) || review.blockers.some(b => b.type === "Contradiction"),
     narrativeClaim: claims.stable[0]?.phrase || claims.movesStated[0] && "move stated" || "",
+    claim: engine.findingSentence(claims, {
+      currentFinish: current.project.scheduledFinish,
+      previousFinish: previous.project.scheduledFinish,
+    }),
+    publishedDateCheck: claims.publishedDateCheck,
     claims,
     blockers: review.blockers,
   };
@@ -114,9 +119,7 @@ function formatResult(result, format) {
       `- Contradiction: ${result.contradiction ? "yes" : "no"}`,
       `- Narrative claim: ${result.narrativeClaim || "none"}`,
     ];
-    if (result.claims?.publishedDateCheck) {
-      lines.push(`- Check: ${result.claims.publishedDateCheck.detail}`);
-    }
+    if (result.claim) lines.push(`- ${result.claim}`);
     lines.push("");
     return lines.join("\n");
   }
@@ -127,10 +130,8 @@ function formatResult(result, format) {
     `Contradiction: ${result.contradiction ? "yes" : "no"}`,
   ];
   if (result.narrativeClaim) lines.push(`Narrative claim: ${result.narrativeClaim}`);
-  if (result.claims?.publishedDateCheck) {
-    lines.push(`Check: ${result.claims.publishedDateCheck.detail}`);
-  }
-  for (const blocker of result.blockers || []) lines.push(`- ${blocker.type}: ${blocker.title}`);
+  if (result.claim) lines.push(result.claim);
+  for (const blocker of (result.blockers || []).filter(item => item.title !== result.claim)) lines.push(`- ${blocker.type}: ${blocker.title}`);
   return `${lines.join("\n")}\n`;
 }
 

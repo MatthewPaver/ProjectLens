@@ -31,7 +31,11 @@
     "unaffected",
     "not affected",
     "has not slipped",
-    "not slipped"
+    "not slipped",
+    "progressing to plan",
+    "on course",
+    "in line with plan",
+    "no deviation"
   ],
   "movePhrases": [
     "increased from",
@@ -54,7 +58,22 @@
     "now forecast",
     "lengthened by",
     "shortened by",
-    "has changed since"
+    "has changed since",
+    "has been delayed",
+    "has slipped",
+    "has been brought forward",
+    "has been pushed back",
+    "has been replanned",
+    "delays",
+    "delayed",
+    "slippage",
+    "earlier",
+    "later",
+    "brought forward",
+    "reduced",
+    "extended",
+    "delay",
+    "slip"
   ],
   "negations": [
     "not",

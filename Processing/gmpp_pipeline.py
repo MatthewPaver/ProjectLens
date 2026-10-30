@@ -380,6 +380,29 @@ def _clause_around(text: str, index: int) -> str:
     return text[start:end]
 
 
+def _stable_subject_is_whole(text: str, index: int) -> bool:
+    prefix = _clause_around(text[:index], index)
+    subjects = re.findall(
+        r"\b(programme|program|project|delivery|phase|workstream|contract|procurement|milestones?|go-?live|tender|gate)\b",
+        prefix, re.I,
+    )
+    return not subjects or subjects[-1].lower() in {"programme", "program", "project", "delivery", "schedule"}
+
+
+def _programme_stability(text: str, index: int) -> bool:
+    clause = _clause_around(text[:index], index)
+    if re.search(r"\b(?:phase|workstream|contract|procurement|milestones?|go-?live|tender|gate|(?:initial|full) operat(?:ing|ional) capability|in[ -]service(?: date)?)\b", clause, re.I):
+        return False
+    target = _clause_around(text, index)[len(clause):]
+    if re.search(r"\b(?:to|for)\b[^.;!?]*\b(?:phase|workstream|contract|procurement|milestones?|go-?live|tender|gate|(?:initial|full) operat(?:ing|ional) capability|in[ -]service(?: date)?)\b", target, re.I):
+        return False
+    return bool(re.search(
+        r"\b(?:programme|program|project|delivery|schedule)\s+"
+        r"(?:(?:is|was|has|been|still|overall|delivery|schedule|baseline|continues?|to|be|running|remains?|remained|progressing|firmly|currently|shows|encountered|experienced|suffered|facing)\s+)*$",
+        clause, re.I,
+    ))
+
+
 def _phrase_about_end_date(text: str, index: int) -> bool:
     # Contract-start / tender / milestone moves do not count as end-date claims.
     clause = _clause_around(text, index)
@@ -509,7 +532,7 @@ def _extract_moves(text: str, move_phrases: list[str], dates: list[dict[str, Any
         pattern = re.compile(rf"\b{re.escape(phrase.lower()).replace(r'\ ', r'\s+')}\b", re.I)
         for match in pattern.finditer(lower):
             index = match.start()
-            if not _phrase_about_end_date(text, index):
+            if not _phrase_about_end_date(text, index) and not _programme_stability(text, index):
                 continue
             if not _move_phrase_takes_landing_dates(phrase):
                 moves.append({"from": None, "to": None, "index": index, "phrase": phrase})
@@ -528,9 +551,9 @@ def _extract_moves(text: str, move_phrases: list[str], dates: list[dict[str, Any
 
 def _stated_direction(phrase: str) -> str | None:
     text = (phrase or "").lower()
-    if re.search(r"\b(decreased|shortened|brought\s+forward|pulled\s+(?:forward|in)|advanced|earlier|accelerated)\b", text):
+    if re.search(r"\b(decreased|reduced|shortened|brought\s+forward|pulled\s+(?:forward|in)|advanced|earlier|accelerated)\b", text):
         return "earlier"
-    if re.search(r"\b(extended|lengthened|increased|slipped|delayed|pushed|moved|changed|revised|re-baselined|correction|now\s+forecast)\b", text):
+    if re.search(r"\b(extended|lengthened|increased|slip|slipped|slippage|delay|delays|delayed|later|pushed|moved|changed|revised|re-baselined|correction|now\s+forecast)\b", text):
         return "later"
     return None
 
@@ -549,12 +572,13 @@ def _move_covers(
 ) -> bool:
     if not moves or not current_finish:
         return False
+    dated_moves = [move for move in moves if move.get("to")]
+    if dated_moves:
+        return any(
+            (delta := day_delta(move["to"], current_finish)) is not None and abs(delta) <= 14
+            for move in dated_moves
+        )
     for move in moves:
-        if move.get("to"):
-            delta = day_delta(move["to"], current_finish)
-            if delta is not None and abs(delta) <= 14:
-                return True
-            continue
         stated = _stated_direction(move.get("phrase") or "")
         actual = _actual_direction(current_finish, previous_finish)
         if stated and actual and stated == actual:
@@ -575,7 +599,8 @@ def detect_schedule_claims(
     stable = [
         hit for hit in _phrase_hits(source, rules["stablePhrases"])
         if not _is_negated(source, hit["index"], rules["negations"])
-        and _phrase_about_end_date(source, hit["index"])
+        and _stable_subject_is_whole(source, hit["index"])
+        and (_phrase_about_end_date(source, hit["index"]) or _programme_stability(source, hit["index"]))
     ]
     moves = _extract_moves(source, rules["movePhrases"], dates)
     finish_moved = bool(current_finish and previous_finish and current_finish != previous_finish)

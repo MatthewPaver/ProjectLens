@@ -268,12 +268,15 @@ function openProject(projectId) {
   $("#detailReasons").innerHTML = project.attentionReasons.length
     ? project.attentionReasons.map(reason => `<li>${escapeHtml(reason)}</li>`).join("")
     : "<li>No elevated scoring signal. Open the evidence for context.</li>";
-  const claimFlag = project.narrativeSaysUnchangedButMoved
-    ? `<p class="claim-flag"><strong>Narrative says unchanged, published date moved.</strong> The schedule commentary and the published end date disagree for this release.</p>`
+  const claimDates = { currentFinish: project.endDate, previousFinish: project.previous?.endDate };
+  const claims = ProjectLensEngine.detectScheduleClaims(project.scheduleNarrative || project.narrativeExcerpt || "", claimDates);
+  const sentence = ProjectLensEngine.findingSentence(claims, claimDates);
+  const claimFlag = sentence && !claims.publishedDateCheck
+    ? `<p class="claim-flag">${escapeHtml(sentence)}</p>`
     : "";
   // Quieter than a contradiction: narrative end date and published end date disagree, but the finish did not move.
-  const dateCheck = project.publishedDateCheck
-    ? `<p class="claim-check">${escapeHtml(project.publishedDateCheck.detail || "The narrative end date and the published end date disagree. Check which is current.")}</p>`
+  const dateCheck = claims.publishedDateCheck
+    ? `<p class="claim-check">${escapeHtml(sentence)}</p>`
     : "";
   const narrativeDetails = project.narrativeExcerpt || project.scheduleNarrative
     ? `<details class="narrative-full"><summary>Full schedule narrative</summary><p>${escapeHtml(project.narrativeExcerpt || project.scheduleNarrative)}</p></details>`

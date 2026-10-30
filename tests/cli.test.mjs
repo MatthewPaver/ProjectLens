@@ -64,3 +64,22 @@ describe("projectlens CLI", () => {
     assert.match(result.stderr || result.stdout, /Export this schedule from MS Project as XML/);
   });
 });
+
+describe("Round 4 plain findings", () => {
+  const args = ["compare", "--previous", "examples/monthly/northstar-previous.xer",
+    "--current", "examples/monthly/northstar-current.xer",
+    "--narrative", "examples/monthly/northstar-narrative.txt"];
+  const sentence = "The update says the end date is unchanged, but the schedule's finish moved 73 days.";
+  it("prints the shared contradiction sentence", () => {
+    const result = run([...args, "--format", "text"]);
+    assert.equal(result.status, 1);
+    assert.ok(result.stdout.includes(sentence), result.stdout);
+  });
+  it("includes claim, contradiction and publishedDateCheck in JSON", () => {
+    const result = run([...args, "--format", "json"]);
+    const payload = JSON.parse(result.stdout);
+    assert.equal(payload.claim, sentence);
+    assert.equal(payload.contradiction, true);
+    assert.equal(payload.publishedDateCheck, null);
+  });
+});
