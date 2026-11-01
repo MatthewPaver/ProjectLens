@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Reconstructed mini schedule for ProjectLens tests. See SOURCE.md. -->
+<APIBusinessObjects xmlns="http://xmlns.oracle.com/Primavera/P6/V19.12/API/BusinessObjects">
+  <Project>
+    <ObjectId>1</ObjectId>
+    <Id>MINI</Id>
+    <Name>MINI</Name>
+    <DataDate>2026-01-01T00:00:00</DataDate>
+    <ScheduledFinishDate>2026-06-30T00:00:00</ScheduledFinishDate>
+    <Activity>
+      <ObjectId>10</ObjectId>
+      <Id>MN-100</Id>
+      <Name>Design</Name>
+      <Type>Task Dependent</Type>
+      <Status>Not Started</Status>
+      <PlannedDuration>160h</PlannedDuration>
+      <RemainingEarlyStartDate>2026-01-15T00:00:00</RemainingEarlyStartDate>
+      <RemainingEarlyFinishDate>2026-03-31T00:00:00</RemainingEarlyFinishDate>
+      <TotalFloat>40h</TotalFloat>
+    </Activity>
+    <Activity>
+      <ObjectId>20</ObjectId>
+      <Id>MN-200</Id>
+      <Name>Build</Name>
+      <Type>Task Dependent</Type>
+      <Status>Not Started</Status>
+      <PlannedDuration>320h</PlannedDuration>
+      <RemainingEarlyStartDate>2026-04-01T00:00:00</RemainingEarlyStartDate>
+      <RemainingEarlyFinishDate>2026-05-31T00:00:00</RemainingEarlyFinishDate>
+      <TotalFloat>16h</TotalFloat>
+    </Activity>
+    <Activity>
+      <ObjectId>30</ObjectId>
+      <Id>MN-900</Id>
+      <Name>Complete</Name>
+      <Type>Finish Milestone</Type>
+      <Status>Not Started</Status>
+      <PlannedDuration>0h</PlannedDuration>
+      <RemainingEarlyStartDate>2026-06-30T00:00:00</RemainingEarlyStartDate>
+      <RemainingEarlyFinishDate>2026-06-30T00:00:00</RemainingEarlyFinishDate>
+      <TotalFloat>0h</TotalFloat>
+    </Activity>
+    <Relationship>
+      <ObjectId>1</ObjectId>
+      <PredecessorActivityObjectId>10</PredecessorActivityObjectId>
+      <SuccessorActivityObjectId>20</SuccessorActivityObjectId>
+      <Type>Finish to Start</Type>
+      <Lag>0h</Lag>
+    </Relationship>
+    <Relationship>
+      <ObjectId>2</ObjectId>
+      <PredecessorActivityObjectId>20</PredecessorActivityObjectId>
+      <SuccessorActivityObjectId>30</SuccessorActivityObjectId>
+      <Type>Finish to Start</Type>
+      <Lag>0h</Lag>
+    </Relationship>
+  </Project>
+</APIBusinessObjects>

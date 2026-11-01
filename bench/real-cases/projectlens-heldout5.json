@@ -1,0 +1,1553 @@
+{
+  "meta": {
+    "name": "ProjectLens independent held-out set 5",
+    "caseCount": 40,
+    "uniqueProjects": 40,
+    "licence": "Open Government Licence v3.0 for source data and verbatim government narratives; independently authored labels and explanations.",
+    "yearConvention": "prevYear/year are annual-report release years. Source release fields name the financial-year releases. Older releases generally report the preceding September; the 2021 release compares against the September 2019 snapshot published in 2020.",
+    "narrative": "Complete current-release schedule cell, with original spelling, punctuation and whitespace. No paraphrases, generated variants or invented dates.",
+    "labelling": "C2 rules. Explicitly stated end-date movements are explained. A moved date with an unchanged/on-track claim or an unexplained conflicting current end date is a contradiction. Equal dates are no-move unless the commentary names a different current end/closure date, in which case published-date-check.",
+    "independence": "No tool implementation, tests or engine files read. Neither tool was run. Prior bench JSON and input data read only to identify exclusions and the required format.",
+    "exclusion": "Excludes every matched prior project name and GMPP ID from sets 1–4 and the allowed input directories. Matching propagates known ID/name links across releases; historical renames used in selected pairs are documented in matchedBy.",
+    "labelCounts": {
+      "contradiction": 10,
+      "explained": 18,
+      "no-move": 8,
+      "published-date-check": 4
+    },
+    "doubtfulLabels": [
+      "PLH5-B02",
+      "PLH5-B05",
+      "PLH5-B09",
+      "PLH5-B10",
+      "PLH5-B40"
+    ]
+  },
+  "cases": [
+    {
+      "id": "PLH5-B01",
+      "gmppId": null,
+      "project": "Broadband Delivery Programme",
+      "department": "DCMS",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2015-03-31",
+      "curEnd": "2016-12-31",
+      "daysMoved": 641,
+      "narrative": "On schedule (as of September  2013)",
+      "label": "contradiction",
+      "why": "The published end moves from 31 March 2015 to 31 December 2016, while the entire schedule narrative says \"On schedule (as of September  2013)\" and states no move.",
+      "source": {
+        "previous": {
+          "release": "2012-13",
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-dcms-2013",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7bffe7ed915d01ba1ca7f4/gmpp-data-DCMS-q2-2012-13.csv",
+          "sha256": "f2cc82bfb9f0ac3654c8da984793b77184a92e0d156eaf93bccb2c1efc4402cc",
+          "projectColumn": 3,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2013-14",
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "sha256": "67cb811e8bf3f807ecee8cf177e36036bb6c0810a7c6f4077364cfebabb302a1",
+          "projectColumn": 25,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "Broadband Delivery Programme",
+      "prevEndAsPublished": "31/03/2015",
+      "curEndAsPublished": "31/12/2016",
+      "matchedBy": "unique project name normalised for case, spacing and punctuation, with the same department"
+    },
+    {
+      "id": "PLH5-B02",
+      "gmppId": null,
+      "project": "Government Hubs Programme",
+      "department": "CO",
+      "prevYear": 2018,
+      "year": 2019,
+      "prevEnd": "2025-03-31",
+      "curEnd": "2036-03-31",
+      "daysMoved": 4018,
+      "narrative": "Programme as a whole remains on schedule with individual project timelines and programme tranche timelines shifting in line with emerging priorities and challenges.",
+      "label": "contradiction",
+      "why": "The published programme end moves from March 2025 to March 2036. The narrative says the programme as a whole remains on schedule. It mentions individual and tranche timelines shifting, without stating this programme-end extension.",
+      "source": {
+        "previous": {
+          "release": "2017-18",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+          "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv",
+          "sha256": "915cf52ff57a180c9f3989e9e29e56594efd81da1e66fa3757d66a145b71f726",
+          "projectColumn": 16,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2018-19",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+          "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv",
+          "sha256": "c22caa602ec3a7d9cc64cb20d559dbd5dbd0b9ceae5b4184675f247138d5b8b8",
+          "projectColumn": 17,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "Government Hubs Programme",
+      "prevEndAsPublished": "31/03/25",
+      "curEndAsPublished": "31/03/2036",
+      "matchedBy": "unique project name normalised for case, spacing and punctuation, with the same department",
+      "labelCaveat": "The narrative acknowledges individual and tranche movements. The label applies the C2 rule to its explicit programme-wide on-schedule claim and unstated programme-end extension."
+    },
+    {
+      "id": "PLH5-B03",
+      "gmppId": null,
+      "project": "Commercial Capability Programme",
+      "department": "CO",
+      "prevYear": 2016,
+      "year": 2017,
+      "prevEnd": "2017-03-31",
+      "curEnd": "2018-03-31",
+      "daysMoved": 365,
+      "narrative": "On track to deliver key enablers within current scope",
+      "label": "contradiction",
+      "why": "The published end moves one year later, from 31 March 2017 to 31 March 2018. The narrative says it is on track within current scope and states no end-date move.",
+      "source": {
+        "previous": {
+          "release": "2015-16",
+          "publication": "https://www.gov.uk/government/news/ipa-annual-report-on-major-government-projects-shows-improvements",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a80a49ce5274a2e8ab51547/government_major_projects_portfolio_data_september_2015.csv",
+          "sha256": "c03928d2b93b02065869fb225a61ad88a44a1328c971a4c58e88349a74a32937",
+          "projectColumn": 7,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2016-17",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2017",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a821ed6e5274a2e8ab57995/Annual_Report_-_consolidated_data_and_narratives.csv",
+          "sha256": "1dc7c1598ab6955d5a1a704117b239350aef956b4b5aa141facaaadd331c6238",
+          "projectColumn": 12,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "Commercial Capability Programme",
+      "prevEndAsPublished": "31/03/2017",
+      "curEndAsPublished": "31/03/2018",
+      "matchedBy": "unique project name normalised for case, spacing and punctuation, with the same department"
+    },
+    {
+      "id": "PLH5-B04",
+      "gmppId": null,
+      "project": "Foxhound Programme",
+      "department": "CO",
+      "prevYear": 2017,
+      "year": 2018,
+      "prevEnd": "2018-07-01",
+      "curEnd": "2018-12-31",
+      "daysMoved": 183,
+      "narrative": "The Programme has continued to make good progress with all core components of the system now underway and in the delivery pipeline. The Programme has now implemented the system to its Full Business Case partners as well as consuming a number of new Brexit-driven Partners.  The overall risks around technology development timelines continues to reduce but challenges remain around enhanced roll-out to multiple new partners to time.  The Programme agreed with the IPA in autumn 2017 that end March 2019 is an achievable target date for Programme closure.  \r\rThe Service Organisation is well established and is increasingly picking up work transitioning from the Programme.  The Target Operating Model aims to deliver significant Programme transition to the DfID organisation managing the Service through 2018.                        ",
+      "label": "contradiction",
+      "why": "The published end moves from 1 July to 31 December 2018. The narrative instead names end March 2019 as the achievable programme-closure target, at least 90 days beyond the published end, without explaining the published move.",
+      "source": {
+        "previous": {
+          "release": "2016-17",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2017",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a821ed6e5274a2e8ab57995/Annual_Report_-_consolidated_data_and_narratives.csv",
+          "sha256": "1dc7c1598ab6955d5a1a704117b239350aef956b4b5aa141facaaadd331c6238",
+          "projectColumn": 13,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2017-18",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+          "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv",
+          "sha256": "915cf52ff57a180c9f3989e9e29e56594efd81da1e66fa3757d66a145b71f726",
+          "projectColumn": 13,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "FOXHOUND Programme",
+      "prevEndAsPublished": "01/07/2018",
+      "curEndAsPublished": "31/12/18",
+      "matchedBy": "unique project name normalised for case, spacing and punctuation, with the same department"
+    },
+    {
+      "id": "PLH5-B05",
+      "gmppId": null,
+      "project": "National Crime Agency (NCA)",
+      "department": "HO",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2013-10-01",
+      "curEnd": "2014-03-31",
+      "daysMoved": 181,
+      "narrative": " The NCA Programme has now closed following its successful launch and having delivered to schedule.  ",
+      "label": "contradiction",
+      "why": "The published end moves from 1 October 2013 to 31 March 2014. The narrative says the programme closed having delivered to schedule, without stating the end-date movement.",
+      "source": {
+        "previous": {
+          "release": "2012-13",
+          "publication": "https://www.gov.uk/government/publications/home-office-major-projects-portfolio-data-2013",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a74f33c40f0b6399b2af792/HO_Major_projects.csv",
+          "sha256": "a6cd77f80e244d21121701703af1942a0c391871d03f5a51699ccebf556af5d8",
+          "projectColumn": 15,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2013-14",
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "sha256": "67cb811e8bf3f807ecee8cf177e36036bb6c0810a7c6f4077364cfebabb302a1",
+          "projectColumn": 127,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "National Crime Agency (NCA)",
+      "prevEndAsPublished": "01/10/2013",
+      "curEndAsPublished": "31/03/2014",
+      "matchedBy": "unique project name normalised for case, spacing and punctuation, with the same department",
+      "labelCaveat": "The successful launch and formal programme closure can be different milestones. This label follows the C2 rule for an unqualified delivered-to-schedule claim; it is not an allegation of late operational launch."
+    },
+    {
+      "id": "PLH5-B06",
+      "gmppId": null,
+      "project": "Transforming the Customer Experience (Formerly A&E)",
+      "department": "HO",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2012-03-31",
+      "curEnd": "2014-11-01",
+      "daysMoved": 945,
+      "narrative": "The programme is on track to deliver as scheduled.",
+      "label": "contradiction",
+      "why": "The published end moves from 31 March 2012 to 1 November 2014, while the narrative says the programme is on track to deliver as scheduled and states no move.",
+      "source": {
+        "previous": {
+          "release": "2012-13",
+          "publication": "https://www.gov.uk/government/publications/home-office-major-projects-portfolio-data-2013",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a74f33c40f0b6399b2af792/HO_Major_projects.csv",
+          "sha256": "a6cd77f80e244d21121701703af1942a0c391871d03f5a51699ccebf556af5d8",
+          "projectColumn": 18,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2013-14",
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "sha256": "67cb811e8bf3f807ecee8cf177e36036bb6c0810a7c6f4077364cfebabb302a1",
+          "projectColumn": 131,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "Transforming the Customer Experience",
+      "prevEndAsPublished": "31/03/2012",
+      "curEndAsPublished": "01/11/2014",
+      "matchedBy": "Historic rename: the distinctive Transforming the Customer Experience title is retained with a parenthetical Formerly A&E suffix, within HO. The 2013/2014 descriptions identify the same passport-application system replacement. This completed historic project is distinct from the later Passport Transformation Programme, GMPP ID HO_0044_2021-Q4, which is excluded."
+    },
+    {
+      "id": "PLH5-B07",
+      "gmppId": null,
+      "project": "HMCTS Compliance & Enforcement Services Project",
+      "department": "MOJ",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2014-02-01",
+      "curEnd": "2015-07-31",
+      "daysMoved": 545,
+      "narrative": "There is no deviation from the planned schedule. The project team is continually assessing the project delivery plan with the aim to pursue the most ambitious timeline. ",
+      "label": "contradiction",
+      "why": "The published end moves from 1 February 2014 to 31 July 2015. The narrative explicitly says there is no deviation from the planned schedule and states no move.",
+      "source": {
+        "previous": {
+          "release": "2012-13",
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-moj-2013--2",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7b88a5ed915d4147620fed/gmpp-data-MoJ-q2-2012-13.csv",
+          "sha256": "99508c923a01dd8be3cd58df5e24bf7ba296eea54b22d2da25c44005b13aa4d7",
+          "projectColumn": 13,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2013-14",
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "sha256": "67cb811e8bf3f807ecee8cf177e36036bb6c0810a7c6f4077364cfebabb302a1",
+          "projectColumn": 180,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "Court Fines Compliance & Enforcement Project",
+      "prevEndAsPublished": "01/02/2014",
+      "curEndAsPublished": "31/07/2015",
+      "matchedBy": "Historic rename, MoJ: both published descriptions call this the Compliance & Enforcement Services project, delivering the Criminal Compliance & Enforcement Blueprint within HMCTS. This is the standalone compliance/enforcement procurement, not the later HMCTS Reform programme."
+    },
+    {
+      "id": "PLH5-B08",
+      "gmppId": null,
+      "project": "Electronic Data Collection",
+      "department": "ONS",
+      "prevYear": 2014,
+      "year": 2015,
+      "prevEnd": "2024-03-31",
+      "curEnd": "2019-11-01",
+      "daysMoved": -1612,
+      "narrative": "Schedule on track, with the build of the application progressing according to plan. \nThe technical platform release to support the Monthly Wages and Salaries Surveys pilot went live on 5 September, as planned. ",
+      "label": "contradiction",
+      "why": "The published end moves from 31 March 2024 to 1 November 2019. The narrative says \"Schedule on track\" and states no shortening.",
+      "source": {
+        "previous": {
+          "release": "2013-14",
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "sha256": "67cb811e8bf3f807ecee8cf177e36036bb6c0810a7c6f4077364cfebabb302a1",
+          "projectColumn": 198,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2014-15",
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2015",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a801db6ed915d74e33f88a0/GMPP_data_september_2014.csv",
+          "sha256": "addde3f42fb6e4408c30e62d8cf3bf32eb5267d10802e13b3718faf051aef117",
+          "projectColumn": 187,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "Electronic Data Collection (EDC)",
+      "prevEndAsPublished": "31/03/2024",
+      "curEndAsPublished": "01/11/2019",
+      "matchedBy": "Same ONS project, with only the EDC acronym removed. Both descriptions concern systems, methods and processes for collection, integration, processing and analysis of survey/economic data."
+    },
+    {
+      "id": "PLH5-B09",
+      "gmppId": null,
+      "project": "E&N Herts NHS Trust - Lister Hospital ('Our Changing Hospitals' Phase 4 Programme)",
+      "department": "DOH",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2014-01-17",
+      "curEnd": "2014-03-17",
+      "daysMoved": 59,
+      "narrative": "The programme is currently on timetable to deliver consolidation as planned in October 2014.",
+      "label": "contradiction",
+      "why": "The published end moves from 17 January to 17 March 2014. The narrative says the programme is on timetable to deliver consolidation as planned in October 2014, over six months after the published end, without stating the published movement.",
+      "source": {
+        "previous": {
+          "release": "2012-13",
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-department-of-health-2013--2",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7cab85ed915d6969f46841/gmpp-data-DH-q2-2012-13.csv",
+          "sha256": "f631a2722cf4dbd3a8df742701cd21d8295297441e2f5af3ddfb458e9a359d33",
+          "projectColumn": 4,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2013-14",
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "sha256": "67cb811e8bf3f807ecee8cf177e36036bb6c0810a7c6f4077364cfebabb302a1",
+          "projectColumn": 68,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "E & N Herts NHS Trust - Lister Hospital ('Our Changing Hospitals' Phase 4 Programme)",
+      "prevEndAsPublished": "17/01/2014",
+      "curEndAsPublished": "17/03/2014",
+      "matchedBy": "unique project name normalised for case, spacing and punctuation, with the same department",
+      "labelCaveat": "Consolidation is the named delivery outcome, rather than an explicit formal-closure date. The commentary and published end require interpretation of that scope; the label treats consolidation as the programme delivery finish."
+    },
+    {
+      "id": "PLH5-B10",
+      "gmppId": null,
+      "project": "The Materiel Strategy",
+      "department": "MOD",
+      "prevYear": 2014,
+      "year": 2015,
+      "prevEnd": "2016-04-01",
+      "curEnd": "2017-05-31",
+      "daysMoved": 425,
+      "narrative": "DE&S was established as a bespoke trading entity in April 2014. Managed Service Providers are under contract to support DE&S in developing plans to reach a ‘match fit’ end-state. The process of transformational change is to deliver a ‘match fit’ DE&S by April 2017.\n\n",
+      "label": "contradiction",
+      "why": "The published end moves from 1 April 2016 to 31 May 2017. The narrative instead targets the transformational match-fit end-state by April 2017. Even 30 April is 31 days before the published end, and the narrative does not state the published movement.",
+      "source": {
+        "previous": {
+          "release": "2013-14",
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "sha256": "67cb811e8bf3f807ecee8cf177e36036bb6c0810a7c6f4077364cfebabb302a1",
+          "projectColumn": 150,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2014-15",
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2015",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a801db6ed915d74e33f88a0/GMPP_data_september_2014.csv",
+          "sha256": "addde3f42fb6e4408c30e62d8cf3bf32eb5267d10802e13b3718faf051aef117",
+          "projectColumn": 157,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "The Material Strategy",
+      "prevEndAsPublished": "01/04/2016",
+      "curEndAsPublished": "31/05/2017",
+      "matchedBy": "Same MOD Defence Equipment & Support transformation programme. Material/Materiel is a spelling variation in successive published titles; both descriptions identify DE&S and the same match-fit transformation.",
+      "labelCaveat": "The match-fit transformation end-state may precede administrative or supplier-contract closure. This label follows C2 by treating the stated transformation completion as the current programme finish; the scope distinction is uncertain."
+    },
+    {
+      "id": "PLH5-B11",
+      "gmppId": "BEIS_0007_2021-Q3",
+      "project": "REPLACEMENT ANALYTICAL PROJECT",
+      "department": "DESNZ",
+      "prevYear": 2024,
+      "year": 2025,
+      "prevEnd": "2028-07-10",
+      "curEnd": "2032-10-30",
+      "daysMoved": 1573,
+      "narrative": "Compared to financial year 23/24-Q4, the project's end-date at 24/25-Q4 increased from 10/07/2028 to 30/10/2032. This is primarily due to the following factors‚\nAs a result of the strategic decision to pause the project, a deferral has been implemented with the forecast project end date aligned to this.  However, this is subject to a pending a decision on the final project close out. ",
+      "label": "explained",
+      "why": "The narrative states the increase to October 2032 and explains the strategic pause and associated deferral. The pending final-close-out decision is disclosed.",
+      "source": {
+        "previous": {
+          "release": "2023-24",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2023-24",
+          "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv",
+          "sha256": "29596242964ff850351b9d091ae7db2584e1c8cdec3b7c8e53ca661479db614b",
+          "projectColumn": null,
+          "projectRecord": 18,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2024-25",
+          "publication": "https://www.gov.uk/government/publications/nista-annual-report-2024-2025",
+          "csv": "https://assets.publishing.service.gov.uk/media/6895fbb63080e72710b2e2ef/nista_annual_report_data_2425.csv",
+          "sha256": "cac14ed4e6a90a81486bdc24295ea40996e7fd6fcd3834e3ffad8a2685f8c8b3",
+          "projectColumn": null,
+          "projectRecord": 30,
+          "narrativeField": "Schedule Narrative"
+        }
+      },
+      "prevProject": "Replacement Analytical Project",
+      "prevEndAsPublished": "2028-07-10 00:00:00",
+      "curEndAsPublished": "30/10/2032",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B12",
+      "gmppId": "DESNZ_0295_2324-Q3",
+      "project": "Home Upgrade Grant and Local Authority Delivery (HULA) schemes",
+      "department": "DESNZ",
+      "prevYear": 2024,
+      "year": 2025,
+      "prevEnd": "2025-03-31",
+      "curEnd": "2025-09-01",
+      "daysMoved": 154,
+      "narrative": "Compared to financial year 23/24-Q4, the project's end-date at 24/25-Q4 increased from 31/03/2025 to 01/09/2025. This is primarily due to the following factors:\nDelivery ended on 30 March 2025. HUG2 project closure activity is underway with the final IPA review expected in September 2025. HULA will exit GMPP with HUG2 at this time and therefore the Q2 report (data date end September 2024 will be the last) ",
+      "label": "explained",
+      "why": "The narrative explicitly gives the move from March to September 2025 and distinguishes ended delivery from remaining HUG2 closure and review activity.",
+      "source": {
+        "previous": {
+          "release": "2023-24",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2023-24",
+          "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv",
+          "sha256": "29596242964ff850351b9d091ae7db2584e1c8cdec3b7c8e53ca661479db614b",
+          "projectColumn": null,
+          "projectRecord": 13,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2024-25",
+          "publication": "https://www.gov.uk/government/publications/nista-annual-report-2024-2025",
+          "csv": "https://assets.publishing.service.gov.uk/media/6895fbb63080e72710b2e2ef/nista_annual_report_data_2425.csv",
+          "sha256": "cac14ed4e6a90a81486bdc24295ea40996e7fd6fcd3834e3ffad8a2685f8c8b3",
+          "projectColumn": null,
+          "projectRecord": 43,
+          "narrativeField": "Schedule Narrative"
+        }
+      },
+      "prevProject": "Home Upgrade Grant and Local Authority Delivery (HULA) schemes",
+      "prevEndAsPublished": "2025-03-31 00:00:00",
+      "curEndAsPublished": "01/09/2025",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B13",
+      "gmppId": "DFE_0020_2021-Q4",
+      "project": "NATIONAL TUTORING PROGRAMME",
+      "department": "DFE",
+      "prevYear": 2024,
+      "year": 2025,
+      "prevEnd": "2024-07-31",
+      "curEnd": "2025-03-31",
+      "daysMoved": 243,
+      "narrative": "Compared to financial year 23/24-Q4, the project's end-date at 24/25-Q4 increased from 31/07/2024 to 31/03/2025. This is primarily due to the following factors‚\nThe original project end date reflected the end of the NTP delivery in schools. In order to claw back unused funds from schools and close down, the project continued until 31/03/25.",
+      "label": "explained",
+      "why": "The narrative explicitly gives the move from July 2024 to March 2025 and explains fund recovery and close-down work after delivery in schools.",
+      "source": {
+        "previous": {
+          "release": "2023-24",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2023-24",
+          "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv",
+          "sha256": "29596242964ff850351b9d091ae7db2584e1c8cdec3b7c8e53ca661479db614b",
+          "projectColumn": null,
+          "projectRecord": 32,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2024-25",
+          "publication": "https://www.gov.uk/government/publications/nista-annual-report-2024-2025",
+          "csv": "https://assets.publishing.service.gov.uk/media/6895fbb63080e72710b2e2ef/nista_annual_report_data_2425.csv",
+          "sha256": "cac14ed4e6a90a81486bdc24295ea40996e7fd6fcd3834e3ffad8a2685f8c8b3",
+          "projectColumn": null,
+          "projectRecord": 79,
+          "narrativeField": "Schedule Narrative"
+        }
+      },
+      "prevProject": "National Tutoring programme",
+      "prevEndAsPublished": "2024-07-31",
+      "curEndAsPublished": "31/03/2025",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B14",
+      "gmppId": "HMRC_0159_2223-Q2",
+      "project": "SINGLE CUSTOMS PLATFORM",
+      "department": "HMRC",
+      "prevYear": 2024,
+      "year": 2025,
+      "prevEnd": "2025-03-31",
+      "curEnd": "2027-03-31",
+      "daysMoved": 730,
+      "narrative": "Compared to financial year 23/24-Q4, the project's end-date at 24/25-Q4 increased from 31/03/2025 to 31/03/2027. This is primarily due to the following factors‚\nSingle Customs Platform (SCP) has identified the need to reframe its programme delivery for a further 2 years, to ensure there is a sustainable Customs Declaration Service (CDS) in place, for the longer term. \n\nSCP needs to move from being a largely functional focus, that has existed to date, and create a need to invest in the CDS Service. The programme has performed an extensive prioritisation exercise to target outcome achievement. \n\nTo transition CDS to Business as Usual the programme needs to increase confidence of the CDS long-term ability to meet future requirements of HMRC, and broader HM Government border operations. ",
+      "label": "explained",
+      "why": "The narrative explicitly states the two-year extension to March 2027 and describes the additional work needed for a sustainable Customs Declaration Service.",
+      "source": {
+        "previous": {
+          "release": "2023-24",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2023-24",
+          "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv",
+          "sha256": "29596242964ff850351b9d091ae7db2584e1c8cdec3b7c8e53ca661479db614b",
+          "projectColumn": null,
+          "projectRecord": 196,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2024-25",
+          "publication": "https://www.gov.uk/government/publications/nista-annual-report-2024-2025",
+          "csv": "https://assets.publishing.service.gov.uk/media/6895fbb63080e72710b2e2ef/nista_annual_report_data_2425.csv",
+          "sha256": "cac14ed4e6a90a81486bdc24295ea40996e7fd6fcd3834e3ffad8a2685f8c8b3",
+          "projectColumn": null,
+          "projectRecord": 109,
+          "narrativeField": "Schedule Narrative"
+        }
+      },
+      "prevProject": "Single Customs Platform",
+      "prevEndAsPublished": "2025-03-31",
+      "curEndAsPublished": "31/03/2027",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B15",
+      "gmppId": "HO_0285_2324-Q2",
+      "project": "MANSTON TRANSFORMATION PROGRAMME",
+      "department": "HO",
+      "prevYear": 2024,
+      "year": 2025,
+      "prevEnd": "2027-11-05",
+      "curEnd": "2029-03-31",
+      "daysMoved": 512,
+      "narrative": "Compared to financial year 23/24-Q4, the project's end-date at 24/25-Q4 increased from 05/11/2027 to 31/03/2029. This is primarily due to the following factors‚\nDue to the change in Government, this financial year, the Programme paused and revisited the scope and requirements from a value for money perspective. A Ministerial steer and decision was given to move forward with the revised scope and since then work has taken place to pivot the Programme. Design requirements and plans have been revisited and the delivery schedule has been re-baselined.",
+      "label": "explained",
+      "why": "The narrative explicitly states the extension to March 2029 and explains the pause, revised scope, changed designs and rebaselined delivery schedule.",
+      "source": {
+        "previous": {
+          "release": "2023-24",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2023-24",
+          "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv",
+          "sha256": "29596242964ff850351b9d091ae7db2584e1c8cdec3b7c8e53ca661479db614b",
+          "projectColumn": null,
+          "projectRecord": 217,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2024-25",
+          "publication": "https://www.gov.uk/government/publications/nista-annual-report-2024-2025",
+          "csv": "https://assets.publishing.service.gov.uk/media/6895fbb63080e72710b2e2ef/nista_annual_report_data_2425.csv",
+          "sha256": "cac14ed4e6a90a81486bdc24295ea40996e7fd6fcd3834e3ffad8a2685f8c8b3",
+          "projectColumn": null,
+          "projectRecord": 113,
+          "narrativeField": "Schedule Narrative"
+        }
+      },
+      "prevProject": "Manston Transformation Programme",
+      "prevEndAsPublished": "2027-11-05",
+      "curEndAsPublished": "31/03/2029",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B16",
+      "gmppId": "HO_0043_2021-Q4",
+      "project": "FUTURE SUPPLIERS SERVICES",
+      "department": "HO",
+      "prevYear": 2024,
+      "year": 2025,
+      "prevEnd": "2024-10-28",
+      "curEnd": "2025-05-30",
+      "daysMoved": 214,
+      "narrative": "Compared to financial year 23/24-Q4, the project's end-date at 24/25-Q4 increased from 28/10/2024 to 30/05/2025. This is primarily due to the following factors‚\nThe conclusion of the Visa and Citizenship Application Service (VCAS) procurement was delayed due to a legal challenge to the procurement outcome by a bidder (which was later dropped). The Programme was expected to award contracts in July 2023, however the legal challenge put a suspension on the contract awards for three of the five contracts. FSS was able to award one contract in August 2023 and was successful in October 2023 in lifting the suspension of award in the remaining contracts. Once all five contracts had been awarded, the Programme worked closely with the new commercial partners at detailed implementation planning and revisited its delivery timelines, shifting Programme closure to March 2025. A Portfolio Change Request in July 2024 included an additional two months of Early Life Support resulting in Programme closure timelines extending to May 2025.",
+      "label": "explained",
+      "why": "The narrative explicitly gives the extension to May 2025 and describes procurement litigation, revised implementation planning and two months of early-life support.",
+      "source": {
+        "previous": {
+          "release": "2023-24",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2023-24",
+          "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv",
+          "sha256": "29596242964ff850351b9d091ae7db2584e1c8cdec3b7c8e53ca661479db614b",
+          "projectColumn": null,
+          "projectRecord": 212,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2024-25",
+          "publication": "https://www.gov.uk/government/publications/nista-annual-report-2024-2025",
+          "csv": "https://assets.publishing.service.gov.uk/media/6895fbb63080e72710b2e2ef/nista_annual_report_data_2425.csv",
+          "sha256": "cac14ed4e6a90a81486bdc24295ea40996e7fd6fcd3834e3ffad8a2685f8c8b3",
+          "projectColumn": null,
+          "projectRecord": 123,
+          "narrativeField": "Schedule Narrative"
+        }
+      },
+      "prevProject": "Future Suppliers Services",
+      "prevEndAsPublished": "2024-10-28",
+      "curEndAsPublished": "30/05/2025",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B17",
+      "gmppId": "MHCLG_0017_2122-Q2",
+      "project": "Levelling Up Fund",
+      "department": "MHCLG",
+      "prevYear": 2024,
+      "year": 2025,
+      "prevEnd": "2026-03-31",
+      "curEnd": "2028-03-31",
+      "daysMoved": 731,
+      "narrative": "Compared to financial year 23/24-Q4, the project's end-date at 24/25-Q4 increased from 31/03/2026 to 31/03/2028. This is primarily due to the following factors‚\nAutumn Statement 2024 agreed a reprofiling of c£1.bn for LUF projects beyond March 2026. Through the latest monitoring return, we allowed projects for the first time to extend spending profiles to 2027 for Round 1 projects and 2028 for Round 2 and 3 projects. These profiles (with optimism bias applied) have informed funding profiles for Spending Review phase 2. ",
+      "label": "explained",
+      "why": "The narrative explicitly gives the extension to March 2028 and explains the agreed reprofiling and later spending profiles for the fund rounds.",
+      "source": {
+        "previous": {
+          "release": "2023-24",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2023-24",
+          "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv",
+          "sha256": "29596242964ff850351b9d091ae7db2584e1c8cdec3b7c8e53ca661479db614b",
+          "projectColumn": null,
+          "projectRecord": 177,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2024-25",
+          "publication": "https://www.gov.uk/government/publications/nista-annual-report-2024-2025",
+          "csv": "https://assets.publishing.service.gov.uk/media/6895fbb63080e72710b2e2ef/nista_annual_report_data_2425.csv",
+          "sha256": "cac14ed4e6a90a81486bdc24295ea40996e7fd6fcd3834e3ffad8a2685f8c8b3",
+          "projectColumn": null,
+          "projectRecord": 142,
+          "narrativeField": "Schedule Narrative"
+        }
+      },
+      "prevProject": "Levelling Up Fund",
+      "prevEndAsPublished": "2026-03-31",
+      "curEndAsPublished": "31/03/2028",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B18",
+      "gmppId": "DFE_0016_2021-Q3",
+      "project": "Institutes of Technology (IoT) 2",
+      "department": "DFE",
+      "prevYear": 2023,
+      "year": 2024,
+      "prevEnd": "2026-01-01",
+      "curEnd": "2025-03-31",
+      "daysMoved": -276,
+      "narrative": "Compared to financial year 22/23-Q4, the project's end-date at 23/24-Q4 decreased from 2026-01-01 to 2025-03-31. This is primarily due to the following factors. \n\n This end date is a correction from an error in previous returns which gave a project end date in 2026.",
+      "label": "explained",
+      "why": "The narrative explicitly states the shortening to March 2025 and identifies the previous 2026 date as a reporting error.",
+      "source": {
+        "previous": {
+          "release": "2022-23",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2022-23",
+          "csv": "https://assets.publishing.service.gov.uk/media/64b79c5171749c001389ee41/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2023.csv",
+          "sha256": "ecd3756718a71e6f52fb25050caba535d64e7f5b21f6db361cfa10859a4364ac",
+          "projectColumn": null,
+          "projectRecord": 58,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2023-24",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2023-24",
+          "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv",
+          "sha256": "29596242964ff850351b9d091ae7db2584e1c8cdec3b7c8e53ca661479db614b",
+          "projectColumn": null,
+          "projectRecord": 30,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "Institutes of Technology (IoT) 2",
+      "prevEndAsPublished": "2026-01-01",
+      "curEndAsPublished": "2025-03-31",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B19",
+      "gmppId": "MOJ_0054_2021-Q4",
+      "project": "Print Recompete",
+      "department": "MOJ",
+      "prevYear": 2023,
+      "year": 2024,
+      "prevEnd": "2023-12-30",
+      "curEnd": "2024-11-30",
+      "daysMoved": 336,
+      "narrative": "Compared to financial year 22/23-Q4, the project's end-date at 23/24-Q4 increased from 2023-12-30 to 2024-11-30. This is primarily due to the following factors. \n\n The project has rebaselined its schedule following delays to device deployment.",
+      "label": "explained",
+      "why": "The narrative explicitly gives the extension to November 2024 and explains rebaselining following delayed device deployment.",
+      "source": {
+        "previous": {
+          "release": "2022-23",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2022-23",
+          "csv": "https://assets.publishing.service.gov.uk/media/64b79c5171749c001389ee41/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2023.csv",
+          "sha256": "ecd3756718a71e6f52fb25050caba535d64e7f5b21f6db361cfa10859a4364ac",
+          "projectColumn": null,
+          "projectRecord": 233,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2023-24",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2023-24",
+          "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv",
+          "sha256": "29596242964ff850351b9d091ae7db2584e1c8cdec3b7c8e53ca661479db614b",
+          "projectColumn": null,
+          "projectRecord": 59,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "Print Recompete",
+      "prevEndAsPublished": "2023-12-30",
+      "curEndAsPublished": "2024-11-30",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B20",
+      "gmppId": "MOJ_0055_2021-Q4",
+      "project": "Prison Retail",
+      "department": "MOJ",
+      "prevYear": 2023,
+      "year": 2024,
+      "prevEnd": "2023-06-30",
+      "curEnd": "2024-06-30",
+      "daysMoved": 366,
+      "narrative": "Compared to financial year 22/23-Q4, the project's end-date at 23/24-Q4 increased from 2023-06-30 to 2024-06-30. This is primarily due to the following factors. \n\n The project has rebaselined its schedule mainly due to delays in supplier delivery.",
+      "label": "explained",
+      "why": "The narrative explicitly gives the extension to June 2024 and explains rebaselining due to supplier delays.",
+      "source": {
+        "previous": {
+          "release": "2022-23",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2022-23",
+          "csv": "https://assets.publishing.service.gov.uk/media/64b79c5171749c001389ee41/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2023.csv",
+          "sha256": "ecd3756718a71e6f52fb25050caba535d64e7f5b21f6db361cfa10859a4364ac",
+          "projectColumn": null,
+          "projectRecord": 234,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2023-24",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2023-24",
+          "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv",
+          "sha256": "29596242964ff850351b9d091ae7db2584e1c8cdec3b7c8e53ca661479db614b",
+          "projectColumn": null,
+          "projectRecord": 60,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "Prison Retail",
+      "prevEndAsPublished": "2023-06-30",
+      "curEndAsPublished": "2024-06-30",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B21",
+      "gmppId": "HMRC_0095_2122-Q4",
+      "project": "Pensions Programme",
+      "department": "HMRC",
+      "prevYear": 2023,
+      "year": 2024,
+      "prevEnd": "2027-03-31",
+      "curEnd": "2028-03-31",
+      "daysMoved": 366,
+      "narrative": "Compared to financial year 22/23-Q4, the project's end-date at 23/24-Q4 increased from 2027-03-31 to 2028-03-31. This is primarily due to the following factors. \n\n The lifecycle of the programme was extended by one year to end 2027/28 to fully incorporate the Low Earners' Anomaly cost profile.",
+      "label": "explained",
+      "why": "The narrative explicitly states the one-year extension to March 2028 to include the Low Earners anomaly cost profile.",
+      "source": {
+        "previous": {
+          "release": "2022-23",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2022-23",
+          "csv": "https://assets.publishing.service.gov.uk/media/64b79c5171749c001389ee41/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2023.csv",
+          "sha256": "ecd3756718a71e6f52fb25050caba535d64e7f5b21f6db361cfa10859a4364ac",
+          "projectColumn": null,
+          "projectRecord": 137,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2023-24",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2023-24",
+          "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv",
+          "sha256": "29596242964ff850351b9d091ae7db2584e1c8cdec3b7c8e53ca661479db614b",
+          "projectColumn": null,
+          "projectRecord": 193,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "Pensions Programme",
+      "prevEndAsPublished": "2027-03-31",
+      "curEndAsPublished": "2028-03-31",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B22",
+      "gmppId": "DEFRA_0017_2122-Q1",
+      "project": "UK Seafood Fund",
+      "department": "DEFRA",
+      "prevYear": 2022,
+      "year": 2023,
+      "prevEnd": "2024-03-31",
+      "curEnd": "2025-03-31",
+      "daysMoved": 365,
+      "narrative": "Compared to financial year 21/22-Q4, the project's end-date at 22/23-Q4 increased from 2024-03-31 to 2025-03-31. This is primarily due to the following factors.\n  An extension to the end date of the scheme and subsequent reprofile of funding as recommended by the IPA Assurance review in March 2022.",
+      "label": "explained",
+      "why": "The narrative explicitly gives the extension to March 2025 and attributes it to the assurance review recommendation and funding reprofile.",
+      "source": {
+        "previous": {
+          "release": "2021-22",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2022",
+          "csv": "https://assets.publishing.service.gov.uk/media/62d6c047e90e071e753d6936/GMPP_Government_Major_Projects_Portfolio_AR_Data_March_2022.csv",
+          "sha256": "f34d32e4ed93a34cb9e7500491bba4cfa9568999c7dfabcbe74e0cc4cf538f2c",
+          "projectColumn": null,
+          "projectRecord": 224,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2022-23",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2022-23",
+          "csv": "https://assets.publishing.service.gov.uk/media/64b79c5171749c001389ee41/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2023.csv",
+          "sha256": "ecd3756718a71e6f52fb25050caba535d64e7f5b21f6db361cfa10859a4364ac",
+          "projectColumn": null,
+          "projectRecord": 33,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "UK Seafood Fund",
+      "prevEndAsPublished": "2024-03-31",
+      "curEndAsPublished": "2025-03-31",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B23",
+      "gmppId": "DEFRA_0012_2021-Q3",
+      "project": "River Thames Scheme",
+      "department": "DEFRA",
+      "prevYear": 2021,
+      "year": 2022,
+      "prevEnd": "2029-04-12",
+      "curEnd": "2030-04-01",
+      "daysMoved": 354,
+      "narrative": "Compared to 2021-Q4, your project end-date increased from 12 APR 2029  to 01 APR 2030 . This is primarily due to the following factors: The project has reviewed its programme of works following Outline Business Case approval. This re-baselining exercise has identified it will take longer to get to Gateway 4 - Readiness for service than previously anticipated.",
+      "label": "explained",
+      "why": "The narrative explicitly gives the extension to April 2030 and explains the rebaselining and longer route to readiness for service.",
+      "source": {
+        "previous": {
+          "release": "2020-21",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2021",
+          "csv": "https://assets.publishing.service.gov.uk/media/60eecae48fa8f50c7ca55af1/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2021.csv",
+          "sha256": "88a38d6ab1e1865a96aebde3d18e98150e79b4167b92b82dff15dcb96fa784f1",
+          "projectColumn": null,
+          "projectRecord": 143,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2021-22",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2022",
+          "csv": "https://assets.publishing.service.gov.uk/media/62d6c047e90e071e753d6936/GMPP_Government_Major_Projects_Portfolio_AR_Data_March_2022.csv",
+          "sha256": "f34d32e4ed93a34cb9e7500491bba4cfa9568999c7dfabcbe74e0cc4cf538f2c",
+          "projectColumn": null,
+          "projectRecord": 189,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "River Thames Scheme",
+      "prevEndAsPublished": "12/04/2029",
+      "curEndAsPublished": "2030-04-01",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B24",
+      "gmppId": "MOD_0123_2021-Q4",
+      "project": "Maritime Electronic Warfare System Integrated Capability",
+      "department": "MOD",
+      "prevYear": 2021,
+      "year": 2022,
+      "prevEnd": "2044-07-31",
+      "curEnd": "2034-06-30",
+      "daysMoved": -3684,
+      "narrative": "Compared to 2021-Q4, the project end-date decreased from 31 Jul 2044 to 30 Jun 2034. This is primarily due to the following factors: \r\nThe programme end-date has been aligned with Full Operating Capability.",
+      "label": "explained",
+      "why": "The narrative explicitly gives the shortening from July 2044 to June 2034 and explains alignment with Full Operating Capability.",
+      "source": {
+        "previous": {
+          "release": "2020-21",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2021",
+          "csv": "https://assets.publishing.service.gov.uk/media/60eecae48fa8f50c7ca55af1/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2021.csv",
+          "sha256": "88a38d6ab1e1865a96aebde3d18e98150e79b4167b92b82dff15dcb96fa784f1",
+          "projectColumn": null,
+          "projectRecord": 102,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2021-22",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2022",
+          "csv": "https://assets.publishing.service.gov.uk/media/62d6c047e90e071e753d6936/GMPP_Government_Major_Projects_Portfolio_AR_Data_March_2022.csv",
+          "sha256": "f34d32e4ed93a34cb9e7500491bba4cfa9568999c7dfabcbe74e0cc4cf538f2c",
+          "projectColumn": null,
+          "projectRecord": 131,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "Maritime Electronic Warfare System Integrated Capability",
+      "prevEndAsPublished": "31/07/2044",
+      "curEndAsPublished": "2034-06-30",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B25",
+      "gmppId": "BEIS_0001_1617-Q2",
+      "project": "Heat Networks Investment Project",
+      "department": "BEIS",
+      "prevYear": 2020,
+      "year": 2021,
+      "prevEnd": "2021-03-31",
+      "curEnd": "2022-03-31",
+      "daysMoved": 365,
+      "narrative": "Compared to financial year 19/20-Q2, the project's end-date increased from 31 March 2021  to 31 March 2022 . This is primarily due to the following factors: HNIP is being delivered in two phases: the pilot scheme, which is complete, and the Main Scheme which is now in the final year of delivery and scheduled to close to applicants in November 21.",
+      "label": "explained",
+      "why": "The narrative explicitly states the extension from March 2021 to March 2022, with pilot/main-scheme phases and closure to applicants distinguished.",
+      "source": {
+        "previous": {
+          "release": "2019-20",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2020",
+          "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv",
+          "sha256": "0a9b082d6d1cd4c0887f94c6853b5e5ed5892c7c60a0d19ea9e7f839b9b7db89",
+          "projectColumn": 4,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2020-21",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2021",
+          "csv": "https://assets.publishing.service.gov.uk/media/60eecae48fa8f50c7ca55af1/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2021.csv",
+          "sha256": "88a38d6ab1e1865a96aebde3d18e98150e79b4167b92b82dff15dcb96fa784f1",
+          "projectColumn": null,
+          "projectRecord": 6,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "Heat Networks Investment Project",
+      "prevEndAsPublished": "31/03/2021",
+      "curEndAsPublished": "31/03/2022",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B26",
+      "gmppId": "DCMS_0010_1718-Q3",
+      "project": "Local Full Fibre Networks",
+      "department": "DCMS",
+      "prevYear": 2020,
+      "year": 2021,
+      "prevEnd": "2021-12-01",
+      "curEnd": "2021-12-31",
+      "daysMoved": 30,
+      "narrative": "Compared to financial year 19/20-Q2, the project's end-date increased from 01 December 2021  to 31 December 2021 . This is primarily due to the following factors: HMT approval has been given to extend the programme to December 2021. All projects are planned to be completed within this schedule.",
+      "label": "explained",
+      "why": "The narrative explicitly gives the move from 1 December to 31 December 2021 and states that HM Treasury approved the extension.",
+      "source": {
+        "previous": {
+          "release": "2019-20",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2020",
+          "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv",
+          "sha256": "0a9b082d6d1cd4c0887f94c6853b5e5ed5892c7c60a0d19ea9e7f839b9b7db89",
+          "projectColumn": 22,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2020-21",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2021",
+          "csv": "https://assets.publishing.service.gov.uk/media/60eecae48fa8f50c7ca55af1/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2021.csv",
+          "sha256": "88a38d6ab1e1865a96aebde3d18e98150e79b4167b92b82dff15dcb96fa784f1",
+          "projectColumn": null,
+          "projectRecord": 161,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "Local Full Fibre Networks",
+      "prevEndAsPublished": "01/12/2021",
+      "curEndAsPublished": "31/12/2021",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B27",
+      "gmppId": "DFT_0021_1314-Q3",
+      "project": "Rail Franchising Programme",
+      "department": "DFT",
+      "prevYear": 2019,
+      "year": 2020,
+      "prevEnd": "2019-03-31",
+      "curEnd": "2019-09-14",
+      "daysMoved": 167,
+      "narrative": "The scheduled baseline project end date at Q2 1920 (30th September 2019) is 14/09/19, has lengthened by 167 days since last year's Q2 1819 date of 31/03/19, due primarily to the following factors;\n\n - Given the nature of the Rail Franchising Programme, Passenger Services and IPA agreed to use the most advanced project to report on delivery Milestones. In Q2 1819 Q2 this was South Eastern Project with end date of 31/03/2019. The reason for the 167 day increase is that in Q2 1920 the most advanced project was West Coast Partnership with an end date of 14/09/2019.  \n",
+      "label": "explained",
+      "why": "The narrative explicitly gives the 167-day increase and explains that the reporting convention changed from the South Eastern project to West Coast Partnership.",
+      "source": {
+        "previous": {
+          "release": "2018-19",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+          "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv",
+          "sha256": "c22caa602ec3a7d9cc64cb20d559dbd5dbd0b9ceae5b4184675f247138d5b8b8",
+          "projectColumn": 45,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2019-20",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2020",
+          "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv",
+          "sha256": "0a9b082d6d1cd4c0887f94c6853b5e5ed5892c7c60a0d19ea9e7f839b9b7db89",
+          "projectColumn": 45,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "Rail Franchising Programme",
+      "prevEndAsPublished": "31/03/2019",
+      "curEndAsPublished": "14/09/2019",
+      "matchedBy": "unique project name normalised for case, spacing and punctuation, with the same department"
+    },
+    {
+      "id": "PLH5-B28",
+      "gmppId": "MOJ_0003_1112-Q1",
+      "project": "Electronic Monitoring",
+      "department": "MOJ",
+      "prevYear": 2020,
+      "year": 2021,
+      "prevEnd": "2024-08-31",
+      "curEnd": "2022-04-01",
+      "daysMoved": -883,
+      "narrative": "Compared to financial year 19/20-Q2, the project's end-date decreased from 31 August 2024  to 01 April 2022 . This is primarily due to the following factors: The Project's end date has previously reflected the current end dates for the Electronic Monitoring contracts which remain static; but the end date now reflects the closure of the project and transfer of the service to regular operation and the Electronic Monitoring Expansion Programme.",
+      "label": "explained",
+      "why": "The narrative explicitly gives the shortening from August 2024 to April 2022 and explains the switch from contract end dates to project closure and transfer to regular operation.",
+      "source": {
+        "previous": {
+          "release": "2019-20",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2020",
+          "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv",
+          "sha256": "0a9b082d6d1cd4c0887f94c6853b5e5ed5892c7c60a0d19ea9e7f839b9b7db89",
+          "projectColumn": 114,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2020-21",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2021",
+          "csv": "https://assets.publishing.service.gov.uk/media/60eecae48fa8f50c7ca55af1/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2021.csv",
+          "sha256": "88a38d6ab1e1865a96aebde3d18e98150e79b4167b92b82dff15dcb96fa784f1",
+          "projectColumn": null,
+          "projectRecord": 125,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "Electronic Monitoring",
+      "prevEndAsPublished": "31/08/2024",
+      "curEndAsPublished": "01/04/2022",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B29",
+      "gmppId": "CO_0210_2223-Q4",
+      "project": "ROSA RENEWAL PROJECT",
+      "department": "CO",
+      "prevYear": 2024,
+      "year": 2025,
+      "prevEnd": "2025-03-31",
+      "curEnd": "2025-03-31",
+      "daysMoved": 0,
+      "narrative": "Compared to financial year 23/24-Q4, the project's end-date at 24/25-Q4 remained at 31/03/2025. This is primarily due to the following factors‚\nRRP successfully closed in line with the agreed baseline of March 2025",
+      "label": "no-move",
+      "why": "The end stays at 31 March 2025 and the narrative says the project closed in line with that March 2025 baseline.",
+      "source": {
+        "previous": {
+          "release": "2023-24",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2023-24",
+          "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv",
+          "sha256": "29596242964ff850351b9d091ae7db2584e1c8cdec3b7c8e53ca661479db614b",
+          "projectColumn": null,
+          "projectRecord": 126,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2024-25",
+          "publication": "https://www.gov.uk/government/publications/nista-annual-report-2024-2025",
+          "csv": "https://assets.publishing.service.gov.uk/media/6895fbb63080e72710b2e2ef/nista_annual_report_data_2425.csv",
+          "sha256": "cac14ed4e6a90a81486bdc24295ea40996e7fd6fcd3834e3ffad8a2685f8c8b3",
+          "projectColumn": null,
+          "projectRecord": 10,
+          "narrativeField": "Schedule Narrative"
+        }
+      },
+      "prevProject": "Rosa Renewal Project",
+      "prevEndAsPublished": "2025-03-31",
+      "curEndAsPublished": "31/03/2025",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B30",
+      "gmppId": "DEFRA_0016_2122-Q1",
+      "project": "BIOSECURITY, BORDERS AND TRADE PROGRAMME",
+      "department": "DEFRA",
+      "prevYear": 2024,
+      "year": 2025,
+      "prevEnd": "2025-03-31",
+      "curEnd": "2025-03-31",
+      "daysMoved": 0,
+      "narrative": "Compared to financial year 23/24-Q4, the project's end-date at 24/25-Q4 remained at 31/03/2025. This is primarily due to the following factors‚\nThe programme closed on 31 March 2025 as scheduled.",
+      "label": "no-move",
+      "why": "The end stays at 31 March 2025. The narrative explicitly says the programme closed on that date as scheduled.",
+      "source": {
+        "previous": {
+          "release": "2023-24",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2023-24",
+          "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv",
+          "sha256": "29596242964ff850351b9d091ae7db2584e1c8cdec3b7c8e53ca661479db614b",
+          "projectColumn": null,
+          "projectRecord": 132,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2024-25",
+          "publication": "https://www.gov.uk/government/publications/nista-annual-report-2024-2025",
+          "csv": "https://assets.publishing.service.gov.uk/media/6895fbb63080e72710b2e2ef/nista_annual_report_data_2425.csv",
+          "sha256": "cac14ed4e6a90a81486bdc24295ea40996e7fd6fcd3834e3ffad8a2685f8c8b3",
+          "projectColumn": null,
+          "projectRecord": 22,
+          "narrativeField": "Schedule Narrative"
+        }
+      },
+      "prevProject": "Defra Biosecurity, Borders and Trade Programme (BBTP)",
+      "prevEndAsPublished": "2025-03-31",
+      "curEndAsPublished": "31/03/2025",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B31",
+      "gmppId": "BEIS_0001_2122-Q2",
+      "project": "LOW COST NUCLEAR PROGRAMME (ROLLS ROYCE SMRS CHALLENGE)",
+      "department": "DESNZ",
+      "prevYear": 2024,
+      "year": 2025,
+      "prevEnd": "2025-03-31",
+      "curEnd": "2025-03-31",
+      "daysMoved": 0,
+      "narrative": "Compared to financial year 23/24-Q4, the project's end-date at 24/25-Q4 remained at 31/03/2025. This is primarily due to the following factors‚\nKey drivers for the timeline of the project were the need to reach design maturity points and progress through Generic Design Assessment (GDA). Step 2 of GDA was completed by 31/07/2024 with the remainder of the objectives and benefits progressed by 30/03/2025. It should be noted that development of the RR SMR design including further GDA progress continues after the end of grant funding.",
+      "label": "no-move",
+      "why": "The end stays at 31 March 2025 and the narrative states that same date. Continuing reactor-design work is explicitly distinguished from the end of grant funding.",
+      "source": {
+        "previous": {
+          "release": "2023-24",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2023-24",
+          "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv",
+          "sha256": "29596242964ff850351b9d091ae7db2584e1c8cdec3b7c8e53ca661479db614b",
+          "projectColumn": null,
+          "projectRecord": 15,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2024-25",
+          "publication": "https://www.gov.uk/government/publications/nista-annual-report-2024-2025",
+          "csv": "https://assets.publishing.service.gov.uk/media/6895fbb63080e72710b2e2ef/nista_annual_report_data_2425.csv",
+          "sha256": "cac14ed4e6a90a81486bdc24295ea40996e7fd6fcd3834e3ffad8a2685f8c8b3",
+          "projectColumn": null,
+          "projectRecord": 39,
+          "narrativeField": "Schedule Narrative"
+        }
+      },
+      "prevProject": "Low Cost Nuclear Programme (Rolls Royce SMRs Challenge)",
+      "prevEndAsPublished": "2025-03-31 00:00:00",
+      "curEndAsPublished": "31/03/2025",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B32",
+      "gmppId": "DHSC_0253_2324-Q1",
+      "project": "DATA FOR RESEARCH AND DEVELOPMENT (R&D)",
+      "department": "DHSC",
+      "prevYear": 2024,
+      "year": 2025,
+      "prevEnd": "2025-03-31",
+      "curEnd": "2025-03-31",
+      "daysMoved": 0,
+      "narrative": "Compared to financial year 23/24-Q4, the project's end-date at 24/25-Q4 remained at 31/03/2025. This is primarily due to the following factors‚\n‚ the programme has delivered in line with the timescales in the business case and is due to close before the start of the current GMPP reporting cycle.",
+      "label": "no-move",
+      "why": "The end stays at 31 March 2025. The narrative repeats that date and reports delivery in line with the business-case timescales, without naming a competing current end.",
+      "source": {
+        "previous": {
+          "release": "2023-24",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2023-24",
+          "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv",
+          "sha256": "29596242964ff850351b9d091ae7db2584e1c8cdec3b7c8e53ca661479db614b",
+          "projectColumn": null,
+          "projectRecord": 161,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2024-25",
+          "publication": "https://www.gov.uk/government/publications/nista-annual-report-2024-2025",
+          "csv": "https://assets.publishing.service.gov.uk/media/6895fbb63080e72710b2e2ef/nista_annual_report_data_2425.csv",
+          "sha256": "cac14ed4e6a90a81486bdc24295ea40996e7fd6fcd3834e3ffad8a2685f8c8b3",
+          "projectColumn": null,
+          "projectRecord": 50,
+          "narrativeField": "Schedule Narrative"
+        }
+      },
+      "prevProject": "Data for Research and Development (R&D)",
+      "prevEndAsPublished": "2025-03-31",
+      "curEndAsPublished": "31/03/2025",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B33",
+      "gmppId": "DHSC_0096_2122-Q4",
+      "project": "DIGITISING SOCIAL CARE",
+      "department": "DHSC",
+      "prevYear": 2024,
+      "year": 2025,
+      "prevEnd": "2025-03-31",
+      "curEnd": "2025-03-31",
+      "daysMoved": 0,
+      "narrative": "Compared to financial year 23/24-Q4, the project's end-date at 24/25-Q4 remained at 31/03/2025. This is primarily due to the following factors‚\nThe programme is forecasting to achieve 80% adoption in the coming months, therefore the programme is exiting the GMPP and standing up to two successor programmes to continue building on progress and sustainability. ",
+      "label": "no-move",
+      "why": "The end stays at 31 March 2025 and the narrative states that same date. Two successor programmes are distinguished from the programme exiting GMPP.",
+      "source": {
+        "previous": {
+          "release": "2023-24",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2023-24",
+          "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv",
+          "sha256": "29596242964ff850351b9d091ae7db2584e1c8cdec3b7c8e53ca661479db614b",
+          "projectColumn": null,
+          "projectRecord": 163,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2024-25",
+          "publication": "https://www.gov.uk/government/publications/nista-annual-report-2024-2025",
+          "csv": "https://assets.publishing.service.gov.uk/media/6895fbb63080e72710b2e2ef/nista_annual_report_data_2425.csv",
+          "sha256": "cac14ed4e6a90a81486bdc24295ea40996e7fd6fcd3834e3ffad8a2685f8c8b3",
+          "projectColumn": null,
+          "projectRecord": 54,
+          "narrativeField": "Schedule Narrative"
+        }
+      },
+      "prevProject": "Digitising Social Care",
+      "prevEndAsPublished": "2025-03-31",
+      "curEndAsPublished": "31/03/2025",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B34",
+      "gmppId": "DFE_0173_2223-Q2",
+      "project": "Higher Technical Education",
+      "department": "DFE",
+      "prevYear": 2023,
+      "year": 2024,
+      "prevEnd": "2027-09-01",
+      "curEnd": "2027-09-01",
+      "daysMoved": 0,
+      "narrative": "Compared to financial year 22/23-Q4, the project's end-date at 23/24-Q4 remained schedule to finish on 2027-09-01. This is primarily due to the following factors. \n\n The programme schedule remains achievable.",
+      "label": "no-move",
+      "why": "The end stays at 1 September 2027 and the narrative repeats that date, saying the schedule remains achievable.",
+      "source": {
+        "previous": {
+          "release": "2022-23",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2022-23",
+          "csv": "https://assets.publishing.service.gov.uk/media/64b79c5171749c001389ee41/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2023.csv",
+          "sha256": "ecd3756718a71e6f52fb25050caba535d64e7f5b21f6db361cfa10859a4364ac",
+          "projectColumn": null,
+          "projectRecord": 56,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2023-24",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2023-24",
+          "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv",
+          "sha256": "29596242964ff850351b9d091ae7db2584e1c8cdec3b7c8e53ca661479db614b",
+          "projectColumn": null,
+          "projectRecord": 28,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "Higher Technical Education",
+      "prevEndAsPublished": "2027-09-01",
+      "curEndAsPublished": "2027-09-01",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B35",
+      "gmppId": "MOJ_0073_2122-Q4",
+      "project": "Drug Testing Services",
+      "department": "MOJ",
+      "prevYear": 2024,
+      "year": 2025,
+      "prevEnd": "2025-10-08",
+      "curEnd": "2025-10-08",
+      "daysMoved": 0,
+      "narrative": "Compared to financial year 23/24-Q4, the project's end-date at 24/25-Q4 remained at 08/10/2025. This is primarily due to the following factors‚\nThe project is on track to deliver against the baseline schedule.",
+      "label": "no-move",
+      "why": "The end stays at 8 October 2025 and the narrative repeats that date with an on-track claim.",
+      "source": {
+        "previous": {
+          "release": "2023-24",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2023-24",
+          "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv",
+          "sha256": "29596242964ff850351b9d091ae7db2584e1c8cdec3b7c8e53ca661479db614b",
+          "projectColumn": null,
+          "projectRecord": 52,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2024-25",
+          "publication": "https://www.gov.uk/government/publications/nista-annual-report-2024-2025",
+          "csv": "https://assets.publishing.service.gov.uk/media/6895fbb63080e72710b2e2ef/nista_annual_report_data_2425.csv",
+          "sha256": "cac14ed4e6a90a81486bdc24295ea40996e7fd6fcd3834e3ffad8a2685f8c8b3",
+          "projectColumn": null,
+          "projectRecord": 199,
+          "narrativeField": "Schedule Narrative"
+        }
+      },
+      "prevProject": "Drug Testing Services",
+      "prevEndAsPublished": "2025-10-08",
+      "curEndAsPublished": "08/10/2025",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B36",
+      "gmppId": "MOD_0142_2122-Q1",
+      "project": "MARTLET",
+      "department": "MOD",
+      "prevYear": 2024,
+      "year": 2025,
+      "prevEnd": "2025-12-19",
+      "curEnd": "2025-12-19",
+      "daysMoved": 0,
+      "narrative": "Compared to financial year 23/24-Q4, the project's end-date at 24/25-Q4 remained at 19/12/2025. This is primarily due to the following factors.\nFull Operating Capability is on target to be achieved in summer 2025.  The programme end date has been maintained compared to 12 months ago.",
+      "label": "no-move",
+      "why": "The end stays at 19 December 2025. The narrative explicitly says the programme end has been maintained; summer 2025 is a separate Full Operating Capability milestone.",
+      "source": {
+        "previous": {
+          "release": "2023-24",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2023-24",
+          "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv",
+          "sha256": "29596242964ff850351b9d091ae7db2584e1c8cdec3b7c8e53ca661479db614b",
+          "projectColumn": null,
+          "projectRecord": 114,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2024-25",
+          "publication": "https://www.gov.uk/government/publications/nista-annual-report-2024-2025",
+          "csv": "https://assets.publishing.service.gov.uk/media/6895fbb63080e72710b2e2ef/nista_annual_report_data_2425.csv",
+          "sha256": "cac14ed4e6a90a81486bdc24295ea40996e7fd6fcd3834e3ffad8a2685f8c8b3",
+          "projectColumn": null,
+          "projectRecord": 185,
+          "narrativeField": "Schedule Narrative"
+        }
+      },
+      "prevProject": "Martlet",
+      "prevEndAsPublished": "2025-12-19 00:00:00",
+      "curEndAsPublished": "19/12/2025",
+      "matchedBy": "same GMPP ID in both releases"
+    },
+    {
+      "id": "PLH5-B37",
+      "gmppId": null,
+      "project": "NHS Pension Re-let",
+      "department": "DHSC",
+      "prevYear": 2018,
+      "year": 2019,
+      "prevEnd": "2017-07-21",
+      "curEnd": "2017-07-21",
+      "daysMoved": 0,
+      "narrative": "In August 2016 an Outline Business Case Addendum was approved to deliver a refined hybrid model so that the NHS Business Services Authority undertake Payroll Administration services in addition to Pensioner Administration, insourcing from the incumbent supplier with transitional support provided in line with contractual exit provisions. As such the project closure date of 21 July 2017 moved to 21 July 2018 (date that the existing contract expired plus one year's transitional support). Pensioner Administration and Payroll responsibilities transferred to the NHS Business Services Authority on 2 July 2018, completing the insourcing activities, and successfully delivering against the original programme objectives. The programme has remained on GMPP after closure pending independent assurance that the benefits have successfully been delivered",
+      "label": "published-date-check",
+      "why": "The published end stays at 21 July 2017, while the narrative explicitly says the project closure moved to 21 July 2018. The date field and closure commentary disagree.",
+      "source": {
+        "previous": {
+          "release": "2017-18",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2018",
+          "csv": "https://assets.publishing.service.gov.uk/media/5b3e2e2340f0b678bc5d018c/csv-ipa-government-major-projects-portfolio-data-september-2017.csv",
+          "sha256": "915cf52ff57a180c9f3989e9e29e56594efd81da1e66fa3757d66a145b71f726",
+          "projectColumn": 52,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2018-19",
+          "publication": "https://www.gov.uk/government/publications/infrastructure-and-projects-authority-annual-report-2019",
+          "csv": "https://assets.publishing.service.gov.uk/media/5d2dd08d40f0b64a8626b762/Annual_Report_on_Major_Projects_2018_to_2019__consolidated_data_and_narratives.csv",
+          "sha256": "c22caa602ec3a7d9cc64cb20d559dbd5dbd0b9ceae5b4184675f247138d5b8b8",
+          "projectColumn": 54,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "NHS Pension Re-let",
+      "prevEndAsPublished": "21/07/17",
+      "curEndAsPublished": "21/07/2017",
+      "matchedBy": "unique project name normalised for case, spacing and punctuation, with the same department"
+    },
+    {
+      "id": "PLH5-B38",
+      "gmppId": null,
+      "project": "NOMS ICTS Services (NIS) Programme (formally part of Quantum Re-compete Project)",
+      "department": "MOJ",
+      "prevYear": 2014,
+      "year": 2015,
+      "prevEnd": "2014-11-30",
+      "curEnd": "2014-11-30",
+      "daysMoved": 0,
+      "narrative": "Deployment of the main rollout activities was paused between August and December 2014, whilst significant performance issues were investigated and corrected. \n\nThe revised remediation plan agreed by the Programme Board, sets out the new phased approach to delivery. This has had significant impact on the schedule, moving the main rollout and programme closure into 2015/16. \n\nHowever, some aspects of the programme (printer deployment and Satellite replacement) have now been completed.",
+      "label": "published-date-check",
+      "why": "The published end stays at 30 November 2014, while the narrative explicitly moves programme closure into 2015/16. This is a later current closure period, not merely a dated intermediate rollout milestone.",
+      "source": {
+        "previous": {
+          "release": "2013-14",
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "sha256": "67cb811e8bf3f807ecee8cf177e36036bb6c0810a7c6f4077364cfebabb302a1",
+          "projectColumn": 188,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2014-15",
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2015",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a801db6ed915d74e33f88a0/GMPP_data_september_2014.csv",
+          "sha256": "addde3f42fb6e4408c30e62d8cf3bf32eb5267d10802e13b3718faf051aef117",
+          "projectColumn": 176,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "NOMS ICTS Services (NIS) Programme (formally part of Quantum Re-compete Project)",
+      "prevEndAsPublished": "30/11/2014",
+      "curEndAsPublished": "30/11/2014",
+      "matchedBy": "unique project name normalised for case, spacing and punctuation, with the same department"
+    },
+    {
+      "id": "PLH5-B39",
+      "gmppId": null,
+      "project": "Prison Competitions Phase 2",
+      "department": "MOJ",
+      "prevYear": 2014,
+      "year": 2015,
+      "prevEnd": "2014-01-31",
+      "curEnd": "2014-01-31",
+      "daysMoved": 0,
+      "narrative": "The Programme completed all its deliverables in December 2013. Following the standard MPA approach to assess costs and benefits, sufficient time operating under a new contract must be allowed before formal project closure can be achieved. An independent assurance review to assess delivery of benefits was undertaken in Autumn 2014, enabling formal closure in early 2015.",
+      "label": "published-date-check",
+      "why": "The published end stays at 31 January 2014. The narrative distinguishes December 2013 deliverables from formal closure in early 2015, so the unchanged end field warrants checking.",
+      "source": {
+        "previous": {
+          "release": "2013-14",
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "sha256": "67cb811e8bf3f807ecee8cf177e36036bb6c0810a7c6f4077364cfebabb302a1",
+          "projectColumn": 189,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2014-15",
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2015",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a801db6ed915d74e33f88a0/GMPP_data_september_2014.csv",
+          "sha256": "addde3f42fb6e4408c30e62d8cf3bf32eb5267d10802e13b3718faf051aef117",
+          "projectColumn": 177,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "Prison Competitions Phase 2",
+      "prevEndAsPublished": "31/01/2014",
+      "curEndAsPublished": "31/01/2014",
+      "matchedBy": "unique project name normalised for case, spacing and punctuation, with the same department"
+    },
+    {
+      "id": "PLH5-B40",
+      "gmppId": null,
+      "project": "Mersey Care NHS LIFT scheme (TIME - To Improve Mental Health Environments)",
+      "department": "DOH",
+      "prevYear": 2013,
+      "year": 2014,
+      "prevEnd": "2015-01-20",
+      "curEnd": "2015-01-20",
+      "daysMoved": 0,
+      "narrative": "Allowing for a post-completion review in June 2011, the end date for the first part of the Project (the completion of the \"Clock View\" building at Walton) is now December 2015.   The delay was chiefly attributable to delays in achieving approval and the securing of institutional funding. ",
+      "label": "published-date-check",
+      "why": "The published end stays at 20 January 2015, while the narrative says the first part of the project now ends in December 2015. Even that first-part completion is after the published whole-project end.",
+      "source": {
+        "previous": {
+          "release": "2012-13",
+          "publication": "https://www.gov.uk/government/publications/government-major-projects-portfolio-data-for-department-of-health-2013--2",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7cab85ed915d6969f46841/gmpp-data-DH-q2-2012-13.csv",
+          "sha256": "f631a2722cf4dbd3a8df742701cd21d8295297441e2f5af3ddfb458e9a359d33",
+          "projectColumn": 5,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        },
+        "current": {
+          "release": "2013-14",
+          "publication": "https://www.gov.uk/government/publications/major-projects-authority-annual-report-2014",
+          "csv": "https://assets.publishing.service.gov.uk/media/5a7ea47a40f0b62305b823ee/Government_Major_Projects_Portfolio_data__September_2013__CSV_.csv",
+          "sha256": "67cb811e8bf3f807ecee8cf177e36036bb6c0810a7c6f4077364cfebabb302a1",
+          "projectColumn": 61,
+          "projectRecord": null,
+          "narrativeField": "Departmental narrative on schedule, including any deviation from planned schedule (if necessary)"
+        }
+      },
+      "prevProject": "Mersey Care NHS LIFT scheme (TIME - To Improve Mental health Environments)",
+      "prevEndAsPublished": "20/01/2015",
+      "curEndAsPublished": "20/01/2015",
+      "matchedBy": "unique project name normalised for case, spacing and punctuation, with the same department",
+      "labelCaveat": "The commentary explicitly dates the first part of a phased project, rather than an unqualified whole-project closure. It still places that completion after the published project end, so this is a date check rather than an assertion that the whole project closes in December 2015."
+    }
+  ]
+}

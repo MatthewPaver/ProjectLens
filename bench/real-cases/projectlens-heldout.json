@@ -1,0 +1,943 @@
+{
+ "meta": {
+  "description": "Held-out GMPP pairs for ProjectLens narrative/date contradiction scoring. Not for tuning.",
+  "yearConvention": "prevYear/year use ProjectLens gmpp.json convention: year N = the release whose data is as at 31 Mar N (2020 = 2019-20 release, data as at 30 Sep 2019).",
+  "labelRules": {
+   "contradiction": "end date moved >14 days and the narrative says unchanged/the same, or names a current end date >14 days from the published one, without stating the actual move",
+   "explained": "end date moved >14 days and the narrative states the change",
+   "no-move": "published end date identical in both releases (daysMoved = 0)"
+  },
+  "narrativeVerbatim": "Narrative is the exact cell text from the current-year CSV (2019-20 and 2020-21 decoded as Windows-1252, others UTF-8), including line breaks, non-breaking spaces and any mojibake present in the source.",
+  "licence": "Contains public sector information licensed under the Open Government Licence v3.0."
+ },
+ "cases": [
+  {
+   "id": "PLH-B01",
+   "gmppId": "MOJ_0049_2021-Q1",
+   "project": "10,000 Additional Prison Places Programme - Estate Expansions",
+   "department": "MOJ",
+   "prevYear": 2021,
+   "year": 2022,
+   "prevRelease": "2020-21",
+   "release": "2021-22",
+   "prevEnd": "2027-03-30",
+   "curEnd": "2025-05-01",
+   "daysMoved": -698,
+   "narrative": "Compared to 20/21 Q4, the project end date has remained static.",
+   "label": "contradiction",
+   "why": "End date moved 698 days earlier (30 Mar 2027 -> 1 May 2025). The whole narrative says the end date 'has remained static' and states no change.",
+   "contradictionType": "claims-unchanged",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2021-22 (data as at 31 Mar 2022)",
+     "csv": "https://assets.publishing.service.gov.uk/media/62d6c047e90e071e753d6936/GMPP_Government_Major_Projects_Portfolio_AR_Data_March_2022.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2020-21 (data as at 31 Mar 2021)",
+     "csv": "https://assets.publishing.service.gov.uk/media/60eecae48fa8f50c7ca55af1/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2021.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B02",
+   "gmppId": "MOD_0104_1617-Q1",
+   "project": "Armour Main Battle Tank",
+   "department": "MOD",
+   "prevYear": 2020,
+   "year": 2021,
+   "prevRelease": "2019-20",
+   "release": "2020-21",
+   "prevEnd": "2028-07-31",
+   "curEnd": "2026-06-01",
+   "daysMoved": -791,
+   "narrative": "Compared to financial year 19/20-Q2, the project's end-date remained scheduled to finish on 01 June  2026  . This is primarily due to the following factors: \r\n\r\nSchedule dates have been revised during contract negotiation contract signature in March 21.  Key milestones (50% confidence) are: \r\n- Initial Operating Capability (1 squadron of 18 tanks with crews trained at appropriate collective training standard) - November 27.\r\n- Full Operating Capability (148 tanks delivered): November 30.\r\n\r\nThese dates are later than envisaged at Initial Gate.  This slip has arisen during contractual negotiations due to the perception in Industry of delivery and cost risk around the Design and Manufacture phases, reflecting that which has been witnessed from other projects.\r\n",
+   "label": "contradiction",
+   "why": "End date moved 791 days earlier (31 Jul 2028 -> 1 Jun 2026). The narrative says the end date 'remained scheduled to finish on 01 June 2026'. Its later text is about milestones (IOC, FOC) slipping later, not about the end date moving.",
+   "contradictionType": "claims-unchanged",
+   "doubt": "The narrative does say 'Schedule dates have been revised', but it ties that to milestones moving later, while the end date moved earlier. A lenient reader might count that as stating the move.",
+   "prevProject": "Armour MBT 2025",
+   "inTuningPairsFile": true,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2020-21 (data as at 31 Mar 2021)",
+     "csv": "https://assets.publishing.service.gov.uk/media/60eecae48fa8f50c7ca55af1/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2021.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B03",
+   "gmppId": "MOD_0104_1617-Q1",
+   "project": "Armour MBT",
+   "department": "MOD",
+   "prevYear": 2023,
+   "year": 2024,
+   "prevRelease": "2022-23",
+   "release": "2023-24",
+   "prevEnd": "2031-05-22",
+   "curEnd": "2030-06-30",
+   "daysMoved": -326,
+   "narrative": "Compared to financial year 22/23-Q4, the project's end-date at 23/24-Q4 remained scheduled to finish on 2030-06-30. This is primarily due to the following factors. The programme remains on track to achieve its key milestones. These are. Initial Operating Capability (1 Squadron of tanks with crews trained to the appropriate standard and held at readiness) â€“ November 2027. Full Operating Capability (148 tanks delivered and all Key User Requirements met subject to subsequent approvals). November 2030. The platform Critical Design Review was achieved in January 2023 providing confidence in the design and readiness for the next phases of delivery. ",
+   "label": "contradiction",
+   "why": "End date moved 326 days earlier (22 May 2031 -> 30 Jun 2030). The narrative says it 'remained scheduled to finish on 2030-06-30' and 'remains on track'. No move is stated.",
+   "contradictionType": "claims-unchanged",
+   "prevProject": "Armour MBT 2025",
+   "inTuningPairsFile": true,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2023-24 (data as at 31 Mar 2024)",
+     "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2022-23 (data as at 31 Mar 2023)",
+     "csv": "https://assets.publishing.service.gov.uk/media/64b79c5171749c001389ee41/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2023.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B04",
+   "gmppId": "MOD_0121_2021-Q4",
+   "project": "Collective Training Transformation Programme",
+   "department": "MOD",
+   "prevYear": 2023,
+   "year": 2024,
+   "prevRelease": "2022-23",
+   "release": "2023-24",
+   "prevEnd": "2040-03-31",
+   "curEnd": "2032-03-31",
+   "daysMoved": -2922,
+   "narrative": "Compared to financial year 22/23-Q4, the programme's end-date at 23/24-Q4 remained scheduled to finish on 2032-03-31. ",
+   "label": "contradiction",
+   "why": "End date moved 2,922 days earlier (31 Mar 2040 -> 31 Mar 2032). The one-sentence narrative says it 'remained scheduled to finish on 2032-03-31'.",
+   "contradictionType": "claims-unchanged",
+   "inTuningPairsFile": true,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2023-24 (data as at 31 Mar 2024)",
+     "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2022-23 (data as at 31 Mar 2023)",
+     "csv": "https://assets.publishing.service.gov.uk/media/64b79c5171749c001389ee41/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2023.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B05",
+   "gmppId": "MOD_0091_1415-Q3",
+   "project": "Armoured Cavalry 2025",
+   "department": "MOD",
+   "prevYear": 2023,
+   "year": 2024,
+   "prevRelease": "2022-23",
+   "release": "2023-24",
+   "prevEnd": "2030-03-31",
+   "curEnd": "2025-04-30",
+   "daysMoved": -1796,
+   "narrative": "Compared to financial year 22/23-Q4, the project's end-date at 23/24-Q4 remained scheduled to finish on 2025-04-30. This is primarily due to the following factors.  A jointly agreed, risk adjusted reset schedule is in place out to Full Operating Capability; the programme is operating to this pending formal approval of the schedule by the department and HM Treasury. ",
+   "label": "contradiction",
+   "why": "End date moved 1,796 days earlier (31 Mar 2030 -> 30 Apr 2025). The narrative says it 'remained scheduled to finish on 2025-04-30'.",
+   "contradictionType": "claims-unchanged",
+   "doubt": "It also mentions 'a jointly agreed, risk adjusted reset schedule' that is pending approval. That signals schedule change but does not say the end date moved. The published date returned to the value from two releases earlier.",
+   "inTuningPairsFile": true,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2023-24 (data as at 31 Mar 2024)",
+     "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2022-23 (data as at 31 Mar 2023)",
+     "csv": "https://assets.publishing.service.gov.uk/media/64b79c5171749c001389ee41/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2023.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B06",
+   "gmppId": "FCO_0010_1617-Q3",
+   "project": "Echo 2 Programme",
+   "department": "FCDO",
+   "prevYear": 2023,
+   "year": 2024,
+   "prevRelease": "2022-23",
+   "release": "2023-24",
+   "prevEnd": "2024-07-31",
+   "curEnd": "2025-01-23",
+   "daysMoved": 176,
+   "narrative": "The current forecast end date for the Programme is Q4 23/24 following the re-baselining in January 2024 as a result of significant delays to the design, build and test phase. The authority has been working closely with the suppliers to increase confidence in this revised delivery timeline. \n\nDespite the delays the Programme remains within the FBC approved spend envelope despite the delayed profile for benefits realisation.",
+   "label": "contradiction",
+   "why": "End date moved 176 days later (31 Jul 2024 -> 23 Jan 2025). The narrative names the current forecast end date as 'Q4 23/24' (by 31 Mar 2024). That is about 300 days before the published date, and earlier even than the previous one.",
+   "contradictionType": "names-different-date",
+   "doubt": "It mentions 're-baselining in January 2024' because of delays, so it states that a change happened, but to a date that contradicts the column. 'Q4 23/24' may be a typo for Q4 24/25. Labelled 'contradiction' because the stated current end date is wrong by more than 14 days.",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2023-24 (data as at 31 Mar 2024)",
+     "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2022-23 (data as at 31 Mar 2023)",
+     "csv": "https://assets.publishing.service.gov.uk/media/64b79c5171749c001389ee41/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2023.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B07",
+   "gmppId": "MOD_0136_2122-Q1",
+   "project": "Naval Support Integrated Global Network (NSIGN)",
+   "department": "MOD",
+   "prevYear": 2023,
+   "year": 2024,
+   "prevRelease": "2022-23",
+   "release": "2023-24",
+   "prevEnd": "2029-05-22",
+   "curEnd": "2030-03-22",
+   "daysMoved": 304,
+   "narrative": "Compared to financial year 22/23-Q4, the project's end-date at 23/24-Q4 increased from 2029-03-22 to 2029-09-25. This is primarily due to the following factors. Changes in key milestones reflect the delay on transition to the Concept Phase, as a result of a protracted Strategic Outline Case approval and the reality of a Programme early in the scoping and solution design phase. \n ",
+   "label": "contradiction",
+   "why": "End date moved 304 days later (22 May 2029 -> 22 Mar 2030). The narrative says it 'increased from 2029-03-22 to 2029-09-25', which is 178 days before the published current date. The 'from' date also differs from the published previous date.",
+   "contradictionType": "names-different-date",
+   "doubt": "The narrative states an increase, but not the published one. It is a contradiction only under the 'names a different date' rule.",
+   "inTuningPairsFile": true,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2023-24 (data as at 31 Mar 2024)",
+     "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2022-23 (data as at 31 Mar 2023)",
+     "csv": "https://assets.publishing.service.gov.uk/media/64b79c5171749c001389ee41/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2023.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B08",
+   "gmppId": "CO_0024_2021-Q2",
+   "project": "Civil Service Pensions 2015 Remedy",
+   "department": "CO",
+   "prevYear": 2024,
+   "year": 2025,
+   "prevRelease": "2023-24",
+   "release": "2024-25",
+   "prevEnd": "2024-09-30",
+   "curEnd": "2024-06-30",
+   "daysMoved": -92,
+   "narrative": "Compared to financial year 23/24-Q4, the project's end-date at 24/25-Q4 changed from 30/07/2024 to 30/06/2025. This is primarily due to the following factors; the original programme closure date was predicated on the associated legislation being in place in 2022.  The scheme regulations needed to remediate members did not come into force until 1 October 2023 which gave schemes 18 months to provide members with a choice i.e. 31 March 2025.\nFollowing our IPA review in February 2024 it was agreed that the Programme should be extended to 30 June 2025 then move to a portfolio delivery for the remaining 4 projects",
+   "label": "contradiction",
+   "why": "The published end date moved 92 days earlier (30 Sep 2024 -> 30 Jun 2024). The narrative says it 'changed from 30/07/2024 to 30/06/2025' and was 'extended to 30 June 2025': a later date, 365 days after the published current date.",
+   "contradictionType": "names-different-date",
+   "doubt": "Probably a year typo in the published End Date column. The narrative states a change, but in the opposite direction and to a different date. Labelled 'contradiction' because the narrative and the column disagree by a year.",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "NISTA Annual Report 2024-25 (data as at 31 Mar 2025)",
+     "csv": "https://assets.publishing.service.gov.uk/media/6895fbb63080e72710b2e2ef/nista_annual_report_data_2425.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2023-24 (data as at 31 Mar 2024)",
+     "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B09",
+   "gmppId": "FCO_0012_1718-Q4",
+   "project": "Hera Programme",
+   "department": "FCDO",
+   "prevYear": 2020,
+   "year": 2021,
+   "prevRelease": "2019-20",
+   "release": "2020-21",
+   "prevEnd": "2021-10-31",
+   "curEnd": "2022-10-31",
+   "daysMoved": 365,
+   "narrative": "Compared to financial year 19/20-Q2, the project's end-date increased from 31 October 2021  to 31 October 2022 . This is primarily due to the following factors: The scheduled end date for the Hera programme is October 2022; the creation of FCDO from the former FCO and DFiD increased the scope and timeline compared to the previous Atlas programme. The programme has updated its release schedule accordingly, and is currently  on track against its baselined plans for delivering the first implementation in 2021 as planned, with further functionality to be rolled out in phases accross 2022.",
+   "label": "explained",
+   "why": "Moved 365 days later. The narrative states 'end-date increased from 31 October 2021 to 31 October 2022' and gives the reason (FCDO merger). 'On track against its baselined plans' refers to releases, not the end date.",
+   "prevProject": "Atlas Programme (IPA ID 2410)",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2020-21 (data as at 31 Mar 2021)",
+     "csv": "https://assets.publishing.service.gov.uk/media/60eecae48fa8f50c7ca55af1/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2021.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B10",
+   "gmppId": "DFT_0029_1617-Q1",
+   "project": "South West Route Capacity",
+   "department": "DFT",
+   "prevYear": 2020,
+   "year": 2021,
+   "prevRelease": "2019-20",
+   "release": "2020-21",
+   "prevEnd": "2019-12-31",
+   "curEnd": "2021-08-31",
+   "daysMoved": 609,
+   "narrative": "Compared to financial year 19/20-Q2, the project's end-date increased from 31 December 2019  to 31 August 2021 . This is primarily due to the following factors: The SWRC Programme has successfully completed all of its delivery milestones on schedule. The end-date was extended to August 2021 to account for internal governance and assurance activities.",
+   "label": "explained",
+   "why": "Moved 609 days later. The narrative states the increase to 31 August 2021 and 'The end-date was extended to August 2021'. 'Milestones on schedule' is about delivery milestones.",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2020-21 (data as at 31 Mar 2021)",
+     "csv": "https://assets.publishing.service.gov.uk/media/60eecae48fa8f50c7ca55af1/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2021.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B11",
+   "gmppId": "DCMS_0011_1718-Q3",
+   "project": "5G Testbeds & Trials",
+   "department": "DCMS",
+   "prevYear": 2020,
+   "year": 2021,
+   "prevRelease": "2019-20",
+   "release": "2020-21",
+   "prevEnd": "2021-03-31",
+   "curEnd": "2022-03-31",
+   "daysMoved": 365,
+   "narrative": "Compared to financial year 19/20-Q2, the project's end-date increased from 31 March 2021  to 31 March 2022 . This is primarily due to the following factors: The Programme was granted an extension, and is scheduled to close 31 March 2022. The Programme currently remains on track to deliver and complete all projects by this date. However, it has been identified that the Programme would benefit from an extension of a further year to allow for a longer window for benefits to be realised. The team has also outlined key roles required to carry out post-project closure activities to ensure the Programme closes in a successful, controlled manner in the six month period following Programme closure if an extension were not permitted.",
+   "label": "explained",
+   "why": "Moved 365 days later. The narrative states the increase to 31 March 2022 and 'The Programme was granted an extension'. 'Remains on track... by this date' refers to the new date.",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2020-21 (data as at 31 Mar 2021)",
+     "csv": "https://assets.publishing.service.gov.uk/media/60eecae48fa8f50c7ca55af1/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2021.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B12",
+   "gmppId": "NCA_0001_1415-Q2",
+   "project": "NCA Transformation Portfolio",
+   "department": "NCA",
+   "prevYear": 2021,
+   "year": 2022,
+   "prevRelease": "2020-21",
+   "release": "2021-22",
+   "prevEnd": "2022-03-31",
+   "curEnd": "2030-03-31",
+   "daysMoved": 2922,
+   "narrative": "Compared to 2021-Q4, your project end-date increased from 31 MAR 2022  to 31 MAR 2030 . This is primarily due to the following factors: The NCA Transformation Portfolio continues to run in line with the Business Case date of 31/03/2030  with an IPA strategic review (Gate 0) and Illicit Finance closure (Gate 5) planned from 4th - 8th April 2022. Our 2022/23 Spending Review Bid has been submitted and we achieved funding of our Data, Digital and Technology Programme. In August 2021 a decision was taken by our Change Committee to move our Portfolio to \"Red\" position due to risks and low confidence in delivery plans and financial forecasts from programmes, pending HMT approval of the IF and Portfolio FY 21/22 Business Cases, lack of clarity on dependencies, delivery performance and benefits. Since then we have introduced more rigour and implemented forums in  conjunction with Commercial and Finance to address concerns highlighted above .",
+   "label": "explained",
+   "why": "Moved 2,922 days later. The narrative states 'end-date increased from 31 MAR 2022 to 31 MAR 2030'. 'Continues to run in line with the Business Case date of 31/03/2030' matches the new date.",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2021-22 (data as at 31 Mar 2022)",
+     "csv": "https://assets.publishing.service.gov.uk/media/62d6c047e90e071e753d6936/GMPP_Government_Major_Projects_Portfolio_AR_Data_March_2022.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2020-21 (data as at 31 Mar 2021)",
+     "csv": "https://assets.publishing.service.gov.uk/media/60eecae48fa8f50c7ca55af1/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2021.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B13",
+   "gmppId": "MOJ_0044_1920-Q2",
+   "project": "Prison Technology Transformation Programme (PTTP)",
+   "department": "MOJ",
+   "prevYear": 2021,
+   "year": 2022,
+   "prevRelease": "2020-21",
+   "release": "2021-22",
+   "prevEnd": "2023-08-31",
+   "curEnd": "2023-12-31",
+   "daysMoved": 122,
+   "narrative": "Compared to 2021-Q4, your project end-date increased from 31 AUG 2023  to 31 DEC 2023 . This is primarily due to the following factors: \r\nThis aligns to the end date for the existing supplier contracts in August 2023, and accounts for programme closure assurance activity following this contract exit delivery. Contract exit remains on schedule for August 2023, aligned to the schedule outlined in the Programme Business Case (PBC).",
+   "label": "explained",
+   "why": "Moved 122 days later. The narrative states the increase from 31 Aug 2023 to 31 Dec 2023. 'Contract exit remains on schedule for August 2023' is a different milestone (supplier contract exit), not the end date.",
+   "doubt": "Names August 2023 (the old end date) for a different milestone. A date-matching checker might pick it up wrongly.",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2021-22 (data as at 31 Mar 2022)",
+     "csv": "https://assets.publishing.service.gov.uk/media/62d6c047e90e071e753d6936/GMPP_Government_Major_Projects_Portfolio_AR_Data_March_2022.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2020-21 (data as at 31 Mar 2021)",
+     "csv": "https://assets.publishing.service.gov.uk/media/60eecae48fa8f50c7ca55af1/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2021.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B14",
+   "gmppId": "DFT_0034_1920-Q2",
+   "project": "A12 Chelmsford to A120 Widening",
+   "department": "DFT",
+   "prevYear": 2021,
+   "year": 2022,
+   "prevRelease": "2020-21",
+   "release": "2021-22",
+   "prevEnd": "2028-08-31",
+   "curEnd": "2028-07-31",
+   "daysMoved": -31,
+   "narrative": "Compared to 2021-Q4, your project end-date decreased from 31 AUG 2028  to 31 JUL 2028 . This is primarily due to the following factors: \"The project schedule has an approved baseline position of July 2028 for the project end date and a current forecasted project end date of October 2028. This milestone is not the same as the forecasted date for the road to be open to traffic following the improvements which is December 2027. This is the point at which the post-construction benefits will be begin to be realised.  \r\n\r\nWithin the year, the project has seen slippage to interim milestones including DCO application submission as supplementary consultations were required to ensure stakeholders were informed of design amendments.\"",
+   "label": "explained",
+   "why": "Moved 31 days earlier. The narrative states 'decreased from 31 AUG 2028 to 31 JUL 2028' and an approved baseline end date of July 2028.",
+   "doubt": "It also gives a current forecast end date of October 2028 (92 days after the published approved date). The column is 'Latest Approved End Date', which matches the stated approved baseline.",
+   "prevProject": "A12 Chelmsford to A120 widening",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2021-22 (data as at 31 Mar 2022)",
+     "csv": "https://assets.publishing.service.gov.uk/media/62d6c047e90e071e753d6936/GMPP_Government_Major_Projects_Portfolio_AR_Data_March_2022.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2020-21 (data as at 31 Mar 2021)",
+     "csv": "https://assets.publishing.service.gov.uk/media/60eecae48fa8f50c7ca55af1/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2021.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B15",
+   "gmppId": "HO_0040_1920-Q4",
+   "project": "Suspicious Activity Reports (SARS) Reform",
+   "department": "HO",
+   "prevYear": 2022,
+   "year": 2023,
+   "prevRelease": "2021-22",
+   "release": "2022-23",
+   "prevEnd": "2024-04-02",
+   "curEnd": "2024-07-01",
+   "daysMoved": 90,
+   "narrative": "Compared to financial year 21/22-Q4, the project's end-date at 22/23-Q4 increased from 2024-04-02 to 2024-07-01. This is primarily due to the following factors.\n  The programme's delivery of its outcomes and benefits remains on-track.  The IT Transformation's Bulk Release successfully went live in March 23; the UK Financial Intelligence Unit (UKFIU) expansion was also successfully delivered in March 23.The remaining SARs IT service delivery went through a re-planning exercise which led to the project end date shifting by 3 months - it is now in the Discovery phase. Alpha and Beta phase(s) are on track.",
+   "label": "explained",
+   "why": "Moved 90 days later. The narrative states the increase and that re-planning 'led to the project end date shifting by 3 months'. 'Remains on-track' is about outcomes and benefits.",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2022-23 (data as at 31 Mar 2023)",
+     "csv": "https://assets.publishing.service.gov.uk/media/64b79c5171749c001389ee41/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2023.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2021-22 (data as at 31 Mar 2022)",
+     "csv": "https://assets.publishing.service.gov.uk/media/62d6c047e90e071e753d6936/GMPP_Government_Major_Projects_Portfolio_AR_Data_March_2022.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B16",
+   "gmppId": "MOJ_0051_2021-Q2",
+   "project": "PFI Prison Expiry and Transfer Tranche 1",
+   "department": "MOJ",
+   "prevYear": 2022,
+   "year": 2023,
+   "prevRelease": "2021-22",
+   "release": "2022-23",
+   "prevEnd": "2023-09-30",
+   "curEnd": "2024-01-20",
+   "daysMoved": 112,
+   "narrative": "Compared to financial year 21/22-Q4, the project's end-date at 22/23-Q4 increased from 2023-09-30 to 2024-01-20. This is primarily due to the following factors.\nThe programme schedule has been re-baselined and delivery is on now track.",
+   "label": "explained",
+   "why": "Moved 112 days later. The narrative states the increase to 2024-01-20 and that the schedule 'has been re-baselined' before saying delivery is 'on now track'.",
+   "prevProject": "PFI Prisons Expiry & Transfer Project",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2022-23 (data as at 31 Mar 2023)",
+     "csv": "https://assets.publishing.service.gov.uk/media/64b79c5171749c001389ee41/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2023.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2021-22 (data as at 31 Mar 2022)",
+     "csv": "https://assets.publishing.service.gov.uk/media/62d6c047e90e071e753d6936/GMPP_Government_Major_Projects_Portfolio_AR_Data_March_2022.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B17",
+   "gmppId": "HO_0041_2021-Q3",
+   "project": "Police Uplift Programme",
+   "department": "HO",
+   "prevYear": 2022,
+   "year": 2023,
+   "prevRelease": "2021-22",
+   "release": "2022-23",
+   "prevEnd": "2024-03-31",
+   "curEnd": "2023-09-30",
+   "daysMoved": -183,
+   "narrative": "Compared to financial year 21/22-Q4, the project's end-date at 22/23-Q4 decreased from 2024-03-31 to 2023-09-30. This is primarily due to the following factors.\n  Policing has recruited the additional officers, as scheduled. The programme is continuing preparations for closure, as planned, by the end of Quarter 2 23/24.",
+   "label": "explained",
+   "why": "Moved 183 days earlier. The narrative states 'decreased from 2024-03-31 to 2023-09-30'. 'As scheduled' and 'as planned' refer to recruitment and closure.",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2022-23 (data as at 31 Mar 2023)",
+     "csv": "https://assets.publishing.service.gov.uk/media/64b79c5171749c001389ee41/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2023.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2021-22 (data as at 31 Mar 2022)",
+     "csv": "https://assets.publishing.service.gov.uk/media/62d6c047e90e071e753d6936/GMPP_Government_Major_Projects_Portfolio_AR_Data_March_2022.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B18",
+   "gmppId": "FCO_0011_1718-Q3",
+   "project": "Washington Embassy Refurbishment",
+   "department": "FCDO",
+   "prevYear": 2023,
+   "year": 2024,
+   "prevRelease": "2022-23",
+   "release": "2023-24",
+   "prevEnd": "2023-08-01",
+   "curEnd": "2024-09-30",
+   "daysMoved": 426,
+   "narrative": "The project's end-date at 23/24-Q4 is 2024-09-30. This is primarily due to the following factors. \n\n Original programme set pre-Covid and revised to take account of subsequent delays/supply chain issues",
+   "label": "explained",
+   "why": "Moved 426 days later. No 'increased from' template sentence. The narrative gives the new date (2024-09-30) and says the programme was 'revised to take account of subsequent delays/supply chain issues'.",
+   "doubt": "States the change only in paraphrase ('revised... delays'), with no old date.",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2023-24 (data as at 31 Mar 2024)",
+     "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2022-23 (data as at 31 Mar 2023)",
+     "csv": "https://assets.publishing.service.gov.uk/media/64b79c5171749c001389ee41/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2023.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B19",
+   "gmppId": "HMRC_0033_2122-Q3",
+   "project": "Unique Customer Record",
+   "department": "HMRC",
+   "prevYear": 2023,
+   "year": 2024,
+   "prevRelease": "2022-23",
+   "release": "2023-24",
+   "prevEnd": "2024-05-07",
+   "curEnd": "2025-03-31",
+   "daysMoved": 328,
+   "narrative": "Compared to financial year 22/23-Q4, the project's end-date at 23/24-Q4 increased from 2024-05-07 to 2025-03-31. This is primarily due to the following factors. \n\n The programme is now more mature in its lifecycle and has more accurate plans. This is reflected in the current programme end date which the programme remains on track to meet.",
+   "label": "explained",
+   "why": "Moved 328 days later. The narrative states 'increased from 2024-05-07 to 2025-03-31'. 'Remains on track to meet' refers to the current (new) end date.",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2023-24 (data as at 31 Mar 2024)",
+     "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2022-23 (data as at 31 Mar 2023)",
+     "csv": "https://assets.publishing.service.gov.uk/media/64b79c5171749c001389ee41/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2023.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B20",
+   "gmppId": "HO_0044_2021-Q4",
+   "project": "Passport Transformation Programme",
+   "department": "HO",
+   "prevYear": 2023,
+   "year": 2024,
+   "prevRelease": "2022-23",
+   "release": "2023-24",
+   "prevEnd": "2023-03-31",
+   "curEnd": "2025-04-30",
+   "daysMoved": 761,
+   "narrative": "The project's end-date at 23/24-Q4 is 2025-04-30. This is primarily due to the following factors. \n\n Compared to 2023 Q4, Passport Transformation Programme has increased forecasted end date from 31 March 2025 to 30 April 2025. This is primarily due to the  inclusion of the Priority Service capability within the scope of the programme.",
+   "label": "explained",
+   "why": "Moved 761 days later. The narrative gives the new date (2025-04-30) and says the programme 'has increased forecasted end date from 31 March 2025 to 30 April 2025' because of added scope.",
+   "doubt": "The 'from' date it states (31 Mar 2025) is not the published previous date (31 Mar 2023), but the move and the new date match the column.",
+   "prevProject": "HMPO Transformation",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2023-24 (data as at 31 Mar 2024)",
+     "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2022-23 (data as at 31 Mar 2023)",
+     "csv": "https://assets.publishing.service.gov.uk/media/64b79c5171749c001389ee41/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2023.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B21",
+   "gmppId": "CO_0014_2122-Q2",
+   "project": "National Underground Asset Register (NUAR)",
+   "department": "DSIT",
+   "prevYear": 2024,
+   "year": 2025,
+   "prevRelease": "2023-24",
+   "release": "2024-25",
+   "prevEnd": "2024-09-30",
+   "curEnd": "2026-03-31",
+   "daysMoved": 547,
+   "narrative": "Compared to financial year 23/24-Q4, the project's end-date at 24/25-Q4 increased from 31/03/2025 to 31/03/2026. This is primarily due to the following factors‚\nThe programme competed the development of the NUAR service and transitioned it to the appointed long-term operator by 31/03/25, within the approved schedule. Commitments to move to Public Beta by spring 2025, and to be fully operational by the end of 2025 remain on schedule.\n\nThe programme has received approval to extend by an additional 12 months to oversee the delivery of Public Beta and Fully Operational commitments, the progression of legislative measures, and to explore, through extensive stakeholder engagement and robust testing, if and how additional benefits could be delivered by increasing access to NUAR data.\n\nThis funding extension has, in part, been necessitated by fall of the Data Protection and Digital Identity Bill after the general election was called in May 2024. This meant a new Bill was required to pass the NUAR measures through parliament, extending timelines, which is required to full operationalise the service and fully realise the envisaged benefits.",
+   "label": "explained",
+   "why": "Moved 547 days later. The narrative states 'increased from 31/03/2025 to 31/03/2026' and that the programme 'has received approval to extend by an additional 12 months'. 'Remain on schedule' refers to Public Beta commitments.",
+   "doubt": "The 'from' date (31/03/2025) differs from the published previous date (30/09/2024); the new date matches.",
+   "prevProject": "National Underground Asset Register",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "NISTA Annual Report 2024-25 (data as at 31 Mar 2025)",
+     "csv": "https://assets.publishing.service.gov.uk/media/6895fbb63080e72710b2e2ef/nista_annual_report_data_2425.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2023-24 (data as at 31 Mar 2024)",
+     "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B22",
+   "gmppId": "HMRC_0291_2324-Q3",
+   "project": "VOA Business Systems Transformation (BST) Council Tax",
+   "department": "VOA",
+   "prevYear": 2024,
+   "year": 2025,
+   "prevRelease": "2023-24",
+   "release": "2024-25",
+   "prevEnd": "2026-03-31",
+   "curEnd": "2025-06-30",
+   "daysMoved": -274,
+   "narrative": "Compared to financial year 23/24-Q4, the project's end-date at 24/25-Q4 decreased from 31/03/2026 to 30/06/2025. This is primarily due to the following factors‚\nThe programme delivery schedule reduced from March 2026 to June 2025, to reflect the removal of Non-Domestic Rates deliverables. A new programme has been established which is now accountable for the scope that was removed from BST. ",
+   "label": "explained",
+   "why": "Moved 274 days earlier. The narrative states 'decreased from 31/03/2026 to 30/06/2025' because scope was removed.",
+   "prevProject": "VOA Business Systems Transformation",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "NISTA Annual Report 2024-25 (data as at 31 Mar 2025)",
+     "csv": "https://assets.publishing.service.gov.uk/media/6895fbb63080e72710b2e2ef/nista_annual_report_data_2425.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2023-24 (data as at 31 Mar 2024)",
+     "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B23",
+   "gmppId": "DFE_0006_1415-Q3",
+   "project": "Priority School Building Programme 2",
+   "department": "DFE",
+   "prevYear": 2020,
+   "year": 2021,
+   "prevRelease": "2019-20",
+   "release": "2020-21",
+   "prevEnd": "2025-02-25",
+   "curEnd": "2025-02-25",
+   "daysMoved": 0,
+   "narrative": "Compared to financial year 19/20-Q2, the project's end-date remained scheduled to finish on 25 February  2025  . This is primarily due to the following factors: The programme scheduled end date remains unchanged.",
+   "label": "no-move",
+   "why": "Published end date unchanged (25 Feb 2025). The narrative also says it is unchanged.",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2020-21 (data as at 31 Mar 2021)",
+     "csv": "https://assets.publishing.service.gov.uk/media/60eecae48fa8f50c7ca55af1/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2021.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B24",
+   "gmppId": "DFID_0001_1112-Q1",
+   "project": "St Helena Airport",
+   "department": "FCDO",
+   "prevYear": 2020,
+   "year": 2021,
+   "prevRelease": "2019-20",
+   "release": "2020-21",
+   "prevEnd": "2026-08-31",
+   "curEnd": "2026-08-31",
+   "daysMoved": 0,
+   "narrative": "Compared to financial year 19/20-Q2, the project's end-date remained scheduled to finish on 31 August  2026  . This is primarily due to the following factors: The scheduled baseline project end date remains 31/08/26, has not changed since last year.  The construction of the airport was completed on schedule with the airport receiving certification during May 2016. St Helena's commercial air service made a strong start since commencing on 14 October 2017. - The department hopes to close the project when firm plans are in place for the completion of outstanding infrastructure works. The following non-project operating environment activities have impacted the project: The COVID 19 pandemic has delayed the Department progressing the workstream that will find the most cost-effective way to bring outstanding capital works to completion. The Department has focused its efforts to ensuring St Helena Government has the resources it needs to respond to COVID 19. We return to this issue as soon as we have resources to do so.",
+   "label": "no-move",
+   "why": "Published end date unchanged (31 Aug 2026). The narrative says 'has not changed since last year'.",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2020-21 (data as at 31 Mar 2021)",
+     "csv": "https://assets.publishing.service.gov.uk/media/60eecae48fa8f50c7ca55af1/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2021.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B25",
+   "gmppId": "MOJ_0028_1314-Q2",
+   "project": "HMCTS Reform",
+   "department": "MOJ",
+   "prevYear": 2020,
+   "year": 2021,
+   "prevRelease": "2019-20",
+   "release": "2020-21",
+   "prevEnd": "2023-12-31",
+   "curEnd": "2023-12-31",
+   "daysMoved": 0,
+   "narrative": "Compared to financial year 19/20-Q2, the project's end-date increased from 31 March 2020  to 31 December 2023 . This is primarily due to the following factors: There has been no change to the projected end date.",
+   "label": "no-move",
+   "why": "Published end date unchanged (31 Dec 2023 in both releases). The template sentence claims 'increased from 31 March 2020 to 31 December 2023', then says 'There has been no change to the projected end date'.",
+   "doubt": "False-positive test: the narrative states a move that the published dates do not show.",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2020-21 (data as at 31 Mar 2021)",
+     "csv": "https://assets.publishing.service.gov.uk/media/60eecae48fa8f50c7ca55af1/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2021.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2019-20 (data as at 30 Sep 2019)",
+     "csv": "https://assets.publishing.service.gov.uk/media/5f05de523a6f40041036a2ec/GMPP_Government_Major_Projects_Portfolio_data_September_2019.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B26",
+   "gmppId": "FCO_0012_1718-Q4",
+   "project": "Hera Programme",
+   "department": "FCDO",
+   "prevYear": 2021,
+   "year": 2022,
+   "prevRelease": "2020-21",
+   "release": "2021-22",
+   "prevEnd": "2022-10-31",
+   "curEnd": "2022-10-31",
+   "daysMoved": 0,
+   "narrative": "Compared to 2021-Q4, your project end-date remained scheduled to finish on 31 OCT  2022  . This is primarily due to the following factors: The scheduled end date for the Hera programme has been extended until January 2023; this follows issues which emerged in the planned late Autumn release of Hera which resulted in a re-planning exercise.  The programme has updated its release schedule accordingly, and is currently  on track against its baselined plans for delivering the a phased implementation in the summer and late Autumn 2022.",
+   "label": "no-move",
+   "why": "Published end date unchanged (31 Oct 2022). The narrative says it 'remained scheduled to finish on 31 OCT 2022', then that the end date 'has been extended until January 2023'.",
+   "doubt": "The narrative contradicts itself and claims a move the column does not show. No finish movement, so not a contradiction under ProjectLens's rule.",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2021-22 (data as at 31 Mar 2022)",
+     "csv": "https://assets.publishing.service.gov.uk/media/62d6c047e90e071e753d6936/GMPP_Government_Major_Projects_Portfolio_AR_Data_March_2022.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2020-21 (data as at 31 Mar 2021)",
+     "csv": "https://assets.publishing.service.gov.uk/media/60eecae48fa8f50c7ca55af1/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2021.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B27",
+   "gmppId": "HO_0029_1314-Q4",
+   "project": "Immigration Platform Technologies (IPT)",
+   "department": "HO",
+   "prevYear": 2021,
+   "year": 2022,
+   "prevRelease": "2020-21",
+   "release": "2021-22",
+   "prevEnd": "2021-10-29",
+   "curEnd": "2021-10-29",
+   "daysMoved": 0,
+   "narrative": "Compared to 2021-Q4, your project end-date remained scheduled to finish on 29 OCT  2021  . This is primarily due to the following factors: The Programme end date has been delayed primarily due to challenges faced in: delivering the Data and Management Information elements of the programme, which were underestimated; the new work relating to  Afghan resettlement;  British National Overseas changes (specifically for Hong Kong); and the need for changes to allow for refugees from the Ukraine to be granted visas using Atlas.  These new priorities and emerging demand have resulted in additional scope to the wider Immigration Portfolio, which has in turn impacted IPT, placing additional demands on the programme team, delaying testing activity across a range of services and slowing down the roll-out activity.   \nThe programme plan has been reviewed and revised, resulting in a longer delivery timeframe.",
+   "label": "no-move",
+   "why": "Published end date unchanged (29 Oct 2021, already in the past). The narrative says 'The Programme end date has been delayed' and the plan was revised.",
+   "doubt": "As above: the narrative claims a delay that the column does not show.",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2021-22 (data as at 31 Mar 2022)",
+     "csv": "https://assets.publishing.service.gov.uk/media/62d6c047e90e071e753d6936/GMPP_Government_Major_Projects_Portfolio_AR_Data_March_2022.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2020-21 (data as at 31 Mar 2021)",
+     "csv": "https://assets.publishing.service.gov.uk/media/60eecae48fa8f50c7ca55af1/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2021.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B28",
+   "gmppId": "DEFRA_0010_2021-Q3",
+   "project": "Leeds Phase 2 Flood Scheme",
+   "department": "DEFRA",
+   "prevYear": 2022,
+   "year": 2023,
+   "prevRelease": "2021-22",
+   "release": "2022-23",
+   "prevEnd": "2024-10-18",
+   "curEnd": "2024-10-18",
+   "daysMoved": 0,
+   "narrative": "Compared to financial year 21/22-Q4, the project's end-date at 22/23-Q4 remained schedule to finish on 2024-10-18. This is primarily due to the following factors.\n  Unforeseen delays have been experienced when finding a temporary works solution for a listed structure and whilst mitigation measures have been implemented, the project completion date has changed by 15 weeks. The overall design and construction works are approximately 85% through the programme.",
+   "label": "no-move",
+   "why": "Published end date unchanged (18 Oct 2024). The narrative says it remained on that date but that 'the project completion date has changed by 15 weeks'.",
+   "doubt": "As above: the narrative states a change that the column does not show.",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2022-23 (data as at 31 Mar 2023)",
+     "csv": "https://assets.publishing.service.gov.uk/media/64b79c5171749c001389ee41/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2023.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2021-22 (data as at 31 Mar 2022)",
+     "csv": "https://assets.publishing.service.gov.uk/media/62d6c047e90e071e753d6936/GMPP_Government_Major_Projects_Portfolio_AR_Data_March_2022.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B29",
+   "gmppId": "DCMS_0008_1516-Q4",
+   "project": "Blythe House Programme",
+   "department": "DCMS",
+   "prevYear": 2023,
+   "year": 2024,
+   "prevRelease": "2022-23",
+   "release": "2023-24",
+   "prevEnd": "2024-06-28",
+   "curEnd": "2024-06-28",
+   "daysMoved": 0,
+   "narrative": "The project's end-date at 23/24-Q4 is 2024-06-28. This is primarily due to the following factors. \n\n The change in end date is due to adding contingency to the V&A's decant schedule to ensure vacation of Blythe House in time for sale completion.",
+   "label": "no-move",
+   "why": "Published end date unchanged (28 Jun 2024). The narrative says 'The change in end date is due to adding contingency...'. That change happened in the previous release (31 Mar 2023 -> 28 Jun 2024).",
+   "doubt": "The narrative explains a move from the previous year.",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2023-24 (data as at 31 Mar 2024)",
+     "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2022-23 (data as at 31 Mar 2023)",
+     "csv": "https://assets.publishing.service.gov.uk/media/64b79c5171749c001389ee41/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2023.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B30",
+   "gmppId": "CO_0035_2122-Q1",
+   "project": "Single Trade Window Programme",
+   "department": "HMRC",
+   "prevYear": 2023,
+   "year": 2024,
+   "prevRelease": "2022-23",
+   "release": "2023-24",
+   "prevEnd": "2027-03-31",
+   "curEnd": "2027-03-31",
+   "daysMoved": 0,
+   "narrative": "Compared to financial year 22/23-Q4, the project's end-date at 23/24-Q4 remained schedule to finish on 2027-03-31. This is primarily due to the following factors. \n\n The STW programme is on track to complete by the end date of 31 March 2027",
+   "label": "no-move",
+   "why": "Published end date unchanged (31 Mar 2027). The narrative says it remained and 'is on track to complete by the end date of 31 March 2027'.",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "IPA Annual Report 2023-24 (data as at 31 Mar 2024)",
+     "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2022-23 (data as at 31 Mar 2023)",
+     "csv": "https://assets.publishing.service.gov.uk/media/64b79c5171749c001389ee41/GMPP_Government_Major_Projects_Portofolio_AR_Data_March_2023.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B31",
+   "gmppId": "MOD_0138_2122-Q1",
+   "project": "SEA VENOM",
+   "department": "MoD",
+   "prevYear": 2024,
+   "year": 2025,
+   "prevRelease": "2023-24",
+   "release": "2024-25",
+   "prevEnd": "2029-12-21",
+   "curEnd": "2029-12-21",
+   "daysMoved": 0,
+   "narrative": "Compared to financial year 23/24-Q4, the project's end-date at 24/25-Q4 remained at 21/12/2029. This is primarily due to the following factors.\nThe programme end date has been maintained.",
+   "label": "no-move",
+   "why": "Published end date unchanged (21 Dec 2029). The narrative says 'remained at 21/12/2029' and that the end date 'has been maintained'.",
+   "prevProject": "Sea Venom",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "NISTA Annual Report 2024-25 (data as at 31 Mar 2025)",
+     "csv": "https://assets.publishing.service.gov.uk/media/6895fbb63080e72710b2e2ef/nista_annual_report_data_2425.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2023-24 (data as at 31 Mar 2024)",
+     "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  },
+  {
+   "id": "PLH-B32",
+   "gmppId": "HO_0229_2223-Q4",
+   "project": "Fraud Reform",
+   "department": "HO",
+   "prevYear": 2024,
+   "year": 2025,
+   "prevRelease": "2023-24",
+   "release": "2024-25",
+   "prevEnd": "2025-03-31",
+   "curEnd": "2025-03-31",
+   "daysMoved": 0,
+   "narrative": "Compared to financial year 23/24-Q4, the project's end-date at 24/25-Q4 remained at 31/03/2025. This is primarily due to the following factors‚\nThe programme formally closed on 31/03/2025.",
+   "label": "no-move",
+   "why": "Published end date unchanged (31 Mar 2025). The narrative says it remained and the programme 'formally closed on 31/03/2025'.",
+   "inTuningPairsFile": false,
+   "source": {
+    "current": {
+     "release": "NISTA Annual Report 2024-25 (data as at 31 Mar 2025)",
+     "csv": "https://assets.publishing.service.gov.uk/media/6895fbb63080e72710b2e2ef/nista_annual_report_data_2425.csv"
+    },
+    "previous": {
+     "release": "IPA Annual Report 2023-24 (data as at 31 Mar 2024)",
+     "csv": "https://assets.publishing.service.gov.uk/media/6787e8ee1124a2c3ceb646be/Government_Major_Projects_Portofolio_AR_Data_March_2024.csv"
+    },
+    "fields": "GMPP ID, Project Name, Department, 'Project - End Date (Latest Approved End Date)' / 'End Date', 'Departmental narrative on schedule...' / 'Schedule Narrative'"
+   }
+  }
+ ]
+}

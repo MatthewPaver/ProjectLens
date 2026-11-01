@@ -74,199 +74,15 @@ function escapeHtml(value) {
   }[character]));
 }
 
-function numberValue(value) {
-  if (value === null || value === undefined || value === "") return null;
-  const parsed = Number(String(value).replace(/,/g, ""));
-  return Number.isFinite(parsed) ? parsed : null;
-}
 
-function parseDate(value) {
-  if (!value) return null;
-  const clean = String(value).trim();
-  const isoMatch = clean.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (isoMatch) return new Date(`${isoMatch[1]}-${isoMatch[2]}-${isoMatch[3]}T12:00:00Z`);
-  const timestamp = Date.parse(clean);
-  return Number.isNaN(timestamp) ? null : new Date(timestamp);
-}
-
-function formatDate(value) {
-  const date = value instanceof Date ? value : parseDate(value);
-  return date ? new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(date) : "Not supplied";
-}
-
-function dayDifference(current, previous) {
-  if (!current || !previous) return null;
-  return Math.round((current.getTime() - previous.getTime()) / 86400000);
-}
-
-function parseXer(text, fileName) {
-  if (!text?.trim()) throw new Error(`${fileName} is empty.`);
-  const tables = {};
-  let tableName = "";
-  let fields = [];
-
-  text.replace(/^\uFEFF/, "").replace(/\r\n?/g, "\n").split("\n").forEach(line => {
-    if (!line) return;
-    const cells = line.split("\t");
-    const marker = cells[0].trim();
-    if (marker === "%T") {
-      tableName = (cells[1] || "").trim().toUpperCase();
-      if (tableName) tables[tableName] ||= [];
-      fields = [];
-    } else if (marker === "%F" && tableName) {
-      fields = cells.slice(1).map(field => field.trim());
-    } else if (marker === "%R" && tableName && fields.length) {
-      const record = {};
-      fields.forEach((field, index) => { record[field] = cells[index + 1] ?? ""; });
-      tables[tableName].push(record);
-    }
-  });
-
-  if (!tables.PROJECT?.length || !tables.TASK?.length) throw new Error(`${fileName} is not a readable Primavera P6 schedule file (XER).`);
-  if (tables.PROJECT.length !== 1) throw new Error(`${fileName} contains multiple projects. Export a single project for change assurance, or use the detailed schedule review to inspect first-project scope.`);
-
-  const project = tables.PROJECT[0];
-  if (!project.proj_id?.trim()) throw new Error(`${fileName} has no project ID. Export a single-project schedule file (XER) and retry.`);
-  const tasks = tables.TASK.map(row => ({
-    code: row.task_code || row.task_id,
-    name: row.task_name || row.task_code || row.task_id,
-    finish: parseDate(row.early_end_date || row.target_end_date || row.act_end_date),
-    float: numberValue(row.total_float_hr_cnt),
-    constraint: row.constraint_type || row.cstr_type || "",
-    constraintDate: parseDate(row.cstr_date || row.constraint_date),
-  }));
-  if (tasks.some(task => !task.code) || new Set(tasks.map(task => task.code)).size !== tasks.length) throw new Error(`${fileName} needs unique, non-empty activity codes for comparison.`);
-  if (!parseDate(project.scd_end_date || project.plan_end_date)) throw new Error(`${fileName} has no supported project scheduled finish. Export a calculated single-project schedule and retry.`);
-  const codeById = new Map((tables.TASK || []).map(row => [row.task_id, row.task_code || row.task_id]));
-  const relations = (tables.TASKPRED || []).map(row => JSON.stringify([codeById.get(row.pred_task_id) || row.pred_task_id, codeById.get(row.task_id) || row.task_id, row.pred_type || "Not supplied", numberValue(row.lag_hr_cnt)]));
-
-  return {
-    fileName,
-    sourceText: text.replace(/\r\n?/g, "\n").trim(),
-    project: {
-      id: project.proj_id || "unassigned",
-      name: project.proj_short_name || project.proj_name || "Unnamed project",
-      dataDate: parseDate(project.last_recalc_date || project.data_date),
-      scheduledFinish: parseDate(project.scd_end_date || project.plan_end_date),
-    },
-    tasks,
-    taskByCode: new Map(tasks.map(task => [task.code, task])),
-    relations: new Set(relations),
-  };
-}
-
-function taskChanges(previous, current) {
-  const codes = new Set([...previous.taskByCode.keys(), ...current.taskByCode.keys()]);
-  const changes = [];
-  const activityEvidence = [];
-  const snapshot = task => task ? { finish: formatDate(task.finish), totalFloatHours: task.float, constraintType: task.constraint || "None", constraintDate: formatDate(task.constraintDate) } : null;
-  let constraintChanges = 0;
-  let floatErosion = 0;
-
-  codes.forEach(code => {
-    const before = previous.taskByCode.get(code);
-    const after = current.taskByCode.get(code);
-    if (!before || !after) {
-      activityEvidence.push({ code, name: (after || before).name, before: snapshot(before), after: snapshot(after) });
-      changes.push({ code, name: (after || before).name, summary: after ? "Activity added" : "Activity removed" });
-      return;
-    }
-    const finishDelta = dayDifference(after.finish, before.finish);
-    const constraintChanged = `${before.constraint}|${formatDate(before.constraintDate)}` !== `${after.constraint}|${formatDate(after.constraintDate)}`;
-    const floatDelta = before.float !== null && after.float !== null ? after.float - before.float : null;
-    if (finishDelta || constraintChanged || (floatDelta !== null && floatDelta !== 0)) activityEvidence.push({ code, name: after.name, before: snapshot(before), after: snapshot(after) });
-    if (constraintChanged) constraintChanges += 1;
-    if (floatDelta !== null && floatDelta < 0) floatErosion += 1;
-    if ((finishDelta && Math.abs(finishDelta) >= 7) || constraintChanged || (floatDelta !== null && floatDelta <= -8)) {
-      const evidence = [];
-      if (finishDelta) evidence.push(`finish ${finishDelta > 0 ? "+" : ""}${finishDelta}d`);
-      if (constraintChanged) evidence.push("constraint changed");
-      if (floatDelta !== null && floatDelta < 0) evidence.push(`float ${floatDelta}h`);
-      changes.push({ code, name: after.name, summary: evidence.join(" · ") });
-    }
-  });
-
-  const relationEvidence = [...new Set([...previous.relations, ...current.relations])].filter(signature => previous.relations.has(signature) !== current.relations.has(signature)).map(signature => {
-    const [predecessor, successor, type, lagHours] = JSON.parse(signature);
-    return { change: current.relations.has(signature) ? "Added" : "Removed", predecessor, successor, type, lagHours };
-  });
-  const relationChanges = relationEvidence.length;
-  return { changes, activityEvidence, relationEvidence, constraintChanges, floatErosion, relationChanges };
-}
-
-function analyseReview(previous, current, narrative) {
-  if (previous.project.name !== current.project.name) throw new Error("The project names differ. Choose previous and current exports of the same project before comparing.");
-  if (previous.project.id !== current.project.id) throw new Error("The project IDs differ. Choose exports of the same source project; re-imported projects with new IDs are not supported by this comparison.");
-  if (previous.sourceText === current.sourceText) throw new Error("These exports contain identical evidence. Choose a previous and a current schedule, then retry.");
-  if (!previous.project.dataDate || !current.project.dataDate) throw new Error("Both exports need a supported project data date before comparison.");
-  if (current.project.dataDate < previous.project.dataDate) throw new Error("The current data date precedes the previous export. Swap the files and retry.");
-  const finishMovement = dayDifference(current.project.scheduledFinish, previous.project.scheduledFinish);
-  const changes = taskChanges(previous, current);
-  const text = narrative.toLowerCase();
-  // These are bounded text prompts, not a judgement that a claim is true.
-  // Exclude explicit local negations such as "not on track" before matching.
-  const stabilityText = text.replace(/\b(?:not|never|no longer)\s+(?:\w+\s+){0,3}(?:on track|unchanged|as planned|stable)\b/g, "");
-  const statedStable = /\b(unchanged|no material change|on track|as planned|remains stable|no impact)\b/.test(stabilityText);
-  const blockers = [];
-  const coverage = [previous, current].map(schedule => ({ file: schedule.fileName, tasks: schedule.tasks.length, finishDates: schedule.tasks.filter(task => task.finish !== null).length, floatValues: schedule.tasks.filter(task => task.float !== null).length }));
-  if (coverage.some(item => item.finishDates !== item.tasks || item.floatValues !== item.tasks)) blockers.push({ type: "Evidence gap", title: "Some activity finish dates or float values could not be compared", detail: coverage.map(item => `${item.file}: ${item.finishDates}/${item.tasks} finishes and ${item.floatValues}/${item.tasks} float values`).join("; ") });
-
-  if (!narrative.trim()) {
-    blockers.push({
-      type: "Evidence gap",
-      title: "No change narrative was supplied",
-      detail: "The schedules can show movement, but not the stated reason, mitigation or approval basis.",
-    });
-  }
-  if (statedStable && finishMovement >= 7) {
-    blockers.push({
-      type: "Contradiction",
-      title: `The finish moved ${finishMovement} days and the update needs clarifying`,
-      detail: `${formatDate(previous.project.scheduledFinish)} → ${formatDate(current.project.scheduledFinish)}.`,
-    });
-  } else if (finishMovement !== null && Math.abs(finishMovement) >= 7) {
-    blockers.push({ type: "Schedule movement", title: `The scheduled finish moved ${finishMovement > 0 ? "+" : ""}${finishMovement} days`, detail: "Check the reason and supporting evidence. Mentioning the movement does not verify its cause." });
-  }
-  if (changes.constraintChanges) {
-    blockers.push({
-      type: "Unexplained change",
-      title: `${changes.constraintChanges} constraint changes need review`,
-      detail: "Constraint type or date changed. Inspect the source fields and the instruction supporting each change; narrative wording does not close this review question.",
-    });
-  }
-  if (changes.relationChanges) {
-    blockers.push({
-      type: "Unexplained change",
-      title: `${changes.relationChanges} links between tasks changed`,
-      detail: "Added or removed links between tasks (which task waits for which) can change the order of work. Ask which instruction explains the differences; these exports do not establish causation.",
-    });
-  }
-  if (changes.floatErosion) {
-    blockers.push({
-      type: "Float loss",
-      title: `Less spare time before the finish moves (float) on ${changes.floatErosion} changed activities`,
-      detail: "The current schedule shows less total float: these activities can slip less before they delay the finish. Check the underlying fields and planning assumptions; this does not prove a delay or a critical path.",
-    });
-  }
-  const explicitMissingOwnership = /\b(?:no|without|missing|unassigned)\s+(?:named\s+)?(?:owner|due date)\b|\b(?:owner|due date)\s+(?:is\s+)?(?:missing|unassigned|unknown|not set)\b/.test(text);
-  if (explicitMissingOwnership || (/\b(manage\w*|mitigat\w*|governance|action)\b/.test(text) && !/\b(owner|responsible|accountable|due|by \d{1,2})\b/.test(text))) {
-    blockers.push({
-      type: "Ownership gap",
-      title: "The stated response has no named owner or due date",
-      detail: "Name an owner and a date so someone can follow the mitigation up.",
-    });
-  }
-
-  return {
-    previous,
-    current,
-    finishMovement,
-    changes,
-    blockers,
-    coverage,
-    generatedAt: new Date().toISOString(),
-  };
-}
+// Engine bindings: schedule parsing and review live in ProjectLensEngine.
+const parseXer = (text, fileName, options) => ProjectLensEngine.parseXerAssurance(text, fileName, options);
+const taskChanges = (...args) => ProjectLensEngine.taskChanges(...args);
+const analyseReview = (...args) => ProjectLensEngine.analyseReview(...args);
+const numberValue = (...args) => ProjectLensEngine.numberValue(...args);
+const parseDate = (...args) => ProjectLensEngine.parseDate(...args);
+const formatDate = (...args) => ProjectLensEngine.formatDate(...args);
+const dayDifference = (...args) => ProjectLensEngine.dayDifference(...args);
 
 function showToast(message) {
   const toast = $("#assuranceToast");
@@ -605,11 +421,25 @@ function questionFor(blocker) {
 
 async function loadFile(kind, file) {
   if (!file) return;
-  if (!/\.xer$/i.test(file.name)) {
-    showError("Choose a Primavera P6 .xer file, then run the check again.");
+  if (/\.mpp$/i.test(file.name)) {
+    showError("Export this schedule from MS Project as XML (File > Save As > XML) and load that");
     return;
   }
-  assuranceState.files[kind] = { name: file.name, text: await file.text() };
+  if (!/\.(xer|xml)$/i.test(file.name)) {
+    showError("Choose a Primavera P6 .xer/.xml or MS Project XML file, then run the check again.");
+    return;
+  }
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  let text;
+  let encoding = "utf-8";
+  if (/\.xml$/i.test(file.name)) {
+    text = new TextDecoder("utf-8").decode(bytes);
+  } else {
+    const decoded = ProjectLensEngine.decodeXerBytes(bytes);
+    text = decoded.text;
+    encoding = decoded.encoding;
+  }
+  assuranceState.files[kind] = { name: file.name, text, encoding, projectId: null };
   assuranceState.originalNarrative = null;
   const label = kind === "previous" ? $("#assurancePreviousName") : $("#assuranceCurrentName");
   label.textContent = file.name;
@@ -619,16 +449,56 @@ async function loadFile(kind, file) {
   $("#intakeMessage").textContent = ready ? "Both files loaded. Ready to check." : "Choose the second schedule file to continue.";
 }
 
-async function runReview() {
+async function parseWithProjectPicker(kind) {
+  const file = assuranceState.files[kind];
+  const projects = ProjectLensEngine.listProjects(file.text);
+  let projectId = file.projectId;
+  if (projects.length > 1 && !projectId) {
+    const listing = projects.map((p, i) => `${i + 1}. ${p.shortName} (${p.projId}, ${p.activityCount} activities)`).join("\n");
+    const choice = window.prompt(`This file contains ${projects.length} projects. Enter the number to use:\n\n${listing}`, "1");
+    if (!choice) throw new Error("Choose a project in the multi-project export before comparing.");
+    const index = Number(choice) - 1;
+    if (!projects[index]) throw new Error("That project number is not in the list.");
+    projectId = projects[index].projId;
+    file.projectId = projectId;
+  }
+  if (/\.xml$/i.test(file.name)) {
+    const xml = file.text;
+    if (/<APIBusinessObjects|<Project[\s\S]*<Activity/i.test(xml)) {
+      return ProjectLensEngine.parseP6Xml(xml, file.name);
+    }
+    return ProjectLensEngine.parseMspdiXml(xml, file.name);
+  }
+  return parseXer(file.text, file.name, projectId ? { projectId } : {});
+}
+
+async function runReview(options = {}) {
   if (!assuranceState.files.previous || !assuranceState.files.current) return;
   $("#workspaceError").hidden = true;
   const button = $("#runAssuranceReview");
   button.disabled = true;
   button.innerHTML = "Checking evidence…";
   try {
-    const previous = parseXer(assuranceState.files.previous.text, assuranceState.files.previous.name);
-    const current = parseXer(assuranceState.files.current.text, assuranceState.files.current.name);
-    const review = analyseReview(previous, current, $("#assuranceNarrative").value.trim());
+    const previous = await parseWithProjectPicker("previous");
+    const current = await parseWithProjectPicker("current");
+    let review;
+    try {
+      review = analyseReview(previous, current, $("#assuranceNarrative").value.trim(), {
+        confirmedMatch: Boolean(options.confirmedMatch),
+      });
+    } catch (error) {
+      // Overlapping activity codes but different names/IDs: ask before comparing.
+      if (error.code === "CONFIRM_PROJECT_MATCH") {
+        const ok = window.confirm(`${error.message}\n\nCompare them?`);
+        if (!ok) {
+          showError("Comparison cancelled. Choose matching exports, or confirm when the codes overlap.");
+          return;
+        }
+        review = analyseReview(previous, current, $("#assuranceNarrative").value.trim(), { confirmedMatch: true });
+      } else {
+        throw error;
+      }
+    }
     assuranceState.originalNarrative ??= $("#assuranceNarrative").value;
     review.inputIdentity = await inputIdentity();
     renderReview(review);
@@ -1021,6 +891,10 @@ function renderSelectedFinding(index) {
   const value = item => !item ? "Activity absent" : constraintFinding ? `${item.constraintType} · ${item.constraintDate}` : floatFinding ? `${item.totalFloatHours ?? "Not supplied"} hours total float` : item.finish;
   const activityRows = relevant.map(change => `<li><code>${escapeHtml(change.code)}</code> ${escapeHtml(change.name)}<br><span>Previous: ${escapeHtml(value(change.before))}<br>Current: ${escapeHtml(value(change.after))}</span></li>`).join("") || "<li>No supporting activity changes found.</li>";
   const relationshipRows = review.changes.relationEvidence.map(relation => `<li>${escapeHtml(relation.change)}: <code>${escapeHtml(relation.predecessor)}</code> → <code>${escapeHtml(relation.successor)}</code><br><span>Type: ${escapeHtml(relation.type)} · lag: ${relation.lagHours === null ? "Not supplied" : `${escapeHtml(relation.lagHours)} hours`}</span></li>`).join("");
+  const evidence = review.claims.evidence;
+  const quotation = evidence
+    ? evidence.sentence.split(evidence.phrase).map(escapeHtml).join(`<mark>${escapeHtml(evidence.phrase)}</mark>`)
+    : escapeHtml($("#assuranceNarrative").value || "No narrative supplied.");
   $("#findingEvidence").innerHTML = `
     <button id="backToFindings" type="button">Back to findings</button>
     <h3>${escapeHtml(finding?.title || "Schedule evidence")}</h3>
@@ -1029,7 +903,8 @@ function renderSelectedFinding(index) {
     <dl class="source-dates"><div><dt>Previous finish</dt><dd>${escapeHtml(formatDate(review.previous.project.scheduledFinish))}</dd></div><div><dt>Current finish</dt><dd>${escapeHtml(formatDate(review.current.project.scheduledFinish))}</dd></div></dl>
     <details><summary>Inspect source files and fields</summary><p class="source-files">Sources: ${escapeHtml(evidenceVersion(review))} · PROJECT scheduled finish; TASK activity dates, constraints and total float.</p></details>
     <details ${constraintFinding || floatFinding || relationshipFinding ? "open" : ""}><summary>${relationshipFinding ? `Task link field evidence (${review.changes.relationEvidence.length})` : `Activity field evidence (${relevant.length})`}</summary><ul>${relationshipFinding ? relationshipRows : activityRows}</ul></details>
-    <h4>Narrative under review</h4><blockquote>${escapeHtml(($("#assuranceNarrative").value.split(/\n\s*\n/).find(paragraph => /unchanged|on track|stable|no impact/i.test(paragraph)) || $("#assuranceNarrative").value || "No narrative supplied.").trim())}</blockquote><details><summary>Read full narrative</summary><p>${escapeHtml($("#assuranceNarrative").value || "No narrative supplied.")}</p></details>
+    ${review.claim ? `<p class="claim-finding">${escapeHtml(review.claim)}</p>` : ""}
+    <h4>Narrative under review</h4><blockquote>${quotation}</blockquote><details><summary>Read full narrative</summary><p>${escapeHtml($("#assuranceNarrative").value || "No narrative supplied.")}</p></details>
     ${assuranceState.originalNarrative !== null && assuranceState.originalNarrative !== $("#assuranceNarrative").value ? `<details class="original-narrative"><summary>Read original narrative from the first check</summary><p>${escapeHtml(assuranceState.originalNarrative || "No narrative was supplied at the first check.")}</p></details>` : ""}
     <p class="source-boundary">Field coverage: ${review.coverage.map(item => `${escapeHtml(item.file)}: ${item.finishDates}/${item.tasks} finishes, ${item.floatValues}/${item.tasks} float values`).join("; ")}. Fixed checks flag conflicts. They do not establish causation, entitlement or contractual approval.</p>`;
 }
