@@ -143,7 +143,7 @@ function renderReview(review, restoredContext = null) {
   const ready = review.blockers.length === 0;
   const topBlockers = review.blockers.slice(0, 3);
   $("#reviewName").textContent = displayProjectName(review.current.project.name);
-  $("#reviewEvidenceVersion").textContent = `${evidenceVersion(review)} · checked ${new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(new Date(review.generatedAt))}`;
+  $("#reviewEvidenceVersion").textContent = `${evidenceVersion(review)} · Previous data date: ${formatDate(review.previous.project?.dataDate)}; current data date: ${formatDate(review.current.project?.dataDate)} · checked ${new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(new Date(review.generatedAt))}`;
   $("#readinessCard").classList.toggle("ready", ready);
   $("#readinessStatus").textContent = ready ? "Human review still required" : "Needs evidence before decision";
   document.body.classList.add("has-review");

@@ -20,6 +20,8 @@ def snapshot(page):
 def ready(page):
     page.goto(f"{BASE}?walkthrough=1")
     expect(page.locator("#tourMovement")).to_contain_text("73 days")
+    expect(page.locator("#reviewEvidenceVersion")).to_contain_text("Previous data date: 31 Jan 2026")
+    expect(page.locator("#reviewEvidenceVersion")).to_contain_text("current data date: 28 Feb 2026")
 
 
 def run_journey(browser):
