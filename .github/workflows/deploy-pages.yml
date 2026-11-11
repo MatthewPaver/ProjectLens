@@ -30,6 +30,9 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: "22"
+      - name: Run the real-case benchmark floors
+        # Fails if any set drops below floors.json (set 5 is 29/40 today).
+        run: npm run bench
       - name: Install test and RAG dependencies
         run: make install-rag
       - name: Run deterministic and RAG tests

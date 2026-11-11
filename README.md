@@ -26,9 +26,9 @@ node bin/projectlens.mjs compare \
 
 Replace the export paths and pasted text with your own files. [The guide](docs/USE_ON_YOUR_OWN_SCHEDULES.md) covers formats, batch comparisons and exit codes.
 
-**Accuracy:** set 4 is **28/30, seen**. Set 5's independent score is **pending**; no set 5 file is available here. Reproduce set 4 with `npm run bench` and inspect [the cases and source links](bench/real-cases/). Sets 1–4 informed these rules and do not measure unseen accuracy.
+**Measured results (reproduce with `npm run bench`):** set 4 is **28/30** on cases that shaped the rules (regression evidence, not independent accuracy). Set 5 is **29/40** on the committed fixture [`bench/real-cases/projectlens-heldout5.json`](bench/real-cases/projectlens-heldout5.json); the floor is 29. On the job that matters most — labelled contradictions — set 5 catches **3 of 10**. Sets 1–4 informed the rules. Do not treat any of these totals as production accuracy. Cases and sources: [bench/real-cases/](bench/real-cases/).
 
-**Browser:** [Try ProjectLens](https://matthewpaver.github.io/ProjectLens/change-assurance.html), then select **Try the example project** or use your own schedules. No install or account needed. The browser also records a human decision and its conditions.
+**Browser:** [Open the example review](https://matthewpaver.github.io/ProjectLens/change-assurance.html), then select **Try the example project** (made-up Northstar) or use your own schedules. No install or account needed. The browser also records a human decision and its conditions.
 
 **Case study:** [The problem, review journey and before-and-after design](https://matthewpaver.github.io/work/projectlens/).
 

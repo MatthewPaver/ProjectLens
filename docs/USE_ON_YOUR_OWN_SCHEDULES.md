@@ -25,7 +25,7 @@ For a working synthetic example, use `examples/monthly/northstar-previous.xer` a
 
 Formats: `text`, `json`, `csv`, `md`. Text and Markdown show the quote; JSON includes structured `claims.evidence`. CSV keeps its history columns. Use `--project <id>` for multi-project XERs. CLI narrative files must be `.txt` or `.md`; convert Word text first.
 
-**Accuracy:** set 4 is **28/30, seen**, reproduced with `npm run bench`. Set 5's independent score is **pending** because no set 5 file is available here. [Cases, labels and sources](../bench/real-cases/) are public. Sets 1–4 informed the rules; do not treat them as unseen accuracy.
+**Measured results:** set 4 is **28/30** on cases that shaped the rules (regression evidence). Set 5 is **29/40** on [`projectlens-heldout5.json`](../bench/real-cases/projectlens-heldout5.json), with contradiction recall **3/10**. Reproduce with `npm run bench`. [Cases, labels and sources](../bench/real-cases/) are public. Do not treat these totals as production accuracy.
 
 ## 2. Browser
 
