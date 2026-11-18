@@ -3,7 +3,7 @@
 Browser-local change-assurance tool for project controls reviewers: compares a change pack's narrative with its Primavera P6 XER schedules and evidence, surfaces conflicts as at most three blockers, and records the human board decision. Live on GitHub Pages from `docs/`. See README.md.
 
 ## Layout
-- `docs/` is the product (static HTML/JS, deployed as-is). `change-assurance.*` (primary workflow), `schedule-review.*` + `xer-review.js`, `board-readiness.*`, `index.html` + `app.js` (GMPP explorer), `demo/` (synthetic XER fixtures).
+- `docs/` is the product (static HTML/JS, deployed as-is). `change-assurance.*` (primary workflow), `schedule-review.*` + `xer-review.js`, `index.html` (redirects to change-assurance), `public-evidence.html` + `app.js` (GMPP explorer), `board-readiness.html` (redirect stub for old links), `demo/` (synthetic XER fixtures).
 - `Processing/gmpp_pipeline.py` builds `docs/data/gmpp.json` from `Data/public/raw/` (`make public-data`).
 - `Processing/precedent_rag/` optional local FastAPI + LangGraph sidecar (Gemini, LangSmith). Offline eval: `make precedent-eval-offline` (hit@5 = 7/8, pinned by `test_offline_eval_baseline_is_stable`).
 - `Processing/analysis/`, `core/`, `output/`, `ingestion/` earlier CSV schedule pipeline (`make pipeline`).

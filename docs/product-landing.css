@@ -1,13 +1,9 @@
-@font-face { font-family: "Encode Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url("assets/fonts/encode-sans-400.ttf") format("truetype"); }
-@font-face { font-family: "Encode Sans"; font-style: normal; font-weight: 500; font-display: swap; src: url("assets/fonts/encode-sans-500.ttf") format("truetype"); }
-@font-face { font-family: "Encode Sans"; font-style: normal; font-weight: 600; font-display: swap; src: url("assets/fonts/encode-sans-600.ttf") format("truetype"); }
-@font-face { font-family: "Encode Sans"; font-style: normal; font-weight: 700; font-display: swap; src: url("assets/fonts/encode-sans-700.ttf") format("truetype"); }
 
 :root {
   --pl-white: #fff; --pl-ground: #fafbfc; --pl-panel: #f3f6fa; --pl-ink: #0b1933;
   --pl-muted: #4c5b70; --pl-blue: #0857e8; --pl-blue-hover: #0645bd; --pl-selection: #e8f0ff;
   --pl-line: #d5dce6; --pl-attention: #805300; --pl-attention-ground: #fff6de;
-  --pl-font: "Encode Sans", sans-serif; --pl-code: "JetBrains Mono", monospace;
+  --pl-font: "Hanken Grotesk Local", sans-serif; --pl-code: "JetBrains Mono", monospace;
   --pl-width: 1380px; --pl-gutter: max(5vw, 24px); --pl-radius: 12px;
   --pl-ease: cubic-bezier(.16,1,.3,1);
   --assurance-paper: var(--pl-ground); --assurance-ink: var(--pl-ink); --assurance-white: var(--pl-white);
@@ -372,3 +368,7 @@ body.product-design { margin: 0; background: var(--pl-white); color: var(--pl-in
 .product-design table,.product-design .source-dates,.product-design .register-list,.product-design .evidence-summary,.product-design .finding-evidence li { font-variant-numeric: tabular-nums; }
 /* Supporting-evidence cards: no copy under 12px, in the product face. */
 .product-design .comparable-case > span,.product-design .precedent-gate i,.product-design .precedent-gate button { font-family: var(--pl-font); font-size: 12px; line-height: 1.4; }
+
+/* Link from the made-up example to a real public GMPP record. */
+.product-real-data { margin: 10px auto 0; font-size: 14px; line-height: 1.5; }
+.product-real-data a { color: var(--pl-blue); text-underline-offset: .2em; }

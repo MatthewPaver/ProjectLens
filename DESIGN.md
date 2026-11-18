@@ -15,24 +15,24 @@ colors:
   attention-ground: "#fff6de"
 typography:
   display:
-    fontFamily: '"Encode Sans", sans-serif'
+    fontFamily: '"Hanken Grotesk Local", sans-serif'
     fontSize: "61px"
     fontWeight: 700
     lineHeight: 1.02
     letterSpacing: "-.035em"
   title:
-    fontFamily: '"Encode Sans", sans-serif'
+    fontFamily: '"Hanken Grotesk Local", sans-serif'
     fontSize: "29px"
     fontWeight: 600
     lineHeight: 1.25
     letterSpacing: "-.025em"
   body:
-    fontFamily: '"Encode Sans", sans-serif'
+    fontFamily: '"Hanken Grotesk Local", sans-serif'
     fontSize: "15px"
     fontWeight: 400
     lineHeight: 1.6
   label:
-    fontFamily: '"Encode Sans", sans-serif'
+    fontFamily: '"Hanken Grotesk Local", sans-serif'
     fontSize: "13px"
     fontWeight: 500
     lineHeight: 1.4
@@ -92,7 +92,7 @@ Primary cobalt identifies actions, active navigation, selection and keyboard foc
 
 ## Typography
 
-Encode Sans is self-hosted in docs/assets/fonts at weights 400, 500, 600 and 700; the bundled OFL governs distribution. Display type is reserved for the landing headline. Review headings use the title scale; evidence copy uses compact body type, with metadata generally 12–13px. The landing introduction and claim/observation comparison use larger reading type. Source codes retain the JetBrains Mono/monospace stack. Dates and quantitative comparisons use tabular numerals.
+Hanken Grotesk (the portfolio's family) is self-hosted in docs/assets/fonts as one variable woff2; the bundled OFL governs distribution. All ProjectLens pages use it. Display type is reserved for the landing headline. Review headings use the title scale; evidence copy uses compact body type, with metadata generally 12–13px. The landing introduction and claim/observation comparison use larger reading type. Source codes retain the JetBrains Mono/monospace stack. Dates and quantitative comparisons use tabular numerals.
 
 ## Layout
 

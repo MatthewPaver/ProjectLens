@@ -23,7 +23,7 @@ def run_desktop(browser):
     page.on("console", lambda message: errors.append(message.text) if message.type == "error" else None)
     page.on("pageerror", lambda error: errors.append(str(error)))
     page.on("requestfailed", lambda request: failures.append(f"{request.method} {request.url}"))
-    page.goto(BASE_URL)
+    page.goto(f"{BASE_URL}/public-evidence.html")
     page.wait_for_load_state("networkidle")
     page.locator("#loading").wait_for(state="hidden")
     assert page.locator("#heroCount").inner_text() == "189"
@@ -67,7 +67,7 @@ def run_desktop(browser):
 
 def run_mobile(browser):
     page = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1)
-    page.goto(BASE_URL)
+    page.goto(f"{BASE_URL}/public-evidence.html")
     page.wait_for_load_state("networkidle")
     page.locator("#loading").wait_for(state="hidden")
     assert page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")

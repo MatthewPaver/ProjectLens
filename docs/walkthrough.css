@@ -4,11 +4,11 @@
 .tour-session a { color: inherit; margin-left: 12px; text-underline-offset: 3px; }
 .walkthrough-session .tour-layout { max-width: 1600px; margin: auto; display: grid; grid-template-columns: 300px minmax(0, 1fr); }
 .tour-guide { padding: 32px 24px; align-self: start; position: sticky; top: 74px; }
-.tour-guide h1 { margin: 0 0 16px; font: 600 24px/1.2 'Libre Franklin', sans-serif; letter-spacing: -.025em; }
+.tour-guide h1 { margin: 0 0 16px; font: 600 24px/1.2 "Hanken Grotesk Local", sans-serif; letter-spacing: -.025em; }
 .tour-intro { margin-bottom: 24px; font-size: 14px; line-height: 1.65; }
 .tour-steps { list-style: none; padding: 0; margin: 0 0 24px; }
 .tour-steps li + li { border-top: 1px solid #c4c3b9; }
-.tour-guide button { font: 500 13px/1.4 'Libre Franklin', sans-serif; cursor: pointer; color: #071a1b; }
+.tour-guide button { font: 500 13px/1.4 "Hanken Grotesk Local", sans-serif; cursor: pointer; color: #071a1b; }
 .tour-steps button { width: 100%; display: flex; gap: 12px; text-align: left; border: 0; background: transparent; padding: 12px 0; }
 .tour-steps span { font-variant-numeric: tabular-nums; }
 .tour-steps button[aria-current] { font-weight: 700; color: #8f3c27; }
@@ -23,7 +23,7 @@
 .tour-stage { scroll-margin-top: 96px; }
 .tour-stage-heading { margin-bottom: 28px; max-width: 70ch; }
 #tourPosition { margin: 0 0 12px; font-size: 13px; font-variant-numeric: tabular-nums; }
-.tour-stage h2 { font: 600 clamp(24px, 2.4vw, 36px)/1.2 'Libre Franklin', sans-serif; letter-spacing: -.025em; margin: 0 0 16px; }
+.tour-stage h2 { font: 600 clamp(24px, 2.4vw, 36px)/1.2 "Hanken Grotesk Local", sans-serif; letter-spacing: -.025em; margin: 0 0 16px; }
 #tourDescription { font-size: 15px; line-height: 1.7; }
 .tour-timeline { padding: 24px; background: #f1ecdf; margin-bottom: 24px; }
 .tour-schedule { display: grid; grid-template-columns: 1fr auto; gap: 8px 16px; font-size: 13px; }
@@ -38,9 +38,9 @@
 #tourOriginalClaim { margin: 0; padding: 24px; background: #071a1b; color: #fffdf6; font-size: 16px; line-height: 1.7; white-space: pre-line; }
 #tourExperiment { margin-bottom: 28px; }
 #tourExperiment label { display: block; margin-bottom: 10px; font-size: 14px; font-weight: 600; }
-#tourNarrative { display: block; width: 100%; resize: vertical; padding: 16px; border: 1px solid #8b9690; background: #fffdf6; color: #071a1b; font: 14px/1.65 'Libre Franklin', sans-serif; caret-color: #a94d35; }
+#tourNarrative { display: block; width: 100%; resize: vertical; padding: 16px; border: 1px solid #8b9690; background: #fffdf6; color: #071a1b; font: 14px/1.65 "Hanken Grotesk Local", sans-serif; caret-color: #a94d35; }
 .tour-experiment-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
-.tour-stage button { font: 500 13px/1.5 'Libre Franklin', sans-serif; cursor: pointer; color: #071a1b; }
+.tour-stage button { font: 500 13px/1.5 "Hanken Grotesk Local", sans-serif; cursor: pointer; color: #071a1b; }
 .tour-stage button:disabled { opacity: .52; cursor: wait; }
 .tour-guide button:hover:not(:disabled), .tour-stage button:hover:not(:disabled) { background: #dce7e8; color: #071a1b; }
 .tour-guide :focus-visible, .tour-stage :focus-visible { outline: 3px solid #406d84; outline-offset: 3px; }
@@ -54,7 +54,7 @@
 .walkthrough-session[data-tour-stage='3'] #readinessCard { display: none; }
 .walkthrough-session .readiness-workspace { padding: 0 0 24px; }
 .walkthrough-session .review-context { margin-top: 24px; }
-.walkthrough-session .register-heading h1 { font: 600 26px/1.25 "Libre Franklin", sans-serif; letter-spacing: -.025em; }
+.walkthrough-session .register-heading h1 { font: 600 26px/1.25 "Hanken Grotesk Local", sans-serif; letter-spacing: -.025em; }
 .walkthrough-session .register-row.closed { opacity: 1; }
 .walkthrough-session .assurance-toast:not(.show) { visibility: hidden; }
 .walkthrough-session .register-view { min-height: 0; padding: 24px 0; }

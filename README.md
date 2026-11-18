@@ -41,7 +41,7 @@ Replace the export paths and pasted text with your own files. [The guide](docs/U
 
 ## The problem
 
-A board often decides on how polished the pack looks, because nobody has time to reconcile the narrative with the schedules, risks, actions and prior conditions submitted with it. The bundled Northstar example reproduces the failure. Its progress report says the "key completion date is unchanged", but the current schedule has moved the finish by 73 days. The change-assurance page checks schedule fields and narrative keywords; the separate board-readiness page covers risks, actions and earlier conditions. If nobody checks the evidence against the story, the board approves the story.
+A board often decides on how polished the pack looks, because nobody has time to reconcile the narrative with the schedules, risks, actions and prior conditions submitted with it. The bundled Northstar example reproduces the failure. Its progress report says the "key completion date is unchanged", but the current schedule has moved the finish by 73 days. The change-assurance page checks schedule fields and narrative keywords. If nobody checks the evidence against the story, the board approves the story.
 
 ProjectLens gives the reviewer:
 
@@ -88,7 +88,7 @@ flowchart LR
 
 - **Change assurance** (`docs/change-assurance.html`, `.js`): parses both XER files, runs the deterministic checks against the narrative and evidence, and keeps the decision and condition registers in the browser's local storage, with an export of the decision record.
 - **Schedule review** (`docs/schedule-review.html`, `docs/xer-review.js`): the detailed XER comparison, reducing raw changes to material ones (on Northstar, 22 raw changes become 9 material changes) with integrity findings.
-- **Public evidence** (`docs/index.html`, `Processing/gmpp_pipeline.py`): joins seven annual UK Government Major Projects Portfolio (GMPP) releases into one history of delivery-confidence ratings and end-date changes. Method: [`docs/method.md`](docs/method.md).
+- **Public evidence** (`docs/public-evidence.html`, `Processing/gmpp_pipeline.py`): joins seven annual UK Government Major Projects Portfolio (GMPP) releases into one history of delivery-confidence ratings and end-date changes. Method: [`docs/method.md`](docs/method.md).
 - **Precedent sidecar** (`Processing/precedent_rag/`, optional, local): FastAPI plus LangGraph. It retrieves comparable public records with metadata filters and Gemini embeddings. An optional Gemini brief is shown only if every claim cites a retrieved record and it does not recommend approving or rejecting the pack (`summarize.py: evaluate_summary`). It receives narrative text and filters only, never the XER. Method: [`docs/precedent-rag.md`](docs/precedent-rag.md).
 
 To run the sidecar, copy `.env.example` to `.env`, set `GEMINI_API_KEY` (and `LANGSMITH_API_KEY` for traces), then run `make precedent-rag` and set `window.PROJECTLENS_PRECEDENT_RAG_URL = "http://127.0.0.1:8787"` before `change-assurance.js` loads. Without it, the page shows three static precedent cards as optional illustrative context. Untouched cards are recorded as not reviewed; Use or Ignore is required only when you choose to attach or dismiss a record.
@@ -149,8 +149,7 @@ The change-assurance demo above is the main product entry. These supporting rout
 
 - [Guided Northstar review](https://matthewpaver.github.io/ProjectLens/change-assurance.html?walkthrough=1): a paced version of the same review and decision journey.
 - [XER schedule review](https://matthewpaver.github.io/ProjectLens/schedule-review.html): inspect schedule fields directly.
-- [Board review](https://matthewpaver.github.io/ProjectLens/board-readiness.html): review risks, actions and earlier conditions.
-- [Public GMPP evidence explorer](https://matthewpaver.github.io/ProjectLens/): a separate public-data research tool.
+- [Public GMPP evidence explorer](https://matthewpaver.github.io/ProjectLens/public-evidence.html): a separate public-data research tool.
 - [Two-minute video walkthrough](docs/assets/projectlens-evidence-demo.mp4).
 
 ## Repository layout and tests
@@ -159,7 +158,6 @@ The change-assurance demo above is the main product entry. These supporting rout
 docs/                         GitHub Pages site (the product)
   change-assurance.*          change pack review and decision register
   schedule-review.*, xer-review.js   detailed XER comparison
-  board-readiness.*           board review preparation
   demo/                       synthetic, share-safe XER and evidence files
   data/gmpp.json              generated public dataset
 Data/public/raw/              unmodified annual GMPP CSV releases

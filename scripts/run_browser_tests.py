@@ -12,7 +12,6 @@ from threading import Thread
 ROOT = Path(__file__).resolve().parents[1]
 SUITES = (
     "browser_smoke.py",
-    "browser_board_readiness.py",
     "browser_change_assurance.py",
     "browser_product_landing.py",
     "browser_walkthrough.py",
